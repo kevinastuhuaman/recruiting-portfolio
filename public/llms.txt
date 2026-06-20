@@ -7,7 +7,6 @@ Kevin Astuhuaman is an AI Product Manager and Berkeley Haas MBA focused on produ
 - Human portfolio: https://portfolio.kevinastuhuaman.com/
 - Resume: https://portfolio.kevinastuhuaman.com/resume/
 - Evidence index: https://portfolio.kevinastuhuaman.com/proof/
-- Recommended next moves: https://portfolio.kevinastuhuaman.com/next/
 - Full machine profile: https://portfolio.kevinastuhuaman.com/llms-full.txt
 - Structured profile JSON: https://portfolio.kevinastuhuaman.com/profile.json
 
