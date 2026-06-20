@@ -19,6 +19,7 @@ AI Product Manager and Berkeley Haas MBA building production AI-agent systems ac
 - Education: UC Berkeley Haas MBA, May 2026, STEM-designated
 - Work authorization: Eligible for up to 3 years of U.S. work authorization through OPT/STEM OPT. No sponsorship needed for the next role.
 - Portfolio: https://portfolio.kevinastuhuaman.com/
+- PDF packet: https://portfolio.kevinastuhuaman.com/kevin-astuhuaman-recruiter-packet.pdf
 - LinkedIn: https://www.linkedin.com/in/kevinastuhuaman
 - GitHub: https://github.com/kevinastuhuaman
 
