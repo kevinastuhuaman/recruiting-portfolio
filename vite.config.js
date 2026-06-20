@@ -9,6 +9,7 @@ export default defineConfig({
       input: {
         main: resolve(root, "index.html"),
         resume: resolve(root, "resume/index.html"),
+        packet: resolve(root, "packet/index.html"),
         proof: resolve(root, "proof/index.html"),
         next: resolve(root, "next/index.html"),
         contact: resolve(root, "contact/index.html"),

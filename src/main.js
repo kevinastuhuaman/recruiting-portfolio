@@ -46,6 +46,7 @@ const searchable = [
   ["PayPal AI Observability", "/projects/paypal-ai-observability/", "AI observability tooling, 15+ checkout systems, 75% faster detection"],
   ["BCP Credicorp SMB Fintech", "/projects/smb-fintech-bcp-credicorp/", "Digital-first SMB products, 100K+ entrepreneurs, $620M ARR/P&L"],
   ["Agentic Dev Workflows", "/projects/agentic-dev-workflows/", "Claude Code, Codex, MCP, evals, observability, automation"],
+  ["Recruiter Packet", "/packet/", "One-page packet for target roles, proof points, work authorization, and links"],
   ["Resume", "/resume/", "Recruiter-readable resume snapshot"],
   ["Proof", "/proof/", "Evidence registry and claim status"],
   ["GitHub", "https://github.com/kevinastuhuaman", "Public repositories and build record"],

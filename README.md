@@ -18,6 +18,7 @@ npm run build
 ## Public Surfaces
 
 - `/`: human recruiting portfolio
+- `/packet/`: one-page recruiter packet
 - `/resume/`: recruiter-readable resume
 - `/proof/`: claim and evidence registry
 - `/llms.txt`: concise machine-readable profile

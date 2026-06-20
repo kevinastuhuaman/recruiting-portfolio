@@ -57,6 +57,8 @@ Public evidence:
 ## Public Links
 
 - Portfolio: https://portfolio.kevinastuhuaman.com/
+- Recruiter packet: https://portfolio.kevinastuhuaman.com/packet/
+- Markdown recruiter packet: https://portfolio.kevinastuhuaman.com/recruiter-packet.md
 - LinkedIn: https://www.linkedin.com/in/kevinastuhuaman
 - GitHub: https://github.com/kevinastuhuaman
 - Writing: https://kevinastuhuaman.com/
