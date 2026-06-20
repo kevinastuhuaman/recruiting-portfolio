@@ -71,7 +71,7 @@ Kevin is a Berkeley Haas MBA and AI Product Manager who combines enterprise AI o
 ## Constraints
 
 - No em dashes in public copy.
-- Avoid Microsoft partnership wording unless it is legally precise.
+- Avoid legally imprecise partnership wording.
 - No inflated superlative phrasing.
 - Preserve work-authorization wording as eligibility, not a legal guarantee.
 - Keep PayPal and employer details public-safe.
