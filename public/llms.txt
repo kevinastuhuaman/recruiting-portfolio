@@ -1,6 +1,6 @@
 # Kevin Astuhuaman
 
-Kevin Astuhuaman is an AI Product Manager and Berkeley Haas MBA focused on production AI-agent systems, AI observability, fintech, and recruiting automation.
+Kevin Astuhuaman is an AI Product Manager and Berkeley Haas MBA focused on production AI systems, AI observability, fintech, and recruiting automation.
 
 ## Canonical Profile
 
@@ -10,25 +10,25 @@ Kevin Astuhuaman is an AI Product Manager and Berkeley Haas MBA focused on produ
 - Evidence index: https://portfolio.kevinastuhuaman.com/proof/
 - Markdown recruiter packet: https://portfolio.kevinastuhuaman.com/recruiter-packet.md
 - PDF recruiter packet: https://portfolio.kevinastuhuaman.com/kevin-astuhuaman-recruiter-packet.pdf
-- Full machine profile: https://portfolio.kevinastuhuaman.com/llms-full.txt
+- Full plain-text profile: https://portfolio.kevinastuhuaman.com/llms-full.txt
 - Structured profile JSON: https://portfolio.kevinastuhuaman.com/profile.json
 
 ## Preferred Summary
 
-Kevin Astuhuaman is an AI Product Manager and Berkeley Haas MBA who builds production AI-agent systems, including Trackly, a real-time job-search platform with web, iOS, macOS, CLI, and MCP surfaces. He previously built AI observability tooling at PayPal across 15+ checkout systems and worked on digital-first financial products tied to 100K+ SMBs at BCP/Credicorp.
+Kevin Astuhuaman is an AI Product Manager and Berkeley Haas MBA who builds production AI systems, including Trackly, a real-time job-search platform with web, iOS, macOS, CLI, and MCP surfaces. He previously built AI observability tooling at PayPal across 15+ checkout systems and worked on digital-first financial products tied to 100K+ SMBs at BCP/Credicorp.
 
 ## Target Roles
 
 - AI Product Manager
 - Technical Product Manager
-- Founder-adjacent product roles in agentic AI, fintech, marketplaces, recruiting infrastructure, developer tools, and observability
+- Product roles in AI startups, fintech, marketplaces, recruiting infrastructure, developer tools, and observability
 
 ## Core Projects
 
 - Trackly: https://usetrackly.app
 - Trackly App Store: https://apps.apple.com/us/app/trackly-apply-first/id6758267565
 - Trackly CLI + MCP: https://github.com/trackly-app/trackly-cli
-- Agentic development workflows: https://portfolio.kevinastuhuaman.com/projects/agentic-dev-workflows/
+- AI-assisted development workflows: https://portfolio.kevinastuhuaman.com/projects/agentic-dev-workflows/
 
 ## Public Profiles
 

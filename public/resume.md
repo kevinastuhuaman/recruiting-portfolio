@@ -1,6 +1,6 @@
 # Kevin Astuhuaman
 
-AI Product Manager building production AI-agent systems across recruiting automation, observability, and fintech.
+AI Product Manager building production AI systems across recruiting automation, observability, and fintech.
 
 Bay Area | Berkeley Haas MBA, May 2026 | GitHub: https://github.com/kevinastuhuaman | LinkedIn: https://www.linkedin.com/in/kevinastuhuaman
 

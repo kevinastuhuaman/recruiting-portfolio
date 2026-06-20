@@ -11,6 +11,7 @@
   --graphite: #2f3437;
   --panel: rgba(255, 253, 246, 0.76);
   --shadow: 0 18px 60px rgba(17, 17, 15, 0.12);
+  --shadow-strong: 0 22px 70px rgba(17, 17, 15, 0.18);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
@@ -35,6 +36,23 @@ a {
   color: inherit;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.18em;
+}
+
+a,
+button {
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
 }
 
 img {
@@ -78,6 +96,11 @@ input {
 .brand {
   font-weight: 800;
   text-decoration: none;
+}
+
+.brand:hover,
+.nav-links a:hover {
+  color: var(--blue);
 }
 
 .nav-links {
@@ -127,6 +150,20 @@ input {
 .button.lime {
   background: var(--lime);
   color: var(--ink);
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 4px 4px 0 var(--rule);
+}
+
+.button.secondary:hover {
+  background: var(--paper-strong);
+}
+
+.button:active {
+  transform: translateY(0);
+  box-shadow: 1px 1px 0 var(--rule);
 }
 
 .hero {
@@ -220,6 +257,11 @@ input {
   color: var(--paper-strong);
 }
 
+.mode-switch button:not(.is-active):hover {
+  background: rgba(22, 82, 240, 0.08);
+  color: var(--ink);
+}
+
 .hero-copy {
   min-width: 0;
   display: grid;
@@ -265,6 +307,10 @@ input {
   padding: 20px;
   border-right: 1px solid var(--rule);
   background: rgba(255, 253, 246, 0.45);
+}
+
+.proof-tile:hover {
+  background: var(--paper-strong);
 }
 
 .proof-tile:last-child {
@@ -344,6 +390,15 @@ input {
     rgba(243, 239, 229, 0.52);
 }
 
+.packet-card:hover,
+.artifact-card:hover {
+  position: relative;
+  z-index: 2;
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-strong);
+  background: var(--paper-strong);
+}
+
 .packet-card:last-child {
   border-right: 0;
 }
@@ -416,6 +471,11 @@ input {
   line-height: 1.08;
 }
 
+.artifact-card:hover h3,
+.packet-card:hover strong {
+  color: var(--blue);
+}
+
 .artifact-card p {
   margin: 0;
   color: var(--graphite);
@@ -467,6 +527,11 @@ input {
   width: 100%;
   height: 190px;
   object-fit: cover;
+  transition: transform 420ms ease;
+}
+
+.artifact-card:hover .artifact-visual img {
+  transform: scale(1.035);
 }
 
 .system-map {
@@ -486,6 +551,14 @@ input {
   background: var(--paper);
   font-weight: 850;
   text-align: center;
+}
+
+.artifact-card:hover .system-node:nth-child(2n) {
+  background: rgba(199, 242, 56, 0.32);
+}
+
+.artifact-card:hover .system-node:nth-child(2n + 1) {
+  background: rgba(22, 82, 240, 0.1);
 }
 
 .timeline {
@@ -531,6 +604,10 @@ input {
   gap: 18px;
   padding: 18px 24px;
   border-bottom: 1px solid var(--rule);
+}
+
+.evidence-row:hover {
+  background: rgba(255, 253, 246, 0.58);
 }
 
 .evidence-row:last-child {
@@ -690,8 +767,68 @@ input {
   text-decoration: none;
 }
 
+.search-result:hover,
+.search-result:focus-visible {
+  background: rgba(22, 82, 240, 0.08);
+}
+
 .search-result span {
   color: var(--muted);
+}
+
+.has-js .reveal {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.has-js .reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 520ms ease,
+    transform 520ms ease;
+}
+
+.has-js .artifact-card.reveal:nth-child(2),
+.has-js .packet-card.reveal:nth-child(2),
+.has-js .timeline-item.reveal:nth-child(2),
+.has-js .proof-tile.reveal:nth-child(2) {
+  transition-delay: 70ms;
+}
+
+.has-js .artifact-card.reveal:nth-child(3),
+.has-js .packet-card.reveal:nth-child(3),
+.has-js .timeline-item.reveal:nth-child(3),
+.has-js .proof-tile.reveal:nth-child(3) {
+  transition-delay: 140ms;
+}
+
+.has-js .artifact-card.reveal:nth-child(4),
+.has-js .packet-card.reveal:nth-child(4),
+.has-js .timeline-item.reveal:nth-child(4),
+.has-js .proof-tile.reveal:nth-child(4) {
+  transition-delay: 210ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  a,
+  button,
+  .artifact-visual img,
+  .has-js .reveal,
+  .has-js .reveal.is-visible {
+    transition: none;
+  }
+
+  .button:hover,
+  .packet-card:hover,
+  .artifact-card:hover,
+  .has-js .reveal {
+    transform: none;
+  }
 }
 
 @media (max-width: 980px) {

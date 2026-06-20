@@ -1,14 +1,14 @@
-# Kevin Astuhuaman Full Machine Profile
+# Kevin Astuhuaman Full Plain-Text Profile
 
 Last updated: June 20, 2026, Pacific time.
 
 ## Identity
 
-Kevin Astuhuaman is an AI Product Manager, Technical PM, and Berkeley Haas MBA based in the Bay Area. His public recruiting thesis is: hands-on AI product operator who can personally build systems and operate inside enterprise-scale product environments.
+Kevin Astuhuaman is an AI Product Manager, Technical PM, and Berkeley Haas MBA based in the Bay Area. His public recruiting thesis is simple: he can build the product himself and still operate inside large, technical product environments.
 
 ## Current Positioning
 
-AI Product Manager building production AI-agent systems across recruiting automation, observability, and fintech.
+AI Product Manager building production AI systems across recruiting automation, observability, and fintech.
 
 ## Education
 
