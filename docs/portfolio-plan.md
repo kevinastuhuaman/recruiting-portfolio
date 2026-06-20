@@ -13,7 +13,7 @@ MJ Kang's site works because it is an authored artifact: strict editorial grid, 
 ## Five Adversarial Conclusions
 
 1. Recruiter scan: the first 30 seconds must state target role, enterprise proof, builder proof, fintech operating proof, work authorization, and clear CTAs.
-2. Visual taste: avoid Framer-template language, floating stat cards, generic purple gradients, glassmorphism, and "Hi, I'm..." hero copy.
+2. Visual taste: avoid Framer-template language, floating stat cards, generic decorative color effects, glassy UI cliches, and generic personal-site hero copy.
 3. Technical plan: do not build inside TracklyMac. Use a separate static-first repo with versioned HTML, JSON, Markdown, and deployable public files.
 4. Discoverability: add `llms.txt`, `llms-full.txt`, `profile.json`, `proof.json`, JSON-LD, sitemap, robots, and agent-skill metadata.
 5. Authenticity and risk: no hype, no employer-confidential details, no overclaiming, no em dashes, and careful OPT/STEM OPT wording.
