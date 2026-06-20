@@ -1,15 +1,15 @@
 :root {
   color-scheme: light;
-  --paper: #f3efe5;
-  --paper-strong: #fffdf6;
+  --paper: #f6f7f8;
+  --paper-strong: #ffffff;
   --ink: #11110f;
-  --muted: #68645c;
+  --muted: #62666c;
   --rule: #191815;
   --blue: #1652f0;
   --lime: #c7f238;
   --clay: #c46b4d;
   --graphite: #2f3437;
-  --panel: rgba(255, 253, 246, 0.76);
+  --panel: rgba(255, 255, 255, 0.78);
   --shadow: 0 18px 60px rgba(17, 17, 15, 0.12);
   --shadow-strong: 0 22px 70px rgba(17, 17, 15, 0.18);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -73,8 +73,8 @@ input {
   margin: 0 auto;
   max-width: 1440px;
   background:
-    linear-gradient(rgba(17, 17, 15, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(17, 17, 15, 0.035) 1px, transparent 1px),
+    linear-gradient(rgba(17, 17, 15, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(17, 17, 15, 0.03) 1px, transparent 1px),
     var(--paper);
   background-size: 48px 48px;
 }
@@ -89,7 +89,7 @@ input {
   gap: 16px;
   padding: 16px 24px;
   border-bottom: 1px solid var(--rule);
-  background: rgba(243, 239, 229, 0.92);
+  background: rgba(246, 247, 248, 0.92);
   backdrop-filter: blur(14px);
 }
 
@@ -777,16 +777,14 @@ input {
 }
 
 .has-js .reveal {
-  opacity: 0;
-  transform: translateY(18px);
+  opacity: 1;
+  transform: translateY(12px);
+  transition: transform 520ms ease;
+  will-change: transform;
 }
 
 .has-js .reveal.is-visible {
-  opacity: 1;
   transform: translateY(0);
-  transition:
-    opacity 520ms ease,
-    transform 520ms ease;
 }
 
 .has-js .artifact-card.reveal:nth-child(2),
