@@ -25,7 +25,7 @@ Trackly is a real-time job-search agent Kevin built during his own job hunt. It 
 Public evidence:
 - Live site: https://usetrackly.app
 - App Store: https://apps.apple.com/us/app/trackly-apply-first/id6758267565
-- CLI + MCP repo: https://github.com/kevinastuhuaman/trackly-cli
+- CLI + MCP repo: https://github.com/trackly-app/trackly-cli
 
 Claims:
 - 1,900+ companies monitored and 128,975+ roles shown on the public Trackly site.

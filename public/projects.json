@@ -6,7 +6,7 @@
       "url": "/projects/trackly/",
       "type": "Live product",
       "demonstrates": ["product judgment", "full-stack shipping", "agent-native interfaces", "native apps"],
-      "publicLinks": ["https://usetrackly.app", "https://apps.apple.com/us/app/trackly-apply-first/id6758267565", "https://github.com/kevinastuhuaman/trackly-cli"]
+      "publicLinks": ["https://usetrackly.app", "https://apps.apple.com/us/app/trackly-apply-first/id6758267565", "https://github.com/trackly-app/trackly-cli"]
     },
     {
       "name": "PayPal AI Observability",
