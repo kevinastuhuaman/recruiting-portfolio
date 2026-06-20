@@ -2,6 +2,19 @@
 
 Static recruiting portfolio for Kevin Astuhuaman.
 
+## Live Site
+
+- Production/test URL: `https://portfolio.kevinastuhuaman.com`
+- Hosting: GitHub Pages from this public repo
+- Cost: $0/month while the repo remains public
+
+## Domain Guardrail
+
+- `portfolio.kevinastuhuaman.com` is the new recruiting portfolio.
+- `ai.kevinastuhuaman.com` is Kevin's existing Framer site and should not be changed by this repo.
+- Do not add `ai.kevinastuhuaman.com` to `public/CNAME`.
+- Do not redirect `ai.kevinastuhuaman.com` traffic to this site unless Kevin explicitly asks.
+
 ## Local Development
 
 ```bash
