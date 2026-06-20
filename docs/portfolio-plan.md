@@ -4,27 +4,27 @@ Last updated: June 20, 2026.
 
 ## Objective
 
-Create a public recruiting surface that upgrades Kevin's profile before a job-search post. The portfolio should be visually stronger than a GitHub README, but it should still be proof-led and machine-readable.
+Create a public recruiting surface that upgrades Kevin's profile before a job-search post. The portfolio should be visually stronger than a GitHub README, but it should still be proof-led and easy for both recruiters and AI tools to read.
 
 ## Reference
 
-MJ Kang's site works because it is an authored artifact: strict editorial grid, Human/Machine concept, selected works, concise history, `llms.txt`, and agent-skill metadata. The right lesson is not to copy the visual skin. The right lesson is to make Kevin's portfolio a dossier that works for recruiters and AI agents.
+MJ Kang's site works because it feels authored: strict editorial grid, Human/Machine concept, selected works, concise history, `llms.txt`, and structured context for AI tools. The right lesson is not to copy the visual skin. The right lesson is to make Kevin's portfolio useful for recruiters and easy for AI tools to parse.
 
 ## Five Adversarial Conclusions
 
 1. Recruiter scan: the first 30 seconds must state target role, enterprise proof, builder proof, fintech operating proof, work authorization, and clear CTAs.
 2. Visual taste: avoid Framer-template language, floating stat cards, generic decorative color effects, glassy UI cliches, and generic personal-site hero copy.
 3. Technical plan: do not build inside TracklyMac. Use a separate static-first repo with versioned HTML, JSON, Markdown, and deployable public files.
-4. Discoverability: add `llms.txt`, `llms-full.txt`, `profile.json`, `proof.json`, JSON-LD, sitemap, robots, and agent-skill metadata.
+4. Discoverability: add `llms.txt`, `llms-full.txt`, `profile.json`, `proof.json`, JSON-LD, sitemap, robots, and site-navigation metadata.
 5. Authenticity and risk: no hype, no employer-confidential details, no overclaiming, no em dashes, and careful OPT/STEM OPT wording.
 
 ## Canonical Positioning
 
-Kevin Astuhuaman is an AI Product Manager and Berkeley Haas MBA who builds production AI-agent systems across recruiting automation, observability, and fintech.
+Kevin Astuhuaman is an AI Product Manager and Berkeley Haas MBA who builds production AI systems across recruiting automation, observability, and fintech.
 
 ## Ship Order
 
-1. Build static recruiting dossier in `~/Code/recruiting-portfolio`.
+1. Build static recruiting portfolio in `~/Code/recruiting-portfolio`.
 2. Add proof-first main page, resume route, four selected-work routes, proof ledger, contact route.
 3. Add AI-readable files and structured data.
 4. Update GitHub profile README to align with the same claims.

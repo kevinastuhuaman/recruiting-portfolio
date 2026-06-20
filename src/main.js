@@ -1,5 +1,7 @@
 const localHosts = new Set(["localhost", "127.0.0.1", "::1"]);
 
+document.documentElement.classList.add("has-js");
+
 if (window.location.protocol === "http:" && !localHosts.has(window.location.hostname)) {
   window.location.replace(`https://${window.location.host}${window.location.pathname}${window.location.search}${window.location.hash}`);
 }
@@ -20,7 +22,7 @@ modeButtons.forEach((button) => {
   });
 });
 
-const packet = `Kevin Astuhuaman is an AI Product Manager and Berkeley Haas MBA who builds production AI-agent systems across recruiting automation, observability, and fintech. He built Trackly across web, iOS, macOS, CLI, and MCP surfaces; built AI observability tooling at PayPal across 15+ checkout systems; and worked on digital-first financial products tied to 100K+ SMBs and a $620M ARR/P&L portfolio. Portfolio: https://portfolio.kevinastuhuaman.com/ GitHub: https://github.com/kevinastuhuaman LinkedIn: https://www.linkedin.com/in/kevinastuhuaman`;
+const packet = `Kevin Astuhuaman is a Berkeley Haas MBA and AI Product Manager who gets close to the system. He built Trackly across web, iOS, macOS, CLI, and MCP; worked on AI observability tooling at PayPal Checkout across 15+ systems; and worked on digital-first financial products tied to 100K+ SMBs and a $620M ARR/P&L portfolio at BCP/Credicorp. Portfolio: https://portfolio.kevinastuhuaman.com/ GitHub: https://github.com/kevinastuhuaman LinkedIn: https://www.linkedin.com/in/kevinastuhuaman`;
 
 document.querySelectorAll("[data-copy-packet]").forEach((button) => {
   button.addEventListener("click", async () => {
@@ -45,7 +47,7 @@ const searchable = [
   ["Trackly", "/projects/trackly/", "Real-time job-search agent, 1,900+ companies, web, iOS, macOS, CLI, MCP"],
   ["PayPal AI Observability", "/projects/paypal-ai-observability/", "AI observability tooling, 15+ checkout systems, 75% faster detection"],
   ["BCP Credicorp SMB Fintech", "/projects/smb-fintech-bcp-credicorp/", "Digital-first SMB products, 100K+ entrepreneurs, $620M ARR/P&L"],
-  ["Agentic Dev Workflows", "/projects/agentic-dev-workflows/", "Claude Code, Codex, MCP, evals, observability, automation"],
+  ["How I build with AI tools", "/projects/agentic-dev-workflows/", "Claude Code, Codex, MCP, evals, observability, automation"],
   ["Recruiter Packet", "/packet/", "One-page packet for target roles, proof points, work authorization, and links"],
   ["Resume", "/resume/", "Recruiter-readable resume snapshot"],
   ["Proof", "/proof/", "Evidence registry and claim status"],
@@ -93,3 +95,27 @@ document.addEventListener("keydown", (event) => {
 });
 
 renderSearch();
+
+const revealTargets = document.querySelectorAll(
+  ".packet-wall, .section-grid, .packet-card, .artifact-card, .timeline-item, .proof-tile, .evidence-row"
+);
+
+if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  revealTargets.forEach((item) => item.classList.add("is-visible"));
+} else {
+  const revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        revealObserver.unobserve(entry.target);
+      });
+    },
+    { rootMargin: "0px 0px -8% 0px", threshold: 0.12 }
+  );
+
+  revealTargets.forEach((item) => {
+    item.classList.add("reveal");
+    revealObserver.observe(item);
+  });
+}

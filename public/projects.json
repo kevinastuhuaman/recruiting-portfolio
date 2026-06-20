@@ -5,13 +5,13 @@
       "name": "Trackly",
       "url": "/projects/trackly/",
       "type": "Live product",
-      "demonstrates": ["product judgment", "full-stack shipping", "agent-native interfaces", "native apps"],
+      "demonstrates": ["product judgment", "full-stack shipping", "AI assistant interfaces", "native apps"],
       "publicLinks": ["https://usetrackly.app", "https://apps.apple.com/us/app/trackly-apply-first/id6758267565", "https://github.com/trackly-app/trackly-cli"]
     },
     {
       "name": "PayPal AI Observability",
       "url": "/projects/paypal-ai-observability/",
-      "type": "Sanitized enterprise case study",
+      "type": "Public-safe enterprise case study",
       "demonstrates": ["enterprise AI", "observability", "technical product management"]
     },
     {
@@ -21,9 +21,9 @@
       "demonstrates": ["regulated product leadership", "SMB fintech", "growth", "P&L context"]
     },
     {
-      "name": "Agentic Development Workflows",
+      "name": "How I build with AI tools",
       "url": "/projects/agentic-dev-workflows/",
-      "type": "Builder system",
+      "type": "Builder workflow",
       "demonstrates": ["MCP", "LLM observability", "evals", "AI-assisted development"]
     }
   ]
