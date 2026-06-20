@@ -10,6 +10,7 @@ export default defineConfig({
         main: resolve(root, "index.html"),
         resume: resolve(root, "resume/index.html"),
         proof: resolve(root, "proof/index.html"),
+        next: resolve(root, "next/index.html"),
         contact: resolve(root, "contact/index.html"),
         trackly: resolve(root, "projects/trackly/index.html"),
         paypal: resolve(root, "projects/paypal-ai-observability/index.html"),

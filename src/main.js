@@ -42,6 +42,7 @@ const searchable = [
   ["Agentic Dev Workflows", "/projects/agentic-dev-workflows/", "Claude Code, Codex, MCP, evals, observability, automation"],
   ["Resume", "/resume/", "Recruiter-readable resume snapshot"],
   ["Proof", "/proof/", "Evidence registry and claim status"],
+  ["Next Moves", "/next/", "Recommended roadmap for public profile, evidence, LinkedIn, and design polish"],
   ["GitHub", "https://github.com/kevinastuhuaman", "Public repositories and build record"],
   ["LinkedIn", "https://www.linkedin.com/in/kevinastuhuaman", "Professional profile"]
 ];
