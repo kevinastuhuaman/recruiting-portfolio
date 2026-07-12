@@ -2,6 +2,7 @@
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Analytics from "../components/Analytics.astro";
+import { createHash } from "node:crypto";
 import { links, site } from "../data/site.js";
 import "../styles/global.css";
 
@@ -110,6 +111,20 @@ const schema = {
     page,
   ],
 };
+const schemaJson = JSON.stringify(schema);
+const schemaHash = createHash("sha256").update(schemaJson).digest("base64");
+const contentSecurityPolicy = [
+  "default-src 'self'",
+  `script-src 'self' 'sha256-${schemaHash}' https://static.cloudflareinsights.com`,
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data:",
+  "font-src 'self'",
+  "connect-src 'self' https://closeai.mba https://us.i.posthog.com https://cloudflareinsights.com",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "upgrade-insecure-requests",
+].join("; ");
 ---
 
 <!doctype html>
@@ -123,7 +138,7 @@ const schema = {
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://closeai.mba https://us.i.posthog.com https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
+      content={contentSecurityPolicy}
     />
     {noindex && <meta name="robots" content="noindex, follow" />}
     {!noindex && <link rel="canonical" href={canonical} />}
@@ -144,7 +159,7 @@ const schema = {
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={imageUrl} />
-    {includeSchema && <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />}
+    {includeSchema && <script is:inline type="application/ld+json" set:html={schemaJson} />}
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>

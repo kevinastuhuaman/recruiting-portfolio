@@ -7,6 +7,10 @@ export default defineConfig({
   publicDir: "./site-public",
   build: {
     format: "directory",
+    inlineStylesheets: "never",
+  },
+  vite: {
+    build: { assetsInlineLimit: 0 },
   },
   compressHTML: true,
 });
