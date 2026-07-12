@@ -25,6 +25,7 @@ Built and operates a real-time job-search product across web, native apps, CLI, 
 - Chose direct company career pages as the wedge after seeing strong roles appear before aggregators during the MBA recruiting cycle.
 - Designed quality controls for stale jobs, duplicate roles, false-zero monitoring failures, classification, and match explanations.
 - Shipped one product system across web, iOS, macOS, a public CLI, and an MCP server.
+- Built a human-reviewed browser-agent harness that combines Trackly MCP context, ATS-specific form rules, Chrome computer use, and a fresh approval gate before submission.
 
 ### UC Berkeley Haas Open Innovation Squad
 

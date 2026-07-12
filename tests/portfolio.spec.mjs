@@ -150,6 +150,19 @@ test("AI Investigation Workbench exposes plan, evidence, uncertainty, and human 
   await scanWorkbench();
 });
 
+test("Trackly explains the browser-agent harness and its human approval boundary", async ({ page }) => {
+  await page.goto("/projects/trackly/");
+  const harness = page.locator(".browser-harness-section");
+  await expect(harness.getByRole("heading", { name: /where autonomy ends/i })).toBeVisible();
+  await expect(harness.getByText(/Trackly supplies the selected roles and user context/i)).toBeVisible();
+  await expect(harness.getByText(/pauses before submission/i)).toBeVisible();
+  await expect(harness.getByText(/edit, navigation, reload, or reconnect invalidates/i)).toBeVisible();
+  await expect(harness.getByText("Financial operations", { exact: true })).toBeVisible();
+  await expect(harness.getByText("Sales and CRM", { exact: true })).toBeVisible();
+  await expect(harness.getByText("Legacy enterprise workflows", { exact: true })).toBeVisible();
+  await expect(harness.getByRole("link", { name: /GPT-5.6 announcement/i })).toHaveAttribute("href", "https://openai.com/index/gpt-5-6/");
+});
+
 test("public machine files and resume PDF are fetchable", async ({ request }) => {
   for (const path of ["/robots.txt", "/sitemap.xml", "/llms.txt", "/profile.json", "/projects.json", "/proof.json", "/assistant-corpus.json", "/resume.md", "/2e43f7d61916408ea525527e4bc9b5c7.txt", "/.well-known/agent-skills/index.json", "/.well-known/agent-skills/site-navigation/SKILL.md", "/kevin-astuhuaman-resume.pdf"]) {
     const response = await request.get(path);
