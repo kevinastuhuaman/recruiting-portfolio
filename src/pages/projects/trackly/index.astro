@@ -8,7 +8,7 @@ const [inventory] = publicClaims;
 
 <BaseLayout
   title="Trackly case study | Kevin Astuhuaman"
-  description="How Kevin Astuhuaman built Trackly around direct career-page signal, product quality, explainable matching, and delivery across web, native apps, CLI, and MCP."
+  description="How Kevin Astuhuaman built Trackly around direct career-page signal, product quality, explainable matching, agent-ready interfaces, and a human-reviewed browser-agent harness."
   path="/projects/trackly/"
   pageType="article"
   about="Trackly"
@@ -150,6 +150,67 @@ const [inventory] = publicClaims;
         <li><strong>Chat + voice</strong><span>Ask, confirm, and take structured actions through conversational interfaces.</span></li>
       </ul>
     </div>
+
+    <section class="browser-harness-section" aria-labelledby="browser-harness-title">
+      <p class="eyebrow">Recent computer-use experiment | July 2026</p>
+      <h2 id="browser-harness-title">A browser agent becomes useful when the product defines where autonomy ends.</h2>
+      <p>
+        Within days of GPT-5.6 reaching Codex, I turned Trackly's saved-job workflow into a domain-specific computer-use harness. Trackly supplies the selected roles and user context through its CLI and MCP server. The harness adds ATS-specific mechanics, form-integrity checks, and recovery rules. Codex then uses Chrome to prepare each application.
+      </p>
+      <p>
+        The key product decision is the stopping point. The workflow can enter reusable facts and prepare draft responses, but it pauses before submission. Subjective answers, salary, sponsorship, and any unresolved field remain visible to the user. Submission requires a fresh instruction tied to that job, and any edit, navigation, reload, or reconnect invalidates the earlier approval.
+      </p>
+
+      <figure class="browser-harness" aria-labelledby="browser-harness-caption">
+        <figcaption id="browser-harness-caption">The working control loop, shown without private application data</figcaption>
+        <ol>
+          <li><span>01</span><strong>Select</strong><p>The user saves the work worth completing in Trackly.</p></li>
+          <li><span>02</span><strong>Ground</strong><p>MCP supplies the job, profile context, and allowed answers.</p></li>
+          <li><span>03</span><strong>Prepare</strong><p>Codex controls Chrome using ATS-specific interaction rules.</p></li>
+          <li><span>04</span><strong>Verify</strong><p>The harness checks committed form state, errors, and unknowns.</p></li>
+          <li><span>05</span><strong>Review</strong><p>A person inspects every consequential answer and edit.</p></li>
+          <li><span>06</span><strong>Authorize</strong><p>Only a fresh, item-specific instruction can allow submission.</p></li>
+        </ol>
+      </figure>
+
+      <div class="autonomy-boundary" aria-label="Browser-agent autonomy boundary">
+        <div>
+          <span>Agent may</span>
+          <strong>Fetch approved context, upload the resume, fill known fields, draft answers, and validate the form.</strong>
+        </div>
+        <div>
+          <span>Agent must show</span>
+          <strong>Subjective responses, salary, sponsorship, demographic choices, missing facts, and validation uncertainty.</strong>
+        </div>
+        <div>
+          <span>Agent may not</span>
+          <strong>Submit without fresh approval, invent facts, bypass security checks, or treat visible text as proof that the form accepted a value.</strong>
+        </div>
+      </div>
+
+      <h3>Recruiting is one instance of a broader product pattern.</h3>
+      <div class="transfer-grid">
+        <article>
+          <span>Financial operations</span>
+          <h4>Prepare high-volume forms from approved records.</h4>
+          <p>The agent handles repetitive browser entry; an operator reviews regulated or consequential fields before filing.</p>
+        </article>
+        <article>
+          <span>Sales and CRM</span>
+          <h4>Carry account context into portals without losing judgment.</h4>
+          <p>The agent can populate structured fields and draft notes while the account owner approves external messages and commitments.</p>
+        </article>
+        <article>
+          <span>Legacy enterprise workflows</span>
+          <h4>Bridge systems when the last mile has no reliable API.</h4>
+          <p>A domain harness turns a general browser agent into a bounded operator with explicit rules, exceptions, recovery, and audit evidence.</p>
+        </article>
+      </div>
+
+      <p class="artifact-note browser-source">
+        Current state: a working personal workflow across supported ATS forms, described here as a product experiment rather than autonomous submission. Public references: <a href={links.tracklyCli}>Trackly CLI and MCP</a> and <a href={links.gpt56}>OpenAI's July 9, 2026 GPT-5.6 announcement</a>.
+      </p>
+    </section>
 
     <h2 id="how-i-worked">How I worked</h2>
     <p>
@@ -350,6 +411,163 @@ const [inventory] = publicClaims;
     color: #555550;
   }
 
+  .browser-harness-section {
+    width: min(100vw, 1440px);
+    margin: 104px 0 96px 50%;
+    padding: 88px max(20px, calc((min(100vw, 1440px) - 960px) / 2));
+    border-top: 1px solid #11110f;
+    border-bottom: 1px solid #11110f;
+    background: #eef1f4;
+    transform: translateX(-50%);
+  }
+
+  .browser-harness-section > h2,
+  .browser-harness-section > p,
+  .browser-harness-section > h3 {
+    max-width: 900px;
+  }
+
+  .browser-harness-section > h2 {
+    font-size: clamp(2.6rem, 5vw, 4.5rem);
+  }
+
+  .browser-harness-section > h3 {
+    margin-top: 72px;
+    font-size: 2.1rem;
+  }
+
+  .browser-harness {
+    margin: 54px 0 0;
+    border: 1px solid #11110f;
+    background: white;
+  }
+
+  .browser-harness figcaption {
+    padding: 18px 22px;
+    border-bottom: 1px solid #11110f;
+    background: #11110f;
+    color: white;
+    font-weight: 750;
+  }
+
+  .browser-harness ol {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .browser-harness li {
+    min-height: 210px;
+    padding: 22px;
+    border-right: 1px solid #11110f;
+    border-bottom: 1px solid #11110f;
+  }
+
+  .browser-harness li:nth-child(3n) {
+    border-right: 0;
+  }
+
+  .browser-harness li:nth-last-child(-n + 3) {
+    border-bottom: 0;
+  }
+
+  .browser-harness li span,
+  .browser-harness li strong {
+    display: block;
+  }
+
+  .browser-harness li span {
+    color: #5a6068;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.75rem;
+  }
+
+  .browser-harness li strong {
+    margin-top: 34px;
+    font-size: 1.35rem;
+  }
+
+  .browser-harness li p {
+    margin: 10px 0 0;
+    color: #4b5057;
+    font-size: 0.9rem;
+  }
+
+  .autonomy-boundary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-right: 1px solid #11110f;
+    border-bottom: 1px solid #11110f;
+    border-left: 1px solid #11110f;
+  }
+
+  .autonomy-boundary > div {
+    padding: 24px 22px;
+    border-right: 1px solid #11110f;
+  }
+
+  .autonomy-boundary > div:last-child {
+    border-right: 0;
+  }
+
+  .autonomy-boundary span,
+  .autonomy-boundary strong {
+    display: block;
+  }
+
+  .autonomy-boundary span {
+    margin-bottom: 12px;
+    color: #0057b8;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .autonomy-boundary strong {
+    font-size: 0.92rem;
+  }
+
+  .transfer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 34px;
+    border-top: 1px solid #11110f;
+    border-bottom: 1px solid #11110f;
+  }
+
+  .transfer-grid article {
+    padding: 28px 24px;
+    border-right: 1px solid #11110f;
+  }
+
+  .transfer-grid article:last-child {
+    border-right: 0;
+  }
+
+  .transfer-grid span {
+    color: #5a6068;
+    font-size: 0.76rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .transfer-grid h4 {
+    margin: 30px 0 12px;
+    font-size: 1.35rem;
+  }
+
+  .transfer-grid p {
+    margin-bottom: 0;
+    color: #4b5057;
+    font-size: 0.92rem;
+  }
+
+  .browser-source {
+    margin-top: 26px;
+  }
+
   .final-actions {
     margin-top: 56px;
   }
@@ -357,7 +575,10 @@ const [inventory] = publicClaims;
   @media (max-width: 760px) {
     .system-artifact ol,
     .eval-artifact,
-    .surface-layout {
+    .surface-layout,
+    .browser-harness ol,
+    .autonomy-boundary,
+    .transfer-grid {
       grid-template-columns: 1fr;
     }
 
@@ -376,6 +597,27 @@ const [inventory] = publicClaims;
     .surface-list li {
       grid-template-columns: 1fr;
       gap: 6px;
+    }
+
+    .browser-harness-section {
+      margin-top: 72px;
+      padding-block: 64px;
+    }
+
+    .browser-harness li,
+    .browser-harness li:nth-child(3n),
+    .browser-harness li:nth-last-child(-n + 3),
+    .autonomy-boundary > div,
+    .transfer-grid article {
+      min-height: 0;
+      border-right: 0;
+      border-bottom: 1px solid #11110f;
+    }
+
+    .browser-harness li:last-child,
+    .autonomy-boundary > div:last-child,
+    .transfer-grid article:last-child {
+      border-bottom: 0;
     }
   }
 </style>

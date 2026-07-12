@@ -18,6 +18,7 @@ export const links = {
   trackly: "https://usetrackly.app/",
   appStore: "https://apps.apple.com/us/app/trackly-apply-first/id6758267565",
   tracklyCli: "https://github.com/trackly-app/trackly-cli",
+  gpt56: "https://openai.com/index/gpt-5-6/",
   berkeleyMobagel:
     "https://haas.berkeley.edu/open-innovation/programs/past-challenges/",
   publicProfile:
@@ -138,8 +139,8 @@ export const assistantCorpus = {
       id: "trackly",
       title: "Trackly case study",
       url: `${site.origin}/projects/trackly/`,
-      keywords: ["trackly", "agent", "agents", "job search", "career pages", "scraping", "matching", "eval", "classification", "chat", "voice", "ios", "macos", "cli", "mcp", "builder"],
-      content: "Kevin built Trackly during his MBA job search after seeing strong roles appear on company career pages before job boards. The live product monitors direct sources, normalizes and deduplicates jobs, applies freshness and false-zero guards, classifies job attributes, explains matches, and delivers the same product system through web, iOS, macOS, a public CLI, MCP, chat, and voice. On July 12, 2026, Trackly's public inventory showed 1,969 monitored company career sites, 40 ATS and source types, and 128,975 job records. Kevin owned the product problem, prioritization, quality thresholds, interaction decisions, release decisions, operation, and hands-on implementation. AI coding agents accelerated implementation and review but did not decide the product promise or release evidence.",
+      keywords: ["trackly", "agent", "agents", "job search", "career pages", "scraping", "matching", "eval", "classification", "chat", "voice", "ios", "macos", "cli", "mcp", "builder", "computer use", "browser use", "browser agent", "human in the loop", "human-in-the-loop", "harness", "chrome", "ats"],
+      content: "Kevin built Trackly during his MBA job search after seeing strong roles appear on company career pages before job boards. The live product monitors direct sources, normalizes and deduplicates jobs, applies freshness and false-zero guards, classifies job attributes, explains matches, and delivers the same product system through web, iOS, macOS, a public CLI, MCP, chat, and voice. On July 12, 2026, Trackly's public inventory showed 1,969 monitored company career sites, 40 ATS and source types, and 128,975 job records. Kevin also built a recent human-reviewed browser-agent harness: Trackly supplies a user-selected application queue and job context through its CLI and MCP; a domain-specific policy layer handles ATS mechanics, form integrity, and recovery; Codex controls Chrome to prepare forms; and the workflow pauses before submission for fresh, job-specific human approval. Subjective answers and consequential actions remain visible to the user, and any edit, navigation, reload, or reconnect invalidates prior approval. The transferable product pattern is useful when the final workflow lives in a browser instead of a reliable API, including recruiting, financial operations, sales portals, and CRM workflows. It is a recent working experiment, not a claim of fully autonomous application submission. Kevin owned the product problem, prioritization, quality thresholds, interaction decisions, release decisions, operation, and hands-on implementation. AI coding agents accelerated implementation and review but did not decide the product promise or release evidence.",
     },
     {
       id: "paypal",
@@ -202,6 +203,7 @@ export const experience = [
       "Chose direct company career pages as the wedge after seeing strong roles appear before aggregators during the MBA recruiting cycle.",
       "Designed quality controls for stale jobs, duplicate roles, false-zero monitoring failures, classification, and match explanations.",
       "Shipped one product system across web, iOS, macOS, a public CLI, and an MCP server.",
+      "Built a human-reviewed browser-agent harness that combines Trackly MCP context, ATS-specific form rules, Chrome computer use, and a fresh approval gate before submission.",
     ],
   },
   {
