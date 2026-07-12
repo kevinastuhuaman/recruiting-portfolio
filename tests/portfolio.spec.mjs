@@ -44,6 +44,8 @@ for (const route of compatibilityRoutes) {
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "noindex, follow");
     await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
     await expect(page.getByRole("link", { name: /resume|how kevin worked/i }).first()).toBeVisible();
+    await expect(page.locator(".page-hero")).toHaveCSS("background-color", "rgb(247, 247, 242)");
+    await expect(page.locator(".page-hero h1")).toHaveCSS("color", "rgb(11, 11, 11)");
   });
 }
 
@@ -80,6 +82,7 @@ test("mobile anchor navigation closes the open menu", async ({ page }) => {
   await expect(page.locator(".mobile-nav")).toHaveAttribute("open", "");
   await page.locator('.mobile-nav a[href="/#work"]').click();
   await expect(page.locator(".mobile-nav")).not.toHaveAttribute("open", "");
+  await expect(page.locator("#work")).toBeVisible();
 });
 
 test("resume lenses highlight without removing chronology", async ({ page }) => {
@@ -159,6 +162,8 @@ test("404 output is excluded from indexing and structured data", async ({ page }
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "noindex, follow");
   await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
   await expect(page.locator('script[type="application/ld+json"]')).toHaveCount(0);
+  await expect(page.locator(".page-hero")).toHaveCSS("background-color", "rgb(247, 247, 242)");
+  await expect(page.locator(".page-hero h1")).toHaveCSS("color", "rgb(11, 11, 11)");
 });
 
 test("local previews never send production analytics", async ({ page }) => {
