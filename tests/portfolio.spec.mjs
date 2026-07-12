@@ -50,16 +50,15 @@ for (const route of compatibilityRoutes) {
 test("mobile first viewport leads with AI PM, Berkeley, and PayPal evidence", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/", { waitUntil: "networkidle" });
-  const hero = page.locator(".hero-content");
+  const hero = page.locator(".recruiter-hero");
 
   await expect(hero.getByRole("heading", { level: 1, name: /Kevin Astuhuaman/i })).toBeVisible();
-  await expect(hero.getByText(/agentic observability prototypes at PayPal Checkout/i)).toBeVisible();
+  await expect(hero.getByText(/agentic observability prototypes for PayPal Checkout/i)).toBeVisible();
   await expect(hero.getByText(/Berkeley Haas MBA '26/i)).toBeVisible();
   await expect(hero.getByRole("link", { name: "Resume", exact: true })).toBeVisible();
-  await expect(page.locator(".hero-scene")).toBeHidden();
   await expect(page.locator(".mobile-nav summary")).toBeVisible();
 
-  const positions = await page.locator(".hero-content").evaluateAll((elements) =>
+  const positions = await hero.locator("#home-title, .identity-stack, .role-focus").evaluateAll((elements) =>
     elements.map((element) => {
       const rect = element.getBoundingClientRect();
       return { top: rect.top, bottom: rect.bottom, width: rect.width };
@@ -67,11 +66,8 @@ test("mobile first viewport leads with AI PM, Berkeley, and PayPal evidence", as
   );
   expect(positions.every((position) => position.top < 844 && position.bottom > 0 && position.width > 0)).toBe(true);
 
-  const proofBand = await page.locator(".proof-band").evaluate((element) => element.getBoundingClientRect().top);
-  expect(proofBand).toBeLessThanOrEqual(844);
-
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await expect(page.locator(".hero-scene")).toBeVisible();
+  await expect(page.locator(".proof-strip")).toBeVisible();
 });
 
 test("mobile anchor navigation closes the open menu", async ({ page }) => {
