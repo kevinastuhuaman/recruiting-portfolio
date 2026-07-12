@@ -15,7 +15,7 @@ export const links = {
   linkedin: "https://www.linkedin.com/in/kevinastuhuaman",
   github: "https://github.com/kevinastuhuaman",
   writing: "https://kevinastuhuaman.com/",
-  trackly: "https://usetrackly.app",
+  trackly: "https://usetrackly.app/",
   appStore: "https://apps.apple.com/us/app/trackly-apply-first/id6758267565",
   tracklyCli: "https://github.com/trackly-app/trackly-cli",
   publicProfile:

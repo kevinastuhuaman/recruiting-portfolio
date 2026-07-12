@@ -34,7 +34,7 @@
       "id": "trackly-inventory",
       "statement": "Trackly monitored 1,969 company career sites across 40 ATS and source types, with 128,975 job records in its public inventory on July 12, 2026.",
       "short": "1,969 company career sites across 40 source types",
-      "source": "https://usetrackly.app",
+      "source": "https://usetrackly.app/",
       "checked": "2026-07-12",
       "state": "live public product",
       "context": "Dated inventory, not a user-adoption claim."
@@ -91,6 +91,6 @@
     "linkedin": "https://www.linkedin.com/in/kevinastuhuaman",
     "github": "https://github.com/kevinastuhuaman",
     "writing": "https://kevinastuhuaman.com/",
-    "trackly": "https://usetrackly.app"
+    "trackly": "https://usetrackly.app/"
   }
 }

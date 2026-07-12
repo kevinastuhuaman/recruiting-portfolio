@@ -88,19 +88,22 @@ test("resume lenses highlight without removing chronology", async ({ page }) => 
 
 test("the complete recruiting path works without JavaScript", async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
-  const page = await context.newPage();
-  await page.goto("/");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Kevin");
-  await expect(page.getByRole("link", { name: /View Trackly/i })).toBeVisible();
-  await page.goto("/resume/");
-  await expect(page.getByText("PayPal Checkout", { exact: true })).toBeVisible();
-  await expect(page.getByText(/Banco de Credito del Peru/i)).toBeVisible();
-  await page.goto("/contact/");
-  await expect(page.getByRole("link", { name: /LinkedIn/i }).first()).toBeVisible();
-  await page.goto("/ask/");
-  await expect(page.getByRole("heading", { name: "Four answers without the model." })).toBeVisible();
-  await expect(page.getByText(/Interactive questions require JavaScript/i)).toBeVisible();
-  await context.close();
+  try {
+    const page = await context.newPage();
+    await page.goto("/");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Kevin");
+    await expect(page.getByRole("link", { name: /View Trackly/i })).toBeVisible();
+    await page.goto("/resume/");
+    await expect(page.getByText("PayPal Checkout", { exact: true })).toBeVisible();
+    await expect(page.getByText(/Banco de Credito del Peru/i)).toBeVisible();
+    await page.goto("/contact/");
+    await expect(page.getByRole("link", { name: /LinkedIn/i }).first()).toBeVisible();
+    await page.goto("/ask/");
+    await expect(page.getByRole("heading", { name: "Four answers without the model." })).toBeVisible();
+    await expect(page.getByText(/Interactive questions require JavaScript/i)).toBeVisible();
+  } finally {
+    await context.close();
+  }
 });
 
 test("public machine files and resume PDF are fetchable", async ({ request }) => {

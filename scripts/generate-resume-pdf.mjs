@@ -33,8 +33,9 @@ await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
 const address = server.address();
 if (!address || typeof address === "string") throw new Error("Could not start PDF preview server");
 
-const browser = await chromium.launch({ headless: true });
+let browser;
 try {
+  browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
   await page.goto(`http://127.0.0.1:${address.port}/resume/`, { waitUntil: "networkidle" });
   await page.pdf({
@@ -47,8 +48,13 @@ try {
     margin: { top: "0.45in", right: "0.48in", bottom: "0.45in", left: "0.48in" },
   });
 } finally {
-  await browser.close();
-  await new Promise((resolve, reject) => server.close((error) => (error ? reject(error) : resolve())));
+  const cleanup = [
+    new Promise((resolve, reject) => server.close((error) => (error ? reject(error) : resolve()))),
+  ];
+  if (browser) cleanup.unshift(browser.close());
+  const results = await Promise.allSettled(cleanup);
+  const failure = results.find((result) => result.status === "rejected");
+  if (failure?.status === "rejected") throw failure.reason;
 }
 
 console.log("Generated tagged public resume PDF.");

@@ -44,6 +44,6 @@ Progressed through four product roles leading lending, marketplace, growth, and 
 
 ## Selected product
 
-- Trackly: https://usetrackly.app
+- Trackly: https://usetrackly.app/
 - Trackly App Store: https://apps.apple.com/us/app/trackly-apply-first/id6758267565
 - Trackly CLI and MCP: https://github.com/trackly-app/trackly-cli

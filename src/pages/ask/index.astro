@@ -139,8 +139,9 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 
     const ask = async (message: string) => {
       controller?.abort();
-      controller = new AbortController();
-      const timeout = window.setTimeout(() => controller?.abort(), 15000);
+      const activeController = new AbortController();
+      controller = activeController;
+      const timeout = window.setTimeout(() => activeController.abort(), 15000);
       setLoading(true);
       setStatus("Checking the public portfolio...");
       if (answerRegion instanceof HTMLElement) answerRegion.hidden = true;
@@ -149,22 +150,27 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message }),
-          signal: controller.signal,
+          signal: activeController.signal,
         });
         const payload = await response.json().catch(() => null);
         if (!response.ok || !payload || typeof payload.answer !== "string") {
           throw new Error(payload?.message || "The assistant is unavailable. Use the cited answers below.");
         }
+        if (controller !== activeController) return;
         if (answer) answer.textContent = payload.answer;
         renderCitations(payload.citations);
         if (answerRegion instanceof HTMLElement) answerRegion.hidden = false;
         setStatus("Answer complete.");
       } catch (error) {
+        if (controller !== activeController) return;
         const aborted = error instanceof DOMException && error.name === "AbortError";
         setStatus(aborted ? "Request stopped. The static cited answers remain available below." : error instanceof Error ? error.message : "The assistant is unavailable. Use the cited answers below.");
       } finally {
         window.clearTimeout(timeout);
-        setLoading(false);
+        if (controller === activeController) {
+          controller = undefined;
+          setLoading(false);
+        }
       }
     };
 

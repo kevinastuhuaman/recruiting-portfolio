@@ -197,7 +197,7 @@ Kevin built Trackly, a live job-search product spanning web, iOS, macOS, CLI, MC
 
 const fullText = `# Kevin Astuhuaman
 
-Last updated: July 12, 2026 PST
+Last updated: ${site.updated}
 
 ## Positioning
 
