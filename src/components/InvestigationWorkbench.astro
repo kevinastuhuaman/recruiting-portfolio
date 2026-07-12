@@ -1,0 +1,1033 @@
+---
+import {
+  Activity,
+  Check,
+  ChevronRight,
+  Clock,
+  Database,
+  FileSearch,
+  Play,
+  RotateCcw,
+  Send,
+  ShieldCheck,
+  TriangleAlert,
+} from "@lucide/astro";
+
+const { headingLevel = "h3" } = Astro.props;
+const Heading = headingLevel;
+---
+
+<section class="workbench" data-workbench data-stage="idle" aria-labelledby="workbench-title">
+  <header class="workbench-header">
+    <div>
+      <p class="workbench-kicker">Public-safe product reconstruction</p>
+      <Heading id="workbench-title">AI Investigation Workbench</Heading>
+      <p>Original interface, fictional commerce data, and no PayPal systems or assets.</p>
+    </div>
+    <div class="workbench-badges" aria-label="Prototype boundaries">
+      <span><ShieldCheck aria-hidden="true" size={15} /> Synthetic scenario</span>
+      <span><Database aria-hidden="true" size={15} /> No production data</span>
+    </div>
+  </header>
+
+  <div class="workbench-progress" aria-label="Investigation progress" tabindex="0">
+    <span data-progress="scope" aria-current="step"><b>01</b> Scope</span>
+    <ChevronRight aria-hidden="true" size={16} />
+    <span data-progress="plan"><b>02</b> Plan</span>
+    <ChevronRight aria-hidden="true" size={16} />
+    <span data-progress="evidence"><b>03</b> Evidence</span>
+    <ChevronRight aria-hidden="true" size={16} />
+    <span data-progress="review"><b>04</b> Human review</span>
+  </div>
+
+  <div class="workbench-layout">
+    <aside class="workbench-intake" aria-label="Investigation scope">
+      <fieldset>
+        <legend>Choose a synthetic incident</legend>
+        <button type="button" data-scenario="retries" aria-pressed="true">Payment retries</button>
+        <button type="button" data-scenario="latency" aria-pressed="false">Slow authentication</button>
+        <button type="button" data-scenario="integration" aria-pressed="false">Integration errors</button>
+      </fieldset>
+
+      <div class="workbench-prompt">
+        <span>Question</span>
+        <p data-workbench-copy="prompt">Why did mobile checkout completion fall after the payment-method step?</p>
+      </div>
+
+      <dl class="workbench-scope">
+        <div><dt>Product</dt><dd>Northstar Checkout</dd></div>
+        <div><dt>Segment</dt><dd data-workbench-copy="segment">Returning mobile customers</dd></div>
+        <div><dt>Window</dt><dd>Last 24 hours</dd></div>
+        <div><dt>Agent permission</dt><dd>Read-only evidence</dd></div>
+      </dl>
+
+      <div class="workbench-controls">
+        <button class="workbench-primary" type="button" data-workbench-action>
+          <Play aria-hidden="true" size={16} />
+          <span>Build investigation plan</span>
+        </button>
+        <button class="workbench-reset" type="button" data-workbench-reset>
+          <RotateCcw aria-hidden="true" size={15} /> Reset
+        </button>
+      </div>
+      <p class="workbench-status" role="status" aria-live="polite" data-workbench-status>Ready to scope a bounded investigation.</p>
+    </aside>
+
+    <div class="workbench-canvas">
+      <section class="workbench-panel workbench-idle" data-panel="idle" aria-labelledby="idle-title">
+        <div class="empty-signal" aria-hidden="true">
+          <Activity size={32} />
+          <span></span><span></span><span></span><span></span>
+        </div>
+        <p class="panel-label">Before the agent runs</p>
+        <h4 id="idle-title">The user sees the scope, sources, and boundaries first.</h4>
+        <p>The agent cannot send alerts, change checkout behavior, or make a production decision. It can assemble evidence and recommend the next accountable action.</p>
+        <div class="boundary-grid">
+          <div><strong>May do</strong><span>Read approved synthetic sources</span></div>
+          <div><strong>Must show</strong><span>Evidence, contradictions, and unknowns</span></div>
+          <div><strong>May not do</strong><span>Route an escalation without approval</span></div>
+        </div>
+      </section>
+
+      <section class="workbench-panel" data-panel="plan" aria-labelledby="plan-title">
+        <div class="panel-heading">
+          <div>
+            <p class="panel-label">Bounded plan</p>
+            <h4 id="plan-title">Five read-only steps, visible before execution.</h4>
+          </div>
+          <span class="state-pill"><Clock aria-hidden="true" size={14} /> Awaiting approval</span>
+        </div>
+        <ol class="plan-list">
+          <li><span>01</span><div><strong>Compare funnel movement</strong><small>Aggregate analytics · Locate the change</small></div><em>Read</em></li>
+          <li><span>02</span><div><strong>Inspect behavioral patterns</strong><small>Session events · Explain the struggle</small></div><em>Read</em></li>
+          <li><span>03</span><div><strong>Correlate service health</strong><small>Service telemetry · Test a system cause</small></div><em>Read</em></li>
+          <li><span>04</span><div><strong>Search similar issues</strong><small>Issue history · Find prior evidence</small></div><em>Read</em></li>
+          <li><span>05</span><div><strong>Estimate impact range</strong><small>Derived result · State uncertainty</small></div><em>Compute</em></li>
+        </ol>
+      </section>
+
+      <section class="workbench-panel" data-panel="evidence" aria-labelledby="evidence-title">
+        <div class="panel-heading">
+          <div>
+            <p class="panel-label">Evidence timeline</p>
+            <h4 id="evidence-title">What happened and why the user struggled.</h4>
+          </div>
+          <span class="state-pill complete"><Check aria-hidden="true" size={14} /> 4 of 5 checks</span>
+        </div>
+        <div class="evidence-grid">
+          <article>
+            <span class="source-ready"><Check aria-hidden="true" size={14} /> Funnel analytics</span>
+            <strong data-workbench-copy="funnel">Completion fell 12% after payment selection.</strong>
+            <small>Observation · Synthetic source A-104</small>
+          </article>
+          <article>
+            <span class="source-ready"><Check aria-hidden="true" size={14} /> Behavioral sessions</span>
+            <strong data-workbench-copy="behavior">Repeated payment attempts and contradictory messages clustered in one flow.</strong>
+            <small>Observation · Synthetic source B-220</small>
+          </article>
+          <article class="source-warning">
+            <span><TriangleAlert aria-hidden="true" size={14} /> Service telemetry</span>
+            <strong>One source timed out. No healthy result was inferred.</strong>
+            <small>Unknown · Retry available</small>
+          </article>
+          <article>
+            <span class="source-ready"><Check aria-hidden="true" size={14} /> Issue history</span>
+            <strong data-workbench-copy="history">A prior issue shares two signals but differs by platform.</strong>
+            <small>Contradiction · Synthetic source D-041</small>
+          </article>
+        </div>
+      </section>
+
+      <section class="workbench-panel" data-panel="hypothesis" aria-labelledby="hypothesis-title">
+        <div class="panel-heading">
+          <div>
+            <p class="panel-label">Ranked hypothesis</p>
+            <h4 id="hypothesis-title" data-workbench-copy="hypothesis">A retry-state defect is the leading explanation.</h4>
+          </div>
+          <span class="state-pill review"><FileSearch aria-hidden="true" size={14} /> Human review required</span>
+        </div>
+        <div class="hypothesis-layout">
+          <div class="confidence-band">
+            <span>Confidence band</span>
+            <strong>Moderate</strong>
+            <div role="img" aria-label="Moderate confidence"><i></i><i></i><i></i><i></i></div>
+            <small>No decimal precision: one diagnostic source is unavailable.</small>
+          </div>
+          <dl>
+            <div><dt>Observation</dt><dd data-workbench-copy="observation">Retries increased before abandonment.</dd></div>
+            <div><dt>Inference</dt><dd data-workbench-copy="inference">The state transition may be presenting conflicting next actions.</dd></div>
+            <div><dt>Contradiction</dt><dd data-workbench-copy="contradiction">The comparable historical issue affected desktop, not mobile.</dd></div>
+            <div><dt>Unknown</dt><dd>Service telemetry is incomplete. Confirm before remediation.</dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="workbench-panel" data-panel="review" aria-labelledby="review-title">
+        <div class="panel-heading">
+          <div>
+            <p class="panel-label">Human review</p>
+            <h4 id="review-title">The agent drafts the handoff. A person owns the action.</h4>
+          </div>
+          <span class="state-pill review"><ShieldCheck aria-hidden="true" size={14} /> Not yet routed</span>
+        </div>
+        <div class="review-card">
+          <div>
+            <span>Proposed owner</span>
+            <strong data-workbench-copy="owner">Checkout experience</strong>
+          </div>
+          <div>
+            <span>Impact range</span>
+            <strong data-workbench-copy="impact">1,100-1,500 synthetic sessions</strong>
+          </div>
+          <div class="review-summary">
+            <span>Draft diagnosis</span>
+            <p data-workbench-copy="summary">Returning mobile customers encountered conflicting payment retry states. Behavioral evidence supports the pattern; service telemetry remains incomplete.</p>
+          </div>
+        </div>
+        <div class="review-actions" aria-label="Review decision">
+          <button type="button" data-review-action="approve"><Send aria-hidden="true" size={15} /> Approve and route</button>
+          <button type="button" data-review-action="evidence">Request more evidence</button>
+          <button type="button" data-review-action="close">Close as inconclusive</button>
+        </div>
+      </section>
+
+      <section class="workbench-panel workbench-result" data-panel="routed" aria-labelledby="routed-title">
+        <Check aria-hidden="true" size={34} />
+        <p class="panel-label">Routed after approval</p>
+        <h4 id="routed-title">The evidence package now has an accountable owner.</h4>
+        <p>No production action was taken. The audit trail records the agent plan, source results, missing evidence, hypothesis, reviewer, and routing decision.</p>
+      </section>
+
+      <section class="workbench-panel workbench-result inconclusive" data-panel="closed" aria-labelledby="closed-title">
+        <TriangleAlert aria-hidden="true" size={34} />
+        <p class="panel-label">Closed without a claim</p>
+        <h4 id="closed-title">Incomplete evidence stays incomplete.</h4>
+        <p>The investigation preserves its evidence and unknowns without converting uncertainty into a confident diagnosis.</p>
+      </section>
+    </div>
+  </div>
+
+  <noscript>
+    <div class="workbench-noscript">
+      Interactive controls require JavaScript. The product rule remains visible: the agent may assemble evidence and draft a recommendation, but a person approves any escalation.
+    </div>
+  </noscript>
+</section>
+
+<script>
+  const scenarioData = {
+    retries: {
+      prompt: "Why did mobile checkout completion fall after the payment-method step?",
+      segment: "Returning mobile customers",
+      funnel: "Completion fell 12% after payment selection.",
+      behavior: "Repeated payment attempts and contradictory messages clustered in one flow.",
+      history: "A prior issue shares two signals but differs by platform.",
+      hypothesis: "A retry-state defect is the leading explanation.",
+      observation: "Retries increased before abandonment.",
+      inference: "The state transition may be presenting conflicting next actions.",
+      contradiction: "The comparable historical issue affected desktop, not mobile.",
+      owner: "Checkout experience",
+      impact: "1,100-1,500 synthetic sessions",
+      summary: "Returning mobile customers encountered conflicting payment retry states. Behavioral evidence supports the pattern; service telemetry remains incomplete.",
+    },
+    latency: {
+      prompt: "Why are customers leaving before the authentication screen becomes usable?",
+      segment: "Tablet customers",
+      funnel: "Authentication starts fell 9% while upstream traffic stayed stable.",
+      behavior: "Most exits occurred before the primary authentication action rendered.",
+      history: "A prior latency issue affected another browser but had a similar wait pattern.",
+      hypothesis: "A slow interactive state is the leading explanation.",
+      observation: "Customers exited before the primary action became available.",
+      inference: "Render latency may be blocking the intended authentication path.",
+      contradiction: "The median page load remains inside the broad service target.",
+      owner: "Identity experience",
+      impact: "700-980 synthetic sessions",
+      summary: "Tablet customers left before authentication became interactive. Behavioral timing supports a client-side delay; service telemetry remains incomplete.",
+    },
+    integration: {
+      prompt: "Why did one checkout integration begin failing after a configuration change?",
+      segment: "New merchant sessions",
+      funnel: "Payment attempts fell 16% for one synthetic integration cohort.",
+      behavior: "Customers repeatedly returned to the same confirmation step before leaving.",
+      history: "A configuration incident shares the sequence but not the current error family.",
+      hypothesis: "An integration-state mismatch is the leading explanation.",
+      observation: "The affected cohort changed immediately after a configuration event.",
+      inference: "Two systems may disagree about the expected confirmation state.",
+      contradiction: "The same configuration completed successfully in a test cohort.",
+      owner: "Merchant integration",
+      impact: "420-610 synthetic sessions",
+      summary: "A synthetic integration cohort failed after a configuration event. Funnel and behavior evidence support a state mismatch; service telemetry remains incomplete.",
+    },
+  };
+
+  type ScenarioKey = keyof typeof scenarioData;
+  type WorkbenchStage = "idle" | "plan" | "evidence" | "hypothesis" | "review" | "routed" | "closed";
+
+  const stageOrder: WorkbenchStage[] = ["idle", "plan", "evidence", "hypothesis", "review"];
+  const actionLabels: Partial<Record<WorkbenchStage, string>> = {
+    idle: "Build investigation plan",
+    plan: "Run approved steps",
+    evidence: "Review hypotheses",
+    hypothesis: "Prepare escalation",
+  };
+  const statusLabels: Record<WorkbenchStage, string> = {
+    idle: "Ready to scope a bounded investigation.",
+    plan: "Plan ready. Review the sources and permissions before execution.",
+    evidence: "Evidence collected. One source remains unavailable.",
+    hypothesis: "Hypothesis ready with supporting, conflicting, and missing evidence.",
+    review: "Escalation draft ready for a human decision.",
+    routed: "Approved and routed. The audit trail is complete.",
+    closed: "Closed as inconclusive. No unsupported diagnosis was created.",
+  };
+
+  document.querySelectorAll("[data-workbench]").forEach((workbench) => {
+    if (!(workbench instanceof HTMLElement)) return;
+    let scenario: ScenarioKey = "retries";
+
+    const action = workbench.querySelector("[data-workbench-action]");
+    const actionText = action?.querySelector("span");
+    const status = workbench.querySelector("[data-workbench-status]");
+
+    const setScenario = (nextScenario: string) => {
+      if (!(nextScenario in scenarioData)) return;
+      scenario = nextScenario as ScenarioKey;
+      const copy = scenarioData[scenario];
+      workbench.querySelectorAll("[data-scenario]").forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.getAttribute("data-scenario") === scenario));
+      });
+      workbench.querySelectorAll("[data-workbench-copy]").forEach((element) => {
+        const key = element.getAttribute("data-workbench-copy");
+        if (key && key in copy) element.textContent = copy[key as keyof typeof copy];
+      });
+      setStage("idle");
+    };
+
+    const setStage = (stage: WorkbenchStage) => {
+      workbench.dataset.stage = stage;
+      const progressStage = stage === "idle" ? "scope" : stage === "plan" ? "plan" : stage === "evidence" ? "evidence" : "review";
+      workbench.querySelectorAll("[data-progress]").forEach((item) => {
+        if (item.getAttribute("data-progress") === progressStage) item.setAttribute("aria-current", "step");
+        else item.removeAttribute("aria-current");
+      });
+      if (action instanceof HTMLButtonElement) {
+        const label = actionLabels[stage];
+        action.hidden = !label;
+        if (label && actionText) actionText.textContent = label;
+      }
+      if (status) status.textContent = statusLabels[stage] ?? statusLabels.idle;
+    };
+
+    workbench.querySelectorAll("[data-scenario]").forEach((button) => {
+      button.addEventListener("click", () => setScenario(button.getAttribute("data-scenario") ?? "retries"));
+    });
+
+    action?.addEventListener("click", () => {
+      const candidate = workbench.dataset.stage ?? "idle";
+      const current: WorkbenchStage = stageOrder.includes(candidate as WorkbenchStage) ? candidate as WorkbenchStage : "idle";
+      const index = stageOrder.indexOf(current);
+      if (index >= 0 && index < stageOrder.length - 1) setStage(stageOrder[index + 1]);
+    });
+
+    workbench.querySelector("[data-workbench-reset]")?.addEventListener("click", () => setStage("idle"));
+
+    workbench.querySelectorAll("[data-review-action]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const decision = button.getAttribute("data-review-action");
+        if (decision === "approve") setStage("routed");
+        if (decision === "evidence") setStage("evidence");
+        if (decision === "close") setStage("closed");
+      });
+    });
+
+    setScenario(scenario);
+  });
+</script>
+
+<style>
+  .workbench {
+    --wb-ink: #111318;
+    --wb-panel: #f6f7f9;
+    --wb-muted: #59616d;
+    --wb-rule: #cdd2da;
+    --wb-blue: #0057b8;
+    --wb-cyan: #0b7285;
+    --wb-green: #087f5b;
+    --wb-amber: #9a5b00;
+    overflow: hidden;
+    background: #ffffff;
+    color: var(--wb-ink);
+    border: 1px solid #252932;
+    border-radius: 6px;
+    box-shadow: 0 22px 70px rgba(16, 24, 40, 0.14);
+  }
+
+  .workbench-header {
+    display: flex;
+    min-height: 120px;
+    padding: 24px 28px;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 28px;
+    background: #121722;
+    color: white;
+  }
+
+  .workbench-kicker,
+  .panel-label {
+    margin: 0 0 8px;
+    color: #69d2e7;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .workbench-header h2,
+  .workbench-header h3 {
+    margin: 0;
+    font-size: clamp(1.55rem, 3vw, 2.2rem);
+    letter-spacing: 0;
+  }
+
+  .workbench-header p:last-child {
+    max-width: 650px;
+    margin: 8px 0 0;
+    color: #c9d0dc;
+  }
+
+  .workbench-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .workbench-badges span,
+  .state-pill {
+    display: inline-flex;
+    min-height: 30px;
+    padding: 5px 9px;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #4d5665;
+    border-radius: 4px;
+    color: #eef2f7;
+    font-size: 0.72rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .workbench-progress {
+    display: flex;
+    min-height: 52px;
+    padding: 10px 24px;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid var(--wb-rule);
+    background: #eef1f5;
+    color: var(--wb-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  .workbench-progress span {
+    display: inline-flex;
+    min-height: 32px;
+    padding: 6px 9px;
+    align-items: center;
+    gap: 7px;
+    border-radius: 4px;
+  }
+
+  .workbench-progress span[aria-current="step"] {
+    background: #111318;
+    color: white;
+  }
+
+  .workbench-progress b {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.68rem;
+  }
+
+  .workbench-layout {
+    display: grid;
+    grid-template-columns: minmax(270px, 0.7fr) minmax(0, 1.3fr);
+    min-height: 650px;
+  }
+
+  .workbench-intake {
+    padding: 24px;
+    border-right: 1px solid var(--wb-rule);
+    background: var(--wb-panel);
+  }
+
+  .workbench-intake fieldset {
+    display: grid;
+    margin: 0 0 20px;
+    padding: 0;
+    gap: 7px;
+    border: 0;
+  }
+
+  .workbench-intake legend,
+  .workbench-prompt > span {
+    margin-bottom: 10px;
+    color: var(--wb-muted);
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .workbench-intake fieldset button,
+  .workbench-reset,
+  .review-actions button {
+    min-height: 40px;
+    padding: 9px 11px;
+    border: 1px solid var(--wb-rule);
+    border-radius: 4px;
+    background: white;
+    color: var(--wb-ink);
+    font: inherit;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .workbench-intake fieldset button[aria-pressed="true"] {
+    border-color: var(--wb-blue);
+    background: #e8f1fb;
+    color: #003f88;
+  }
+
+  .workbench-prompt {
+    min-height: 142px;
+    padding: 16px;
+    border: 1px solid #9ba4b1;
+    border-radius: 4px;
+    background: white;
+  }
+
+  .workbench-prompt p {
+    margin: 12px 0 0;
+    font-size: 1.02rem;
+    font-weight: 700;
+    line-height: 1.42;
+  }
+
+  .workbench-scope {
+    margin: 22px 0;
+    border-top: 1px solid var(--wb-rule);
+  }
+
+  .workbench-scope div {
+    display: grid;
+    grid-template-columns: 0.78fr 1.22fr;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--wb-rule);
+  }
+
+  .workbench-scope dt,
+  .workbench-scope dd {
+    margin: 0;
+    font-size: 0.75rem;
+  }
+
+  .workbench-scope dt {
+    color: var(--wb-muted);
+  }
+
+  .workbench-scope dd {
+    font-weight: 700;
+    text-align: right;
+  }
+
+  .workbench-controls {
+    display: grid;
+    gap: 8px;
+  }
+
+  .workbench-primary {
+    display: inline-flex;
+    min-height: 46px;
+    padding: 10px 14px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid #003f88;
+    border-radius: 4px;
+    background: var(--wb-blue);
+    color: white;
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .workbench-primary[hidden] {
+    display: none;
+  }
+
+  .workbench-reset {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    text-align: center;
+  }
+
+  .workbench-status {
+    min-height: 38px;
+    margin: 14px 0 0;
+    color: var(--wb-muted);
+    font-size: 0.75rem;
+  }
+
+  .workbench-canvas {
+    min-width: 0;
+    padding: clamp(24px, 4vw, 46px);
+    background: #ffffff;
+  }
+
+  .workbench-panel {
+    display: none;
+  }
+
+  .workbench[data-stage="idle"] [data-panel="idle"],
+  .workbench[data-stage="plan"] [data-panel="plan"],
+  .workbench[data-stage="evidence"] [data-panel="evidence"],
+  .workbench[data-stage="hypothesis"] [data-panel="hypothesis"],
+  .workbench[data-stage="review"] [data-panel="review"],
+  .workbench[data-stage="routed"] [data-panel="routed"],
+  .workbench[data-stage="closed"] [data-panel="closed"] {
+    display: block;
+  }
+
+  .panel-heading {
+    display: flex;
+    margin-bottom: 28px;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+  }
+
+  .panel-label {
+    color: var(--wb-cyan);
+  }
+
+  .workbench-panel h4 {
+    max-width: 680px;
+    margin: 0;
+    font-size: clamp(1.45rem, 3vw, 2.15rem);
+    line-height: 1.08;
+    letter-spacing: 0;
+  }
+
+  .state-pill {
+    border-color: #7d8795;
+    color: #39414d;
+  }
+
+  .state-pill.complete {
+    border-color: #55a687;
+    background: #e5f5ee;
+    color: #075b41;
+  }
+
+  .state-pill.review {
+    border-color: #ce9a43;
+    background: #fff4dc;
+    color: #734400;
+  }
+
+  .workbench-idle > p:not(.panel-label),
+  .workbench-result > p:not(.panel-label) {
+    max-width: 700px;
+    color: var(--wb-muted);
+    font-size: 1rem;
+  }
+
+  .empty-signal {
+    display: grid;
+    grid-template-columns: auto repeat(4, 1fr);
+    min-height: 84px;
+    margin-bottom: 34px;
+    align-items: center;
+    gap: 12px;
+    color: var(--wb-blue);
+  }
+
+  .empty-signal span {
+    display: block;
+    height: 2px;
+    background: #b9c3d1;
+  }
+
+  .boundary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 42px;
+    border-top: 1px solid var(--wb-rule);
+  }
+
+  .boundary-grid div {
+    min-height: 130px;
+    padding: 20px 18px 16px 0;
+  }
+
+  .boundary-grid div + div {
+    padding-left: 18px;
+    border-left: 1px solid var(--wb-rule);
+  }
+
+  .boundary-grid strong,
+  .boundary-grid span {
+    display: block;
+  }
+
+  .boundary-grid span {
+    margin-top: 12px;
+    color: var(--wb-muted);
+    font-size: 0.82rem;
+  }
+
+  .plan-list {
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--wb-rule);
+    list-style: none;
+  }
+
+  .plan-list li {
+    display: grid;
+    grid-template-columns: 42px 1fr auto;
+    min-height: 74px;
+    padding: 13px 0;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--wb-rule);
+  }
+
+  .plan-list li > span {
+    color: var(--wb-muted);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.72rem;
+  }
+
+  .plan-list strong,
+  .plan-list small {
+    display: block;
+  }
+
+  .plan-list small {
+    margin-top: 3px;
+    color: var(--wb-muted);
+  }
+
+  .plan-list em {
+    color: var(--wb-cyan);
+    font-size: 0.72rem;
+    font-style: normal;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .evidence-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .evidence-grid article {
+    min-height: 170px;
+    padding: 18px;
+    border: 1px solid var(--wb-rule);
+    border-radius: 4px;
+    background: var(--wb-panel);
+  }
+
+  .evidence-grid article > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--wb-green);
+    font-size: 0.73rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .evidence-grid article.source-warning {
+    border-color: #d7ac62;
+    background: #fff8e9;
+  }
+
+  .evidence-grid article.source-warning > span {
+    color: var(--wb-amber);
+  }
+
+  .evidence-grid strong,
+  .evidence-grid small {
+    display: block;
+  }
+
+  .evidence-grid strong {
+    margin-top: 26px;
+    line-height: 1.35;
+  }
+
+  .evidence-grid small {
+    margin-top: 12px;
+    color: var(--wb-muted);
+  }
+
+  .hypothesis-layout {
+    display: grid;
+    grid-template-columns: minmax(190px, 0.56fr) minmax(0, 1.44fr);
+    gap: 24px;
+  }
+
+  .confidence-band {
+    padding: 22px;
+    border: 1px solid var(--wb-rule);
+    border-radius: 4px;
+    background: #eef4fb;
+  }
+
+  .confidence-band > span,
+  .confidence-band > strong,
+  .confidence-band > small {
+    display: block;
+  }
+
+  .confidence-band > span,
+  .confidence-band > small {
+    color: var(--wb-muted);
+    font-size: 0.75rem;
+  }
+
+  .confidence-band > strong {
+    margin: 18px 0 16px;
+    font-size: 1.45rem;
+  }
+
+  .confidence-band > div {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin-bottom: 18px;
+    gap: 5px;
+  }
+
+  .confidence-band i {
+    height: 8px;
+    background: #bcc7d5;
+  }
+
+  .confidence-band i:nth-child(-n + 2) {
+    background: var(--wb-blue);
+  }
+
+  .hypothesis-layout dl {
+    margin: 0;
+    border-top: 1px solid var(--wb-rule);
+  }
+
+  .hypothesis-layout dl > div {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--wb-rule);
+  }
+
+  .hypothesis-layout dt {
+    color: var(--wb-muted);
+    font-size: 0.74rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .hypothesis-layout dd {
+    margin: 0;
+    font-size: 0.86rem;
+  }
+
+  .review-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 1px solid var(--wb-rule);
+    border-radius: 4px;
+  }
+
+  .review-card > div {
+    min-height: 100px;
+    padding: 18px;
+  }
+
+  .review-card > div + div {
+    border-left: 1px solid var(--wb-rule);
+  }
+
+  .review-card span,
+  .review-card strong {
+    display: block;
+  }
+
+  .review-card span {
+    color: var(--wb-muted);
+    font-size: 0.73rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .review-card strong,
+  .review-card p {
+    margin-top: 14px;
+  }
+
+  .review-card .review-summary {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--wb-rule);
+    border-left: 0;
+  }
+
+  .review-card p {
+    max-width: 760px;
+    margin-bottom: 0;
+  }
+
+  .review-actions {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 16px;
+    gap: 8px;
+  }
+
+  .review-actions button {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .review-actions button:first-child {
+    border-color: var(--wb-blue);
+    background: var(--wb-blue);
+    color: white;
+  }
+
+  .workbench-result {
+    max-width: 720px;
+    padding-top: 60px;
+    color: var(--wb-green);
+  }
+
+  .workbench-result h4,
+  .workbench-result p {
+    color: var(--wb-ink);
+  }
+
+  .workbench-result .panel-label {
+    margin-top: 24px;
+  }
+
+  .workbench-result.inconclusive {
+    color: var(--wb-amber);
+  }
+
+  .workbench-noscript {
+    padding: 16px 24px;
+    border-top: 1px solid var(--wb-rule);
+    background: #fff8e9;
+    color: #6c4506;
+    font-size: 0.82rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .workbench *,
+    .workbench *::before,
+    .workbench *::after {
+      scroll-behavior: auto !important;
+      transition: none !important;
+    }
+  }
+
+  @media (max-width: 850px) {
+    .workbench-header,
+    .panel-heading {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .workbench-badges {
+      justify-content: flex-start;
+    }
+
+    .workbench-progress {
+      overflow-x: auto;
+    }
+
+    .workbench-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .workbench-intake {
+      border-right: 0;
+      border-bottom: 1px solid var(--wb-rule);
+    }
+
+    .workbench-intake fieldset {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .workbench-header,
+    .workbench-intake,
+    .workbench-canvas {
+      padding: 20px;
+    }
+
+    .workbench-progress {
+      padding-inline: 12px;
+    }
+
+    .workbench-progress svg {
+      display: none;
+    }
+
+    .workbench-progress span {
+      min-width: max-content;
+    }
+
+    .workbench-intake fieldset,
+    .evidence-grid,
+    .hypothesis-layout,
+    .review-card,
+    .boundary-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .boundary-grid div + div,
+    .review-card > div + div {
+      padding-left: 0;
+      border-left: 0;
+      border-top: 1px solid var(--wb-rule);
+    }
+
+    .review-card .review-summary {
+      grid-column: auto;
+    }
+
+    .hypothesis-layout dl > div {
+      grid-template-columns: 1fr;
+      gap: 5px;
+    }
+
+    .review-actions {
+      display: grid;
+    }
+
+    .review-actions button {
+      justify-content: center;
+      text-align: center;
+    }
+  }
+</style>

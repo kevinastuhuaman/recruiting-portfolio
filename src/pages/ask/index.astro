@@ -1,0 +1,235 @@
+---
+import { ArrowUpRight, Send, Square } from "@lucide/astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Ask Kevin's portfolio | Kevin Astuhuaman"
+  description="Ask a question about Kevin Astuhuaman's public product work, experience, and technical range, with citations to the portfolio."
+  path="/ask/"
+>
+  <header class="page-hero ask-hero">
+    <div class="section-shell">
+      <p class="eyebrow">Public-corpus beta</p>
+      <h1>Ask the portfolio, then inspect the source.</h1>
+      <p class="lede">This assistant can answer only from the public PayPal, Trackly, Berkeley and MoBagel, BCP, resume, and contact evidence on this site. It has no access to private applications, users, email, calendar, or internal systems.</p>
+    </div>
+  </header>
+
+  <section class="ask-body section-pad">
+    <div class="section-shell ask-layout">
+      <div class="assistant-column">
+        <div class="assistant-enhancement" data-assistant hidden>
+          <form data-assistant-form>
+            <label for="portfolio-question">Question about Kevin's work</label>
+            <textarea id="portfolio-question" name="message" rows="4" maxlength="600" required placeholder="What product decisions in Trackly show Kevin's AI PM judgment?"></textarea>
+            <div class="assistant-actions">
+              <button class="button button-dark" type="submit" data-submit>
+                <Send aria-hidden="true" size={17} /> Ask
+              </button>
+              <button class="button" type="button" data-stop hidden>
+                <Square aria-hidden="true" size={15} /> Stop
+              </button>
+              <span><span data-count>0</span>/600</span>
+            </div>
+          </form>
+
+          <div class="suggestions" aria-label="Suggested questions">
+            <button type="button" data-question="What product decisions in Trackly best show Kevin's judgment?">Trackly decisions</button>
+            <button type="button" data-question="What did Kevin build at PayPal Checkout?">PayPal scope</button>
+            <button type="button" data-question="What did Kevin do with Berkeley's Open Innovation Squad and MoBagel?">Berkeley and MoBagel</button>
+            <button type="button" data-question="What evidence shows Kevin has led products and teams at scale?">Leadership evidence</button>
+            <button type="button" data-question="Which AI product roles fit Kevin best?">Role fit</button>
+          </div>
+
+          <p class="assistant-status" data-status role="status" aria-live="polite"></p>
+          <section class="assistant-answer" data-answer-region hidden aria-labelledby="answer-title">
+            <h2 id="answer-title">Answer</h2>
+            <p data-answer></p>
+            <div data-citations></div>
+          </section>
+        </div>
+
+        <noscript>
+          <p class="fallback-note">Interactive questions require JavaScript. The cited answers below cover the questions recruiters ask most often.</p>
+        </noscript>
+      </div>
+
+      <aside class="assistant-boundary">
+        <p class="eyebrow">Boundary</p>
+        <h2>Useful by being narrow.</h2>
+        <ul>
+          <li>Public portfolio evidence only</li>
+          <li>No tools or runtime web browsing</li>
+          <li>No conversation history or account required</li>
+          <li>Every supported answer links to an inspectable source</li>
+        </ul>
+        <a class="text-link" href="/proof/">Review the public evidence <ArrowUpRight aria-hidden="true" size={17} /></a>
+      </aside>
+    </div>
+  </section>
+
+  <section class="faq-section section-pad" aria-labelledby="faq-title">
+    <div class="section-shell">
+      <p class="eyebrow">Static fallback</p>
+      <h2 id="faq-title">Five answers without the model.</h2>
+      <div class="faq-list">
+        <details open>
+          <summary>What kind of product role fits Kevin?</summary>
+          <p>Applied AI and agent products, plus AI platform or technical product roles where reliability, evals, architecture, and adoption all matter. <a href="/">Portfolio overview</a></p>
+        </details>
+        <details>
+          <summary>What did Kevin personally own in Trackly?</summary>
+          <p>The product problem, prioritization, interaction choices, quality thresholds, release decisions, operation, and hands-on implementation across the system. <a href="/projects/trackly/">Trackly case study</a></p>
+        </details>
+        <details>
+          <summary>Was the PayPal work a production deployment?</summary>
+          <p>The public results refer to an internship prototype and proof of concept, not a PayPal-wide production deployment. <a href="/projects/paypal-ai-observability/">PayPal case study</a></p>
+        </details>
+        <details>
+          <summary>What did Kevin do with Berkeley and MoBagel?</summary>
+          <p>Product and competitive research, feature and UX concepts, a high-fidelity Figma prototype, roadmap and business-model work, and United States go-to-market recommendations through Berkeley's Fujitsu and MoBagel Open Innovation challenge. <a href="/projects/berkeley-mobagel-ai-gtm/">Berkeley and MoBagel case study</a></p>
+        </details>
+        <details>
+          <summary>What shows senior product scope?</summary>
+          <p>Six years of progression at BCP, production lending and digital-channel outcomes, cross-functional ownership, and nine product direct reports. <a href="/projects/smb-fintech-bcp-credicorp/">BCP product leadership case study</a></p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const root = document.querySelector("[data-assistant]");
+    const form = document.querySelector("[data-assistant-form]");
+    const input = document.querySelector("#portfolio-question");
+    const submit = document.querySelector("[data-submit]");
+    const stop = document.querySelector("[data-stop]");
+    const status = document.querySelector("[data-status]");
+    const count = document.querySelector("[data-count]");
+    const answerRegion = document.querySelector("[data-answer-region]");
+    const answer = document.querySelector("[data-answer]");
+    const citations = document.querySelector("[data-citations]");
+    let controller: AbortController | undefined;
+
+    const setStatus = (message: string) => {
+      if (status) status.textContent = message;
+    };
+
+    const setLoading = (loading: boolean) => {
+      if (submit instanceof HTMLButtonElement) submit.disabled = loading;
+      if (stop instanceof HTMLButtonElement) stop.hidden = !loading;
+    };
+
+    const renderCitations = (items: unknown) => {
+      if (!citations) return;
+      citations.replaceChildren();
+      if (!Array.isArray(items) || items.length === 0) return;
+      const heading = document.createElement("h3");
+      heading.textContent = "Sources";
+      const list = document.createElement("ol");
+      for (const item of items) {
+        if (!item || typeof item.title !== "string" || typeof item.url !== "string") continue;
+        let url;
+        try { url = new URL(item.url); } catch { continue; }
+        if (url.origin !== "https://portfolio.kevinastuhuaman.com") continue;
+        const link = document.createElement("a");
+        link.href = url.href;
+        link.textContent = item.title;
+        const li = document.createElement("li");
+        li.append(link);
+        list.append(li);
+      }
+      if (list.childElementCount > 0) citations.append(heading, list);
+    };
+
+    const ask = async (message: string) => {
+      controller?.abort();
+      const activeController = new AbortController();
+      controller = activeController;
+      const timeout = window.setTimeout(() => activeController.abort(), 15000);
+      setLoading(true);
+      setStatus("Checking the public portfolio...");
+      if (answerRegion instanceof HTMLElement) answerRegion.hidden = true;
+      try {
+        const response = await fetch("https://closeai.mba/api/portfolio/ask", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message }),
+          signal: activeController.signal,
+        });
+        const payload = await response.json().catch(() => null);
+        if (!response.ok || !payload || typeof payload.answer !== "string") {
+          throw new Error(payload?.message || "The assistant is unavailable. Use the cited answers below.");
+        }
+        if (controller !== activeController) return;
+        if (answer) answer.textContent = payload.answer;
+        renderCitations(payload.citations);
+        if (answerRegion instanceof HTMLElement) answerRegion.hidden = false;
+        setStatus("Answer complete.");
+      } catch (error) {
+        if (controller !== activeController) return;
+        const aborted = error instanceof DOMException && error.name === "AbortError";
+        setStatus(aborted ? "Request stopped. The static cited answers remain available below." : error instanceof Error ? error.message : "The assistant is unavailable. Use the cited answers below.");
+      } finally {
+        window.clearTimeout(timeout);
+        if (controller === activeController) {
+          controller = undefined;
+          setLoading(false);
+        }
+      }
+    };
+
+    if (root instanceof HTMLElement) root.hidden = false;
+    input?.addEventListener("input", () => {
+      if (count && input instanceof HTMLTextAreaElement) count.textContent = String(input.value.length);
+    });
+    form?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (!(input instanceof HTMLTextAreaElement)) return;
+      const message = input.value.trim();
+      if (message.length >= 2) void ask(message);
+    });
+    stop?.addEventListener("click", () => controller?.abort());
+    document.querySelectorAll("[data-question]").forEach((button) => {
+      button.addEventListener("click", () => {
+        if (!(button instanceof HTMLButtonElement) || !(input instanceof HTMLTextAreaElement)) return;
+        input.value = button.dataset.question || "";
+        if (count) count.textContent = String(input.value.length);
+        input.focus();
+      });
+    });
+  </script>
+</BaseLayout>
+
+<style>
+  .ask-hero { background: #242146; }
+  .ask-body { background: white; }
+  .ask-layout { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, .75fr); gap: 72px; align-items: start; }
+  form label { display: block; margin-bottom: 10px; font-weight: 750; }
+  textarea { width: 100%; min-height: 140px; padding: 16px; resize: vertical; background: #fafaf7; color: #111; border: 1px solid #a8a8a1; border-radius: 6px; line-height: 1.5; }
+  .assistant-actions { display: flex; margin-top: 12px; align-items: center; gap: 10px; }
+  .assistant-actions button { cursor: pointer; }
+  .assistant-actions button:disabled { cursor: wait; opacity: .65; }
+  .assistant-actions > span { margin-left: auto; color: #666660; font-size: .78rem; }
+  .suggestions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .suggestions button { min-height: 40px; padding: 8px 11px; background: white; border: 1px solid #c7c7c0; border-radius: 4px; cursor: pointer; }
+  .assistant-status { min-height: 24px; margin-top: 22px; color: #555550; }
+  .assistant-answer { margin-top: 22px; padding: 28px; background: #f1f1ec; border-left: 4px solid #8056f5; }
+  .assistant-answer h2 { font-size: 1.5rem; }
+  .assistant-answer p { white-space: pre-line; }
+  .assistant-answer :global(h3) { margin-top: 24px; font-size: .86rem; text-transform: uppercase; }
+  .assistant-answer :global(ol) { padding-left: 20px; }
+  .assistant-boundary { padding: 28px; background: #d8ff52; border-radius: 6px; }
+  .assistant-boundary h2 { font-size: 2rem; }
+  .assistant-boundary ul { padding-left: 20px; }
+  .assistant-boundary li + li { margin-top: 10px; }
+  .fallback-note { padding: 16px; background: #fff5d8; }
+  .faq-section { background: #ecece6; }
+  .faq-section > .section-shell > h2 { margin-bottom: 46px; }
+  .faq-list { border-top: 1px solid #bdbdb7; }
+  details { padding: 22px 0; border-bottom: 1px solid #bdbdb7; }
+  summary { cursor: pointer; font-size: 1.15rem; font-weight: 730; }
+  details p { max-width: 760px; margin: 16px 0 0; color: #44443f; }
+  @media (max-width: 760px) { .ask-layout { grid-template-columns: 1fr; gap: 44px; } .suggestions { display: grid; grid-template-columns: 1fr 1fr; } .suggestions button { text-align: left; } }
+  @media (max-width: 380px) { .suggestions { grid-template-columns: 1fr; } }
+</style>

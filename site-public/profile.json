@@ -1,0 +1,120 @@
+{
+  "lastUpdated": "2026-07-12",
+  "canonicalUrl": "https://portfolio.kevinastuhuaman.com/",
+  "name": "Kevin Astuhuaman",
+  "headline": "AI Product Manager | Ex-PayPal AI/ML Observability | Berkeley Haas MBA '26",
+  "location": "Bay Area, California",
+  "summary": "Kevin Astuhuaman is an AI Product Manager, ex-PayPal in AI/ML observability, and Berkeley Haas MBA with seven years of experience building products.",
+  "recruitingLanes": [
+    "Applied AI and agent products",
+    "AI platform and technical product management"
+  ],
+  "experience": [
+    {
+      "organization": "PayPal Checkout",
+      "role": "Technical Product Manager MBA Intern",
+      "dates": "May-August 2025",
+      "summary": "Defined and prototyped an AI-assisted observability workflow for checkout diagnostics."
+    },
+    {
+      "organization": "Trackly",
+      "role": "AI Product Manager and builder",
+      "dates": "2025-present",
+      "summary": "Built and operates a real-time job-search product across web, native apps, CLI, MCP, matching, chat, and voice."
+    },
+    {
+      "organization": "UC Berkeley Haas Open Innovation Squad",
+      "role": "AI Product Manager, Fujitsu and MoBagel challenge",
+      "dates": "December 2024-May 2025",
+      "summary": "Worked on AI product adoption, a high-fidelity Figma prototype, roadmap, business model, and United States go-to-market recommendations for MoBagel."
+    },
+    {
+      "organization": "Banco de Credito BCP (part of Credicorp)",
+      "role": "Product Analyst -> Product Manager -> Senior Product Manager -> Lead Product Manager",
+      "dates": "2018-2024",
+      "summary": "Progression: Lead Product Manager (1 year), Senior Product Manager (1.5 years), Product Manager (1.5 years), Product Analyst (2 years)."
+    }
+  ],
+  "publicClaims": [
+    {
+      "id": "trackly-inventory",
+      "statement": "Trackly monitored 1,969 company career sites across 40 ATS and source types, with 128,975 job records in its public inventory on July 12, 2026.",
+      "short": "1,969 company career sites across 40 source types",
+      "source": "https://usetrackly.app/",
+      "checked": "2026-07-12",
+      "state": "live public product",
+      "context": "Dated inventory, not a user-adoption claim."
+    },
+    {
+      "id": "trackly-app-store",
+      "statement": "Trackly is available publicly on Apple's App Store.",
+      "short": "Trackly on the App Store",
+      "source": "https://apps.apple.com/us/app/trackly-apply-first/id6758267565",
+      "checked": "2026-07-12",
+      "state": "public artifact",
+      "context": "Public distribution artifact for the native product."
+    },
+    {
+      "id": "paypal-detection",
+      "statement": "A PayPal Checkout internship prototype reduced issue-detection time by 75% in the project workflow across a diagnostic environment spanning 15+ tools.",
+      "short": "75% faster issue detection in the internship prototype workflow",
+      "source": "/projects/paypal-ai-observability/",
+      "checked": "2026-07-12",
+      "state": "public-safe resume claim",
+      "context": "Prototype-workflow result, not a PayPal-wide production claim."
+    },
+    {
+      "id": "bcp-access",
+      "statement": "At Banco de Credito BCP, Kevin's work helped more than 100,000 small businesses access a first loan.",
+      "short": "First-loan access for 100,000+ small businesses",
+      "source": "/projects/smb-fintech-bcp-credicorp/",
+      "checked": "2026-07-12",
+      "state": "public profile claim",
+      "context": "Production small-business lending outcome; this claim stays in the BCP experience section, not the portfolio bio."
+    },
+    {
+      "id": "bcp-loans",
+      "statement": "Kevin designed and launched an online credit-evaluation platform that reduced evaluation time from seven days to one hour and generated $40M in incremental loan disbursements in nine months.",
+      "short": "Seven days to one hour; $40M incremental disbursements",
+      "source": "/projects/smb-fintech-bcp-credicorp/",
+      "checked": "2026-07-12",
+      "state": "public resume claim",
+      "context": "Production lending outcome."
+    },
+    {
+      "id": "bcp-digital-growth",
+      "statement": "Kevin redesigned BCP's digital value proposition for small businesses, contributing to 14% year-over-year revenue growth and growing monthly website traffic sixfold to 180,000 users in 15 months.",
+      "short": "14% revenue growth; monthly website traffic grew 6x to 180K",
+      "source": "/projects/smb-fintech-bcp-credicorp/",
+      "checked": "2026-07-12",
+      "state": "public resume claim",
+      "context": "Production digital-channel outcome; 180K is monthly website traffic, not product MAU."
+    },
+    {
+      "id": "trackly-cli-mcp",
+      "statement": "Trackly ships a public command-line interface and Model Context Protocol server.",
+      "short": "Public CLI and MCP server",
+      "source": "https://github.com/trackly-app/trackly-cli",
+      "checked": "2026-07-12",
+      "state": "public source repository",
+      "context": "Public technical distribution artifact; separate from the App Store listing."
+    },
+    {
+      "id": "berkeley-mobagel-brief",
+      "statement": "Berkeley Haas's official past-challenges page lists the Fujitsu and MoBagel AI Business Adoption Acceleration Challenge.",
+      "short": "Official Berkeley Fujitsu and MoBagel AI challenge",
+      "source": "https://haas.berkeley.edu/open-innovation/programs/past-challenges/",
+      "checked": "2026-07-12",
+      "state": "official program listing",
+      "context": "Official program context only. Kevin's participation and deliverables are public resume claims."
+    }
+  ],
+  "links": {
+    "portfolio": "https://portfolio.kevinastuhuaman.com/",
+    "resume": "https://portfolio.kevinastuhuaman.com/resume/",
+    "linkedin": "https://www.linkedin.com/in/kevinastuhuaman",
+    "github": "https://github.com/kevinastuhuaman",
+    "writing": "https://kevinastuhuaman.com/",
+    "trackly": "https://usetrackly.app/"
+  }
+}

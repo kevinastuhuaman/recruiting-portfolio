@@ -1,0 +1,47 @@
+---
+import { ArrowUpRight, BriefcaseBusiness, CodeXml, Mail } from "@lucide/astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { links, site } from "../../data/site.js";
+---
+
+<BaseLayout
+  title="Contact | Kevin Astuhuaman"
+  description="Contact Kevin Astuhuaman about applied AI, agent, platform, and technical product roles."
+  path="/contact/"
+  pageType="contact"
+>
+  <header class="page-hero contact-hero">
+    <div class="section-shell">
+      <p class="eyebrow">Contact</p>
+      <h1>Let’s talk about the hard part of the product.</h1>
+      <p class="lede">I am interested in applied AI, agent, platform, and technical product roles where evidence, reliability, and adoption matter.</p>
+    </div>
+  </header>
+
+  <section class="contact-body section-pad">
+    <div class="section-shell contact-layout">
+      <div>
+        <p class="eyebrow">Best path</p>
+        <h2>LinkedIn is the fastest way to reach me.</h2>
+        <p class="lede">Include the role, the product problem, and what you need this person to own. I will respond with the most relevant work.</p>
+      </div>
+      <div class="contact-links">
+        <a href={links.linkedin}><BriefcaseBusiness aria-hidden="true" size={22} /><span><strong>LinkedIn</strong><small>linkedin.com/in/kevinastuhuaman</small></span><ArrowUpRight aria-hidden="true" size={20} /></a>
+        <a href={`mailto:${site.email}`}><Mail aria-hidden="true" size={22} /><span><strong>Email</strong><small>{site.email}</small></span><ArrowUpRight aria-hidden="true" size={20} /></a>
+        <a href={links.github}><CodeXml aria-hidden="true" size={22} /><span><strong>GitHub</strong><small>Public product and engineering work</small></span><ArrowUpRight aria-hidden="true" size={20} /></a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-hero { background: #1f3432; }
+  .contact-body { background: white; }
+  .contact-layout { display: grid; grid-template-columns: .85fr 1.15fr; gap: clamp(48px, 8vw, 120px); align-items: start; }
+  .contact-layout h2 { font-size: 3.2rem; }
+  .contact-links { border-top: 1px solid #d7d7d0; }
+  .contact-links a { display: grid; grid-template-columns: 28px 1fr 24px; gap: 18px; min-height: 96px; padding: 22px 0; align-items: center; border-bottom: 1px solid #d7d7d0; text-decoration: none; }
+  .contact-links span, .contact-links strong, .contact-links small { display: block; }
+  .contact-links small { margin-top: 4px; color: #666660; }
+  @media (max-width: 760px) { .contact-layout { grid-template-columns: 1fr; } .contact-layout h2 { font-size: 2.1rem; } .contact-links small { overflow-wrap: anywhere; } }
+</style>

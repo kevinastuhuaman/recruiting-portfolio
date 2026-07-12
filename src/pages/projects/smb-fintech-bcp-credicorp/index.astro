@@ -1,0 +1,278 @@
+---
+import { ArrowUpRight, ExternalLink } from "@lucide/astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { links } from "../../../data/site.js";
+---
+
+<BaseLayout
+  title="BCP and Credicorp product leadership | Kevin Astuhuaman"
+  description="Kevin Astuhuaman's six-year product progression across small-business lending, digital channels, growth, and platform work at BCP, part of Credicorp."
+  path="/projects/smb-fintech-bcp-credicorp/"
+  pageType="article"
+  about="SMB fintech product leadership"
+>
+  <header class="page-hero bcp-hero">
+    <div class="section-shell">
+      <p class="eyebrow">Regulated product leadership | 2018-2024</p>
+      <h1>Six years turning SMB financial friction into production products.</h1>
+      <p class="lede">
+        At Banco de Credito BCP, part of Credicorp, I progressed from Product Analyst to Lead Product Manager across small-business lending, digital channels, pricing, growth, and platform work.
+      </p>
+      <div class="case-meta">
+        <span><strong>Progression:</strong> Analyst -> PM -> Senior PM -> Lead PM</span>
+        <span><strong>Leadership:</strong> 9 product direct reports</span>
+        <span><strong>Partners:</strong> Risk, compliance, engineering, design, analytics, commercial</span>
+      </div>
+    </div>
+  </header>
+
+  <article class="article-shell">
+    <p class="eyebrow">The operating context</p>
+    <h2>Small businesses needed speed. The bank needed risk discipline.</h2>
+    <p>
+      The product work sat between customers who could not wait a week for working capital and a regulated institution that needed reliable identity, risk, pricing, compliance, and distribution. Shipping a cleaner funnel was useful only when the underlying decision and operating model could support it.
+    </p>
+
+    <section class="progression" aria-labelledby="progression-title">
+      <h3 id="progression-title">Product progression</h3>
+      <ol>
+        <li><span>Product Analyst</span><strong>Found opportunity through customer and portfolio data</strong></li>
+        <li><span>Product Manager</span><strong>Owned launches, funnels, experiments, and partnerships</strong></li>
+        <li><span>Senior Product Manager</span><strong>Led cross-product architecture and market growth</strong></li>
+        <li><span>Lead Product Manager</span><strong>Managed product leaders, P&amp;L decisions, and enterprise alignment</strong></li>
+      </ol>
+    </section>
+
+    <h2>Three outcomes show the range.</h2>
+
+    <section class="bcp-story">
+      <div class="story-number">01</div>
+      <div>
+        <p class="eyebrow">Access to credit</p>
+        <h3>Help more small businesses receive their first loan.</h3>
+        <p>
+          The outcome I am proudest of was helping more than 100,000 small businesses access a first loan. It made the work concrete: faster, better-designed financial products could widen access for owners whose businesses depended on working capital.
+        </p>
+        <div class="story-metrics"><strong>100K+ businesses</strong><strong>First-loan access</strong></div>
+      </div>
+    </section>
+
+    <section class="bcp-story">
+      <div class="story-number">02</div>
+      <div>
+        <p class="eyebrow">Credit evaluation</p>
+        <h3>Move the credit evaluation from a seven-day process to one hour.</h3>
+        <p>
+          I designed and launched an online evaluation platform that reduced credit-evaluation time from seven days to one hour and generated $40M in incremental loan disbursements in nine months.
+        </p>
+        <div class="story-metrics"><strong>7 days -> 1 hour</strong><strong>$40M incremental in 9 months</strong></div>
+      </div>
+    </section>
+
+    <section class="bcp-story">
+      <div class="story-number">03</div>
+      <div>
+        <p class="eyebrow">Digital value proposition</p>
+        <h3>Make the digital channel useful enough to become a growth engine.</h3>
+        <p>
+          I redesigned the digital value proposition for small businesses by launching products and enabling new channels. Revenue grew 14% year over year, while monthly website traffic grew sixfold to 180K users in 15 months.
+        </p>
+        <div class="story-metrics"><strong>+14% revenue YoY</strong><strong>6x to 180K monthly users</strong></div>
+      </div>
+    </section>
+
+    <h2>The operating model behind the outcomes</h2>
+    <figure class="ecosystem-artifact" aria-labelledby="ecosystem-title">
+      <figcaption id="ecosystem-title">Public-safe reconstruction of the product operating system</figcaption>
+      <div class="customer-core">SMB customer decision</div>
+      <ul>
+        <li><strong>Customer evidence</strong><span>Research, journey analysis, and portfolio data</span></li>
+        <li><strong>Risk and pricing</strong><span>Automated evaluation and controlled experiments</span></li>
+        <li><strong>Product platform</strong><span>Online evaluation, data, identity, and APIs</span></li>
+        <li><strong>Distribution</strong><span>Web, mobile, and 15M+ user channel partners</span></li>
+        <li><strong>Operation</strong><span>Compliance, availability, performance, and P&amp;L</span></li>
+      </ul>
+      <p>The artifact is reconstructed from public resume content and contains no internal bank architecture.</p>
+    </figure>
+
+    <h2>What senior ownership looked like</h2>
+    <dl class="decision-list">
+      <div class="decision">
+        <dt>Decide across constraints</dt>
+        <dd>Product choices had to work for customers, risk, compliance, engineering capacity, pricing, and commercial distribution at the same time.</dd>
+      </div>
+      <div class="decision">
+        <dt>Lead through other product managers</dt>
+        <dd>As Lead Product Manager, I directed nine product reports and aligned cross-functional teams around availability, growth, and customer-segment decisions.</dd>
+      </div>
+      <div class="decision">
+        <dt>Connect platform to outcome</dt>
+        <dd>Digital products and channels mattered because they contributed to 14% year-over-year revenue growth and grew monthly website traffic sixfold to 180K users.</dd>
+      </div>
+    </dl>
+
+    <h2>Why this matters for AI product work</h2>
+    <p>
+      AI products still need distribution, incentives, guardrails, experimentation, and an operating owner. BCP taught me to evaluate a system by the customer and business decisions it improves, especially when an incorrect decision has real financial and regulatory consequences.
+    </p>
+
+    <div class="button-row final-actions">
+      <a class="button button-dark" href="/resume/">View the full chronology <ArrowUpRight aria-hidden="true" size={17} /></a>
+      <a class="button" href={links.publicProfile}>Public PUCP profile <ExternalLink aria-hidden="true" size={16} /></a>
+      <a class="button" href="/contact/">Contact Kevin</a>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .bcp-hero {
+    background: #075f48;
+  }
+
+  .progression {
+    margin: 50px 0 72px;
+    padding: clamp(24px, 4vw, 40px);
+    background: #0c6d52;
+    color: white;
+    border-radius: 6px;
+  }
+
+  .progression ol {
+    margin: 26px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .progression li {
+    display: grid;
+    grid-template-columns: 190px 1fr;
+    gap: 24px;
+    padding: 18px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .progression li span {
+    color: #bfe7d9;
+  }
+
+  .bcp-story {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 34px;
+    padding: 48px 0;
+    border-top: 1px solid #d7d7d0;
+  }
+
+  .story-number {
+    color: #087858;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 1.1rem;
+  }
+
+  .bcp-story h3 {
+    max-width: 680px;
+    font-size: 2.55rem;
+  }
+
+  .bcp-story p:not(.eyebrow) {
+    max-width: 680px;
+    color: #44443f;
+  }
+
+  .story-metrics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 24px;
+  }
+
+  .story-metrics strong {
+    padding: 9px 11px;
+    background: #dff2ea;
+    color: #075f48;
+    border-radius: 4px;
+    font-size: 0.86rem;
+  }
+
+  .ecosystem-artifact {
+    margin: 48px 0;
+    padding: clamp(24px, 4vw, 42px);
+    background: white;
+    border: 1px solid #d7d7d0;
+    border-radius: 6px;
+  }
+
+  .ecosystem-artifact figcaption {
+    margin-bottom: 26px;
+    font-weight: 720;
+  }
+
+  .customer-core {
+    padding: 22px;
+    background: #075f48;
+    color: white;
+    border-radius: 4px;
+    font-size: 1.25rem;
+    font-weight: 740;
+    text-align: center;
+  }
+
+  .ecosystem-artifact ul {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    margin: 14px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ecosystem-artifact li {
+    padding: 18px 12px;
+    border-right: 1px solid #d7d7d0;
+  }
+
+  .ecosystem-artifact li:last-child {
+    border-right: 0;
+  }
+
+  .ecosystem-artifact li strong,
+  .ecosystem-artifact li span {
+    display: block;
+  }
+
+  .ecosystem-artifact li span {
+    margin-top: 8px;
+    color: #666660;
+    font-size: 0.78rem;
+  }
+
+  .ecosystem-artifact > p {
+    margin: 20px 0 0;
+    color: #666660;
+    font-size: 0.82rem;
+  }
+
+  .final-actions {
+    margin-top: 56px;
+  }
+
+  @media (max-width: 760px) {
+    .bcp-story h3 {
+      font-size: 1.75rem;
+    }
+
+    .progression li,
+    .bcp-story {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .ecosystem-artifact ul {
+      grid-template-columns: 1fr;
+    }
+
+    .ecosystem-artifact li {
+      border-right: 0;
+      border-bottom: 1px solid #d7d7d0;
+    }
+  }
+</style>

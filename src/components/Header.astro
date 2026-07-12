@@ -1,0 +1,40 @@
+---
+import { Menu, X } from "@lucide/astro";
+import { nav, site } from "../data/site.js";
+
+interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+const isCurrent = (href: string) => {
+  const path = href.split("#")[0];
+  return path !== "/" && currentPath.startsWith(path);
+};
+---
+
+<header class="site-header">
+  <a class="wordmark" href="/" aria-label={`${site.name}, home`}>{site.name}</a>
+  <nav class="desktop-nav" aria-label="Primary navigation">
+    {nav.map((item) => (
+      <a href={item.href} aria-current={isCurrent(item.href) ? "page" : undefined}>{item.label}</a>
+    ))}
+  </nav>
+  <details class="mobile-nav">
+    <summary aria-label="Open navigation">
+      <Menu class="menu-open" aria-hidden="true" size={21} />
+      <X class="menu-close" aria-hidden="true" size={21} />
+    </summary>
+    <nav aria-label="Mobile navigation">
+      {nav.map((item) => (
+        <a href={item.href} aria-current={isCurrent(item.href) ? "page" : undefined}>{item.label}</a>
+      ))}
+    </nav>
+  </details>
+</header>
+
+<script>
+  document.querySelectorAll(".mobile-nav a").forEach((link) => {
+    link.addEventListener("click", () => link.closest("details")?.removeAttribute("open"));
+  });
+</script>

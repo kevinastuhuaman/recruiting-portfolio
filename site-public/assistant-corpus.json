@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "overview",
+      "title": "Kevin Astuhuaman portfolio",
+      "url": "https://portfolio.kevinastuhuaman.com/",
+      "keywords": [
+        "about",
+        "overview",
+        "ai product manager",
+        "technical product manager",
+        "technical builder",
+        "role",
+        "fit",
+        "hire"
+      ],
+      "content": "Kevin Astuhuaman is an AI Product Manager, ex-PayPal in AI/ML observability, and Berkeley Haas MBA in the Bay Area. His two recruiting lanes are applied AI and agent products, and AI platform or technical product management. His most recent enterprise AI proof is an agentic observability prototype at PayPal Checkout. Trackly proves hands-on product building across web, native apps, CLI, MCP, chat, and voice. Berkeley's Open Innovation Squad work with Fujitsu and MoBagel adds AI product strategy, high-fidelity prototyping, and go-to-market experience. His BCP experience shows six years of progression, regulated-product judgment, team leadership, and operating scale."
+    },
+    {
+      "id": "trackly",
+      "title": "Trackly case study",
+      "url": "https://portfolio.kevinastuhuaman.com/projects/trackly/",
+      "keywords": [
+        "trackly",
+        "agent",
+        "agents",
+        "job search",
+        "career pages",
+        "scraping",
+        "matching",
+        "eval",
+        "classification",
+        "chat",
+        "voice",
+        "ios",
+        "macos",
+        "cli",
+        "mcp",
+        "builder"
+      ],
+      "content": "Kevin built Trackly during his MBA job search after seeing strong roles appear on company career pages before job boards. The live product monitors direct sources, normalizes and deduplicates jobs, applies freshness and false-zero guards, classifies job attributes, explains matches, and delivers the same product system through web, iOS, macOS, a public CLI, MCP, chat, and voice. On July 12, 2026, Trackly's public inventory showed 1,969 monitored company career sites, 40 ATS and source types, and 128,975 job records. Kevin owned the product problem, prioritization, quality thresholds, interaction decisions, release decisions, operation, and hands-on implementation. AI coding agents accelerated implementation and review but did not decide the product promise or release evidence."
+    },
+    {
+      "id": "paypal",
+      "title": "PayPal AI observability case study",
+      "url": "https://portfolio.kevinastuhuaman.com/projects/paypal-ai-observability/",
+      "keywords": [
+        "paypal",
+        "checkout",
+        "observability",
+        "diagnostics",
+        "enterprise ai",
+        "internship",
+        "datadog",
+        "triage",
+        "detection"
+      ],
+      "content": "Kevin was a Technical Product Manager MBA Intern on PayPal Checkout from May through August 2025. He defined and prototyped an agentic observability workflow that unified an investigation path across a landscape of 15 or more diagnostic tools using natural language, AI, and MCP patterns. The internship prototype reduced issue-detection time by 75 percent in the project workflow. An auto-triage proof of concept completed triage five times faster. These are internship prototype and POC results, not PayPal-wide production claims. The portfolio demonstrates the product decisions through an original synthetic AI Investigation Workbench, not through PayPal data, screenshots, source code, prompts, system names, or internal architecture."
+    },
+    {
+      "id": "mobagel",
+      "title": "Berkeley and MoBagel AI product strategy",
+      "url": "https://portfolio.kevinastuhuaman.com/projects/berkeley-mobagel-ai-gtm/",
+      "keywords": [
+        "berkeley",
+        "haas",
+        "mobagel",
+        "mo bagel",
+        "fujitsu",
+        "open innovation",
+        "figma",
+        "prototype",
+        "go to market",
+        "gtm",
+        "pricing",
+        "roadmap",
+        "ai product strategy"
+      ],
+      "content": "Through Berkeley Haas's Open Innovation Squad, Kevin worked on the Fujitsu and MoBagel challenge from December 2024 through May 2025. His public resume describes product discovery, competitive research, feature and UX concepts, a high-fidelity Figma prototype, roadmap and business-model work, and recommendations for United States go-to-market, partnerships, and usage-based pricing. Berkeley's official past-challenges page independently confirms the Fujitsu and MoBagel AI Business Adoption Acceleration Challenge. MoBagel is described as an AI and machine-learning platform that helps businesses adopt AI. No funding, customer, or production claims are inferred from the official program listing."
+    },
+    {
+      "id": "bcp",
+      "title": "BCP and Credicorp product leadership case study",
+      "url": "https://portfolio.kevinastuhuaman.com/projects/smb-fintech-bcp-credicorp/",
+      "keywords": [
+        "bcp",
+        "credicorp",
+        "fintech",
+        "bank",
+        "smb",
+        "lending",
+        "digital channels",
+        "leadership",
+        "team",
+        "teams",
+        "managed",
+        "reports",
+        "risk",
+        "compliance",
+        "growth"
+      ],
+      "content": "From 2018 through 2024, Kevin progressed from Product Analyst to Product Manager, Senior Product Manager, and Lead Product Manager at Banco de Credito BCP, part of Credicorp. His work helped more than 100,000 small businesses access a first loan. He designed and launched an online credit-evaluation platform that reduced evaluation time from seven days to one hour and generated 40 million dollars in incremental loan disbursements in nine months. He redesigned the digital value proposition for small businesses, contributing to 14 percent year-over-year revenue growth and growing monthly website traffic sixfold to 180,000 users in 15 months. As Lead Product Manager, he reached 19.55 percent market share after gaining 129 basis points in seven months, managed nine product direct reports, and worked across risk, compliance, engineering, design, analytics, and commercial teams."
+    },
+    {
+      "id": "resume",
+      "title": "Kevin Astuhuaman resume",
+      "url": "https://portfolio.kevinastuhuaman.com/resume/",
+      "keywords": [
+        "resume",
+        "experience",
+        "education",
+        "berkeley haas",
+        "haas",
+        "berkeley",
+        "mba",
+        "skills",
+        "career",
+        "background",
+        "mo bagel",
+        "summit"
+      ],
+      "content": "Kevin earned a STEM-designated MBA from the University of California, Berkeley, Haas School of Business in May 2026 and a Bachelor of Science in Industrial Engineering from the Pontifical Catholic University of Peru in July 2018. At Haas, he built Trackly, worked with Berkeley's Open Innovation Squad on the Fujitsu and MoBagel AI product challenge, served as VP of the Tech Club, and co-launched the school's first Tech and AI Summit with more than 560 registrations. His working range includes AI product strategy, agent workflows, LLM evals, API and MCP integration, observability, experimentation, marketplaces, fintech, analytics, Figma, SwiftUI, TypeScript, and AI-assisted development."
+    },
+    {
+      "id": "contact",
+      "title": "Contact Kevin Astuhuaman",
+      "url": "https://portfolio.kevinastuhuaman.com/contact/",
+      "keywords": [
+        "contact",
+        "email",
+        "linkedin",
+        "reach",
+        "interview",
+        "recruiter"
+      ],
+      "content": "The preferred contact path is LinkedIn at https://www.linkedin.com/in/kevinastuhuaman. Kevin's public recruiting email is kevin.astuhuaman@berkeley.edu. Recruiters should include the role, the product problem, and what the person needs to own."
+    }
+  ]
+}

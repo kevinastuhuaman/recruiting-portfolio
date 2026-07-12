@@ -1,0 +1,56 @@
+---
+import { ArrowUpRight } from "@lucide/astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { links } from "../../data/site.js";
+---
+
+<BaseLayout
+  title="About | Kevin Astuhuaman"
+  description="How Kevin Astuhuaman approaches AI product work across customer discovery, technical systems, evals, and operating scale."
+  path="/about/"
+>
+  <header class="page-hero about-hero">
+    <div class="section-shell">
+      <p class="eyebrow">About</p>
+      <h1>I learned product in systems where mistakes have consequences.</h1>
+      <p class="lede">Credit decisions, checkout failures, and job-search recommendations all create real costs when the system is wrong. That is why I care about evidence, failure states, and operating ownership.</p>
+    </div>
+  </header>
+
+  <section class="about-body section-pad">
+    <div class="section-shell about-layout">
+      <figure>
+        <img src="/assets/kevin-portrait.webp" width="1280" height="1202" alt="Kevin Astuhuaman" />
+        <figcaption>Kevin Astuhuaman, Bay Area</figcaption>
+      </figure>
+      <div class="about-copy">
+        <p class="eyebrow">How I work</p>
+        <h2>Start with the decision a person needs to make.</h2>
+        <p>I ask what changed for the user, what evidence they need, what can go wrong, and who owns the result. The technology follows that operating model.</p>
+        <p>At PayPal, that meant structuring an AI-assisted diagnostic workflow around detection, evidence, and ownership. With Trackly, it means treating source health and model quality as visible parts of the product. At Berkeley, it meant connecting an AI platform prototype to adoption, pricing, partnerships, and a roadmap. At Banco de Credito BCP, it meant balancing speed with risk and compliance while leading products and product managers.</p>
+        <h3>I build close to the system.</h3>
+        <p>I use code, APIs, MCP, native apps, evals, and observability to reduce the distance between a product decision and working evidence. AI agents increase my implementation speed, but product judgment remains my responsibility.</p>
+        <h3>I am looking for two kinds of work.</h3>
+        <p>Applied AI and agent products where reliability and adoption matter, and AI platform or technical product roles where teams need a PM who can move between customers, architecture, evals, and operation.</p>
+        <div class="button-row">
+          <a class="button button-dark" href="/resume/">View resume <ArrowUpRight aria-hidden="true" size={17} /></a>
+          <a class="button" href={links.linkedin}>LinkedIn <ArrowUpRight aria-hidden="true" size={17} /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about-hero { background: #302d2a; }
+  .about-body { background: white; }
+  .about-layout { display: grid; grid-template-columns: minmax(280px, .78fr) minmax(0, 1.22fr); gap: clamp(44px, 8vw, 110px); }
+  figure { margin: 0; }
+  figure img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 6px; }
+  figcaption { margin-top: 10px; color: #666660; font-size: .82rem; }
+  .about-copy h2 { margin-bottom: 28px; }
+  .about-copy h3 { margin: 46px 0 14px; }
+  .about-copy p { color: #44443f; font-size: 1.05rem; }
+  .about-copy .button-row { margin-top: 40px; }
+  @media (max-width: 760px) { .about-layout { grid-template-columns: 1fr; } figure { max-width: 440px; } }
+</style>

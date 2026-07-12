@@ -1,0 +1,203 @@
+---
+import { ArrowUpRight } from "@lucide/astro";
+import InvestigationWorkbench from "../../../components/InvestigationWorkbench.astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="PayPal AI observability | Kevin Astuhuaman"
+  description="A public-safe case study about Kevin Astuhuaman's PayPal Checkout internship prototype for faster AI-assisted issue diagnostics."
+  path="/projects/paypal-ai-observability/"
+  pageType="article"
+  about="AI observability for checkout diagnostics"
+>
+  <header class="page-hero paypal-hero">
+    <div class="section-shell">
+      <p class="eyebrow">Enterprise AI | May-August 2025</p>
+      <h1>I built an agentic investigation path for fragmented checkout evidence.</h1>
+      <p class="lede">
+        At PayPal Checkout, I defined and prototyped an AI-assisted observability workflow that helped product teams move from scattered technical signals to an evidence-backed diagnosis and accountable handoff.
+      </p>
+      <div class="case-meta">
+        <span><strong>Role:</strong> Technical Product Manager MBA Intern</span>
+        <span><strong>State:</strong> Internship prototype and POC</span>
+        <span><strong>Boundary:</strong> Public-safe reconstruction</span>
+      </div>
+    </div>
+  </header>
+
+  <article class="article-shell">
+    <p class="eyebrow">The product tension</p>
+    <h2>Checkout friction crossed more systems than one product team could inspect quickly.</h2>
+    <p>
+      A failed payment can originate in a merchant integration, a risk decision, a payment path, or another dependency. The product challenge was not to produce more telemetry. It was to turn existing signals into a usable investigation workflow with a clear owner and measurable time to detection and resolution.
+    </p>
+
+    <h2>Discovery turned a broad platform problem into one user job.</h2>
+    <p>
+      More than 20 stakeholder conversations surfaced a landscape of 15+ diagnostic tools, manual correlation, context switching, and slow handoffs. The useful wedge was not “put AI on every dashboard.” It was narrower: help a product manager explain what happened, understand why a user struggled, and carry enough evidence into the next team handoff.
+    </p>
+
+    <div class="focus-path" aria-label="PayPal internship product discovery sequence">
+      <div><span>01</span><strong>Fragmented landscape</strong><p>Many tools and team boundaries, with expertise trapped in the investigation process.</p></div>
+      <div><span>02</span><strong>Focused user job</strong><p>Move from a checkout symptom to evidence and a bounded hypothesis.</p></div>
+      <div><span>03</span><strong>Agentic prototype</strong><p>Natural language, AI, and MCP patterns assembled an inspectable investigation path.</p></div>
+      <div><span>04</span><strong>Human action</strong><p>The system drafted the handoff; an accountable person owned the escalation.</p></div>
+    </div>
+
+    <div class="metric-row" aria-label="PayPal internship project results">
+      <div class="metric"><strong>15+</strong><span>diagnostic tools unified in the project workflow</span></div>
+      <div class="metric"><strong>75%</strong><span>faster issue detection in the prototype workflow</span></div>
+      <div class="metric"><strong>5x</strong><span>faster triage in the auto-triage POC</span></div>
+    </div>
+
+    <h2>Try the product decision, not a copy of PayPal's interface.</h2>
+    <p>
+      This original workbench uses a fictional product, merchant, incidents, sources, and results. It reconstructs the interaction model I would use publicly: show the plan before execution, distinguish evidence from inference, preserve missing data, and require a person to approve the handoff.
+    </p>
+
+    <div class="workbench-wrap">
+      <InvestigationWorkbench headingLevel="h3" />
+    </div>
+
+    <h2>The product decisions</h2>
+    <dl class="decision-list">
+      <div class="decision">
+        <dt>Start with the investigation job</dt>
+        <dd>
+          I framed success around mean time to detect and resolve, not around the novelty of an agent. This made the prototype accountable to an operating workflow.
+        </dd>
+      </div>
+      <div class="decision">
+        <dt>Use behavioral evidence to explain the funnel</dt>
+        <dd>
+          Aggregate analytics could show where completion changed. Behavioral evidence added the struggle between milestones: retries, delays, contradictory states, and abandonment patterns.
+        </dd>
+      </div>
+      <div class="decision">
+        <dt>Unify context, not ownership</dt>
+        <dd>
+          The prototype assembled signals and quantified impact, then routed the result to the responsible team. It did not pretend that a model should make every operational decision.
+        </dd>
+      </div>
+      <div class="decision">
+        <dt>Make the handoff inspectable</dt>
+        <dd>
+          The output needed a diagnosis, supporting evidence, impact range, uncertainty, and owner. A fluent answer without those fields would have been harder to trust and act on.
+        </dd>
+      </div>
+    </dl>
+
+    <h2>How the result should be read</h2>
+    <p>
+      The 75% result refers to issue-detection time in the internship prototype workflow. The 5x result refers to the auto-triage POC. Neither number is presented as a PayPal-wide production deployment result. I do not publish internal screenshots, logs, system names, merchant data, or architecture.
+    </p>
+
+    <aside class="confidentiality-boundary" aria-label="Public reconstruction boundary">
+      <strong>What is intentionally absent</strong>
+      <p>The internship work involved confidential and proprietary material. This case does not publish or imitate merchant names, transaction identifiers, exact prompts, screenshots, internal tool inventory, source data, or architecture. The interactive prototype is original and synthetic.</p>
+    </aside>
+
+    <h2>What this work changed in how I build</h2>
+    <p>
+      Enterprise AI earns trust by fitting an accountable operating model. The system needs explicit success measures, clear human ownership, observable evidence, and boundaries that keep the model from becoming an opaque decision-maker. Those principles later shaped Trackly's evals, tool confirmations, and failure handling.
+    </p>
+
+    <div class="button-row final-actions">
+      <a class="button button-dark" href="/projects/trackly/">See those principles in Trackly <ArrowUpRight aria-hidden="true" size={17} /></a>
+      <a class="button" href="/resume/">View resume</a>
+      <a class="button" href="/contact/">Contact Kevin</a>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .paypal-hero {
+    background: #003f88;
+  }
+
+  .focus-path {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin: 44px 0 56px;
+    border-top: 1px solid #d3d7dd;
+    border-bottom: 1px solid #d3d7dd;
+  }
+
+  .focus-path > div {
+    min-height: 210px;
+    padding: 22px 20px 22px 0;
+  }
+
+  .focus-path > div + div {
+    padding-left: 20px;
+    border-left: 1px solid #d3d7dd;
+  }
+
+  .focus-path span,
+  .focus-path strong {
+    display: block;
+  }
+
+  .focus-path span {
+    color: #0057b8;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.74rem;
+  }
+
+  .focus-path strong {
+    margin-top: 34px;
+  }
+
+  .focus-path p {
+    color: #5b6068;
+    font-size: 0.82rem;
+  }
+
+  .workbench-wrap {
+    width: min(1180px, calc(100vw - 40px));
+    margin: 48px 50%;
+    transform: translateX(-50%);
+  }
+
+  .confidentiality-boundary {
+    margin: 44px 0;
+    padding: 22px 24px;
+    border-left: 4px solid #0057b8;
+    background: #eef4fb;
+  }
+
+  .confidentiality-boundary p {
+    margin: 8px 0 0;
+    color: #4d5663;
+  }
+
+  .final-actions {
+    margin-top: 56px;
+  }
+
+  @media (max-width: 700px) {
+    .focus-path {
+      grid-template-columns: 1fr;
+    }
+
+    .focus-path > div {
+      min-height: 0;
+      padding: 20px 0;
+    }
+
+    .focus-path > div + div {
+      padding-left: 0;
+      border-top: 1px solid #d3d7dd;
+      border-left: 0;
+    }
+
+    .focus-path strong {
+      margin-top: 12px;
+    }
+
+    .workbench-wrap {
+      width: calc(100vw - 24px);
+    }
+  }
+</style>

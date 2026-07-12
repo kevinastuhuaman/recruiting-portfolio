@@ -1,0 +1,217 @@
+---
+import { ArrowUpRight } from "@lucide/astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { links } from "../../../data/site.js";
+---
+
+<BaseLayout
+  title="Berkeley and MoBagel AI product strategy | Kevin Astuhuaman"
+  description="Kevin Astuhuaman's Berkeley Haas Open Innovation Squad work on AI product adoption, high-fidelity prototyping, roadmap, business model, and go-to-market recommendations for MoBagel."
+  path="/projects/berkeley-mobagel-ai-gtm/"
+  pageType="article"
+  about="AI product strategy and go-to-market for the Fujitsu and MoBagel challenge"
+>
+  <header class="page-hero mobagel-hero">
+    <div class="section-shell">
+      <p class="eyebrow">Berkeley Haas Open Innovation Squad | December 2024-May 2025</p>
+      <h1>Making an AI platform easier to understand, adopt, and take to market.</h1>
+      <p class="lede">
+        I worked on the Fujitsu and MoBagel challenge across product discovery, feature and UX concepts, a high-fidelity Figma prototype, roadmap, business model, and United States go-to-market recommendations.
+      </p>
+      <div class="case-meta">
+        <span><strong>Role:</strong> AI Product Manager</span>
+        <span><strong>Context:</strong> Berkeley Open Innovation challenge</span>
+        <span><strong>Focus:</strong> Product adoption and GTM</span>
+      </div>
+    </div>
+  </header>
+
+  <article class="article-shell">
+    <p class="eyebrow">The product tension</p>
+    <h2>Powerful AI is not useful if a business user cannot see the path from question to decision.</h2>
+    <p>
+      MoBagel was presented in the challenge as an AI and machine-learning platform designed to simplify how businesses adopt AI. The product question was broader than feature discovery: how should the experience, value proposition, pricing, partnerships, and roadmap work together for a United States customer?
+    </p>
+
+    <div class="adoption-map" aria-label="Public-safe AI product adoption framework">
+      <div><span>01</span><strong>Business question</strong><p>Start with the decision a non-technical user needs to make.</p></div>
+      <div><span>02</span><strong>Guided workflow</strong><p>Turn data and modeling complexity into understandable product steps.</p></div>
+      <div><span>03</span><strong>Visible result</strong><p>Connect the output to an action, not merely a generated insight.</p></div>
+      <div><span>04</span><strong>Adoption loop</strong><p>Align packaging, usage, partnerships, and roadmap with repeated value.</p></div>
+    </div>
+
+    <h2>The work connected product design with market entry.</h2>
+    <div class="workstreams">
+      <section>
+        <p class="eyebrow">Discover</p>
+        <h3>Research the user and category</h3>
+        <p>Product and competitive research focused the opportunity around non-technical users who needed analysis and automation without becoming machine-learning specialists.</p>
+      </section>
+      <section>
+        <p class="eyebrow">Prototype</p>
+        <h3>Make the product direction tangible</h3>
+        <p>Feature and UX concepts were carried into a high-fidelity Figma prototype so the team could evaluate a product experience, not only a written recommendation.</p>
+      </section>
+      <section>
+        <p class="eyebrow">Sequence</p>
+        <h3>Connect the prototype to a roadmap</h3>
+        <p>The roadmap linked user needs, product capabilities, and differentiated value rather than treating the prototype as an isolated design exercise.</p>
+      </section>
+      <section>
+        <p class="eyebrow">Go to market</p>
+        <h3>Design how adoption would happen</h3>
+        <p>Recommendations covered positioning, partnership channels, a business model, and usage-based pricing for United States expansion.</p>
+      </section>
+    </div>
+
+    <h2>Three decisions carried the strategy.</h2>
+    <dl class="decision-list">
+      <div class="decision">
+        <dt>Lead with the user's decision, not the model</dt>
+        <dd>The product story needed to explain what a business user could accomplish before explaining the AI and machine-learning machinery underneath.</dd>
+      </div>
+      <div class="decision">
+        <dt>Use a high-fidelity prototype to test the proposition</dt>
+        <dd>A polished prototype made workflow, hierarchy, and usability assumptions inspectable before roadmap or market commitments.</dd>
+      </div>
+      <div class="decision">
+        <dt>Treat GTM as part of the product</dt>
+        <dd>Pricing, partnerships, packaging, and onboarding determine whether an AI capability becomes a repeated workflow or an interesting demo.</dd>
+      </div>
+    </dl>
+
+    <aside class="source-note">
+      <strong>Evidence boundary</strong>
+      <p>Kevin's role and deliverables are public resume claims. Berkeley Haas's official past-challenges page independently confirms the Fujitsu and MoBagel AI Business Adoption Acceleration Challenge. No funding, customer, or production claims are inferred from the official program listing.</p>
+    </aside>
+
+    <div class="button-row final-actions">
+      <a class="button button-dark" href={links.berkeleyMobagel}>Open Berkeley's challenge brief <ArrowUpRight aria-hidden="true" size={17} /></a>
+      <a class="button" href="/resume/">View resume</a>
+      <a class="button" href="/contact/">Contact Kevin</a>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .mobagel-hero {
+    background: #243238;
+  }
+
+  .adoption-map {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin: 48px 0 62px;
+    border-top: 1px solid #c8d4d2;
+    border-bottom: 1px solid #c8d4d2;
+  }
+
+  .adoption-map > div {
+    min-height: 220px;
+    padding: 24px 22px 22px 0;
+  }
+
+  .adoption-map > div + div {
+    padding-left: 22px;
+    border-left: 1px solid #c8d4d2;
+  }
+
+  .adoption-map span,
+  .adoption-map strong {
+    display: block;
+  }
+
+  .adoption-map span {
+    color: #08766a;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.75rem;
+  }
+
+  .adoption-map strong {
+    margin-top: 46px;
+  }
+
+  .adoption-map p {
+    color: #515e5c;
+    font-size: 0.84rem;
+  }
+
+  .workstreams {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: 42px 0 64px;
+    border: 1px solid #c8d4d2;
+  }
+
+  .workstreams section {
+    min-height: 270px;
+    padding: 28px;
+  }
+
+  .workstreams section:nth-child(2n) {
+    border-left: 1px solid #c8d4d2;
+  }
+
+  .workstreams section:nth-child(n + 3) {
+    border-top: 1px solid #c8d4d2;
+  }
+
+  .workstreams h3 {
+    margin-top: 28px;
+    font-size: 1.55rem;
+  }
+
+  .workstreams p:last-child {
+    color: #515e5c;
+  }
+
+  .source-note {
+    margin: 48px 0;
+    padding: 22px 24px;
+    border-left: 4px solid #08766a;
+    background: #edf6f4;
+  }
+
+  .source-note p {
+    margin: 8px 0 0;
+    color: #515e5c;
+  }
+
+  .final-actions {
+    margin-top: 56px;
+  }
+
+  @media (max-width: 700px) {
+    .adoption-map,
+    .workstreams {
+      grid-template-columns: 1fr;
+    }
+
+    .adoption-map > div {
+      min-height: 0;
+      padding: 20px 0;
+    }
+
+    .adoption-map > div + div,
+    .workstreams section:nth-child(2n) {
+      padding-left: 0;
+      border-left: 0;
+      border-top: 1px solid #c8d4d2;
+    }
+
+    .adoption-map strong {
+      margin-top: 12px;
+    }
+
+    .workstreams section,
+    .workstreams section:nth-child(n + 3) {
+      min-height: 0;
+      padding: 22px;
+      border-top: 1px solid #c8d4d2;
+    }
+
+    .workstreams section:first-child {
+      border-top: 0;
+    }
+  }
+</style>

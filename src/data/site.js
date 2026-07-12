@@ -1,0 +1,276 @@
+export const site = {
+  origin: "https://portfolio.kevinastuhuaman.com",
+  name: "Kevin Astuhuaman",
+  title: "AI Product Manager | Ex-PayPal AI/ML Observability | Berkeley Haas MBA '26",
+  location: "Bay Area, California",
+  description:
+    "Kevin Astuhuaman is an AI Product Manager, ex-PayPal in AI/ML observability, and Berkeley Haas MBA with seven years of experience building products.",
+  email: "kevin.astuhuaman@berkeley.edu",
+  updated: "2026-07-12",
+  image: "/assets/kevin-portrait.webp",
+  socialImage: "/assets/og-card.png",
+};
+
+export const links = {
+  linkedin: "https://www.linkedin.com/in/kevinastuhuaman",
+  github: "https://github.com/kevinastuhuaman",
+  writing: "https://kevinastuhuaman.com/",
+  trackly: "https://usetrackly.app/",
+  appStore: "https://apps.apple.com/us/app/trackly-apply-first/id6758267565",
+  tracklyCli: "https://github.com/trackly-app/trackly-cli",
+  berkeleyMobagel:
+    "https://haas.berkeley.edu/open-innovation/programs/past-challenges/",
+  publicProfile:
+    "https://facultad-ciencias-ingenieria.pucp.edu.pe/2024/10/07/kevin-astuhuaman-egresado-de-ingenieria-industrial-admitido-a-maestria-en-berkeley/",
+};
+
+export const routes = [
+  { path: "/", state: "index", title: "Kevin Astuhuaman | AI Product Manager", modified: "2026-07-12" },
+  { path: "/projects/trackly/", state: "index", title: "Trackly case study | Kevin Astuhuaman", modified: "2026-07-12" },
+  { path: "/projects/paypal-ai-observability/", state: "index", title: "PayPal AI observability | Kevin Astuhuaman", modified: "2026-07-12" },
+  { path: "/projects/berkeley-mobagel-ai-gtm/", state: "index", title: "Berkeley and MoBagel AI product strategy | Kevin Astuhuaman", modified: "2026-07-12" },
+  { path: "/projects/smb-fintech-bcp-credicorp/", state: "index", title: "BCP and Credicorp product leadership | Kevin Astuhuaman", modified: "2026-07-12" },
+  { path: "/resume/", state: "index", title: "Resume | Kevin Astuhuaman", modified: "2026-07-12" },
+  { path: "/about/", state: "index", title: "About | Kevin Astuhuaman", modified: "2026-07-12" },
+  { path: "/proof/", state: "index", title: "Public evidence | Kevin Astuhuaman", modified: "2026-07-12" },
+  { path: "/contact/", state: "index", title: "Contact | Kevin Astuhuaman", modified: "2026-07-12" },
+  { path: "/ask/", state: "index", title: "Ask Kevin's portfolio | Kevin Astuhuaman", modified: "2026-07-12" },
+  { path: "/privacy/", state: "index", title: "Privacy | Kevin Astuhuaman", modified: "2026-07-12" },
+  { path: "/packet/", state: "compat", title: "Recruiter brief", modified: "2026-07-12" },
+  { path: "/projects/agentic-dev-workflows/", state: "compat", title: "AI-assisted product building", modified: "2026-07-12" },
+  { path: "/llms.txt", state: "fetch", title: "LLM profile", modified: "2026-07-12" },
+  { path: "/llms-full.txt", state: "fetch", title: "Full text profile", modified: "2026-07-12" },
+  { path: "/profile.json", state: "fetch", title: "Structured profile", modified: "2026-07-12" },
+  { path: "/projects.json", state: "fetch", title: "Structured projects", modified: "2026-07-12" },
+  { path: "/resume.md", state: "fetch", title: "Markdown resume", modified: "2026-07-12" },
+  { path: "/proof.json", state: "fetch", title: "Public evidence registry", modified: "2026-07-12" },
+  { path: "/assistant-corpus.json", state: "fetch", title: "Public assistant corpus", modified: "2026-07-12" },
+  { path: "/.well-known/agent-skills/index.json", state: "fetch", title: "Agent navigation index", modified: "2026-07-12" },
+  { path: "/.well-known/agent-skills/site-navigation/SKILL.md", state: "fetch", title: "Agent navigation guide", modified: "2026-07-12" },
+];
+
+export const publicClaims = [
+  {
+    id: "trackly-inventory",
+    statement: "Trackly monitored 1,969 company career sites across 40 ATS and source types, with 128,975 job records in its public inventory on July 12, 2026.",
+    short: "1,969 company career sites across 40 source types",
+    source: links.trackly,
+    checked: "2026-07-12",
+    state: "live public product",
+    context: "Dated inventory, not a user-adoption claim.",
+  },
+  {
+    id: "trackly-app-store",
+    statement: "Trackly is available publicly on Apple's App Store.",
+    short: "Trackly on the App Store",
+    source: links.appStore,
+    checked: "2026-07-12",
+    state: "public artifact",
+    context: "Public distribution artifact for the native product.",
+  },
+  {
+    id: "paypal-detection",
+    statement: "A PayPal Checkout internship prototype reduced issue-detection time by 75% in the project workflow across a diagnostic environment spanning 15+ tools.",
+    short: "75% faster issue detection in the internship prototype workflow",
+    source: "/projects/paypal-ai-observability/",
+    checked: "2026-07-12",
+    state: "public-safe resume claim",
+    context: "Prototype-workflow result, not a PayPal-wide production claim.",
+  },
+  {
+    id: "bcp-access",
+    statement: "At Banco de Credito BCP, Kevin's work helped more than 100,000 small businesses access a first loan.",
+    short: "First-loan access for 100,000+ small businesses",
+    source: "/projects/smb-fintech-bcp-credicorp/",
+    checked: "2026-07-12",
+    state: "public profile claim",
+    context: "Production small-business lending outcome; this claim stays in the BCP experience section, not the portfolio bio.",
+  },
+  {
+    id: "bcp-loans",
+    statement: "Kevin designed and launched an online credit-evaluation platform that reduced evaluation time from seven days to one hour and generated $40M in incremental loan disbursements in nine months.",
+    short: "Seven days to one hour; $40M incremental disbursements",
+    source: "/projects/smb-fintech-bcp-credicorp/",
+    checked: "2026-07-12",
+    state: "public resume claim",
+    context: "Production lending outcome.",
+  },
+  {
+    id: "bcp-digital-growth",
+    statement: "Kevin redesigned BCP's digital value proposition for small businesses, contributing to 14% year-over-year revenue growth and growing monthly website traffic sixfold to 180,000 users in 15 months.",
+    short: "14% revenue growth; monthly website traffic grew 6x to 180K",
+    source: "/projects/smb-fintech-bcp-credicorp/",
+    checked: "2026-07-12",
+    state: "public resume claim",
+    context: "Production digital-channel outcome; 180K is monthly website traffic, not product MAU.",
+  },
+  {
+    id: "trackly-cli-mcp",
+    statement: "Trackly ships a public command-line interface and Model Context Protocol server.",
+    short: "Public CLI and MCP server",
+    source: links.tracklyCli,
+    checked: "2026-07-12",
+    state: "public source repository",
+    context: "Public technical distribution artifact; separate from the App Store listing.",
+  },
+  {
+    id: "berkeley-mobagel-brief",
+    statement: "Berkeley Haas's official past-challenges page lists the Fujitsu and MoBagel AI Business Adoption Acceleration Challenge.",
+    short: "Official Berkeley Fujitsu and MoBagel AI challenge",
+    source: links.berkeleyMobagel,
+    checked: "2026-07-12",
+    state: "official program listing",
+    context: "Official program context only. Kevin's participation and deliverables are public resume claims.",
+  },
+];
+
+export const assistantCorpus = {
+  schemaVersion: 1,
+  entries: [
+    {
+      id: "overview",
+      title: "Kevin Astuhuaman portfolio",
+      url: `${site.origin}/`,
+      keywords: ["about", "overview", "ai product manager", "technical product manager", "technical builder", "role", "fit", "hire"],
+      content: "Kevin Astuhuaman is an AI Product Manager, ex-PayPal in AI/ML observability, and Berkeley Haas MBA in the Bay Area. His two recruiting lanes are applied AI and agent products, and AI platform or technical product management. His most recent enterprise AI proof is an agentic observability prototype at PayPal Checkout. Trackly proves hands-on product building across web, native apps, CLI, MCP, chat, and voice. Berkeley's Open Innovation Squad work with Fujitsu and MoBagel adds AI product strategy, high-fidelity prototyping, and go-to-market experience. His BCP experience shows six years of progression, regulated-product judgment, team leadership, and operating scale.",
+    },
+    {
+      id: "trackly",
+      title: "Trackly case study",
+      url: `${site.origin}/projects/trackly/`,
+      keywords: ["trackly", "agent", "agents", "job search", "career pages", "scraping", "matching", "eval", "classification", "chat", "voice", "ios", "macos", "cli", "mcp", "builder"],
+      content: "Kevin built Trackly during his MBA job search after seeing strong roles appear on company career pages before job boards. The live product monitors direct sources, normalizes and deduplicates jobs, applies freshness and false-zero guards, classifies job attributes, explains matches, and delivers the same product system through web, iOS, macOS, a public CLI, MCP, chat, and voice. On July 12, 2026, Trackly's public inventory showed 1,969 monitored company career sites, 40 ATS and source types, and 128,975 job records. Kevin owned the product problem, prioritization, quality thresholds, interaction decisions, release decisions, operation, and hands-on implementation. AI coding agents accelerated implementation and review but did not decide the product promise or release evidence.",
+    },
+    {
+      id: "paypal",
+      title: "PayPal AI observability case study",
+      url: `${site.origin}/projects/paypal-ai-observability/`,
+      keywords: ["paypal", "checkout", "observability", "diagnostics", "enterprise ai", "internship", "datadog", "triage", "detection"],
+      content: "Kevin was a Technical Product Manager MBA Intern on PayPal Checkout from May through August 2025. He defined and prototyped an agentic observability workflow that unified an investigation path across a landscape of 15 or more diagnostic tools using natural language, AI, and MCP patterns. The internship prototype reduced issue-detection time by 75 percent in the project workflow. An auto-triage proof of concept completed triage five times faster. These are internship prototype and POC results, not PayPal-wide production claims. The portfolio demonstrates the product decisions through an original synthetic AI Investigation Workbench, not through PayPal data, screenshots, source code, prompts, system names, or internal architecture.",
+    },
+    {
+      id: "mobagel",
+      title: "Berkeley and MoBagel AI product strategy",
+      url: `${site.origin}/projects/berkeley-mobagel-ai-gtm/`,
+      keywords: ["berkeley", "haas", "mobagel", "mo bagel", "fujitsu", "open innovation", "figma", "prototype", "go to market", "gtm", "pricing", "roadmap", "ai product strategy"],
+      content: "Through Berkeley Haas's Open Innovation Squad, Kevin worked on the Fujitsu and MoBagel challenge from December 2024 through May 2025. His public resume describes product discovery, competitive research, feature and UX concepts, a high-fidelity Figma prototype, roadmap and business-model work, and recommendations for United States go-to-market, partnerships, and usage-based pricing. Berkeley's official past-challenges page independently confirms the Fujitsu and MoBagel AI Business Adoption Acceleration Challenge. MoBagel is described as an AI and machine-learning platform that helps businesses adopt AI. No funding, customer, or production claims are inferred from the official program listing.",
+    },
+    {
+      id: "bcp",
+      title: "BCP and Credicorp product leadership case study",
+      url: `${site.origin}/projects/smb-fintech-bcp-credicorp/`,
+      keywords: ["bcp", "credicorp", "fintech", "bank", "smb", "lending", "digital channels", "leadership", "team", "teams", "managed", "reports", "risk", "compliance", "growth"],
+      content: "From 2018 through 2024, Kevin progressed from Product Analyst to Product Manager, Senior Product Manager, and Lead Product Manager at Banco de Credito BCP, part of Credicorp. His work helped more than 100,000 small businesses access a first loan. He designed and launched an online credit-evaluation platform that reduced evaluation time from seven days to one hour and generated 40 million dollars in incremental loan disbursements in nine months. He redesigned the digital value proposition for small businesses, contributing to 14 percent year-over-year revenue growth and growing monthly website traffic sixfold to 180,000 users in 15 months. As Lead Product Manager, he reached 19.55 percent market share after gaining 129 basis points in seven months, managed nine product direct reports, and worked across risk, compliance, engineering, design, analytics, and commercial teams.",
+    },
+    {
+      id: "resume",
+      title: "Kevin Astuhuaman resume",
+      url: `${site.origin}/resume/`,
+      keywords: ["resume", "experience", "education", "berkeley haas", "haas", "berkeley", "mba", "skills", "career", "background", "mo bagel", "summit"],
+      content: "Kevin earned a STEM-designated MBA from the University of California, Berkeley, Haas School of Business in May 2026 and a Bachelor of Science in Industrial Engineering from the Pontifical Catholic University of Peru in July 2018. At Haas, he built Trackly, worked with Berkeley's Open Innovation Squad on the Fujitsu and MoBagel AI product challenge, served as VP of the Tech Club, and co-launched the school's first Tech and AI Summit with more than 560 registrations. His working range includes AI product strategy, agent workflows, LLM evals, API and MCP integration, observability, experimentation, marketplaces, fintech, analytics, Figma, SwiftUI, TypeScript, and AI-assisted development.",
+    },
+    {
+      id: "contact",
+      title: "Contact Kevin Astuhuaman",
+      url: `${site.origin}/contact/`,
+      keywords: ["contact", "email", "linkedin", "reach", "interview", "recruiter"],
+      content: "The preferred contact path is LinkedIn at https://www.linkedin.com/in/kevinastuhuaman. Kevin's public recruiting email is kevin.astuhuaman@berkeley.edu. Recruiters should include the role, the product problem, and what the person needs to own.",
+    },
+  ],
+};
+
+export const experience = [
+  {
+    organization: "PayPal Checkout",
+    role: "Technical Product Manager MBA Intern",
+    dates: "May-August 2025",
+    location: "Chicago, Illinois",
+    summary: "Defined and prototyped an AI-assisted observability workflow for checkout diagnostics.",
+    bullets: [
+      "Unified the investigation path across 15+ diagnostic tools with success metrics for detection and resolution.",
+      "Built an agentic diagnostic prototype using Claude, Datadog, APIs, and MCP patterns, reducing issue-detection time 75% in the project workflow.",
+      "Designed auto-triage orchestration that diagnosed issues, estimated impact, and routed alerts; the POC completed triage 5x faster.",
+    ],
+  },
+  {
+    organization: "Trackly",
+    role: "AI Product Manager and builder",
+    dates: "2025-present",
+    location: "Bay Area",
+    summary: "Built and operates a real-time job-search product across web, native apps, CLI, MCP, matching, chat, and voice.",
+    bullets: [
+      "Chose direct company career pages as the wedge after seeing strong roles appear before aggregators during the MBA recruiting cycle.",
+      "Designed quality controls for stale jobs, duplicate roles, false-zero monitoring failures, classification, and match explanations.",
+      "Shipped one product system across web, iOS, macOS, a public CLI, and an MCP server.",
+    ],
+  },
+  {
+    organization: "UC Berkeley Haas Open Innovation Squad",
+    role: "AI Product Manager, Fujitsu and MoBagel challenge",
+    dates: "December 2024-May 2025",
+    location: "Berkeley, California",
+    summary: "Worked on AI product adoption, a high-fidelity Figma prototype, roadmap, business model, and United States go-to-market recommendations for MoBagel.",
+    bullets: [
+      "Conducted product and competitive research around how non-technical business users adopt AI and machine-learning workflows.",
+      "Contributed feature and UX concepts, a high-fidelity Figma prototype, and a roadmap linking user needs to product capabilities.",
+      "Recommended go-to-market positioning, partnership channels, and usage-based pricing for United States expansion.",
+    ],
+  },
+  {
+    organization: "Banco de Credito BCP (part of Credicorp)",
+    role: "Product Analyst -> Product Manager -> Senior Product Manager -> Lead Product Manager",
+    dates: "2018-2024",
+    location: "Lima, Peru",
+    summary: "Progression: Lead Product Manager (1 year), Senior Product Manager (1.5 years), Product Manager (1.5 years), Product Analyst (2 years).",
+    bullets: [
+      "Helped more than 100,000 small businesses access a first loan.",
+      "Designed and launched an online credit-evaluation platform that reduced evaluation time from seven days to one hour and generated $40M in incremental loan disbursements in nine months.",
+      "Redesigned the digital value proposition for small businesses, contributing to 14% year-over-year revenue growth and growing monthly website traffic 6x to 180K users in 15 months.",
+      "Managed a team of nine product direct reports and partnered with risk, compliance, design, engineering, analytics, and commercial teams.",
+      "Reached 19.55% market share after gaining 129 basis points in seven months.",
+    ],
+  },
+];
+
+export const projects = [
+  {
+    id: "paypal",
+    name: "PayPal AI observability",
+    eyebrow: "Recent enterprise AI",
+    href: "/projects/paypal-ai-observability/",
+    thesis: "An agentic observability prototype that turned fragmented checkout diagnostics into one evidence-backed investigation path.",
+    proof: "Internship prototype | AI + MCP | 15+ diagnostic tools",
+  },
+  {
+    id: "trackly",
+    name: "Trackly",
+    eyebrow: "Hands-on builder proof",
+    href: "/projects/trackly/",
+    thesis: "A job-search system built around direct career-page signal, explainable matching, and dependable delivery across human and agent interfaces.",
+    proof: "Live product | Web, iOS, macOS, CLI, MCP",
+    image: "/assets/trackly-home.webp",
+  },
+  {
+    id: "mobagel",
+    name: "Berkeley x MoBagel",
+    eyebrow: "AI product strategy and GTM",
+    href: "/projects/berkeley-mobagel-ai-gtm/",
+    thesis: "Product discovery, high-fidelity prototyping, roadmap, business model, and United States go-to-market recommendations for an AI platform.",
+    proof: "Berkeley challenge | Figma prototype | GTM",
+  },
+  {
+    id: "bcp",
+    name: "BCP small-business products",
+    eyebrow: "Product leadership at scale",
+    href: "/projects/smb-fintech-bcp-credicorp/",
+    thesis: "Six years of progression across lending, digital channels, growth, and product leadership in a regulated financial institution.",
+    proof: "Production products | 9 direct reports",
+  },
+];
+
+export const nav = [
+  { label: "Work", href: "/#work" },
+  { label: "Experience", href: "/#experience" },
+  { label: "Resume", href: "/resume/" },
+  { label: "Contact", href: "/contact/" },
+];

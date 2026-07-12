@@ -1,0 +1,23 @@
+# Kevin Astuhuaman
+
+> AI Product Manager | Ex-PayPal AI/ML Observability | Berkeley Haas MBA '26 | 7 years building products and enjoying every minute of it.
+
+Kevin's most recent enterprise AI proof is an agentic observability prototype at PayPal Checkout. He also built Trackly, a live job-search product spanning web, iOS, macOS, CLI, MCP, matching, chat, and voice. At Berkeley Haas, he worked on the Fujitsu and MoBagel Open Innovation challenge across AI product strategy, high-fidelity prototyping, roadmap, business model, and go-to-market recommendations. He previously progressed through four product roles at Banco de Credito BCP, part of Credicorp.
+
+## Primary pages
+
+- [Portfolio](https://portfolio.kevinastuhuaman.com/): Kevin's recruiting profile and selected work
+- [PayPal AI observability case study](https://portfolio.kevinastuhuaman.com/projects/paypal-ai-observability/): Agentic investigation, product decisions, prototype outcomes, and public-safety boundaries
+- [Trackly case study](https://portfolio.kevinastuhuaman.com/projects/trackly/): Product decisions, system quality, and cross-platform delivery
+- [Berkeley and MoBagel case study](https://portfolio.kevinastuhuaman.com/projects/berkeley-mobagel-ai-gtm/): AI product adoption, high-fidelity prototyping, roadmap, business model, and GTM
+- [Resume](https://portfolio.kevinastuhuaman.com/resume/): Complete chronological experience
+- [Public evidence](https://portfolio.kevinastuhuaman.com/proof/): Sources and context for published claims
+- [Contact](https://portfolio.kevinastuhuaman.com/contact/): LinkedIn and email
+- [Ask Kevin's portfolio](https://portfolio.kevinastuhuaman.com/ask/): Public-corpus assistant with static cited answers
+
+## Machine-readable context
+
+- [Full plain-text profile](https://portfolio.kevinastuhuaman.com/llms-full.txt): Detailed public recruiting context
+- [Structured profile](https://portfolio.kevinastuhuaman.com/profile.json): Public identity, experience, and claims
+- [Structured projects](https://portfolio.kevinastuhuaman.com/projects.json): Project summaries and canonical links
+- [Markdown resume](https://portfolio.kevinastuhuaman.com/resume.md): Crawlable resume equivalent

@@ -1,0 +1,173 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Analytics from "../components/Analytics.astro";
+import { createHash } from "node:crypto";
+import { links, site } from "../data/site.js";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  pageType?: "profile" | "article" | "contact" | "webpage";
+  image?: string;
+  published?: string;
+  modified?: string;
+  about?: string;
+  noindex?: boolean;
+  includeSchema?: boolean;
+}
+
+const {
+  title,
+  description,
+  path,
+  pageType = "webpage",
+  image = site.socialImage,
+  published = "2026-07-12",
+  modified = site.updated,
+  about,
+  noindex = false,
+  includeSchema = true,
+} = Astro.props;
+const canonical = new URL(path, site.origin).href;
+const imageUrl = new URL(image, site.origin).href;
+
+const person = {
+  "@type": "Person",
+  "@id": `${site.origin}/#kevin`,
+  name: site.name,
+  givenName: "Kevin",
+  familyName: "Astuhuaman",
+  url: `${site.origin}/`,
+  image: new URL(site.image, site.origin).href,
+  jobTitle: site.title,
+  description: site.description,
+  homeLocation: { "@type": "Place", name: site.location },
+  alumniOf: [
+    { "@type": "CollegeOrUniversity", name: "University of California, Berkeley, Haas School of Business" },
+    { "@type": "CollegeOrUniversity", name: "Pontifical Catholic University of Peru" },
+  ],
+  knowsAbout: [
+    "AI product management",
+    "AI agents",
+    "LLM evaluation",
+    "Model Context Protocol",
+    "AI observability",
+    "fintech product management",
+    "marketplaces",
+  ],
+  sameAs: [links.linkedin, links.github, links.writing],
+  subjectOf: { "@id": `${site.origin}/#trackly` },
+};
+
+const page = {
+  "@type": pageType === "profile" ? "ProfilePage" : pageType === "article" ? "Article" : pageType === "contact" ? "ContactPage" : "WebPage",
+  "@id": `${canonical}#page`,
+  url: canonical,
+  name: title,
+  description,
+  image: imageUrl,
+  isPartOf: { "@id": `${site.origin}/#website` },
+  ...(pageType === "profile" ? { mainEntity: { "@id": `${site.origin}/#kevin` } } : {}),
+  ...(pageType === "article"
+    ? {
+        headline: title,
+        author: { "@id": `${site.origin}/#kevin` },
+        datePublished: published,
+        dateModified: modified,
+        about: about ? { "@type": "Thing", name: about } : undefined,
+      }
+    : {}),
+};
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${site.origin}/#website`,
+      url: `${site.origin}/`,
+      name: "Kevin Astuhuaman portfolio",
+      description: site.description,
+      inLanguage: "en-US",
+      publisher: { "@id": `${site.origin}/#kevin` },
+    },
+    person,
+    ...(path === "/"
+      ? [
+          {
+            "@type": "SoftwareApplication",
+            "@id": `${site.origin}/#trackly`,
+            name: "Trackly",
+            url: links.trackly,
+            applicationCategory: "BusinessApplication",
+            operatingSystem: "Web, iOS, macOS, command line",
+            creator: { "@id": `${site.origin}/#kevin` },
+          },
+        ]
+      : []),
+    page,
+  ],
+};
+const schemaJson = JSON.stringify(schema);
+const schemaHash = createHash("sha256").update(schemaJson).digest("base64");
+const contentSecurityPolicy = [
+  "default-src 'self'",
+  `script-src 'self' 'sha256-${schemaHash}' https://static.cloudflareinsights.com`,
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data:",
+  "font-src 'self'",
+  "connect-src 'self' https://closeai.mba https://us.i.posthog.com https://cloudflareinsights.com",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "upgrade-insecure-requests",
+].join("; ");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={site.name} />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content={contentSecurityPolicy}
+    />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    {!noindex && <link rel="canonical" href={canonical} />}
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#0b0b0b" />
+    <meta property="og:type" content={pageType === "article" ? "article" : "profile"} />
+    <meta property="og:site_name" content="Kevin Astuhuaman portfolio" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${title} social preview`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    {includeSchema && <script is:inline type="application/ld+json" set:html={schemaJson} />}
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <Header currentPath={path} />
+    <main id="main-content" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <Analytics />
+  </body>
+</html>

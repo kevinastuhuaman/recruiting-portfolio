@@ -1,0 +1,33 @@
+{
+  "lastUpdated": "2026-07-12",
+  "projects": [
+    {
+      "name": "PayPal AI observability",
+      "category": "Recent enterprise AI",
+      "url": "https://portfolio.kevinastuhuaman.com/projects/paypal-ai-observability/",
+      "summary": "An agentic observability prototype that turned fragmented checkout diagnostics into one evidence-backed investigation path.",
+      "proof": "Internship prototype | AI + MCP | 15+ diagnostic tools"
+    },
+    {
+      "name": "Trackly",
+      "category": "Hands-on builder proof",
+      "url": "https://portfolio.kevinastuhuaman.com/projects/trackly/",
+      "summary": "A job-search system built around direct career-page signal, explainable matching, and dependable delivery across human and agent interfaces.",
+      "proof": "Live product | Web, iOS, macOS, CLI, MCP"
+    },
+    {
+      "name": "Berkeley x MoBagel",
+      "category": "AI product strategy and GTM",
+      "url": "https://portfolio.kevinastuhuaman.com/projects/berkeley-mobagel-ai-gtm/",
+      "summary": "Product discovery, high-fidelity prototyping, roadmap, business model, and United States go-to-market recommendations for an AI platform.",
+      "proof": "Berkeley challenge | Figma prototype | GTM"
+    },
+    {
+      "name": "BCP small-business products",
+      "category": "Product leadership at scale",
+      "url": "https://portfolio.kevinastuhuaman.com/projects/smb-fintech-bcp-credicorp/",
+      "summary": "Six years of progression across lending, digital channels, growth, and product leadership in a regulated financial institution.",
+      "proof": "Production products | 9 direct reports"
+    }
+  ]
+}
