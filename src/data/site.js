@@ -152,14 +152,14 @@ export const assistantCorpus = {
       id: "mobagel",
       title: "Berkeley and MoBagel AI product strategy",
       url: `${site.origin}/projects/berkeley-mobagel-ai-gtm/`,
-      keywords: ["berkeley", "haas", "mobagel", "fujitsu", "open innovation", "figma", "prototype", "go to market", "gtm", "pricing", "roadmap", "ai product strategy"],
+      keywords: ["berkeley", "haas", "mobagel", "mo bagel", "fujitsu", "open innovation", "figma", "prototype", "go to market", "gtm", "pricing", "roadmap", "ai product strategy"],
       content: "Through Berkeley Haas's Open Innovation Squad, Kevin worked on the Fujitsu and MoBagel challenge from December 2024 through May 2025. His public resume describes product discovery, competitive research, feature and UX concepts, a high-fidelity Figma prototype, roadmap and business-model work, and recommendations for United States go-to-market, partnerships, and usage-based pricing. Berkeley's official past-challenges page independently confirms the Fujitsu and MoBagel AI Business Adoption Acceleration Challenge. MoBagel is described as an AI and machine-learning platform that helps businesses adopt AI. No funding, customer, or production claims are inferred from the official program listing.",
     },
     {
       id: "bcp",
       title: "BCP and Credicorp product leadership case study",
       url: `${site.origin}/projects/smb-fintech-bcp-credicorp/`,
-      keywords: ["bcp", "credicorp", "fintech", "bank", "smb", "lending", "digital channels", "pricing", "leadership", "team", "teams", "managed", "reports", "risk", "compliance", "growth"],
+      keywords: ["bcp", "credicorp", "fintech", "bank", "smb", "lending", "digital channels", "leadership", "team", "teams", "managed", "reports", "risk", "compliance", "growth"],
       content: "From 2018 through 2024, Kevin progressed from Product Analyst to Product Manager, Senior Product Manager, and Lead Product Manager at Banco de Credito BCP, part of Credicorp. His work helped more than 100,000 small businesses access a first loan. He designed and launched an online credit-evaluation platform that reduced evaluation time from seven days to one hour and generated 40 million dollars in incremental loan disbursements in nine months. He redesigned the digital value proposition for small businesses, contributing to 14 percent year-over-year revenue growth and growing monthly website traffic sixfold to 180,000 users in 15 months. As Lead Product Manager, he reached 19.55 percent market share after gaining 129 basis points in seven months, managed nine product direct reports, and worked across risk, compliance, engineering, design, analytics, and commercial teams.",
     },
     {
