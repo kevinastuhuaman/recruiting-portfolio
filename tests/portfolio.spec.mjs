@@ -115,30 +115,37 @@ test("the complete recruiting path works without JavaScript", async ({ browser }
 test("AI Investigation Workbench exposes plan, evidence, uncertainty, and human approval", async ({ page }) => {
   await page.goto("/projects/paypal-ai-observability/");
   const workbench = page.locator("[data-workbench]");
+  const scanWorkbench = async () => {
+    const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
+    const blocking = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact ?? ""));
+    expect(blocking, JSON.stringify(blocking, null, 2)).toEqual([]);
+  };
 
   await workbench.getByRole("button", { name: "Slow authentication" }).click();
   await expect(workbench.getByText(/authentication screen becomes usable/i)).toBeVisible();
+  await scanWorkbench();
 
   await workbench.getByRole("button", { name: "Build investigation plan" }).click();
   await expect(workbench.getByRole("heading", { name: /Five read-only steps/i })).toBeVisible();
+  await scanWorkbench();
 
   await workbench.getByRole("button", { name: "Run approved steps" }).click();
   await expect(workbench.getByRole("heading", { name: /What happened and why the user struggled/i })).toBeVisible();
   await expect(workbench.getByText(/One source timed out/i)).toBeVisible();
+  await scanWorkbench();
 
   await workbench.getByRole("button", { name: "Review hypotheses" }).click();
   await expect(workbench.getByText("Unknown", { exact: true })).toBeVisible();
   await expect(workbench.getByText(/service telemetry is incomplete/i)).toBeVisible();
+  await scanWorkbench();
 
   await workbench.getByRole("button", { name: "Prepare escalation" }).click();
   await expect(workbench.getByRole("heading", { name: /A person owns the action/i })).toBeVisible();
+  await scanWorkbench();
   await workbench.getByRole("button", { name: "Approve and route" }).click();
   await expect(workbench.getByRole("heading", { name: /accountable owner/i })).toBeVisible();
   await expect(workbench.getByRole("status")).toHaveText(/audit trail is complete/i);
-
-  const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
-  const blocking = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact ?? ""));
-  expect(blocking, JSON.stringify(blocking, null, 2)).toEqual([]);
+  await scanWorkbench();
 });
 
 test("public machine files and resume PDF are fetchable", async ({ request }) => {
