@@ -166,7 +166,7 @@ export const assistantCorpus = {
       id: "resume",
       title: "Kevin Astuhuaman resume",
       url: `${site.origin}/resume/`,
-      keywords: ["resume", "experience", "education", "haas", "berkeley", "mba", "skills", "career", "background", "mo bagel", "summit"],
+      keywords: ["resume", "experience", "education", "berkeley haas", "haas", "berkeley", "mba", "skills", "career", "background", "mo bagel", "summit"],
       content: "Kevin earned a STEM-designated MBA from the University of California, Berkeley, Haas School of Business in May 2026 and a Bachelor of Science in Industrial Engineering from the Pontifical Catholic University of Peru in July 2018. At Haas, he built Trackly, worked with Berkeley's Open Innovation Squad on the Fujitsu and MoBagel AI product challenge, served as VP of the Tech Club, and co-launched the school's first Tech and AI Summit with more than 560 registrations. His working range includes AI product strategy, agent workflows, LLM evals, API and MCP integration, observability, experimentation, marketplaces, fintech, analytics, Figma, SwiftUI, TypeScript, and AI-assisted development.",
     },
     {
