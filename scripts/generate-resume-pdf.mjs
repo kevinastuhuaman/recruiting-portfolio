@@ -1,11 +1,10 @@
 import { createServer } from "node:http";
-import { copyFile, readFile, stat } from "node:fs/promises";
+import { readFile, stat } from "node:fs/promises";
 import { extname, join, normalize } from "node:path";
 import { chromium } from "@playwright/test";
 
 const root = new URL("../dist/", import.meta.url).pathname;
 const output = join(root, "kevin-astuhuaman-resume.pdf");
-const publicOutput = new URL("../site-public/kevin-astuhuaman-resume.pdf", import.meta.url);
 const mime = {
   ".html": "text/html; charset=utf-8",
   ".css": "text/css; charset=utf-8",
@@ -47,7 +46,6 @@ try {
     outline: true,
     margin: { top: "0.45in", right: "0.48in", bottom: "0.45in", left: "0.48in" },
   });
-  await copyFile(output, publicOutput);
 } finally {
   await browser.close();
   await new Promise((resolve, reject) => server.close((error) => (error ? reject(error) : resolve())));
