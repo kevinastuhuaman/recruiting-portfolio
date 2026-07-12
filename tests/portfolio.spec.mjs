@@ -11,6 +11,7 @@ const routes = [
   "/proof/",
   "/contact/",
   "/ask/",
+  "/privacy/",
 ];
 
 const compatibilityRoutes = ["/packet/", "/projects/agentic-dev-workflows/"];
@@ -114,6 +115,27 @@ test("404 output is excluded from indexing and structured data", async ({ page }
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "noindex, follow");
   await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
   await expect(page.locator('script[type="application/ld+json"]')).toHaveCount(0);
+});
+
+test("analytics never sends assistant question text", async ({ page }) => {
+  const events = [];
+  await page.route("https://us.i.posthog.com/capture/", async (route) => {
+    events.push(JSON.parse(route.request().postData() ?? "{}"));
+    await route.fulfill({ status: 200, contentType: "application/json", body: "{}" });
+  });
+  await page.route("https://closeai.mba/api/portfolio/ask", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ answer: "Public Trackly evidence.", citations: [], corpusVersion: "test" }),
+    });
+  });
+  await page.goto("/ask/?utm_source=linkedin");
+  await page.getByLabel("Question about Kevin's work").fill("private recruiter question text");
+  await page.getByRole("button", { name: "Ask", exact: true }).click();
+  await expect(page.getByRole("status")).toHaveText("Answer complete.");
+  expect(JSON.stringify(events)).not.toContain("private recruiter question text");
+  expect(events.some((entry) => entry.event === "portfolio:page_view")).toBe(true);
 });
 
 test("public assistant renders plain-text answers and allowlisted citations", async ({ page }) => {

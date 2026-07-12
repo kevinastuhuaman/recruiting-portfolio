@@ -54,4 +54,6 @@ The former `/packet/` and `/projects/agentic-dev-workflows/` URLs remain as `noi
 
 The assistant API is hosted separately at `https://closeai.mba/api/portfolio/ask`. Its launch corpus is deterministic and mirrored in `/assistant-corpus.json`; it does not query Trackly user data or invoke an LLM.
 
+The client sends cookieless page and command events directly to PostHog, honors Global Privacy Control and Do Not Track, and never includes assistant question text. The public contract is documented at `/privacy/`.
+
 After a production deploy, `npm run indexnow` submits every canonical HTML route to IndexNow. The command is deliberately separate from builds so previews and pull requests cannot publish indexing signals.

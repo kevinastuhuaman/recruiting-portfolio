@@ -1,0 +1,39 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Privacy | Kevin Astuhuaman"
+  description="Privacy practices for Kevin Astuhuaman's recruiting portfolio and public-corpus assistant."
+  path="/privacy/"
+>
+  <header class="page-hero privacy-hero">
+    <div class="section-shell">
+      <p class="eyebrow">Privacy</p>
+      <h1>Measure the portfolio, not the person reading it.</h1>
+      <p class="lede">A narrow analytics footprint supports recruiter-path decisions without collecting assistant questions or creating a persistent profile.</p>
+    </div>
+  </header>
+
+  <article class="reading-shell section-pad prose">
+    <h2>What is measured</h2>
+    <p>Page views and a small set of commands are sent to PostHog: resume downloads, assistant opens, contact clicks, and outbound links. Events can include the page path and explicit UTM source, medium, or campaign values.</p>
+
+    <h2>What is not measured</h2>
+    <p>The portfolio analytics client does not send assistant question text, form text, resume lens selections, email content, application history, or Trackly user data. It does not set a persistent analytics cookie. A random identifier lasts for the current browser tab when session storage is available.</p>
+
+    <h2>Control</h2>
+    <p>Global Privacy Control and browser Do Not Track signals disable the portfolio analytics client. Blocking the analytics request does not change any page, resume, or assistant functionality.</p>
+
+    <h2>Public assistant</h2>
+    <p>Questions are sent to a separate public endpoint only after the visitor selects Ask. The endpoint returns deterministic text from the published public corpus, does not query Trackly user data, does not invoke an LLM, and instructs browsers and crawlers not to cache or index responses.</p>
+
+    <h2>Contact</h2>
+    <p>Questions about this policy can be sent to <a href="mailto:kevin.astuhuaman@berkeley.edu">kevin.astuhuaman@berkeley.edu</a>.</p>
+  </article>
+</BaseLayout>
+
+<style>
+  .privacy-hero { background: #26362f; }
+  .prose { background: white; }
+</style>

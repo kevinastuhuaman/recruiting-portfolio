@@ -32,6 +32,7 @@ export const routes = [
   { path: "/proof/", state: "index", title: "Public evidence | Kevin Astuhuaman", modified: "2026-07-12" },
   { path: "/contact/", state: "index", title: "Contact | Kevin Astuhuaman", modified: "2026-07-12" },
   { path: "/ask/", state: "index", title: "Ask Kevin's portfolio | Kevin Astuhuaman", modified: "2026-07-12" },
+  { path: "/privacy/", state: "index", title: "Privacy | Kevin Astuhuaman", modified: "2026-07-12" },
   { path: "/packet/", state: "compat", title: "Recruiter brief", modified: "2026-07-12" },
   { path: "/projects/agentic-dev-workflows/", state: "compat", title: "AI-assisted product building", modified: "2026-07-12" },
   { path: "/llms.txt", state: "fetch", title: "LLM profile", modified: "2026-07-12" },
