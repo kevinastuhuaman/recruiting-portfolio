@@ -43,25 +43,25 @@ const paypalClaim = publicClaims.find((claim) => claim.id === "paypal-detection"
 
       <div class="hero-main">
         <div class="mode-switch" aria-label="Portfolio emphasis">
-          <button type="button" data-home-mode="recruiter" aria-pressed="true">Recruiter</button>
-          <button type="button" data-home-mode="builder" aria-pressed="false">Builder</button>
-          <button type="button" data-home-mode="agent" aria-pressed="false">Agent</button>
+          <button type="button" data-home-mode="recruiter" aria-controls="home-panel-recruiter" aria-pressed="true">Recruiter</button>
+          <button type="button" data-home-mode="builder" aria-controls="home-panel-builder" aria-pressed="false">Builder</button>
+          <button type="button" data-home-mode="agent" aria-controls="home-panel-agent" aria-pressed="false">Agent</button>
         </div>
 
         <div class="hero-copy">
-          <div data-home-panel="recruiter">
+          <div id="home-panel-recruiter" data-home-panel="recruiter">
             <p class="eyebrow">AI Product Manager | Berkeley Haas MBA '26</p>
             <h2>Seven years building products and enjoying every minute of it.</h2>
             <p class="hero-lede">Most recently, I built agentic observability prototypes for PayPal Checkout. At Berkeley Haas, I worked on AI product adoption, a high-fidelity Figma prototype, roadmap, business model, and go-to-market recommendations.</p>
             <p class="hero-detail">I also built Trackly across web, iOS, macOS, CLI, MCP, chat, and voice, and progressed through four product roles at Banco de Credito BCP.</p>
           </div>
-          <div data-home-panel="builder" hidden>
+          <div id="home-panel-builder" data-home-panel="builder" hidden>
             <p class="eyebrow">Hands-on product building</p>
             <h2>I stay close to the customer, interface, and system.</h2>
             <p class="hero-lede">Trackly began with one job-search timing problem and became a live product across web, native apps, a public CLI, MCP, chat, voice, matching, and the monitoring infrastructure behind them.</p>
             <p class="hero-detail">The point is not the number of surfaces. It is owning the product promise, quality thresholds, failure states, releases, and operating decisions end to end.</p>
           </div>
-          <div data-home-panel="agent" hidden>
+          <div id="home-panel-agent" data-home-panel="agent" hidden>
             <p class="eyebrow">For recruiters and AI systems</p>
             <h2>Public evidence should be easy to inspect and hard to misread.</h2>
             <p class="hero-lede">This portfolio publishes the same verified profile as accessible HTML, Markdown, JSON, cited case studies, and a deterministic recruiter assistant.</p>

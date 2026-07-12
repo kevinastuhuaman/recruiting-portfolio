@@ -57,6 +57,9 @@ test("mobile first viewport leads with AI PM, Berkeley, and PayPal evidence", as
   await expect(hero.getByText(/Berkeley Haas MBA '26/i)).toBeVisible();
   await expect(hero.getByRole("link", { name: "Resume", exact: true })).toBeVisible();
   await expect(page.locator(".mobile-nav summary")).toBeVisible();
+  await expect(hero.getByRole("button", { name: "Recruiter" })).toHaveAttribute("aria-controls", "home-panel-recruiter");
+  await expect(hero.getByRole("button", { name: "Builder" })).toHaveAttribute("aria-controls", "home-panel-builder");
+  await expect(hero.getByRole("button", { name: "Agent" })).toHaveAttribute("aria-controls", "home-panel-agent");
 
   const positions = await hero.locator("#home-title, .identity-stack, .role-focus").evaluateAll((elements) =>
     elements.map((element) => {
