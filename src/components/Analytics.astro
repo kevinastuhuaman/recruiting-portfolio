@@ -3,8 +3,9 @@
   const apiKey = "phc_tdngvWuIvSIwuhcTBxWKTwWF74uWJuWUvAPvnRPhYo2";
   const privacyNavigator = navigator as Navigator & { globalPrivacyControl?: boolean };
   const trackingDisabled = privacyNavigator.globalPrivacyControl === true || navigator.doNotTrack === "1";
+  const isProductionHost = location.hostname === "portfolio.kevinastuhuaman.com";
 
-  if (!trackingDisabled) {
+  if (isProductionHost && !trackingDisabled) {
     let sessionId: string = crypto.randomUUID();
     try {
       sessionId = sessionStorage.getItem("portfolio_session") ?? sessionId;

@@ -40,7 +40,7 @@ Worked on AI product adoption, a high-fidelity Figma prototype, roadmap, busines
 
 **Product Analyst -> Product Manager -> Senior Product Manager -> Lead Product Manager** | 2018-2024 | Lima, Peru
 
-Progressed through four product roles leading lending, digital-channel, growth, and platform work for SMB customers.
+Progression: Lead Product Manager (1 year), Senior Product Manager (1.5 years), Product Manager (1.5 years), Product Analyst (2 years).
 
 - Helped more than 100,000 small businesses access a first loan.
 - Designed and launched an online credit-evaluation platform that reduced evaluation time from seven days to one hour and generated $40M in incremental loan disbursements in nine months.

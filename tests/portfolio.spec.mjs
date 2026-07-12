@@ -162,7 +162,7 @@ test("404 output is excluded from indexing and structured data", async ({ page }
   await expect(page.locator('script[type="application/ld+json"]')).toHaveCount(0);
 });
 
-test("analytics never sends assistant question text", async ({ page }) => {
+test("local previews never send production analytics", async ({ page }) => {
   const events = [];
   await page.route("https://us.i.posthog.com/capture/", async (route) => {
     events.push(JSON.parse(route.request().postData() ?? "{}"));
@@ -180,7 +180,18 @@ test("analytics never sends assistant question text", async ({ page }) => {
   await page.getByRole("button", { name: "Ask", exact: true }).click();
   await expect(page.getByRole("status")).toHaveText("Answer complete.");
   expect(JSON.stringify(events)).not.toContain("private recruiter question text");
-  expect(events.some((entry) => entry.event === "portfolio:page_view")).toBe(true);
+  expect(events).toEqual([]);
+});
+
+test("resume print control works under the site CSP", async ({ page }) => {
+  await page.addInitScript(() => {
+    window.print = () => {
+      window.sessionStorage.setItem("portfolio_print_called", "true");
+    };
+  });
+  await page.goto("/resume/");
+  await page.getByRole("button", { name: "Print" }).click();
+  await expect.poll(() => page.evaluate(() => window.sessionStorage.getItem("portfolio_print_called"))).toBe("true");
 });
 
 test("public assistant renders plain-text answers and allowlisted citations", async ({ page }) => {

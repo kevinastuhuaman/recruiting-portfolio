@@ -18,7 +18,7 @@ import { experience, links, site } from "../../data/site.js";
         <a class="button button-light" href="/kevin-astuhuaman-resume.pdf" download>
           <Download aria-hidden="true" size={18} /> Download PDF
         </a>
-        <button class="button button-outline-light" type="button" onclick="window.print()">
+        <button class="button button-outline-light" type="button" data-print-resume>
           <Printer aria-hidden="true" size={18} /> Print
         </button>
         <a class="button button-outline-light" href={`mailto:${site.email}`}>
@@ -105,7 +105,7 @@ import { experience, links, site } from "../../data/site.js";
             <div><h3>{experience[3].organization}</h3><strong>{experience[3].role}</strong></div>
             <div><span>{experience[3].dates}</span><span>{experience[3].location}</span></div>
           </header>
-          <p>Progression: Lead Product Manager (1 year), Senior Product Manager (1.5 years), Product Manager (1.5 years), Product Analyst (2 years).</p>
+          <p>{experience[3].summary}</p>
           <ul>
             <li class="resume-bullet lens-leadership">Helped more than 100,000 small businesses access a first loan.</li>
             <li class="resume-bullet lens-platform lens-leadership">Designed and launched an online credit-evaluation platform that reduced evaluation time from seven days to one hour and generated $40M in incremental loan disbursements in nine months.</li>
@@ -143,6 +143,7 @@ import { experience, links, site } from "../../data/site.js";
   <script>
     const controls = document.querySelector("[data-resume-lenses]");
     const documentElement = document.querySelector("[data-resume-document]");
+    document.querySelector("[data-print-resume]")?.addEventListener("click", () => window.print());
     controls?.addEventListener("change", (event) => {
       if (!(event.target instanceof HTMLInputElement)) return;
       documentElement?.setAttribute("data-lens", event.target.value);
