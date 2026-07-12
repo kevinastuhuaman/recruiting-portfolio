@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "overview",
+      "title": "Kevin Astuhuaman portfolio",
+      "url": "https://portfolio.kevinastuhuaman.com/",
+      "keywords": [
+        "about",
+        "overview",
+        "ai product manager",
+        "technical product manager",
+        "technical builder",
+        "role",
+        "fit",
+        "hire"
+      ],
+      "content": "Kevin Astuhuaman is an AI Product Manager and technical builder in the Bay Area. His two recruiting lanes are applied AI and agent products, and AI platform or technical product management. Trackly is his flagship product proof. PayPal Checkout is his enterprise AI observability proof. BCP and Credicorp show six years of progression, regulated-product judgment, team leadership, and operating scale."
+    },
+    {
+      "id": "trackly",
+      "title": "Trackly case study",
+      "url": "https://portfolio.kevinastuhuaman.com/projects/trackly/",
+      "keywords": [
+        "trackly",
+        "agent",
+        "agents",
+        "job search",
+        "career pages",
+        "scraping",
+        "matching",
+        "eval",
+        "classification",
+        "chat",
+        "voice",
+        "ios",
+        "macos",
+        "cli",
+        "mcp",
+        "builder"
+      ],
+      "content": "Kevin founded and built Trackly after seeing strong roles appear on company career pages before job boards. The live product monitors direct sources, normalizes and deduplicates jobs, applies freshness and false-zero guards, classifies job attributes, explains matches, and delivers the same product system through web, iOS, macOS, a public CLI, MCP, chat, and voice. On July 12, 2026, Trackly's public inventory showed 1,969 monitored company career sites, 40 ATS and source types, and 128,975 job records. Kevin owned the product problem, prioritization, quality thresholds, interaction decisions, release decisions, operation, and hands-on implementation. AI coding agents accelerated implementation and review but did not decide the product promise or release evidence."
+    },
+    {
+      "id": "paypal",
+      "title": "PayPal AI observability case study",
+      "url": "https://portfolio.kevinastuhuaman.com/projects/paypal-ai-observability/",
+      "keywords": [
+        "paypal",
+        "checkout",
+        "observability",
+        "diagnostics",
+        "enterprise ai",
+        "internship",
+        "datadog",
+        "triage",
+        "detection"
+      ],
+      "content": "Kevin was a Technical Product Manager MBA Intern on PayPal Checkout from May through August 2025. He defined and prototyped an AI-assisted observability workflow that unified the investigation path across 15 or more diagnostic tools. The internship prototype reduced issue-detection time by 75 percent in the project workflow. An auto-triage proof of concept completed triage five times faster. These are internship prototype and POC results, not PayPal-wide production claims. The public case contains no internal screenshots, logs, merchant data, confidential system names, or internal architecture."
+    },
+    {
+      "id": "bcp",
+      "title": "BCP and Credicorp product leadership case study",
+      "url": "https://portfolio.kevinastuhuaman.com/projects/smb-fintech-bcp-credicorp/",
+      "keywords": [
+        "bcp",
+        "credicorp",
+        "fintech",
+        "bank",
+        "smb",
+        "lending",
+        "marketplace",
+        "pricing",
+        "leadership",
+        "team",
+        "teams",
+        "managed",
+        "reports",
+        "risk",
+        "compliance",
+        "growth"
+      ],
+      "content": "From 2018 through 2024, Kevin progressed from Product Analyst to Product Manager, Senior Product Manager, and Lead Product Manager at Banco de Credito del Peru and Credicorp. He launched and scaled an SMB digital marketplace to 180,000 monthly active users and increased product cross-sell per client by 28 percent. He led a personalized loan product from research through launch, reducing processing from seven days to immediate approval and generating 40 million dollars in nine months. He used ML-driven pricing experiments to increase conversion by 32 percent and reach 19.6 percent market share in seven months. As Lead Product Manager, he managed nine product direct reports and worked across risk, compliance, engineering, design, analytics, and commercial teams."
+    },
+    {
+      "id": "resume",
+      "title": "Kevin Astuhuaman resume",
+      "url": "https://portfolio.kevinastuhuaman.com/resume/",
+      "keywords": [
+        "resume",
+        "experience",
+        "education",
+        "haas",
+        "berkeley",
+        "mba",
+        "skills",
+        "career",
+        "background",
+        "mo bagel",
+        "summit"
+      ],
+      "content": "Kevin earned a STEM-designated MBA from the University of California, Berkeley, Haas School of Business in May 2026 and a Bachelor of Science in Industrial Engineering from the Pontifical Catholic University of Peru in July 2018. At Haas, he built Trackly, worked with Berkeley's Open Innovation Squad on AI product strategy for MoBagel, served as VP of the Tech Club, and co-launched the school's first Tech and AI Summit with more than 560 registrations. His working range includes AI product strategy, agent workflows, LLM evals, API and MCP integration, observability, experimentation, marketplaces, fintech, analytics, Figma, SwiftUI, TypeScript, and AI-assisted development."
+    },
+    {
+      "id": "contact",
+      "title": "Contact Kevin Astuhuaman",
+      "url": "https://portfolio.kevinastuhuaman.com/contact/",
+      "keywords": [
+        "contact",
+        "email",
+        "linkedin",
+        "reach",
+        "interview",
+        "recruiter"
+      ],
+      "content": "The preferred contact path is LinkedIn at https://www.linkedin.com/in/kevinastuhuaman. Kevin's public recruiting email is kevin.astuhuaman@berkeley.edu. Recruiters should include the role, the product problem, and what the person needs to own."
+    }
+  ]
+}

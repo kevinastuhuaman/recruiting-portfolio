@@ -1,0 +1,58 @@
+---
+import { ExternalLink } from "@lucide/astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { publicClaims } from "../../data/site.js";
+---
+
+<BaseLayout
+  title="Public evidence | Kevin Astuhuaman"
+  description="Public sources and precise context for the claims used in Kevin Astuhuaman's recruiting portfolio."
+  path="/proof/"
+>
+  <header class="page-hero proof-hero">
+    <div class="section-shell">
+      <p class="eyebrow">Public evidence</p>
+      <h1>Claims should be specific enough to inspect.</h1>
+      <p class="lede">This page contains only the evidence used publicly on the portfolio, with the scope needed to read each claim correctly.</p>
+    </div>
+  </header>
+
+  <section class="proof-body section-pad">
+    <div class="section-shell proof-list">
+      {publicClaims.map((claim, index) => (
+        <article>
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <div>
+            <h2>{claim.short}</h2>
+            <p>{claim.statement}</p>
+            <dl>
+              <div><dt>State</dt><dd>{claim.state}</dd></div>
+              <div><dt>Context</dt><dd>{claim.context}</dd></div>
+              <div><dt>Checked</dt><dd>{claim.checked}</dd></div>
+            </dl>
+            <a class="text-link" href={claim.source}>
+              {claim.source.startsWith("/") ? "Read claim context" : "Open public source"}
+              <ExternalLink aria-hidden="true" size={16} />
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .proof-hero { background: #332a1f; }
+  .proof-body { background: white; }
+  .proof-list { border-top: 1px solid #d7d7d0; }
+  .proof-list article { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 34px; padding: 44px 0; border-bottom: 1px solid #d7d7d0; }
+  .proof-list article > span { color: #777770; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .proof-list h2 { max-width: 800px; margin-bottom: 16px; font-size: 2.65rem; }
+  .proof-list p { max-width: 760px; color: #44443f; }
+  dl { display: grid; grid-template-columns: repeat(3, 1fr); margin: 26px 0; }
+  dl > div { padding-right: 20px; }
+  dl > div + div { padding-left: 20px; border-left: 1px solid #d7d7d0; }
+  dt { color: #777770; font-size: .75rem; font-weight: 750; text-transform: uppercase; }
+  dd { margin: 5px 0 0; font-size: .88rem; }
+  @media (max-width: 700px) { .proof-list article { grid-template-columns: 1fr; gap: 12px; } .proof-list h2 { font-size: 1.75rem; } dl { grid-template-columns: 1fr; } dl > div, dl > div + div { padding: 12px 0; border-left: 0; border-top: 1px solid #d7d7d0; } }
+</style>

@@ -1,0 +1,31 @@
+---
+import { ArrowUpRight, BriefcaseBusiness, CodeXml, Mail } from "@lucide/astro";
+import { links, site } from "../data/site.js";
+---
+
+<footer class="site-footer">
+  <div class="footer-primary">
+    <div>
+      <p class="eyebrow">Start a conversation</p>
+      <h2>Building an AI product where judgment matters?</h2>
+    </div>
+    <div class="footer-actions">
+      <a class="button button-light" href={links.linkedin}>
+        <BriefcaseBusiness aria-hidden="true" size={18} /> LinkedIn <ArrowUpRight aria-hidden="true" size={16} />
+      </a>
+      <a class="button button-outline-light" href={`mailto:${site.email}`}>
+        <Mail aria-hidden="true" size={18} /> Email
+      </a>
+    </div>
+  </div>
+  <div class="footer-meta">
+    <span>Kevin Astuhuaman | Bay Area</span>
+    <nav aria-label="Supporting links">
+      <a href={links.github}><CodeXml aria-hidden="true" size={16} /> GitHub</a>
+      <a href="/ask/">Ask Kevin</a>
+      <a href="/proof/">Evidence</a>
+      <a href="/llms.txt">llms.txt</a>
+      <a href="/profile.json">Profile JSON</a>
+    </nav>
+  </div>
+</footer>

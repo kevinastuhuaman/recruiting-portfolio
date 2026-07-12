@@ -1,0 +1,381 @@
+---
+import { ArrowUpRight, ExternalLink } from "@lucide/astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { links, publicClaims } from "../../../data/site.js";
+
+const [inventory] = publicClaims;
+---
+
+<BaseLayout
+  title="Trackly case study | Kevin Astuhuaman"
+  description="How Kevin Astuhuaman built Trackly around direct career-page signal, product quality, explainable matching, and delivery across web, native apps, CLI, and MCP."
+  path="/projects/trackly/"
+  pageType="article"
+  about="Trackly"
+>
+  <header class="page-hero trackly-hero">
+    <div class="section-shell">
+      <p class="eyebrow">Flagship product | 2025-present</p>
+      <h1>A job-search product built around earlier signal and earned trust.</h1>
+      <p class="lede">
+        I started Trackly during my MBA recruiting cycle because job boards were too slow. The product now monitors direct company career pages and turns that changing data into matches, explanations, alerts, and agent-ready workflows.
+      </p>
+      <div class="case-meta">
+        <span><strong>Role:</strong> Founder and product builder</span>
+        <span><strong>State:</strong> Live public product</span>
+        <span><strong>Surfaces:</strong> Web, iOS, macOS, CLI, MCP</span>
+      </div>
+      <div class="button-row hero-actions">
+        <a class="button button-light" href={links.trackly}>Open Trackly <ArrowUpRight aria-hidden="true" size={17} /></a>
+        <a class="button button-outline-light" href={links.appStore}>App Store <ExternalLink aria-hidden="true" size={16} /></a>
+        <a class="button button-outline-light" href={links.tracklyCli}>CLI + MCP <ExternalLink aria-hidden="true" size={16} /></a>
+      </div>
+    </div>
+  </header>
+
+  <article class="article-shell">
+    <p class="eyebrow">The product tension</p>
+    <h2>The best role can be invisible at the moment it matters.</h2>
+    <p>
+      Job boards optimize for aggregation and distribution. A candidate optimizes for timing and relevance. During recruiting, I kept finding roles on company sites before they appeared in my feeds. That gap became the wedge: monitor the source directly, then make the signal reliable enough to act on.
+    </p>
+
+    <div class="metric-row" aria-label="Dated Trackly public inventory">
+      <div class="metric"><strong>1,969</strong><span>company career sites monitored</span></div>
+      <div class="metric"><strong>40</strong><span>ATS and source types</span></div>
+      <div class="metric"><strong>128,975</strong><span>job records in the July 12, 2026 public inventory</span></div>
+    </div>
+
+    <figure class="artifact-frame">
+      <img
+        src="/assets/trackly-home.webp"
+        width="1440"
+        height="1000"
+        alt="Trackly public homepage showing monitored companies and job inventory"
+      />
+      <figcaption class="artifact-caption">
+        <span>Decision proved: own the source instead of waiting for a downstream feed.</span>
+        <span>Live public product capture</span>
+      </figcaption>
+    </figure>
+
+    <h2>The product system</h2>
+    <p>
+      The interface starts after the difficult part. Career pages change structure, repost old jobs, omit dates, duplicate locations, and sometimes return a valid empty page. Trackly treats source health, normalization, classification, freshness, and explanation as one product-quality system.
+    </p>
+
+    <figure class="system-artifact" aria-labelledby="system-title">
+      <figcaption id="system-title">A public-safe reconstruction of the Trackly product loop</figcaption>
+      <ol>
+        <li><strong>Observe</strong><span>Direct career pages and ATS sources</span></li>
+        <li><strong>Normalize</strong><span>Hydrate fields, merge duplicates, resolve location</span></li>
+        <li><strong>Judge quality</strong><span>Freshness guards, false-zero canaries, classifier evals</span></li>
+        <li><strong>Match</strong><span>Weighted fit with an explanation, not a black-box score</span></li>
+        <li><strong>Deliver</strong><span>Web, native apps, CLI, MCP, chat, and voice</span></li>
+      </ol>
+      <p>Every delivery surface uses the same underlying job and quality model.</p>
+    </figure>
+
+    <h2>Three decisions shaped the product.</h2>
+    <dl class="decision-list">
+      <div class="decision">
+        <dt>1. Direct signal first</dt>
+        <dd>
+          <strong>Choice:</strong> build source monitoring before building a polished application tracker. <strong>Rejected:</strong> another job-board search layer. <strong>Why:</strong> earlier signal was the unique user advantage and the hardest capability to copy credibly.
+        </dd>
+      </div>
+      <div class="decision">
+        <dt>2. Quality is visible</dt>
+        <dd>
+          <strong>Choice:</strong> expose match reasoning and operate explicit failure guards. <strong>Rejected:</strong> hide uncertainty behind a single AI score. <strong>Why:</strong> a confident wrong recommendation costs the user time and erodes trust faster than a cautious explanation.
+        </dd>
+      </div>
+      <div class="decision">
+        <dt>3. Shared system, native behavior</dt>
+        <dd>
+          <strong>Choice:</strong> keep product rules in shared services while designing each surface for its context. <strong>Rejected:</strong> wrap the web product everywhere. <strong>Why:</strong> alerts, keyboard workflows, agent calls, and mobile triage each need a different interaction model.
+        </dd>
+      </div>
+    </dl>
+
+    <h2>An eval is a release decision, not a model demo.</h2>
+    <p>
+      Trackly classifies job function, seniority, region, sponsorship, salary, and experience signals. The product question is not whether a model can return a label. It is whether a label is safe to use for ranking, filtering, and alerts.
+    </p>
+
+    <div class="eval-artifact" aria-label="Example Trackly classification review">
+      <div class="eval-input">
+        <span>Synthetic public example</span>
+        <h3>Senior Product Manager, AI Platform</h3>
+        <p>Own model-evaluation infrastructure, API reliability, and enterprise developer workflows.</p>
+      </div>
+      <div class="eval-output">
+        <div><span>Function</span><strong>Product management</strong></div>
+        <div><span>Domain</span><strong>AI platform</strong></div>
+        <div><span>Level</span><strong>Senior</strong></div>
+        <div><span>Release gate</span><strong>Review disagreement before backfill</strong></div>
+      </div>
+    </div>
+    <p class="artifact-note">
+      The example is synthetic. It demonstrates the review logic without exposing a user's job history or private model traces.
+    </p>
+
+    <h2>The failure mode that changed the roadmap</h2>
+    <p>
+      A source can return zero jobs and still look technically healthy. Treating that response as success silently deletes opportunity from the product. Trackly added false-zero canaries and source-health checks so a suspicious empty result becomes an incident to inspect, not a clean update to publish.
+    </p>
+    <div class="failure-sequence" role="list" aria-label="False-zero recovery sequence">
+      <div role="listitem"><span>Signal</span><strong>Source unexpectedly returns zero jobs</strong></div>
+      <div role="listitem"><span>Guard</span><strong>Compare with historical volume and page health</strong></div>
+      <div role="listitem"><span>Action</span><strong>Quarantine the update and alert the operator</strong></div>
+      <div role="listitem"><span>User result</span><strong>Previously valid jobs remain available until the source is fixed</strong></div>
+    </div>
+
+    <h2>One product, interface-specific jobs</h2>
+    <div class="surface-layout">
+      <figure class="artifact-frame surface-image">
+        <img
+          src="/assets/trackly-app-store.webp"
+          width="1284"
+          height="1291"
+          alt="Trackly App Store product page"
+        />
+        <figcaption class="artifact-caption"><span>Native distribution</span><span>Public App Store artifact</span></figcaption>
+      </figure>
+      <ul class="surface-list">
+        <li><strong>Web</strong><span>Research, compare, manage, and explain.</span></li>
+        <li><strong>iOS</strong><span>Act on a new role while it is still new.</span></li>
+        <li><strong>macOS</strong><span>Use keyboard-first workflows beside the application process.</span></li>
+        <li><strong>CLI + MCP</strong><span>Bring the same job signal into an agent or developer workflow.</span></li>
+        <li><strong>Chat + voice</strong><span>Ask, confirm, and take structured actions through conversational interfaces.</span></li>
+      </ul>
+    </div>
+
+    <h2 id="how-i-worked">How I worked</h2>
+    <p>
+      I owned the product problem, prioritization, interaction decisions, quality thresholds, release decisions, and day-to-day operation. I also wrote and reviewed implementation across the stack. AI coding agents accelerated research, implementation, testing, and review; they did not decide what the product should promise or what evidence was good enough to ship.
+    </p>
+    <p>
+      That division matters. Trackly is evidence that I can work close to the system without confusing code output with product judgment.
+    </p>
+
+    <h2>What I would change next</h2>
+    <p>
+      I would narrow the default product around a smaller number of repeatable decisions: which opportunities deserve attention now, why the match is credible, and what action moves the search forward. New surfaces earn their place only when they improve one of those decisions.
+    </p>
+
+    <div class="button-row final-actions">
+      <a class="button button-dark" href={links.trackly}>Open Trackly <ArrowUpRight aria-hidden="true" size={17} /></a>
+      <a class="button" href="/resume/">View resume</a>
+      <a class="button" href="/contact/">Contact Kevin</a>
+    </div>
+    <p class="source-line">Inventory source checked July 12, 2026: <a href={inventory.source}>Trackly public site</a>.</p>
+  </article>
+</BaseLayout>
+
+<style>
+  .trackly-hero {
+    background: #21143b;
+  }
+
+  .hero-actions {
+    margin-top: 34px;
+  }
+
+  .system-artifact {
+    margin: 48px 0;
+    padding: clamp(24px, 4vw, 42px);
+    background: #15121d;
+    color: white;
+    border-radius: 6px;
+  }
+
+  .system-artifact figcaption {
+    margin-bottom: 32px;
+    font-weight: 720;
+  }
+
+  .system-artifact ol {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .system-artifact li {
+    position: relative;
+    padding: 18px;
+    background: #292334;
+    border-left: 3px solid #8056f5;
+  }
+
+  .system-artifact li + li {
+    margin-left: 10px;
+  }
+
+  .system-artifact li + li::before {
+    position: absolute;
+    top: 50%;
+    left: -13px;
+    width: 10px;
+    height: 1px;
+    background: #8f8999;
+    content: "";
+  }
+
+  .system-artifact strong,
+  .system-artifact span {
+    display: block;
+  }
+
+  .system-artifact span {
+    margin-top: 8px;
+    color: #c9c4d0;
+    font-size: 0.78rem;
+  }
+
+  .system-artifact > p {
+    margin: 26px 0 0;
+    color: #c9c4d0;
+    font-size: 0.86rem;
+  }
+
+  .eval-artifact {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 42px;
+    background: white;
+    border: 1px solid #d7d7d0;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .eval-input,
+  .eval-output {
+    padding: clamp(24px, 4vw, 38px);
+  }
+
+  .eval-input {
+    background: #21143b;
+    color: white;
+  }
+
+  .eval-input > span,
+  .eval-output span {
+    color: #5f5f59;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .eval-input > span {
+    color: #c9bdf2;
+  }
+
+  .eval-input h3 {
+    margin: 30px 0 12px;
+  }
+
+  .eval-input p {
+    color: #d8d1e5;
+  }
+
+  .eval-output > div {
+    display: flex;
+    padding: 14px 0;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+    border-bottom: 1px solid #e1e1dc;
+  }
+
+  .eval-output strong {
+    text-align: right;
+  }
+
+  .artifact-note,
+  .source-line {
+    color: #666660 !important;
+    font-size: 0.85rem !important;
+  }
+
+  .failure-sequence {
+    margin: 42px 0;
+    border-top: 1px solid #d7d7d0;
+  }
+
+  .failure-sequence > div {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 24px;
+    padding: 20px 0;
+    border-bottom: 1px solid #d7d7d0;
+  }
+
+  .failure-sequence span {
+    color: #70706a;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .surface-layout {
+    display: grid;
+    grid-template-columns: minmax(280px, 0.75fr) minmax(0, 1.25fr);
+    gap: 48px;
+    align-items: start;
+  }
+
+  .surface-image {
+    margin: 0;
+  }
+
+  .surface-list {
+    margin: 0 !important;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid #d7d7d0;
+  }
+
+  .surface-list li {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 20px;
+    padding: 21px 0;
+    border-bottom: 1px solid #d7d7d0;
+  }
+
+  .surface-list span {
+    color: #555550;
+  }
+
+  .final-actions {
+    margin-top: 56px;
+  }
+
+  @media (max-width: 760px) {
+    .system-artifact ol,
+    .eval-artifact,
+    .surface-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .system-artifact li + li {
+      margin: 10px 0 0;
+    }
+
+    .system-artifact li + li::before {
+      top: -10px;
+      left: 22px;
+      width: 1px;
+      height: 10px;
+    }
+
+    .failure-sequence > div,
+    .surface-list li {
+      grid-template-columns: 1fr;
+      gap: 6px;
+    }
+  }
+</style>

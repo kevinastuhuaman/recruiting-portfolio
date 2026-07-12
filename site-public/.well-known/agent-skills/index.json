@@ -1,0 +1,11 @@
+{
+  "skills": [
+    {
+      "name": "site-navigation",
+      "type": "skill-md",
+      "description": "Navigate Kevin Astuhuaman's public recruiting portfolio and machine-readable evidence.",
+      "url": "/.well-known/agent-skills/site-navigation/SKILL.md",
+      "digest": "sha256:a9ba0302551dbe1b7d42867254d4efdcb5058c2f39b91b6395036bbbfff4c947"
+    }
+  ]
+}

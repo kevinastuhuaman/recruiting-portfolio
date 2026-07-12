@@ -1,0 +1,26 @@
+{
+  "lastUpdated": "2026-07-12",
+  "projects": [
+    {
+      "name": "Trackly",
+      "category": "Flagship product",
+      "url": "https://portfolio.kevinastuhuaman.com/projects/trackly/",
+      "summary": "A job-search system built around direct career-page signal, explainable matching, and dependable delivery across human and agent interfaces.",
+      "proof": "Live product | Web, iOS, macOS, CLI, MCP"
+    },
+    {
+      "name": "PayPal AI observability",
+      "category": "Enterprise AI",
+      "url": "https://portfolio.kevinastuhuaman.com/projects/paypal-ai-observability/",
+      "summary": "A public-safe account of turning fragmented checkout diagnostics into one faster AI-assisted investigation workflow.",
+      "proof": "Internship prototype | 15+ diagnostic tools"
+    },
+    {
+      "name": "BCP/Credicorp SMB products",
+      "category": "Product leadership at scale",
+      "url": "https://portfolio.kevinastuhuaman.com/projects/smb-fintech-bcp-credicorp/",
+      "summary": "Six years of progression across lending, marketplace, growth, and product leadership in a regulated financial institution.",
+      "proof": "Production products | 9 direct reports"
+    }
+  ]
+}

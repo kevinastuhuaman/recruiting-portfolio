@@ -1,0 +1,96 @@
+{
+  "lastUpdated": "2026-07-12",
+  "canonicalUrl": "https://portfolio.kevinastuhuaman.com/",
+  "name": "Kevin Astuhuaman",
+  "headline": "AI Product Manager and technical builder",
+  "location": "Bay Area, California",
+  "summary": "Kevin Astuhuaman builds applied AI and technical products, from Trackly's job-search agents to enterprise observability and regulated fintech.",
+  "recruitingLanes": [
+    "Applied AI and agent products",
+    "AI platform and technical product management"
+  ],
+  "experience": [
+    {
+      "organization": "Trackly",
+      "role": "Founder and product builder",
+      "dates": "2025-present",
+      "summary": "Built and operates a real-time job-search product across web, native apps, CLI, MCP, matching, chat, and voice."
+    },
+    {
+      "organization": "PayPal Checkout",
+      "role": "Technical Product Manager MBA Intern",
+      "dates": "May-August 2025",
+      "summary": "Defined and prototyped an AI-assisted observability workflow for checkout diagnostics."
+    },
+    {
+      "organization": "Banco de Credito del Peru / Credicorp",
+      "role": "Product Analyst -> Product Manager -> Senior Product Manager -> Lead Product Manager",
+      "dates": "2018-2024",
+      "summary": "Progressed through four product roles leading lending, marketplace, growth, and platform work for SMB customers."
+    }
+  ],
+  "publicClaims": [
+    {
+      "id": "trackly-inventory",
+      "statement": "Trackly monitored 1,969 company career sites across 40 ATS and source types, with 128,975 job records in its public inventory on July 12, 2026.",
+      "short": "1,969 company career sites across 40 source types",
+      "source": "https://usetrackly.app",
+      "checked": "2026-07-12",
+      "state": "live public product",
+      "context": "Dated inventory, not a user-adoption claim."
+    },
+    {
+      "id": "trackly-app-store",
+      "statement": "Trackly is available publicly on Apple's App Store.",
+      "short": "Trackly on the App Store",
+      "source": "https://apps.apple.com/us/app/trackly-apply-first/id6758267565",
+      "checked": "2026-07-12",
+      "state": "public artifact",
+      "context": "Public distribution artifact for the native product."
+    },
+    {
+      "id": "paypal-detection",
+      "statement": "A PayPal Checkout internship prototype reduced issue-detection time by 75% in the project workflow across a diagnostic environment spanning 15+ tools.",
+      "short": "75% faster issue detection in the internship prototype workflow",
+      "source": "/projects/paypal-ai-observability/",
+      "checked": "2026-07-12",
+      "state": "public-safe resume claim",
+      "context": "Prototype-workflow result, not a PayPal-wide production claim."
+    },
+    {
+      "id": "bcp-marketplace",
+      "statement": "At BCP/Credicorp, Kevin launched and scaled an SMB digital marketplace to 180K monthly active users and increased product cross-sell per client by 28%.",
+      "short": "180K MAU and 28% higher cross-sell",
+      "source": "/projects/smb-fintech-bcp-credicorp/",
+      "checked": "2026-07-12",
+      "state": "public resume claim",
+      "context": "Production SMB marketplace outcome."
+    },
+    {
+      "id": "bcp-loans",
+      "statement": "Kevin led a personalized loan product that reduced processing from seven days to immediate approval and generated $40M in nine months.",
+      "short": "Seven days to immediate approval; $40M in nine months",
+      "source": "/projects/smb-fintech-bcp-credicorp/",
+      "checked": "2026-07-12",
+      "state": "public resume claim",
+      "context": "Production lending outcome."
+    },
+    {
+      "id": "trackly-cli-mcp",
+      "statement": "Trackly ships a public command-line interface and Model Context Protocol server.",
+      "short": "Public CLI and MCP server",
+      "source": "https://github.com/trackly-app/trackly-cli",
+      "checked": "2026-07-12",
+      "state": "public source repository",
+      "context": "Public technical distribution artifact; separate from the App Store listing."
+    }
+  ],
+  "links": {
+    "portfolio": "https://portfolio.kevinastuhuaman.com/",
+    "resume": "https://portfolio.kevinastuhuaman.com/resume/",
+    "linkedin": "https://www.linkedin.com/in/kevinastuhuaman",
+    "github": "https://github.com/kevinastuhuaman",
+    "writing": "https://kevinastuhuaman.com/",
+    "trackly": "https://usetrackly.app"
+  }
+}

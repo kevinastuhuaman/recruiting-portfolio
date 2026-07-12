@@ -1,0 +1,636 @@
+---
+import { ArrowDown, ArrowUpRight, Download, Mail } from "@lucide/astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { experience, links, projects, publicClaims, site } from "../data/site.js";
+
+const [trackly, paypal, bcp] = projects;
+const inventory = publicClaims.find((claim) => claim.id === "trackly-inventory") ?? publicClaims[0];
+const appStore = publicClaims.find((claim) => claim.id === "trackly-app-store") ?? publicClaims[1];
+const paypalClaim = publicClaims.find((claim) => claim.id === "paypal-detection") ?? publicClaims[2];
+const marketplace = publicClaims.find((claim) => claim.id === "bcp-marketplace") ?? publicClaims[3];
+---
+
+<BaseLayout
+  title="Kevin Astuhuaman | AI Product Manager"
+  description={site.description}
+  path="/"
+  pageType="profile"
+>
+  <section class="home-hero" aria-labelledby="home-title">
+    <img
+      class="hero-product"
+      src="/assets/trackly-home.webp"
+      width="1440"
+      height="1000"
+      alt="Trackly public product showing company career-page coverage and job inventory"
+      fetchpriority="high"
+    />
+    <div class="hero-shade" aria-hidden="true"></div>
+    <div class="hero-content">
+      <p class="eyebrow">AI Product Manager and technical builder</p>
+      <h1 id="home-title">Kevin<br />Astuhuaman</h1>
+      <p class="hero-thesis">
+        I turn complicated AI systems into products people can trust, from agent workflows and evals to enterprise observability and regulated fintech.
+      </p>
+      <div class="button-row">
+        <a class="button button-light" href="/projects/trackly/">
+          View Trackly <ArrowUpRight aria-hidden="true" size={17} />
+        </a>
+        <a class="button button-ghost" href="/resume/">
+          <Download aria-hidden="true" size={17} /> Resume
+        </a>
+        <a class="button button-ghost" href="/contact/">
+          <Mail aria-hidden="true" size={17} /> Contact
+        </a>
+      </div>
+    </div>
+    <a class="hero-next" href="#work">
+      <ArrowDown aria-hidden="true" size={17} /> See the product decisions
+    </a>
+    <p class="hero-proof">Trackly, live public product</p>
+  </section>
+
+  <section class="proof-band" aria-label="Selected proof">
+    <div class="section-shell proof-band-inner">
+      <div>
+        <strong>Trackly</strong>
+        <span>{inventory.short}</span>
+      </div>
+      <div>
+        <strong>PayPal Checkout</strong>
+        <span>{paypalClaim.short}</span>
+      </div>
+      <div>
+        <strong>BCP / Credicorp</strong>
+        <span>{marketplace.short}</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="work" class="section-pad trackly-story">
+    <div class="section-shell story-heading">
+      <div>
+        <p class="eyebrow">Flagship product</p>
+        <h2>Trackly started with a timing problem.</h2>
+      </div>
+      <p class="lede">
+        Strong roles were appearing on company career pages before job boards. I built the direct signal first, then the quality system, matching, agents, and native surfaces needed to make that signal useful every day.
+      </p>
+    </div>
+
+    <div class="section-shell product-stage">
+      <img
+        src={trackly.image}
+        width="1440"
+        height="1000"
+        loading="lazy"
+        alt="Trackly homepage with direct company career-page monitoring and public inventory counts"
+      />
+      <div class="product-stage-caption">
+        <span>Live product capture</span>
+        <span>{inventory.statement}</span>
+      </div>
+    </div>
+
+    <div class="section-shell decisions-home">
+      <article>
+        <span>01</span>
+        <h3>Own the source</h3>
+        <p>Monitor company career pages directly instead of waiting for an aggregator. The product competes on earlier, more trustworthy signal.</p>
+      </article>
+      <article>
+        <span>02</span>
+        <h3>Design for failure</h3>
+        <p>Career pages drift and parsers break. False-zero canaries, stale-job guards, deduplication, and eval review are product features, not backend cleanup.</p>
+      </article>
+      <article>
+        <span>03</span>
+        <h3>One system, many interfaces</h3>
+        <p>Web, iOS, macOS, CLI, MCP, chat, and voice share the same product logic while respecting what each interface does best.</p>
+      </article>
+    </div>
+
+    <div class="section-shell work-cta">
+      <a class="text-link" href={trackly.href}>Read the complete Trackly case <ArrowUpRight aria-hidden="true" size={18} /></a>
+      <span>{appStore.short}</span>
+    </div>
+  </section>
+
+  <section class="selected-work section-pad" aria-labelledby="selected-title">
+    <div class="section-shell section-intro">
+      <p class="eyebrow">Enterprise and scale</p>
+      <h2 id="selected-title">The builder story is only one part of it.</h2>
+    </div>
+    <div class="section-shell work-pair">
+      <a class="work-card paypal-card" href={paypal.href}>
+        <div>
+          <p class="eyebrow">{paypal.eyebrow}</p>
+          <h3>{paypal.name}</h3>
+          <p>{paypal.thesis}</p>
+        </div>
+        <span>{paypal.proof} <ArrowUpRight aria-hidden="true" size={18} /></span>
+      </a>
+      <a class="work-card bcp-card" href={bcp.href}>
+        <div>
+          <p class="eyebrow">{bcp.eyebrow}</p>
+          <h3>{bcp.name}</h3>
+          <p>{bcp.thesis}</p>
+        </div>
+        <span>{bcp.proof} <ArrowUpRight aria-hidden="true" size={18} /></span>
+      </a>
+    </div>
+  </section>
+
+  <section id="experience" class="experience-home section-pad" aria-labelledby="experience-title">
+    <div class="section-shell experience-layout">
+      <div class="experience-portrait">
+        <img
+          src="/assets/kevin-portrait.webp"
+          width="1280"
+          height="1202"
+          alt="Portrait of Kevin Astuhuaman"
+        />
+        <p>Bay Area | Berkeley Haas MBA, 2026</p>
+      </div>
+      <div>
+        <p class="eyebrow">Experience</p>
+        <h2 id="experience-title">I work from customer tension to operating system.</h2>
+        <div class="experience-spine">
+          {experience.map((item) => (
+            <article>
+              <div>
+                <h3>{item.organization}</h3>
+                <span>{item.dates}</span>
+              </div>
+              <strong>{item.role}</strong>
+              <p>{item.summary}</p>
+            </article>
+          ))}
+        </div>
+        <div class="button-row">
+          <a class="button button-dark" href="/resume/">View full resume <ArrowUpRight aria-hidden="true" size={17} /></a>
+          <a class="button" href={links.linkedin}>LinkedIn <ArrowUpRight aria-hidden="true" size={17} /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ask-invite" aria-labelledby="ask-title">
+    <div class="section-shell">
+      <div>
+        <p class="eyebrow">Public-corpus beta</p>
+        <h2 id="ask-title">Have a specific recruiting question?</h2>
+      </div>
+      <div>
+        <p>Ask about Kevin's product decisions, experience, or technical range. Answers are limited to the same cited public evidence used by this portfolio.</p>
+        <a class="text-link" href="/ask/">Ask Kevin's portfolio <ArrowUpRight aria-hidden="true" size={18} /></a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .home-hero {
+    position: relative;
+    display: flex;
+    min-height: 92svh;
+    padding: 132px clamp(20px, 5vw, 76px) 88px;
+    align-items: flex-end;
+    overflow: clip;
+    background: #15121d;
+    color: white;
+  }
+
+  .hero-product,
+  .hero-shade {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero-product {
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  .hero-shade {
+    background: rgba(7, 6, 10, 0.84);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    width: min(860px, 100%);
+  }
+
+  .hero-content h1 {
+    margin-bottom: 22px;
+    font-size: 8.5rem;
+  }
+
+  .hero-thesis {
+    max-width: 720px;
+    margin-bottom: 28px;
+    color: #f2f2ec;
+    font-size: 1.5rem;
+    line-height: 1.45;
+  }
+
+  .hero-next,
+  .hero-proof {
+    position: absolute;
+    z-index: 2;
+    right: clamp(20px, 5vw, 76px);
+    bottom: 32px;
+    font-size: 0.78rem;
+  }
+
+  .hero-next {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    gap: 7px;
+    font-weight: 700;
+  }
+
+  .hero-proof {
+    top: 96px;
+    bottom: auto;
+    padding: 7px 10px;
+    background: rgba(0, 0, 0, 0.55);
+  }
+
+  .proof-band {
+    background: #0b0b0b;
+    color: white;
+  }
+
+  .proof-band-inner {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .proof-band-inner > div {
+    min-height: 128px;
+    padding: 28px 30px 28px 0;
+  }
+
+  .proof-band-inner > div + div {
+    padding-left: 30px;
+    border-left: 1px solid #3b3b3b;
+  }
+
+  .proof-band strong,
+  .proof-band span {
+    display: block;
+  }
+
+  .proof-band strong {
+    margin-bottom: 8px;
+    font-size: 1.15rem;
+  }
+
+  .proof-band span {
+    color: #c9c9c4;
+    font-size: 0.9rem;
+  }
+
+  .trackly-story {
+    background: #f7f7f2;
+  }
+
+  .story-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+    gap: 72px;
+    align-items: end;
+  }
+
+  .story-heading h2 {
+    max-width: 760px;
+    margin-bottom: 0;
+  }
+
+  .product-stage {
+    margin-top: 72px;
+    background: #15121d;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .product-stage img {
+    width: 100%;
+    height: auto;
+  }
+
+  .product-stage-caption {
+    display: flex;
+    padding: 16px 18px;
+    justify-content: space-between;
+    gap: 24px;
+    background: #0b0b0b;
+    color: #deded8;
+    font-size: 0.82rem;
+  }
+
+  .product-stage-caption span:last-child {
+    max-width: 720px;
+    text-align: right;
+  }
+
+  .decisions-home {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 56px;
+    border-top: 1px solid #cfcfc8;
+  }
+
+  .decisions-home article {
+    padding: 28px 32px 12px 0;
+  }
+
+  .decisions-home article + article {
+    padding-left: 32px;
+    border-left: 1px solid #cfcfc8;
+  }
+
+  .decisions-home article > span {
+    color: #6c6c66;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.78rem;
+  }
+
+  .decisions-home h3 {
+    margin: 30px 0 12px;
+  }
+
+  .decisions-home p {
+    color: #4d4d48;
+  }
+
+  .work-cta {
+    display: flex;
+    margin-top: 48px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .work-cta > span {
+    color: #65655f;
+    font-size: 0.85rem;
+  }
+
+  .selected-work {
+    background: #e9e9e3;
+  }
+
+  .section-intro {
+    margin-bottom: 48px;
+  }
+
+  .section-intro h2 {
+    max-width: 890px;
+  }
+
+  .work-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  .work-card {
+    display: flex;
+    min-height: 430px;
+    padding: clamp(28px, 4vw, 48px);
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 6px;
+    color: white;
+    text-decoration: none;
+  }
+
+  .work-card h3 {
+    max-width: 540px;
+    margin: 26px 0 18px;
+    font-size: 3.25rem;
+  }
+
+  .work-card p:not(.eyebrow) {
+    max-width: 540px;
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 1.05rem;
+  }
+
+  .work-card > span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.86rem;
+    font-weight: 700;
+  }
+
+  .paypal-card {
+    background: #0057b8;
+  }
+
+  .bcp-card {
+    background: #087858;
+  }
+
+  .experience-home {
+    background: white;
+  }
+
+  .ask-invite {
+    padding-block: 54px;
+    background: #d8ff52;
+  }
+
+  .ask-invite .section-shell {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: end;
+  }
+
+  .ask-invite h2,
+  .ask-invite p {
+    margin-bottom: 0;
+  }
+
+  .ask-invite h2 {
+    font-size: 2.6rem;
+  }
+
+  .ask-invite p {
+    max-width: 590px;
+  }
+
+  .ask-invite .text-link {
+    margin-top: 18px;
+  }
+
+  .experience-layout {
+    display: grid;
+    grid-template-columns: minmax(280px, 0.72fr) minmax(0, 1.28fr);
+    gap: clamp(48px, 8vw, 112px);
+  }
+
+  .experience-portrait img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 6px;
+  }
+
+  .experience-portrait p {
+    margin-top: 12px;
+    color: #666660;
+    font-size: 0.82rem;
+  }
+
+  .experience-layout h2 {
+    max-width: 780px;
+  }
+
+  .experience-spine {
+    margin: 48px 0 36px;
+    border-top: 1px solid #d7d7d0;
+  }
+
+  .experience-spine article {
+    padding: 28px 0;
+    border-bottom: 1px solid #d7d7d0;
+  }
+
+  .experience-spine article > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .experience-spine h3 {
+    margin-bottom: 8px;
+  }
+
+  .experience-spine span {
+    color: #666660;
+    font-size: 0.88rem;
+  }
+
+  .experience-spine strong {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.92rem;
+  }
+
+  .experience-spine p {
+    color: #555550;
+  }
+
+  @media (max-width: 800px) {
+    .home-hero {
+      min-height: calc(100svh - 52px);
+      padding: 104px 20px 78px;
+      align-items: center;
+    }
+
+    .hero-product {
+      object-position: 45% top;
+    }
+
+    .hero-shade {
+      background: rgba(7, 6, 10, 0.87);
+    }
+
+    .hero-content h1 {
+      font-size: 3.55rem;
+    }
+
+    .hero-thesis {
+      font-size: 1.04rem;
+    }
+
+    .hero-next {
+      right: auto;
+      left: 20px;
+      bottom: 18px;
+    }
+
+    .hero-proof {
+      top: 78px;
+      right: 20px;
+    }
+
+    .proof-band-inner,
+    .decisions-home,
+    .work-pair,
+    .experience-layout,
+    .story-heading,
+    .ask-invite .section-shell {
+      grid-template-columns: 1fr;
+    }
+
+    .proof-band-inner > div,
+    .proof-band-inner > div + div,
+    .decisions-home article,
+    .decisions-home article + article {
+      padding: 22px 0;
+      border-left: 0;
+    }
+
+    .proof-band-inner > div + div,
+    .decisions-home article + article {
+      border-top: 1px solid #3b3b3b;
+    }
+
+    .decisions-home article + article {
+      border-color: #cfcfc8;
+    }
+
+    .story-heading {
+      gap: 24px;
+    }
+
+    .product-stage-caption,
+    .work-cta,
+    .experience-spine article > div {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .product-stage-caption span:last-child {
+      text-align: left;
+    }
+
+    .work-card {
+      min-height: 340px;
+    }
+
+    .work-card h3 {
+      font-size: 2.15rem;
+    }
+
+    .experience-portrait {
+      max-width: 420px;
+    }
+
+    .ask-invite h2 {
+      font-size: 2rem;
+    }
+  }
+
+  @media (max-width: 390px) {
+    .hero-content h1 {
+      font-size: 3.25rem;
+    }
+
+    .hero-content .button {
+      padding-inline: 12px;
+      font-size: 0.84rem;
+    }
+  }
+</style>

@@ -1,0 +1,26 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Page not found | Kevin Astuhuaman"
+  description="The requested portfolio page could not be found."
+  path="/404.html"
+  noindex
+  includeSchema={false}
+>
+  <section class="page-hero not-found">
+    <div class="section-shell">
+      <p class="eyebrow">404</p>
+      <h1>This page is not part of the product.</h1>
+      <p class="lede">The work, resume, and contact paths are still here.</p>
+      <div class="button-row">
+        <a class="button button-light" href="/">Go home</a>
+        <a class="button button-outline-light" href="/projects/trackly/">View Trackly</a>
+        <a class="button button-outline-light" href="/resume/">Resume</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>.not-found { min-height: 78svh; display: flex; align-items: center; background: #27243d; }</style>

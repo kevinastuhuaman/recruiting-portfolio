@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "lastUpdated": "2026-07-12",
+  "canonicalUrl": "https://portfolio.kevinastuhuaman.com/proof/",
+  "claims": [
+    {
+      "id": "trackly-inventory",
+      "statement": "Trackly monitored 1,969 company career sites across 40 ATS and source types, with 128,975 job records in its public inventory on July 12, 2026.",
+      "source": "https://usetrackly.app/",
+      "checked": "2026-07-12",
+      "state": "live public product",
+      "context": "Dated inventory, not a user-adoption claim."
+    },
+    {
+      "id": "trackly-app-store",
+      "statement": "Trackly is available publicly on Apple's App Store.",
+      "source": "https://apps.apple.com/us/app/trackly-apply-first/id6758267565",
+      "checked": "2026-07-12",
+      "state": "public artifact",
+      "context": "Public distribution artifact for the native product."
+    },
+    {
+      "id": "paypal-detection",
+      "statement": "A PayPal Checkout internship prototype reduced issue-detection time by 75% in the project workflow across a diagnostic environment spanning 15+ tools.",
+      "source": "https://portfolio.kevinastuhuaman.com/projects/paypal-ai-observability/",
+      "checked": "2026-07-12",
+      "state": "public-safe resume claim",
+      "context": "Prototype-workflow result, not a PayPal-wide production claim."
+    },
+    {
+      "id": "bcp-marketplace",
+      "statement": "At BCP/Credicorp, Kevin launched and scaled an SMB digital marketplace to 180K monthly active users and increased product cross-sell per client by 28%.",
+      "source": "https://portfolio.kevinastuhuaman.com/projects/smb-fintech-bcp-credicorp/",
+      "checked": "2026-07-12",
+      "state": "public resume claim",
+      "context": "Production SMB marketplace outcome."
+    },
+    {
+      "id": "bcp-loans",
+      "statement": "Kevin led a personalized loan product that reduced processing from seven days to immediate approval and generated $40M in nine months.",
+      "source": "https://portfolio.kevinastuhuaman.com/projects/smb-fintech-bcp-credicorp/",
+      "checked": "2026-07-12",
+      "state": "public resume claim",
+      "context": "Production lending outcome."
+    },
+    {
+      "id": "trackly-cli-mcp",
+      "statement": "Trackly ships a public command-line interface and Model Context Protocol server.",
+      "source": "https://github.com/trackly-app/trackly-cli",
+      "checked": "2026-07-12",
+      "state": "public source repository",
+      "context": "Public technical distribution artifact; separate from the App Store listing."
+    }
+  ]
+}

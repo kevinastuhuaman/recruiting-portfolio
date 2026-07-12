@@ -1,0 +1,37 @@
+---
+import { ArrowRight, Download } from "@lucide/astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Recruiter brief | Kevin Astuhuaman"
+  description="A short path to Kevin Astuhuaman's current portfolio, resume, and flagship product case study."
+  path="/packet/"
+  noindex
+>
+  <section class="page-hero compatibility-hero">
+    <div class="section-shell compatibility-grid">
+      <div>
+        <p class="eyebrow">Recruiter brief</p>
+        <h1>The current evidence is one step away.</h1>
+      </div>
+      <div>
+        <p class="lede">This former packet URL now points to the maintained, public-safe recruiting surfaces.</p>
+        <div class="compatibility-links">
+          <a class="button button-light" href="/resume/">View resume <ArrowRight aria-hidden="true" size={17} /></a>
+          <a class="text-link light-link" href="/projects/trackly/">Trackly case study <ArrowRight aria-hidden="true" size={17} /></a>
+          <a class="text-link light-link" href="/kevin-astuhuaman-resume.pdf">Resume PDF <Download aria-hidden="true" size={17} /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .compatibility-hero { min-height: 78svh; display: flex; align-items: center; background: #27382f; }
+  .compatibility-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 72px; align-items: end; }
+  .compatibility-grid h1 { max-width: 760px; }
+  .compatibility-links { display: flex; margin-top: 28px; align-items: center; flex-wrap: wrap; gap: 20px; }
+  .light-link { color: white; }
+  @media (max-width: 760px) { .compatibility-grid { grid-template-columns: 1fr; gap: 28px; } }
+</style>

@@ -1,0 +1,21 @@
+# Kevin Astuhuaman
+
+> AI Product Manager and technical builder focused on applied AI, agents, platforms, and technical products.
+
+Kevin built Trackly, a live job-search product spanning web, iOS, macOS, CLI, MCP, matching, chat, and voice. He previously built a public-safe AI observability prototype at PayPal Checkout and progressed through four product roles at BCP/Credicorp.
+
+## Primary pages
+
+- [Portfolio](https://portfolio.kevinastuhuaman.com/): Kevin's recruiting profile and selected work
+- [Trackly case study](https://portfolio.kevinastuhuaman.com/projects/trackly/): Product decisions, system quality, and cross-platform delivery
+- [Resume](https://portfolio.kevinastuhuaman.com/resume/): Complete chronological experience
+- [Public evidence](https://portfolio.kevinastuhuaman.com/proof/): Sources and context for published claims
+- [Contact](https://portfolio.kevinastuhuaman.com/contact/): LinkedIn and email
+- [Ask Kevin's portfolio](https://portfolio.kevinastuhuaman.com/ask/): Public-corpus assistant with static cited answers
+
+## Machine-readable context
+
+- [Full plain-text profile](https://portfolio.kevinastuhuaman.com/llms-full.txt): Detailed public recruiting context
+- [Structured profile](https://portfolio.kevinastuhuaman.com/profile.json): Public identity, experience, and claims
+- [Structured projects](https://portfolio.kevinastuhuaman.com/projects.json): Project summaries and canonical links
+- [Markdown resume](https://portfolio.kevinastuhuaman.com/resume.md): Crawlable resume equivalent

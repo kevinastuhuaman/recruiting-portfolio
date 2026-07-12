@@ -1,0 +1,457 @@
+---
+import { Download, ExternalLink, Mail, Printer } from "@lucide/astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { experience, links, site } from "../../data/site.js";
+---
+
+<BaseLayout
+  title="Resume | Kevin Astuhuaman"
+  description="Kevin Astuhuaman's chronological resume across Trackly, PayPal Checkout, BCP/Credicorp, and Berkeley Haas."
+  path="/resume/"
+>
+  <header class="page-hero resume-hero">
+    <div class="section-shell">
+      <p class="eyebrow">Resume</p>
+      <h1>AI product judgment with hands-on technical range.</h1>
+      <p class="lede">Seven years across regulated fintech, enterprise AI observability, and a live agent product built from the source layer through native and conversational interfaces.</p>
+      <div class="button-row resume-actions">
+        <a class="button button-light" href="/kevin-astuhuaman-resume.pdf" download>
+          <Download aria-hidden="true" size={18} /> Download PDF
+        </a>
+        <button class="button button-outline-light" type="button" onclick="window.print()">
+          <Printer aria-hidden="true" size={18} /> Print
+        </button>
+        <a class="button button-outline-light" href={`mailto:${site.email}`}>
+          <Mail aria-hidden="true" size={18} /> Email
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <section class="resume-shell section-pad" aria-labelledby="resume-name">
+    <div class="resume-toolbar">
+      <div>
+        <p class="eyebrow">Emphasis</p>
+        <p>Highlight the evidence most relevant to the role. The full chronology always remains visible.</p>
+      </div>
+      <fieldset data-resume-lenses>
+        <legend class="sr-only">Resume emphasis</legend>
+        <label><input type="radio" name="resume-lens" value="all" checked /> All</label>
+        <label><input type="radio" name="resume-lens" value="ai" /> Applied AI</label>
+        <label><input type="radio" name="resume-lens" value="platform" /> Platform</label>
+        <label><input type="radio" name="resume-lens" value="leadership" /> Leadership</label>
+      </fieldset>
+    </div>
+
+    <article class="resume-document" data-resume-document>
+      <header class="resume-identity">
+        <div>
+          <h2 id="resume-name">Kevin Astuhuaman</h2>
+          <p>AI Product Manager and technical builder | {site.location}</p>
+        </div>
+        <nav aria-label="Resume contact links">
+          <a href={links.linkedin}>LinkedIn <ExternalLink aria-hidden="true" size={14} /></a>
+          <a href={links.github}>GitHub <ExternalLink aria-hidden="true" size={14} /></a>
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+        </nav>
+      </header>
+
+      <section aria-labelledby="experience-heading">
+        <h2 id="experience-heading" class="resume-section-title">Experience</h2>
+
+        <article class="resume-role">
+          <header>
+            <div><h3>{experience[0].organization}</h3><strong>{experience[0].role}</strong></div>
+            <div><span>{experience[0].dates}</span><span>{experience[0].location}</span></div>
+          </header>
+          <p>{experience[0].summary}</p>
+          <ul>
+            <li class="resume-bullet lens-ai lens-platform">Built the direct career-page monitoring, normalization, matching, eval, and delivery system behind a public inventory spanning 1,969 companies and 40 ATS/source types as of July 12, 2026.</li>
+            <li class="resume-bullet lens-ai">Designed LLM classification and review workflows for function, seniority, region, sponsorship, salary, and experience signals, including disagreement review and guarded backfills.</li>
+            <li class="resume-bullet lens-platform">Shipped one product across web, iOS, macOS, a public npm CLI, and an MCP server, with shared API contracts and interface-specific workflows.</li>
+            <li class="resume-bullet lens-ai lens-leadership">Built streaming chat and real-time voice agent workflows with tool status, confirmations, citations, interruption handling, model failover, and observability.</li>
+          </ul>
+        </article>
+
+        <article class="resume-role">
+          <header>
+            <div><h3>{experience[1].organization}</h3><strong>{experience[1].role}</strong></div>
+            <div><span>{experience[1].dates}</span><span>{experience[1].location}</span></div>
+          </header>
+          <ul>
+            <li class="resume-bullet lens-ai lens-leadership">Drove strategy for a Checkout AI observability prototype across a diagnostic environment serving a multi-sided marketplace.</li>
+            <li class="resume-bullet lens-ai lens-platform">Built an agentic diagnostic workflow using Claude, Datadog, APIs, and MCP patterns, reducing issue-detection time 75% in the internship prototype workflow.</li>
+            <li class="resume-bullet lens-platform">Unified the investigation path across 15+ diagnostic tools and defined success measures for mean time to detect and resolve.</li>
+            <li class="resume-bullet lens-ai">Designed an auto-triage POC that diagnosed issues, estimated impact, and routed alerts to owners, completing triage 5x faster.</li>
+          </ul>
+        </article>
+
+        <article class="resume-role">
+          <header>
+            <div><h3>{experience[2].organization}</h3><strong>{experience[2].role}</strong></div>
+            <div><span>{experience[2].dates}</span><span>{experience[2].location}</span></div>
+          </header>
+          <p>Progression: Lead Product Manager (1 year), Senior Product Manager (1.5 years), Product Manager (1.5 years), Product Analyst (2 years).</p>
+          <ul>
+            <li class="resume-bullet lens-platform lens-leadership">Launched and scaled an SMB marketplace to 180K MAU by integrating lending, insurance, and payments, improving cross-sell per client by 28%.</li>
+            <li class="resume-bullet lens-leadership">Led research, roadmap, pilot, and launch for personalized lending, reducing processing from seven days to immediate approval and generating $40M in nine months.</li>
+            <li class="resume-bullet lens-platform">Launched a unified data, identity, and AI-risk architecture that supported 26% year-over-year sales growth and sixfold website traffic.</li>
+            <li class="resume-bullet lens-leadership">Managed nine product direct reports and partnered with risk, compliance, engineering, design, analytics, and commercial teams.</li>
+            <li class="resume-bullet lens-ai">Used ML-driven pricing experiments to increase conversion 32% and reach 19.6% market share in seven months.</li>
+            <li class="resume-bullet lens-leadership">Led digital-wallet API partnerships that grew sales from zero to $20M in six months and co-led a GTM program that reached $55M in monthly digital sales.</li>
+          </ul>
+        </article>
+      </section>
+
+      <section aria-labelledby="education-heading">
+        <h2 id="education-heading" class="resume-section-title">Education and selected work</h2>
+        <article class="education-row">
+          <div><h3>University of California, Berkeley, Haas School of Business</h3><strong>Master of Business Administration, STEM-designated</strong></div>
+          <span>May 2026</span>
+        </article>
+        <ul>
+          <li>Built Trackly across App Store, web, public npm CLI, and MCP; selected for Microsoft for Startups and featured by Berkeley Haas.</li>
+          <li>Selected for Berkeley's Open Innovation Squad to lead AI product strategy for MoBagel, a YC-backed no-code ML platform.</li>
+          <li>VP, Tech Club; co-launched Haas's first Tech &amp; AI Summit with 560+ registrations.</li>
+        </ul>
+        <article class="education-row">
+          <div><h3>Pontifical Catholic University of Peru</h3><strong>Bachelor of Science, Industrial Engineering</strong></div>
+          <span>July 2018</span>
+        </article>
+      </section>
+
+      <section aria-labelledby="skills-heading">
+        <h2 id="skills-heading" class="resume-section-title">Working range</h2>
+        <p>AI product strategy, agent workflows, LLM evals, API and MCP integration, observability, experimentation, marketplaces, fintech, analytics, Figma, SwiftUI, TypeScript, and AI-assisted development.</p>
+      </section>
+    </article>
+  </section>
+
+  <script>
+    const controls = document.querySelector("[data-resume-lenses]");
+    const documentElement = document.querySelector("[data-resume-document]");
+    controls?.addEventListener("change", (event) => {
+      if (!(event.target instanceof HTMLInputElement)) return;
+      documentElement?.setAttribute("data-lens", event.target.value);
+    });
+  </script>
+</BaseLayout>
+
+<style>
+  .resume-hero {
+    background: #242424;
+  }
+
+  .resume-actions {
+    margin-top: 32px;
+  }
+
+  .resume-actions button {
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .resume-shell {
+    width: min(100% - 40px, 1040px);
+    margin-inline: auto;
+  }
+
+  .resume-toolbar {
+    display: flex;
+    margin-bottom: 32px;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 28px;
+  }
+
+  .resume-toolbar p:last-child {
+    max-width: 480px;
+    margin-bottom: 0;
+    color: #60605b;
+  }
+
+  fieldset {
+    display: flex;
+    margin: 0;
+    padding: 4px;
+    gap: 3px;
+    background: #e5e5df;
+    border: 0;
+    border-radius: 6px;
+  }
+
+  fieldset label {
+    display: flex;
+    min-height: 40px;
+    padding: 8px 10px;
+    align-items: center;
+    gap: 6px;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    font-weight: 680;
+    cursor: pointer;
+  }
+
+  fieldset label:has(input:checked) {
+    background: white;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .resume-document {
+    padding: clamp(28px, 6vw, 72px);
+    background: white;
+    border: 1px solid #d7d7d0;
+    border-radius: 6px;
+  }
+
+  .resume-identity {
+    display: flex;
+    padding-bottom: 30px;
+    justify-content: space-between;
+    gap: 30px;
+    border-bottom: 2px solid #111;
+  }
+
+  .resume-identity h2 {
+    margin-bottom: 8px;
+    font-size: 3.6rem;
+  }
+
+  .resume-identity p {
+    margin-bottom: 0;
+    color: #555550;
+  }
+
+  .resume-identity nav {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+    font-size: 0.85rem;
+  }
+
+  .resume-identity nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .resume-section-title {
+    margin: 44px 0 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #bdbdb7;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .resume-role {
+    padding: 28px 0;
+    border-bottom: 1px solid #deded8;
+  }
+
+  .resume-role > header,
+  .education-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .resume-role header > div:last-child {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    color: #666660;
+    font-size: 0.84rem;
+    white-space: nowrap;
+  }
+
+  .resume-role h3,
+  .education-row h3 {
+    margin-bottom: 5px;
+    font-size: 1.2rem;
+  }
+
+  .resume-role header strong,
+  .education-row strong {
+    font-size: 0.91rem;
+  }
+
+  .resume-role > p {
+    margin: 14px 0 0;
+    color: #555550;
+    font-size: 0.9rem;
+  }
+
+  .resume-role ul,
+  .resume-document section > ul {
+    margin: 16px 0 0;
+    padding-left: 20px;
+  }
+
+  .resume-role li,
+  .resume-document section > ul li {
+    margin-top: 8px;
+    font-size: 0.92rem;
+  }
+
+  .resume-document[data-lens]:not([data-lens="all"]) .resume-bullet {
+    color: #999994;
+  }
+
+  .resume-document[data-lens="ai"] .lens-ai,
+  .resume-document[data-lens="platform"] .lens-platform,
+  .resume-document[data-lens="leadership"] .lens-leadership {
+    color: #111;
+    font-weight: 650;
+  }
+
+  .education-row {
+    padding: 25px 0 0;
+  }
+
+  .education-row > span {
+    color: #666660;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 760px) {
+    .resume-shell {
+      width: min(100% - 24px, 1040px);
+    }
+
+    .resume-toolbar,
+    .resume-identity,
+    .resume-role > header,
+    .education-row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    fieldset {
+      width: 100%;
+      flex-wrap: wrap;
+    }
+
+    .resume-identity nav,
+    .resume-role header > div:last-child {
+      align-items: flex-start;
+    }
+
+    .resume-role header > div:last-child {
+      white-space: normal;
+    }
+
+    .resume-identity h2 {
+      font-size: 2.25rem;
+    }
+  }
+
+  @media print {
+    @page {
+      size: Letter;
+      margin: 0.34in 0.42in;
+    }
+
+    .resume-hero {
+      display: none;
+    }
+
+    .resume-toolbar {
+      display: none;
+    }
+
+    .resume-shell {
+      width: 100%;
+      padding: 0;
+      background: #fff;
+    }
+
+    .resume-document {
+      padding: 0;
+      background: #fff;
+      border: 0;
+      font-size: 8.2pt;
+      line-height: 1.25;
+    }
+
+    .resume-identity {
+      padding-bottom: 12px;
+    }
+
+    .resume-identity h2 {
+      font-size: 23pt;
+    }
+
+    .resume-identity p,
+    .resume-identity nav,
+    .resume-role header strong,
+    .education-row strong,
+    .resume-role > p,
+    .resume-role li,
+    .resume-document section > ul li {
+      font-size: 8.2pt;
+    }
+
+    .resume-identity nav {
+      gap: 2px;
+    }
+
+    .resume-section-title {
+      margin-top: 18px;
+      padding-bottom: 5px;
+      font-size: 7.5pt;
+    }
+
+    .resume-role {
+      padding: 12px 0;
+      break-inside: auto;
+    }
+
+    .resume-role:nth-of-type(-n + 2) {
+      break-inside: avoid;
+    }
+
+    .resume-role h3,
+    .education-row h3 {
+      margin-bottom: 2px;
+      font-size: 11pt;
+    }
+
+    .resume-role ul,
+    .resume-document section > ul {
+      margin-top: 7px;
+    }
+
+    .resume-role li,
+    .resume-document section > ul li {
+      margin-top: 3px;
+    }
+
+    .education-row {
+      padding-top: 12px;
+    }
+
+    .resume-document section:has(#education-heading) {
+      break-before: page;
+    }
+
+    .resume-document[data-lens] .resume-bullet {
+      color: #000 !important;
+      font-weight: 400 !important;
+    }
+  }
+</style>

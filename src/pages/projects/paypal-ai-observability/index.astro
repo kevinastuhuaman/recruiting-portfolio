@@ -1,0 +1,194 @@
+---
+import { ArrowUpRight } from "@lucide/astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="PayPal AI observability | Kevin Astuhuaman"
+  description="A public-safe case study about Kevin Astuhuaman's PayPal Checkout internship prototype for faster AI-assisted issue diagnostics."
+  path="/projects/paypal-ai-observability/"
+  pageType="article"
+  about="AI observability for checkout diagnostics"
+>
+  <header class="page-hero paypal-hero">
+    <div class="section-shell">
+      <p class="eyebrow">Enterprise AI | May-August 2025</p>
+      <h1>Turning fragmented checkout diagnostics into one investigation path.</h1>
+      <p class="lede">
+        At PayPal Checkout, I defined and prototyped an AI-assisted observability workflow that helped product teams move from scattered technical signals to a structured diagnosis.
+      </p>
+      <div class="case-meta">
+        <span><strong>Role:</strong> Technical Product Manager MBA Intern</span>
+        <span><strong>State:</strong> Internship prototype and POC</span>
+        <span><strong>Boundary:</strong> Public-safe reconstruction</span>
+      </div>
+    </div>
+  </header>
+
+  <article class="article-shell">
+    <p class="eyebrow">The product tension</p>
+    <h2>Checkout friction crossed more systems than one product team could inspect quickly.</h2>
+    <p>
+      A failed payment can originate in a merchant integration, a risk decision, a payment path, or another dependency. The product challenge was not to produce more telemetry. It was to turn existing signals into a usable investigation workflow with a clear owner and measurable time to detection and resolution.
+    </p>
+
+    <div class="metric-row" aria-label="PayPal internship project results">
+      <div class="metric"><strong>15+</strong><span>diagnostic tools unified in the project workflow</span></div>
+      <div class="metric"><strong>75%</strong><span>faster issue detection in the prototype workflow</span></div>
+      <div class="metric"><strong>5x</strong><span>faster triage in the auto-triage POC</span></div>
+    </div>
+
+    <figure class="workflow-artifact" aria-labelledby="workflow-title">
+      <figcaption id="workflow-title">
+        Public-safe workflow reconstruction. It shows the product decision, not PayPal's internal architecture.
+      </figcaption>
+      <div class="workflow-grid">
+        <section>
+          <p class="eyebrow">Before</p>
+          <ol>
+            <li><span>1</span><strong>Find the relevant tools</strong></li>
+            <li><span>2</span><strong>Translate logs and dashboards</strong></li>
+            <li><span>3</span><strong>Estimate customer and revenue impact</strong></li>
+            <li><span>4</span><strong>Identify and notify the owner</strong></li>
+          </ol>
+          <p>Manual hops, inconsistent context, slow handoffs.</p>
+        </section>
+        <section class="after-flow">
+          <p class="eyebrow">Prototype decision</p>
+          <ol>
+            <li><span>1</span><strong>Describe the checkout symptom</strong></li>
+            <li><span>2</span><strong>Orchestrate approved diagnostic APIs</strong></li>
+            <li><span>3</span><strong>Return evidence, impact, and confidence</strong></li>
+            <li><span>4</span><strong>Route a structured alert to the owner</strong></li>
+          </ol>
+          <p>One investigation path with explicit measures and ownership.</p>
+        </section>
+      </div>
+    </figure>
+
+    <h2>The product decisions</h2>
+    <dl class="decision-list">
+      <div class="decision">
+        <dt>Start with the investigation job</dt>
+        <dd>
+          I framed success around mean time to detect and resolve, not around the novelty of an agent. This made the prototype accountable to an operating workflow.
+        </dd>
+      </div>
+      <div class="decision">
+        <dt>Unify context, not ownership</dt>
+        <dd>
+          The prototype assembled signals and quantified impact, then routed the result to the responsible team. It did not pretend that a model should make every operational decision.
+        </dd>
+      </div>
+      <div class="decision">
+        <dt>Make the handoff inspectable</dt>
+        <dd>
+          The output needed a diagnosis, supporting evidence, impact estimate, confidence, and owner. A fluent answer without those fields would have been harder to trust and act on.
+        </dd>
+      </div>
+    </dl>
+
+    <h2>How the result should be read</h2>
+    <p>
+      The 75% result refers to issue-detection time in the internship prototype workflow. The 5x result refers to the auto-triage POC. Neither number is presented as a PayPal-wide production deployment result. I do not publish internal screenshots, logs, system names, merchant data, or architecture.
+    </p>
+
+    <h2>What this work changed in how I build</h2>
+    <p>
+      Enterprise AI earns trust by fitting an accountable operating model. The system needs explicit success measures, clear human ownership, observable evidence, and boundaries that keep the model from becoming an opaque decision-maker. Those principles later shaped Trackly's evals, tool confirmations, and failure handling.
+    </p>
+
+    <div class="button-row final-actions">
+      <a class="button button-dark" href="/projects/trackly/">See those principles in Trackly <ArrowUpRight aria-hidden="true" size={17} /></a>
+      <a class="button" href="/resume/">View resume</a>
+      <a class="button" href="/contact/">Contact Kevin</a>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .paypal-hero {
+    background: #003f88;
+  }
+
+  .workflow-artifact {
+    margin: 48px 0;
+    padding: clamp(24px, 4vw, 42px);
+    background: white;
+    border: 1px solid #d7d7d0;
+    border-radius: 6px;
+  }
+
+  .workflow-artifact > figcaption {
+    margin-bottom: 28px;
+    color: #52524d;
+    font-size: 0.88rem;
+  }
+
+  .workflow-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .workflow-grid section {
+    padding: 26px;
+    background: #ededeb;
+    border-radius: 6px;
+  }
+
+  .workflow-grid .after-flow {
+    background: #0057b8;
+    color: white;
+  }
+
+  .workflow-grid ol {
+    margin: 24px 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .workflow-grid li {
+    display: flex;
+    min-height: 58px;
+    padding: 12px 0;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  }
+
+  .after-flow li {
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .workflow-grid li span {
+    display: grid;
+    width: 28px;
+    height: 28px;
+    flex: 0 0 28px;
+    place-items: center;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    font-size: 0.75rem;
+  }
+
+  .workflow-grid section > p:last-child {
+    margin-bottom: 0;
+    color: #5f5f5a;
+    font-size: 0.86rem;
+  }
+
+  .workflow-grid .after-flow > p:last-child {
+    color: #d7e6f6;
+  }
+
+  .final-actions {
+    margin-top: 56px;
+  }
+
+  @media (max-width: 700px) {
+    .workflow-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
