@@ -1,20 +1,10 @@
 # Kevin Astuhuaman
 
-AI Product Manager and technical builder | Bay Area, California
+AI Product Manager | Ex-PayPal AI/ML Observability | Berkeley Haas MBA '26 | Bay Area, California
 
 LinkedIn: https://www.linkedin.com/in/kevinastuhuaman | GitHub: https://github.com/kevinastuhuaman | Portfolio: https://portfolio.kevinastuhuaman.com
 
 ## Experience
-
-### Trackly
-
-**Founder and product builder** | 2025-present | Bay Area
-
-Built and operates a real-time job-search product across web, native apps, CLI, MCP, matching, chat, and voice.
-
-- Chose direct company career pages as the wedge after seeing strong roles appear before aggregators during the MBA recruiting cycle.
-- Designed quality controls for stale jobs, duplicate roles, false-zero monitoring failures, classification, and match explanations.
-- Shipped one product system across web, iOS, macOS, a public CLI, and an MCP server.
 
 ### PayPal Checkout
 
@@ -26,16 +16,37 @@ Defined and prototyped an AI-assisted observability workflow for checkout diagno
 - Built an agentic diagnostic prototype using Claude, Datadog, APIs, and MCP patterns, reducing issue-detection time 75% in the project workflow.
 - Designed auto-triage orchestration that diagnosed issues, estimated impact, and routed alerts; the POC completed triage 5x faster.
 
-### Banco de Credito del Peru / Credicorp
+### Trackly
+
+**AI Product Manager and builder** | 2025-present | Bay Area
+
+Built and operates a real-time job-search product across web, native apps, CLI, MCP, matching, chat, and voice.
+
+- Chose direct company career pages as the wedge after seeing strong roles appear before aggregators during the MBA recruiting cycle.
+- Designed quality controls for stale jobs, duplicate roles, false-zero monitoring failures, classification, and match explanations.
+- Shipped one product system across web, iOS, macOS, a public CLI, and an MCP server.
+
+### UC Berkeley Haas Open Innovation Squad
+
+**AI Product Manager, Fujitsu and MoBagel challenge** | December 2024-May 2025 | Berkeley, California
+
+Worked on AI product adoption, a high-fidelity Figma prototype, roadmap, business model, and United States go-to-market recommendations for MoBagel.
+
+- Conducted product and competitive research around how non-technical business users adopt AI and machine-learning workflows.
+- Contributed feature and UX concepts, a high-fidelity Figma prototype, and a roadmap linking user needs to product capabilities.
+- Recommended go-to-market positioning, partnership channels, and usage-based pricing for United States expansion.
+
+### Banco de Credito BCP (part of Credicorp)
 
 **Product Analyst -> Product Manager -> Senior Product Manager -> Lead Product Manager** | 2018-2024 | Lima, Peru
 
-Progressed through four product roles leading lending, marketplace, growth, and platform work for SMB customers.
+Progressed through four product roles leading lending, digital-channel, growth, and platform work for SMB customers.
 
-- Launched and scaled an SMB digital marketplace to 180K MAU, increasing product cross-sell per client by 28%.
-- Led a personalized loan product from research through launch, reducing processing from seven days to immediate approval and generating $40M in nine months.
+- Helped more than 100,000 small businesses access a first loan.
+- Designed and launched an online credit-evaluation platform that reduced evaluation time from seven days to one hour and generated $40M in incremental loan disbursements in nine months.
+- Redesigned the digital value proposition for small businesses, contributing to 14% year-over-year revenue growth and growing monthly website traffic 6x to 180K users in 15 months.
 - Managed a team of nine product direct reports and partnered with risk, compliance, design, engineering, analytics, and commercial teams.
-- Used ML-driven pricing experiments to increase conversion 32% and reach 19.6% market share in seven months.
+- Reached 19.55% market share after gaining 129 basis points in seven months.
 
 ## Education
 
@@ -44,6 +55,8 @@ Progressed through four product roles leading lending, marketplace, growth, and 
 
 ## Selected product
 
+- PayPal public-safe case: https://portfolio.kevinastuhuaman.com/projects/paypal-ai-observability/
 - Trackly: https://usetrackly.app/
 - Trackly App Store: https://apps.apple.com/us/app/trackly-apply-first/id6758267565
 - Trackly CLI and MCP: https://github.com/trackly-app/trackly-cli
+- Berkeley and MoBagel public-safe case: https://portfolio.kevinastuhuaman.com/projects/berkeley-mobagel-ai-gtm/

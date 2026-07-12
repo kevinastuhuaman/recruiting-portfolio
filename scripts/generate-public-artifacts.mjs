@@ -137,8 +137,9 @@ Use this guide for public-safe recruiting, referral, interview preparation, or c
 - Home: ${absolute("/")}
 - Resume: ${absolute("/resume/")}
 - Public evidence: ${absolute("/proof/")}
-- Trackly case study: ${absolute("/projects/trackly/")}
 - PayPal AI observability case study: ${absolute("/projects/paypal-ai-observability/")}
+- Trackly case study: ${absolute("/projects/trackly/")}
+- Berkeley and MoBagel AI product strategy case study: ${absolute("/projects/berkeley-mobagel-ai-gtm/")}
 - BCP and Credicorp case study: ${absolute("/projects/smb-fintech-bcp-credicorp/")}
 - Contact: ${absolute("/contact/")}
 
@@ -174,14 +175,16 @@ const skillIndex = {
 
 const llms = `# Kevin Astuhuaman
 
-> AI Product Manager and technical builder focused on applied AI, agents, platforms, and technical products.
+> AI Product Manager | Ex-PayPal AI/ML Observability | Berkeley Haas MBA '26 | 7 years building products and enjoying every minute of it.
 
-Kevin built Trackly, a live job-search product spanning web, iOS, macOS, CLI, MCP, matching, chat, and voice. He previously built a public-safe AI observability prototype at PayPal Checkout and progressed through four product roles at BCP/Credicorp.
+Kevin's most recent enterprise AI proof is an agentic observability prototype at PayPal Checkout. He also built Trackly, a live job-search product spanning web, iOS, macOS, CLI, MCP, matching, chat, and voice. At Berkeley Haas, he worked on the Fujitsu and MoBagel Open Innovation challenge across AI product strategy, high-fidelity prototyping, roadmap, business model, and go-to-market recommendations. He previously progressed through four product roles at Banco de Credito BCP, part of Credicorp.
 
 ## Primary pages
 
 - [Portfolio](${absolute("/")}): Kevin's recruiting profile and selected work
+- [PayPal AI observability case study](${absolute("/projects/paypal-ai-observability/")}): Agentic investigation, product decisions, prototype outcomes, and public-safety boundaries
 - [Trackly case study](${absolute("/projects/trackly/")}): Product decisions, system quality, and cross-platform delivery
+- [Berkeley and MoBagel case study](${absolute("/projects/berkeley-mobagel-ai-gtm/")}): AI product adoption, high-fidelity prototyping, roadmap, business model, and GTM
 - [Resume](${absolute("/resume/")}): Complete chronological experience
 - [Public evidence](${absolute("/proof/")}): Sources and context for published claims
 - [Contact](${absolute("/contact/")}): LinkedIn and email
@@ -201,7 +204,7 @@ Last updated: ${site.updated}
 
 ## Positioning
 
-Kevin Astuhuaman is an AI Product Manager and technical builder in the Bay Area. His two recruiting lanes are applied AI and agent products, and AI platform or technical product management.
+Kevin Astuhuaman is an AI Product Manager, ex-PayPal in AI/ML observability, and Berkeley Haas MBA in the Bay Area. He has seven years of product experience. His two recruiting lanes are applied AI and agent products, and AI platform or technical product management.
 
 ## Experience
 
@@ -229,7 +232,7 @@ ${publicClaims.map((claim) => `- ${claim.statement} Context: ${claim.context} So
 
 const resumeMarkdown = `# Kevin Astuhuaman
 
-AI Product Manager and technical builder | ${site.location}
+AI Product Manager | Ex-PayPal AI/ML Observability | Berkeley Haas MBA '26 | ${site.location}
 
 LinkedIn: ${links.linkedin} | GitHub: ${links.github} | Portfolio: ${site.origin}
 
@@ -248,9 +251,11 @@ ${experience
 
 ## Selected product
 
+- PayPal public-safe case: ${absolute("/projects/paypal-ai-observability/")}
 - Trackly: ${links.trackly}
 - Trackly App Store: ${links.appStore}
 - Trackly CLI and MCP: ${links.tracklyCli}
+- Berkeley and MoBagel public-safe case: ${absolute("/projects/berkeley-mobagel-ai-gtm/")}
 `;
 
 await Promise.all([

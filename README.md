@@ -32,8 +32,9 @@ npm run build
 ## Public Surfaces
 
 - `/`: human recruiting portfolio
-- `/projects/trackly/`: flagship product case study
-- `/projects/paypal-ai-observability/`: public-safe enterprise AI case study
+- `/projects/paypal-ai-observability/`: public-safe enterprise AI case study with an original synthetic investigation workbench
+- `/projects/trackly/`: hands-on multi-surface product case study
+- `/projects/berkeley-mobagel-ai-gtm/`: Berkeley, MoBagel, AI product strategy, high-fidelity prototyping, and GTM case study
 - `/projects/smb-fintech-bcp-credicorp/`: product leadership case study
 - `/resume/`: recruiter-readable resume
 - `/proof/` and `/proof.json`: contextual evidence ledger and machine registry
@@ -51,6 +52,8 @@ The former `/packet/` and `/projects/agentic-dev-workflows/` URLs remain as `noi
 ## Public Boundary
 
 `site-public/` is the only static input copied by Astro. `npm run build` regenerates every machine-readable artifact, builds the site and tagged resume PDF, then fails if excluded internal terms or undeclared routes appear in `dist/`.
+
+The older `public/` directory is retained only as an undeployed legacy snapshot. It is ignored by Astro and is not a source for current biography, project, metric, or recruiting claims. Repository readers and AI tools should use `src/data/site.js`, `site-public/`, and the canonical routes listed above.
 
 The assistant API is hosted separately at `https://closeai.mba/api/portfolio/ask`. Its launch corpus is deterministic and mirrored in `/assistant-corpus.json`; it does not query Trackly user data or invoke an LLM.
 

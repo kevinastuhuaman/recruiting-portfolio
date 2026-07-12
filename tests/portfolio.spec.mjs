@@ -5,6 +5,7 @@ const routes = [
   "/",
   "/projects/trackly/",
   "/projects/paypal-ai-observability/",
+  "/projects/berkeley-mobagel-ai-gtm/",
   "/projects/smb-fintech-bcp-credicorp/",
   "/resume/",
   "/about/",
@@ -46,17 +47,19 @@ for (const route of compatibilityRoutes) {
   });
 }
 
-test("mobile first viewport contains the recruiting case and Trackly signal", async ({ page }) => {
+test("mobile first viewport leads with AI PM, Berkeley, and PayPal evidence", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/", { waitUntil: "networkidle" });
+  const hero = page.locator(".hero-content");
 
-  await expect(page.getByRole("heading", { level: 1, name: /Kevin Astuhuaman/i })).toBeVisible();
-  await expect(page.getByText(/complicated AI systems/i)).toBeVisible();
-  await expect(page.getByRole("link", { name: "Resume", exact: true })).toBeVisible();
-  await expect(page.locator(".hero-product")).toBeVisible();
+  await expect(hero.getByRole("heading", { level: 1, name: /Kevin Astuhuaman/i })).toBeVisible();
+  await expect(hero.getByText(/agentic observability prototypes at PayPal Checkout/i)).toBeVisible();
+  await expect(hero.getByText(/Berkeley Haas MBA '26/i)).toBeVisible();
+  await expect(hero.getByRole("link", { name: "Resume", exact: true })).toBeVisible();
+  await expect(page.locator(".hero-scene")).toBeHidden();
   await expect(page.locator(".mobile-nav summary")).toBeVisible();
 
-  const positions = await page.locator(".hero-content, .hero-product").evaluateAll((elements) =>
+  const positions = await page.locator(".hero-content").evaluateAll((elements) =>
     elements.map((element) => {
       const rect = element.getBoundingClientRect();
       return { top: rect.top, bottom: rect.bottom, width: rect.width };
@@ -66,6 +69,9 @@ test("mobile first viewport contains the recruiting case and Trackly signal", as
 
   const proofBand = await page.locator(".proof-band").evaluate((element) => element.getBoundingClientRect().top);
   expect(proofBand).toBeLessThanOrEqual(844);
+
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await expect(page.locator(".hero-scene")).toBeVisible();
 });
 
 test("mobile anchor navigation closes the open menu", async ({ page }) => {
@@ -92,18 +98,47 @@ test("the complete recruiting path works without JavaScript", async ({ browser }
     const page = await context.newPage();
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Kevin");
-    await expect(page.getByRole("link", { name: /View Trackly/i })).toBeVisible();
+    await expect(page.getByRole("link", { name: /See PayPal work/i })).toBeVisible();
     await page.goto("/resume/");
     await expect(page.getByText("PayPal Checkout", { exact: true })).toBeVisible();
-    await expect(page.getByText(/Banco de Credito del Peru/i)).toBeVisible();
+    await expect(page.getByText(/Banco de Credito BCP/i)).toBeVisible();
     await page.goto("/contact/");
     await expect(page.getByRole("link", { name: /LinkedIn/i }).first()).toBeVisible();
     await page.goto("/ask/");
-    await expect(page.getByRole("heading", { name: "Four answers without the model." })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Five answers without the model." })).toBeVisible();
     await expect(page.getByText(/Interactive questions require JavaScript/i)).toBeVisible();
   } finally {
     await context.close();
   }
+});
+
+test("AI Investigation Workbench exposes plan, evidence, uncertainty, and human approval", async ({ page }) => {
+  await page.goto("/projects/paypal-ai-observability/");
+  const workbench = page.locator("[data-workbench]");
+
+  await workbench.getByRole("button", { name: "Slow authentication" }).click();
+  await expect(workbench.getByText(/authentication screen becomes usable/i)).toBeVisible();
+
+  await workbench.getByRole("button", { name: "Build investigation plan" }).click();
+  await expect(workbench.getByRole("heading", { name: /Five read-only steps/i })).toBeVisible();
+
+  await workbench.getByRole("button", { name: "Run approved steps" }).click();
+  await expect(workbench.getByRole("heading", { name: /What happened and why the user struggled/i })).toBeVisible();
+  await expect(workbench.getByText(/One source timed out/i)).toBeVisible();
+
+  await workbench.getByRole("button", { name: "Review hypotheses" }).click();
+  await expect(workbench.getByText("Unknown", { exact: true })).toBeVisible();
+  await expect(workbench.getByText(/service telemetry is incomplete/i)).toBeVisible();
+
+  await workbench.getByRole("button", { name: "Prepare escalation" }).click();
+  await expect(workbench.getByRole("heading", { name: /A person owns the action/i })).toBeVisible();
+  await workbench.getByRole("button", { name: "Approve and route" }).click();
+  await expect(workbench.getByRole("heading", { name: /accountable owner/i })).toBeVisible();
+  await expect(workbench.getByRole("status")).toHaveText(/audit trail is complete/i);
+
+  const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
+  const blocking = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact ?? ""));
+  expect(blocking, JSON.stringify(blocking, null, 2)).toEqual([]);
 });
 
 test("public machine files and resume PDF are fetchable", async ({ request }) => {
@@ -173,5 +208,5 @@ test("public assistant failure preserves the static cited fallback", async ({ pa
   await page.getByLabel("Question about Kevin's work").fill("What did Kevin build at PayPal?");
   await page.getByRole("button", { name: "Ask", exact: true }).click();
   await expect(page.getByRole("status")).toContainText("hourly limit");
-  await expect(page.getByRole("heading", { name: "Four answers without the model." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Five answers without the model." })).toBeVisible();
 });

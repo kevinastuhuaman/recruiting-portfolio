@@ -22,7 +22,7 @@ modeButtons.forEach((button) => {
   });
 });
 
-const packet = `Kevin Astuhuaman is a Berkeley Haas MBA and AI Product Manager who gets close to the system. He built Trackly across web, iOS, macOS, CLI, and MCP; worked on AI observability tooling at PayPal Checkout across 15+ systems; and worked on digital-first financial products tied to 100K+ SMBs and a $620M ARR/P&L portfolio at BCP/Credicorp. Portfolio: https://portfolio.kevinastuhuaman.com/ GitHub: https://github.com/kevinastuhuaman LinkedIn: https://www.linkedin.com/in/kevinastuhuaman`;
+const packet = `Kevin Astuhuaman is an AI Product Manager, ex-PayPal in AI/ML observability, and Berkeley Haas MBA with seven years of product experience. His recent enterprise AI work is an agentic observability prototype for PayPal Checkout. He also built Trackly across web, iOS, macOS, CLI, MCP, chat, and voice; worked on AI product strategy, high-fidelity prototyping, and go-to-market recommendations for Berkeley's Fujitsu and MoBagel challenge; and progressed to Lead Product Manager with nine product direct reports at Banco de Credito BCP, part of Credicorp. Portfolio: https://portfolio.kevinastuhuaman.com/ GitHub: https://github.com/kevinastuhuaman LinkedIn: https://www.linkedin.com/in/kevinastuhuaman`;
 
 document.querySelectorAll("[data-copy-packet]").forEach((button) => {
   button.addEventListener("click", async () => {
@@ -44,11 +44,12 @@ const searchInput = document.querySelector("[data-search-input]");
 const searchResults = document.querySelector("[data-search-results]");
 
 const searchable = [
-  ["Trackly", "/projects/trackly/", "Real-time job-search agent, 1,900+ companies, web, iOS, macOS, CLI, MCP"],
-  ["PayPal AI Observability", "/projects/paypal-ai-observability/", "AI observability tooling, 15+ checkout systems, 75% faster detection"],
-  ["BCP Credicorp SMB Fintech", "/projects/smb-fintech-bcp-credicorp/", "Digital-first SMB products, 100K+ entrepreneurs, $620M ARR/P&L"],
+  ["PayPal AI Observability", "/projects/paypal-ai-observability/", "Agentic observability prototype, 15+ diagnostic tools, 75% faster detection in the project workflow"],
+  ["Trackly", "/projects/trackly/", "Real-time job-search product, 1,969 companies, web, iOS, macOS, CLI, MCP"],
+  ["Berkeley and MoBagel", "/projects/berkeley-mobagel-ai-gtm/", "AI product strategy, Figma prototype, roadmap, business model, and go-to-market recommendations"],
+  ["BCP Product Leadership", "/projects/smb-fintech-bcp-credicorp/", "Digital-first small-business products, Lead Product Manager, nine product direct reports"],
   ["How I build with AI tools", "/projects/agentic-dev-workflows/", "Claude Code, Codex, MCP, evals, observability, automation"],
-  ["Recruiter Packet", "/packet/", "One-page packet for target roles, proof points, work authorization, and links"],
+  ["Recruiter Brief", "/packet/", "Legacy path to the current portfolio, resume, and selected product evidence"],
   ["Resume", "/resume/", "Recruiter-readable resume snapshot"],
   ["Proof", "/proof/", "Evidence registry and claim status"],
   ["GitHub", "https://github.com/kevinastuhuaman", "Public repositories and build record"],

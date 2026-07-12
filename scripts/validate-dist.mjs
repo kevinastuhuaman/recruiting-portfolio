@@ -14,6 +14,10 @@ const forbidden = [
   "(669)-268-7105",
   "$100M",
   "$620M ARR/P&L",
+  "YC-backed",
+  "Y Combinator-backed",
+  "Fortune 100-scale customers",
+  "CODASHOP",
 ];
 
 async function walk(directory) {
@@ -80,7 +84,7 @@ if (!errorPage.includes('name="robots" content="noindex, follow"')) failures.pus
 if (errorPage.includes('rel="canonical"')) failures.push("404.html: must not declare a canonical");
 
 for (const file of await walk(dist.pathname)) {
-  if (!/\.(?:html|json|txt|md|xml)$/i.test(file)) continue;
+  if (!/\.(?:html|js|mjs|css|json|txt|md|xml)$/i.test(file)) continue;
   const contents = await readFile(file, "utf8");
   for (const term of forbidden) {
     if (contents.includes(term)) failures.push(`${file}: contains forbidden public term ${term}`);

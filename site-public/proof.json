@@ -28,20 +28,28 @@
       "context": "Prototype-workflow result, not a PayPal-wide production claim."
     },
     {
-      "id": "bcp-marketplace",
-      "statement": "At BCP/Credicorp, Kevin launched and scaled an SMB digital marketplace to 180K monthly active users and increased product cross-sell per client by 28%.",
+      "id": "bcp-access",
+      "statement": "At Banco de Credito BCP, Kevin's work helped more than 100,000 small businesses access a first loan.",
       "source": "https://portfolio.kevinastuhuaman.com/projects/smb-fintech-bcp-credicorp/",
       "checked": "2026-07-12",
-      "state": "public resume claim",
-      "context": "Production SMB marketplace outcome."
+      "state": "public profile claim",
+      "context": "Production small-business lending outcome; this claim stays in the BCP experience section, not the portfolio bio."
     },
     {
       "id": "bcp-loans",
-      "statement": "Kevin led a personalized loan product that reduced processing from seven days to immediate approval and generated $40M in nine months.",
+      "statement": "Kevin designed and launched an online credit-evaluation platform that reduced evaluation time from seven days to one hour and generated $40M in incremental loan disbursements in nine months.",
       "source": "https://portfolio.kevinastuhuaman.com/projects/smb-fintech-bcp-credicorp/",
       "checked": "2026-07-12",
       "state": "public resume claim",
       "context": "Production lending outcome."
+    },
+    {
+      "id": "bcp-digital-growth",
+      "statement": "Kevin redesigned BCP's digital value proposition for small businesses, contributing to 14% year-over-year revenue growth and growing monthly website traffic sixfold to 180,000 users in 15 months.",
+      "source": "https://portfolio.kevinastuhuaman.com/projects/smb-fintech-bcp-credicorp/",
+      "checked": "2026-07-12",
+      "state": "public resume claim",
+      "context": "Production digital-channel outcome; 180K is monthly website traffic, not product MAU."
     },
     {
       "id": "trackly-cli-mcp",
@@ -50,6 +58,14 @@
       "checked": "2026-07-12",
       "state": "public source repository",
       "context": "Public technical distribution artifact; separate from the App Store listing."
+    },
+    {
+      "id": "berkeley-mobagel-brief",
+      "statement": "Berkeley Haas's official Fujitsu and MoBagel challenge brief called for product research, feature proposals, a high-fidelity Figma prototype, a business model, and a company roadmap.",
+      "source": "https://haas.berkeley.edu/open-innovation/programs/open-innovation-challenges/fujitsu-mobagel-spring-25/",
+      "checked": "2026-07-12",
+      "state": "official program brief",
+      "context": "Program context. Kevin's participation and contribution are public resume claims."
     }
   ]
 }

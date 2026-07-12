@@ -6,14 +6,14 @@ import { experience, links, site } from "../../data/site.js";
 
 <BaseLayout
   title="Resume | Kevin Astuhuaman"
-  description="Kevin Astuhuaman's chronological resume across Trackly, PayPal Checkout, BCP/Credicorp, and Berkeley Haas."
+  description="Kevin Astuhuaman's chronological resume across PayPal Checkout, Trackly, Berkeley and MoBagel, Banco de Credito BCP, and Berkeley Haas."
   path="/resume/"
 >
   <header class="page-hero resume-hero">
     <div class="section-shell">
       <p class="eyebrow">Resume</p>
-      <h1>AI product judgment with hands-on technical range.</h1>
-      <p class="lede">Seven years across regulated fintech, enterprise AI observability, and a live agent product built from the source layer through native and conversational interfaces.</p>
+      <h1>AI Product Manager. Ex-PayPal. Berkeley Haas MBA.</h1>
+      <p class="lede">Seven years building products and enjoying every minute of it, from agentic observability prototypes and AI product strategy to regulated fintech and a live multi-surface product.</p>
       <div class="button-row resume-actions">
         <a class="button button-light" href="/kevin-astuhuaman-resume.pdf" download>
           <Download aria-hidden="true" size={18} /> Download PDF
@@ -47,7 +47,7 @@ import { experience, links, site } from "../../data/site.js";
       <header class="resume-identity">
         <div>
           <h2 id="resume-name">Kevin Astuhuaman</h2>
-          <p>AI Product Manager and technical builder | {site.location}</p>
+          <p>AI Product Manager | Ex-PayPal AI/ML Observability | Berkeley Haas MBA '26 | {site.location}</p>
         </div>
         <nav aria-label="Resume contact links">
           <a href={links.linkedin}>LinkedIn <ExternalLink aria-hidden="true" size={14} /></a>
@@ -66,19 +66,6 @@ import { experience, links, site } from "../../data/site.js";
           </header>
           <p>{experience[0].summary}</p>
           <ul>
-            <li class="resume-bullet lens-ai lens-platform">Built the direct career-page monitoring, normalization, matching, eval, and delivery system behind a public inventory spanning 1,969 companies and 40 ATS/source types as of July 12, 2026.</li>
-            <li class="resume-bullet lens-ai">Designed LLM classification and review workflows for function, seniority, region, sponsorship, salary, and experience signals, including disagreement review and guarded backfills.</li>
-            <li class="resume-bullet lens-platform">Shipped one product across web, iOS, macOS, a public npm CLI, and an MCP server, with shared API contracts and interface-specific workflows.</li>
-            <li class="resume-bullet lens-ai lens-leadership">Built streaming chat and real-time voice agent workflows with tool status, confirmations, citations, interruption handling, model failover, and observability.</li>
-          </ul>
-        </article>
-
-        <article class="resume-role">
-          <header>
-            <div><h3>{experience[1].organization}</h3><strong>{experience[1].role}</strong></div>
-            <div><span>{experience[1].dates}</span><span>{experience[1].location}</span></div>
-          </header>
-          <ul>
             <li class="resume-bullet lens-ai lens-leadership">Drove strategy for a Checkout AI observability prototype across a diagnostic environment serving a multi-sided marketplace.</li>
             <li class="resume-bullet lens-ai lens-platform">Built an agentic diagnostic workflow using Claude, Datadog, APIs, and MCP patterns, reducing issue-detection time 75% in the internship prototype workflow.</li>
             <li class="resume-bullet lens-platform">Unified the investigation path across 15+ diagnostic tools and defined success measures for mean time to detect and resolve.</li>
@@ -88,17 +75,43 @@ import { experience, links, site } from "../../data/site.js";
 
         <article class="resume-role">
           <header>
+            <div><h3>{experience[1].organization}</h3><strong>{experience[1].role}</strong></div>
+            <div><span>{experience[1].dates}</span><span>{experience[1].location}</span></div>
+          </header>
+          <p>{experience[1].summary}</p>
+          <ul>
+            <li class="resume-bullet lens-ai lens-platform">Built the direct career-page monitoring, normalization, matching, eval, and delivery system behind a public inventory spanning 1,969 companies and 40 ATS/source types as of July 12, 2026.</li>
+            <li class="resume-bullet lens-ai">Designed LLM classification and review workflows for function, seniority, region, sponsorship, salary, and experience signals, including disagreement review and guarded backfills.</li>
+            <li class="resume-bullet lens-platform">Shipped one product across web, iOS, macOS, a public npm CLI, and an MCP server, with shared API contracts and interface-specific workflows.</li>
+            <li class="resume-bullet lens-ai lens-leadership">Built streaming chat and real-time voice agent workflows with tool status, confirmations, citations, interruption handling, model failover, and observability.</li>
+          </ul>
+        </article>
+
+        <article class="resume-role">
+          <header>
             <div><h3>{experience[2].organization}</h3><strong>{experience[2].role}</strong></div>
             <div><span>{experience[2].dates}</span><span>{experience[2].location}</span></div>
           </header>
+          <p>{experience[2].summary}</p>
+          <ul>
+            <li class="resume-bullet lens-ai">Conducted product and competitive research around how non-technical business users adopt AI and machine-learning workflows.</li>
+            <li class="resume-bullet lens-ai lens-leadership">Contributed feature and UX concepts, a high-fidelity Figma prototype, and a roadmap linking user needs to product capabilities.</li>
+            <li class="resume-bullet lens-leadership">Recommended go-to-market positioning, partnership channels, and usage-based pricing for United States expansion.</li>
+          </ul>
+        </article>
+
+        <article class="resume-role">
+          <header>
+            <div><h3>{experience[3].organization}</h3><strong>{experience[3].role}</strong></div>
+            <div><span>{experience[3].dates}</span><span>{experience[3].location}</span></div>
+          </header>
           <p>Progression: Lead Product Manager (1 year), Senior Product Manager (1.5 years), Product Manager (1.5 years), Product Analyst (2 years).</p>
           <ul>
-            <li class="resume-bullet lens-platform lens-leadership">Launched and scaled an SMB marketplace to 180K MAU by integrating lending, insurance, and payments, improving cross-sell per client by 28%.</li>
-            <li class="resume-bullet lens-leadership">Led research, roadmap, pilot, and launch for personalized lending, reducing processing from seven days to immediate approval and generating $40M in nine months.</li>
-            <li class="resume-bullet lens-platform">Launched a unified data, identity, and AI-risk architecture that supported 26% year-over-year sales growth and sixfold website traffic.</li>
-            <li class="resume-bullet lens-leadership">Managed nine product direct reports and partnered with risk, compliance, engineering, design, analytics, and commercial teams.</li>
-            <li class="resume-bullet lens-ai">Used ML-driven pricing experiments to increase conversion 32% and reach 19.6% market share in seven months.</li>
-            <li class="resume-bullet lens-leadership">Led digital-wallet API partnerships that grew sales from zero to $20M in six months and co-led a GTM program that reached $55M in monthly digital sales.</li>
+            <li class="resume-bullet lens-leadership">Helped more than 100,000 small businesses access a first loan.</li>
+            <li class="resume-bullet lens-platform lens-leadership">Designed and launched an online credit-evaluation platform that reduced evaluation time from seven days to one hour and generated $40M in incremental loan disbursements in nine months.</li>
+            <li class="resume-bullet lens-platform">Redesigned the digital value proposition for small businesses, contributing to 14% year-over-year revenue growth and growing monthly website traffic 6x to 180K users in 15 months.</li>
+            <li class="resume-bullet lens-leadership">Managed nine product direct reports and reached 19.55% market share after gaining 129 basis points in seven months.</li>
+            <li class="resume-bullet lens-platform lens-leadership">Led digital-wallet API partnerships that grew monthly sales from zero to $20M in under six months and co-led a GTM program that grew monthly digital sales from $24M to $55M in 11 months.</li>
           </ul>
         </article>
       </section>
@@ -111,7 +124,7 @@ import { experience, links, site } from "../../data/site.js";
         </article>
         <ul>
           <li>Built Trackly across App Store, web, public npm CLI, and MCP; selected for Microsoft for Startups and featured by Berkeley Haas.</li>
-          <li>Selected for Berkeley's Open Innovation Squad to lead AI product strategy for MoBagel, a YC-backed no-code ML platform.</li>
+          <li>Worked on Berkeley's Fujitsu and MoBagel Open Innovation challenge across AI product strategy, high-fidelity Figma prototyping, roadmap, business model, and go-to-market recommendations.</li>
           <li>VP, Tech Club; co-launched Haas's first Tech &amp; AI Summit with 560+ registrations.</li>
         </ul>
         <article class="education-row">

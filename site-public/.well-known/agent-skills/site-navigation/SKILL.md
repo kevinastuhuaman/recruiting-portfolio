@@ -12,8 +12,9 @@ Use this guide for public-safe recruiting, referral, interview preparation, or c
 - Home: https://portfolio.kevinastuhuaman.com/
 - Resume: https://portfolio.kevinastuhuaman.com/resume/
 - Public evidence: https://portfolio.kevinastuhuaman.com/proof/
-- Trackly case study: https://portfolio.kevinastuhuaman.com/projects/trackly/
 - PayPal AI observability case study: https://portfolio.kevinastuhuaman.com/projects/paypal-ai-observability/
+- Trackly case study: https://portfolio.kevinastuhuaman.com/projects/trackly/
+- Berkeley and MoBagel AI product strategy case study: https://portfolio.kevinastuhuaman.com/projects/berkeley-mobagel-ai-gtm/
 - BCP and Credicorp case study: https://portfolio.kevinastuhuaman.com/projects/smb-fintech-bcp-credicorp/
 - Contact: https://portfolio.kevinastuhuaman.com/contact/
 
