@@ -19,7 +19,7 @@ export const links = {
   appStore: "https://apps.apple.com/us/app/trackly-apply-first/id6758267565",
   tracklyCli: "https://github.com/trackly-app/trackly-cli",
   berkeleyMobagel:
-    "https://haas.berkeley.edu/open-innovation/programs/open-innovation-challenges/fujitsu-mobagel-spring-25/",
+    "https://haas.berkeley.edu/open-innovation/programs/past-challenges/",
   publicProfile:
     "https://facultad-ciencias-ingenieria.pucp.edu.pe/2024/10/07/kevin-astuhuaman-egresado-de-ingenieria-industrial-admitido-a-maestria-en-berkeley/",
 };
@@ -115,12 +115,12 @@ export const publicClaims = [
   },
   {
     id: "berkeley-mobagel-brief",
-    statement: "Berkeley Haas's official Fujitsu and MoBagel challenge brief called for product research, feature proposals, a high-fidelity Figma prototype, a business model, and a company roadmap.",
-    short: "Figma prototype, business model, and roadmap",
+    statement: "Berkeley Haas's official past-challenges page lists the Fujitsu and MoBagel AI Business Adoption Acceleration Challenge.",
+    short: "Official Berkeley Fujitsu and MoBagel AI challenge",
     source: links.berkeleyMobagel,
     checked: "2026-07-12",
-    state: "official program brief",
-    context: "Program context. Kevin's participation and contribution are public resume claims.",
+    state: "official program listing",
+    context: "Official program context only. Kevin's participation and deliverables are public resume claims.",
   },
 ];
 
@@ -153,7 +153,7 @@ export const assistantCorpus = {
       title: "Berkeley and MoBagel AI product strategy",
       url: `${site.origin}/projects/berkeley-mobagel-ai-gtm/`,
       keywords: ["berkeley", "haas", "mobagel", "fujitsu", "open innovation", "figma", "prototype", "go to market", "gtm", "pricing", "roadmap", "ai product strategy"],
-      content: "Through Berkeley Haas's Open Innovation Squad, Kevin worked on the Fujitsu and MoBagel challenge from December 2024 through May 2025. His public resume describes product discovery, competitive research, feature and UX concepts, a high-fidelity Figma prototype, roadmap and business-model work, and recommendations for United States go-to-market, partnerships, and usage-based pricing. Berkeley's official challenge page confirms that the engagement called for company and market research, feature proposals, a polished Figma prototype, a business model, and a roadmap. MoBagel is described as an AI and machine-learning platform that helps businesses adopt AI. No funding, customer, or production claims are inferred from the challenge brief.",
+      content: "Through Berkeley Haas's Open Innovation Squad, Kevin worked on the Fujitsu and MoBagel challenge from December 2024 through May 2025. His public resume describes product discovery, competitive research, feature and UX concepts, a high-fidelity Figma prototype, roadmap and business-model work, and recommendations for United States go-to-market, partnerships, and usage-based pricing. Berkeley's official past-challenges page independently confirms the Fujitsu and MoBagel AI Business Adoption Acceleration Challenge. MoBagel is described as an AI and machine-learning platform that helps businesses adopt AI. No funding, customer, or production claims are inferred from the official program listing.",
     },
     {
       id: "bcp",

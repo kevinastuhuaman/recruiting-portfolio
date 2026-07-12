@@ -101,12 +101,12 @@
     },
     {
       "id": "berkeley-mobagel-brief",
-      "statement": "Berkeley Haas's official Fujitsu and MoBagel challenge brief called for product research, feature proposals, a high-fidelity Figma prototype, a business model, and a company roadmap.",
-      "short": "Figma prototype, business model, and roadmap",
-      "source": "https://haas.berkeley.edu/open-innovation/programs/open-innovation-challenges/fujitsu-mobagel-spring-25/",
+      "statement": "Berkeley Haas's official past-challenges page lists the Fujitsu and MoBagel AI Business Adoption Acceleration Challenge.",
+      "short": "Official Berkeley Fujitsu and MoBagel AI challenge",
+      "source": "https://haas.berkeley.edu/open-innovation/programs/past-challenges/",
       "checked": "2026-07-12",
-      "state": "official program brief",
-      "context": "Program context. Kevin's participation and contribution are public resume claims."
+      "state": "official program listing",
+      "context": "Official program context only. Kevin's participation and deliverables are public resume claims."
     }
   ],
   "links": {
