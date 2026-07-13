@@ -2,6 +2,7 @@
 import { ArrowUpRight } from "@lucide/astro";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { links } from "../../../data/site.js";
+import { claimsById } from "../../../data/claims.js";
 ---
 
 <BaseLayout
@@ -82,7 +83,7 @@ import { links } from "../../../data/site.js";
 
     <aside class="source-note">
       <strong>Evidence boundary</strong>
-      <p>Kevin's role and deliverables are public resume claims. Berkeley Haas's official past-challenges page independently confirms the Fujitsu and MoBagel AI Business Adoption Acceleration Challenge. No funding, customer, or production claims are inferred from the official program listing.</p>
+      <p>Kevin's role and deliverables are public resume claims. {claimsById["berkeley-mobagel-brief"].statement} No funding, customer, or production claims are inferred from the official program listing.</p>
     </aside>
 
     <div class="button-row final-actions">

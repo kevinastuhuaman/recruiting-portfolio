@@ -1,6 +1,6 @@
 # Kevin Astuhuaman
 
-Last updated: 2026-07-12
+Last updated: 2026-07-13
 
 ## Positioning
 
@@ -14,9 +14,8 @@ Technical Product Manager MBA Intern | May-August 2025
 
 Defined and prototyped an AI-assisted observability workflow for checkout diagnostics.
 
-- Unified the investigation path across 15+ diagnostic tools with success metrics for detection and resolution.
-- Built an agentic diagnostic prototype using Claude, Datadog, APIs, and MCP patterns, reducing issue-detection time 75% in the project workflow.
-- Designed auto-triage orchestration that diagnosed issues, estimated impact, and routed alerts; the POC completed triage 5x faster.
+- A PayPal Checkout internship prototype reduced issue-detection time by 75% in the project workflow across a diagnostic environment spanning 15+ tools.
+- A PayPal Checkout internship auto-triage proof of concept completed triage five times faster in the project workflow.
 
 ### Trackly
 
@@ -45,11 +44,11 @@ Product Analyst -> Product Manager -> Senior Product Manager -> Lead Product Man
 
 Progression: Lead Product Manager (1 year), Senior Product Manager (1.5 years), Product Manager (1.5 years), Product Analyst (2 years).
 
-- Helped more than 100,000 small businesses access a first loan.
-- Designed and launched an online credit-evaluation platform that reduced evaluation time from seven days to one hour and generated $40M in incremental loan disbursements in nine months.
-- Redesigned the digital value proposition for small businesses, contributing to 14% year-over-year revenue growth and growing monthly website traffic 6x to 180K users in 15 months.
-- Managed a team of nine product direct reports and partnered with risk, compliance, design, engineering, analytics, and commercial teams.
-- Reached 19.55% market share after gaining 129 basis points in seven months.
+- At Banco de Credito BCP, Kevin's work helped more than 100,000 small businesses access a first loan.
+- Kevin designed and launched an online credit-evaluation platform that reduced evaluation time from seven days to one hour and generated $40M in incremental loan disbursements in nine months.
+- Kevin redesigned BCP's digital value proposition for small businesses, contributing to 14% year-over-year revenue growth while monthly website traffic grew sixfold to 180,000 in 15 months.
+- As Lead Product Manager at BCP, Kevin managed nine product direct reports.
+- As Lead Product Manager at BCP, Kevin reached 19.55% market share after gaining 129 basis points in seven months.
 
 ## Selected work
 
@@ -62,16 +61,23 @@ Progression: Lead Product Manager (1 year), Senior Product Manager (1.5 years), 
 
 - Trackly monitored 1,969 company career sites across 40 ATS and source types, with 128,975 job records in its public inventory on July 12, 2026. Context: Dated inventory, not a user-adoption claim. Source: https://usetrackly.app/
 - Trackly is available publicly on Apple's App Store. Context: Public distribution artifact for the native product. Source: https://apps.apple.com/us/app/trackly-apply-first/id6758267565
+- During his PayPal Checkout internship, Kevin conducted more than 20 stakeholder conversations and mapped a diagnostic environment spanning more than 15 tools. Context: Internship discovery scope, not a PayPal-wide system inventory. Source: https://portfolio.kevinastuhuaman.com/projects/paypal-ai-observability/
 - A PayPal Checkout internship prototype reduced issue-detection time by 75% in the project workflow across a diagnostic environment spanning 15+ tools. Context: Prototype-workflow result, not a PayPal-wide production claim. Source: https://portfolio.kevinastuhuaman.com/projects/paypal-ai-observability/
+- A PayPal Checkout internship auto-triage proof of concept completed triage five times faster in the project workflow. Context: Proof-of-concept workflow result, not a PayPal-wide production claim. Source: https://portfolio.kevinastuhuaman.com/projects/paypal-ai-observability/
 - At Banco de Credito BCP, Kevin's work helped more than 100,000 small businesses access a first loan. Context: Production small-business lending outcome; this claim stays in the BCP experience section, not the portfolio bio. Source: https://portfolio.kevinastuhuaman.com/projects/smb-fintech-bcp-credicorp/
 - Kevin designed and launched an online credit-evaluation platform that reduced evaluation time from seven days to one hour and generated $40M in incremental loan disbursements in nine months. Context: Production lending outcome. Source: https://portfolio.kevinastuhuaman.com/projects/smb-fintech-bcp-credicorp/
-- Kevin redesigned BCP's digital value proposition for small businesses, contributing to 14% year-over-year revenue growth and growing monthly website traffic sixfold to 180,000 users in 15 months. Context: Production digital-channel outcome; 180K is monthly website traffic, not product MAU. Source: https://portfolio.kevinastuhuaman.com/projects/smb-fintech-bcp-credicorp/
+- Kevin redesigned BCP's digital value proposition for small businesses, contributing to 14% year-over-year revenue growth while monthly website traffic grew sixfold to 180,000 in 15 months. Context: Production digital-channel outcome; 180K is monthly website traffic, never product MAU or a generic user count. Source: https://portfolio.kevinastuhuaman.com/projects/smb-fintech-bcp-credicorp/
+- As Lead Product Manager at BCP, Kevin reached 19.55% market share after gaining 129 basis points in seven months. Context: Production portfolio outcome from Kevin's public resume. Source: https://portfolio.kevinastuhuaman.com/projects/smb-fintech-bcp-credicorp/
+- As Lead Product Manager at BCP, Kevin managed nine product direct reports. Context: Public leadership-scope claim. Source: https://portfolio.kevinastuhuaman.com/resume/
+- Kevin led digital-wallet API partnerships at BCP that grew monthly sales from zero to $20M in under six months. Context: Production partnership outcome from Kevin's public resume. Source: https://portfolio.kevinastuhuaman.com/resume/
+- Kevin co-led a BCP go-to-market program that grew monthly digital sales from $24M to $55M in 11 months. Context: Production go-to-market outcome from Kevin's public resume. Source: https://portfolio.kevinastuhuaman.com/resume/
 - Trackly ships a public command-line interface and Model Context Protocol server. Context: Public technical distribution artifact; separate from the App Store listing. Source: https://github.com/trackly-app/trackly-cli
 - Kevin published Enterprise AI Interface Kit, one interactive operator workflow with seven product contracts for provenance, calibrated confidence, permissions, approval, observable traces, scoped recovery, and honest empty states. Context: An original reference product with fictional data, not employer work, production authorization logic, or a disclosure of Trackly internals. Source: https://kevinastuhuaman.github.io/enterprise-ai-interface-kit/
 - Kevin's public AI Product Builder Stack documents 65 verified tools and product patterns across eight layers, with lifecycle states and implementation evidence. Context: A maintained evidence map, not a claim that every tool is current production infrastructure. Source: https://kevinastuhuaman.github.io/ai-product-builder-stack/
 - Kevin published Human Control Plane, an interactive product study that maps consequence, reversibility, model uncertainty, and intent freshness to four human-oversight patterns. Context: A deterministic product-design study built with synthetic scenarios, not a production authorization framework. Source: https://kevinastuhuaman.github.io/human-in-the-loop-patterns/
 - Kevin published AI Product Motion Studies, three interactive product-design studies with 13 inspectable states for workflow structure, accountable recovery, and cross-surface continuity. Context: Original interfaces with synthetic data and a public motion contract, not employer product work or a disclosure of Trackly internals. Source: https://kevinastuhuaman.github.io/ai-product-motion-studies/
 - Berkeley Haas's official past-challenges page lists the Fujitsu and MoBagel AI Business Adoption Acceleration Challenge. Context: Official program context only. Kevin's participation and deliverables are public resume claims. Source: https://haas.berkeley.edu/open-innovation/programs/past-challenges/
+- At Berkeley Haas, Kevin co-launched the school's first Tech and AI Summit, which received more than 560 registrations. Context: Public campus leadership claim. Source: https://portfolio.kevinastuhuaman.com/resume/
 
 ## Public profiles
 

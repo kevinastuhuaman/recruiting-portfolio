@@ -1,5 +1,12 @@
 {
-  "lastUpdated": "2026-07-12",
+  "lastUpdated": "2026-07-13",
+  "resumeVersion": "2026-07-13",
+  "resumeLenses": [
+    "Applied AI",
+    "Enterprise Platform",
+    "Zero-to-One / Growth",
+    "Leadership"
+  ],
   "canonicalUrl": "https://portfolio.kevinastuhuaman.com/",
   "name": "Kevin Astuhuaman",
   "headline": "AI Product Manager | Ex-PayPal AI/ML Observability | Berkeley Haas MBA '26",
@@ -40,109 +47,253 @@
       "id": "trackly-inventory",
       "statement": "Trackly monitored 1,969 company career sites across 40 ATS and source types, with 128,975 job records in its public inventory on July 12, 2026.",
       "short": "1,969 company career sites across 40 source types",
+      "context": "Dated inventory, not a user-adoption claim.",
       "source": "https://usetrackly.app/",
-      "checked": "2026-07-12",
-      "state": "live public product",
-      "context": "Dated inventory, not a user-adoption claim."
+      "evidenceType": "live public product",
+      "verified": "2026-07-12",
+      "reviewDate": "2026-10-12",
+      "metrics": [
+        {
+          "value": "1,969",
+          "label": "company career sites monitored"
+        },
+        {
+          "value": "40",
+          "label": "ATS and source types"
+        },
+        {
+          "value": "128,975",
+          "label": "job records in the July 12, 2026 public inventory"
+        }
+      ]
     },
     {
       "id": "trackly-app-store",
       "statement": "Trackly is available publicly on Apple's App Store.",
       "short": "Trackly on the App Store",
+      "context": "Public distribution artifact for the native product.",
       "source": "https://apps.apple.com/us/app/trackly-apply-first/id6758267565",
-      "checked": "2026-07-12",
-      "state": "public artifact",
-      "context": "Public distribution artifact for the native product."
+      "evidenceType": "public artifact",
+      "verified": "2026-07-12",
+      "reviewDate": "2026-10-12"
+    },
+    {
+      "id": "paypal-discovery",
+      "statement": "During his PayPal Checkout internship, Kevin conducted more than 20 stakeholder conversations and mapped a diagnostic environment spanning more than 15 tools.",
+      "short": "20+ stakeholder conversations across a 15+ tool diagnostic environment",
+      "context": "Internship discovery scope, not a PayPal-wide system inventory.",
+      "source": "https://portfolio.kevinastuhuaman.com/projects/paypal-ai-observability/",
+      "evidenceType": "public-safe resume claim",
+      "verified": "2026-07-12",
+      "reviewDate": "2027-01-12",
+      "metrics": [
+        {
+          "value": "20+",
+          "label": "stakeholder conversations"
+        },
+        {
+          "value": "15+",
+          "label": "diagnostic tools mapped in internship discovery"
+        }
+      ]
     },
     {
       "id": "paypal-detection",
       "statement": "A PayPal Checkout internship prototype reduced issue-detection time by 75% in the project workflow across a diagnostic environment spanning 15+ tools.",
       "short": "75% faster issue detection in the internship prototype workflow",
-      "source": "/projects/paypal-ai-observability/",
-      "checked": "2026-07-12",
-      "state": "public-safe resume claim",
-      "context": "Prototype-workflow result, not a PayPal-wide production claim."
+      "context": "Prototype-workflow result, not a PayPal-wide production claim.",
+      "source": "https://portfolio.kevinastuhuaman.com/projects/paypal-ai-observability/",
+      "evidenceType": "public-safe resume claim",
+      "verified": "2026-07-12",
+      "reviewDate": "2027-01-12",
+      "metrics": [
+        {
+          "value": "75%",
+          "label": "faster issue detection in the prototype workflow"
+        }
+      ]
+    },
+    {
+      "id": "paypal-triage",
+      "statement": "A PayPal Checkout internship auto-triage proof of concept completed triage five times faster in the project workflow.",
+      "short": "5x faster triage in the internship POC workflow",
+      "context": "Proof-of-concept workflow result, not a PayPal-wide production claim.",
+      "source": "https://portfolio.kevinastuhuaman.com/projects/paypal-ai-observability/",
+      "evidenceType": "public-safe resume claim",
+      "verified": "2026-07-12",
+      "reviewDate": "2027-01-12",
+      "metrics": [
+        {
+          "value": "5x",
+          "label": "faster triage in the auto-triage POC"
+        }
+      ]
     },
     {
       "id": "bcp-access",
       "statement": "At Banco de Credito BCP, Kevin's work helped more than 100,000 small businesses access a first loan.",
       "short": "First-loan access for 100,000+ small businesses",
-      "source": "/projects/smb-fintech-bcp-credicorp/",
-      "checked": "2026-07-12",
-      "state": "public profile claim",
-      "context": "Production small-business lending outcome; this claim stays in the BCP experience section, not the portfolio bio."
+      "context": "Production small-business lending outcome; this claim stays in the BCP experience section, not the portfolio bio.",
+      "source": "https://portfolio.kevinastuhuaman.com/projects/smb-fintech-bcp-credicorp/",
+      "evidenceType": "public profile claim",
+      "verified": "2026-07-12",
+      "reviewDate": "2027-01-12",
+      "metrics": [
+        {
+          "value": "100K+",
+          "label": "small businesses gained first-loan access"
+        }
+      ]
     },
     {
       "id": "bcp-loans",
       "statement": "Kevin designed and launched an online credit-evaluation platform that reduced evaluation time from seven days to one hour and generated $40M in incremental loan disbursements in nine months.",
       "short": "Seven days to one hour; $40M incremental disbursements",
-      "source": "/projects/smb-fintech-bcp-credicorp/",
-      "checked": "2026-07-12",
-      "state": "public resume claim",
-      "context": "Production lending outcome."
+      "context": "Production lending outcome.",
+      "source": "https://portfolio.kevinastuhuaman.com/projects/smb-fintech-bcp-credicorp/",
+      "evidenceType": "public resume claim",
+      "verified": "2026-07-12",
+      "reviewDate": "2027-01-12",
+      "metrics": [
+        {
+          "value": "7 days → 1 hour",
+          "label": "credit-evaluation time"
+        },
+        {
+          "value": "$40M",
+          "label": "incremental loan disbursements in nine months"
+        }
+      ]
     },
     {
       "id": "bcp-digital-growth",
-      "statement": "Kevin redesigned BCP's digital value proposition for small businesses, contributing to 14% year-over-year revenue growth and growing monthly website traffic sixfold to 180,000 users in 15 months.",
+      "statement": "Kevin redesigned BCP's digital value proposition for small businesses, contributing to 14% year-over-year revenue growth while monthly website traffic grew sixfold to 180,000 in 15 months.",
       "short": "14% revenue growth; monthly website traffic grew 6x to 180K",
-      "source": "/projects/smb-fintech-bcp-credicorp/",
-      "checked": "2026-07-12",
-      "state": "public resume claim",
-      "context": "Production digital-channel outcome; 180K is monthly website traffic, not product MAU."
+      "context": "Production digital-channel outcome; 180K is monthly website traffic, never product MAU or a generic user count.",
+      "source": "https://portfolio.kevinastuhuaman.com/projects/smb-fintech-bcp-credicorp/",
+      "evidenceType": "public resume claim",
+      "verified": "2026-07-12",
+      "reviewDate": "2027-01-12",
+      "metrics": [
+        {
+          "value": "+14%",
+          "label": "year-over-year revenue growth"
+        },
+        {
+          "value": "6x to 180K",
+          "label": "monthly website traffic in 15 months"
+        }
+      ]
+    },
+    {
+      "id": "bcp-market-share",
+      "statement": "As Lead Product Manager at BCP, Kevin reached 19.55% market share after gaining 129 basis points in seven months.",
+      "short": "19.55% market share after a 129-basis-point gain",
+      "context": "Production portfolio outcome from Kevin's public resume.",
+      "source": "https://portfolio.kevinastuhuaman.com/projects/smb-fintech-bcp-credicorp/",
+      "evidenceType": "public resume claim",
+      "verified": "2026-07-12",
+      "reviewDate": "2027-01-12"
+    },
+    {
+      "id": "bcp-team",
+      "statement": "As Lead Product Manager at BCP, Kevin managed nine product direct reports.",
+      "short": "Nine product direct reports",
+      "context": "Public leadership-scope claim.",
+      "source": "https://portfolio.kevinastuhuaman.com/resume/",
+      "evidenceType": "public resume claim",
+      "verified": "2026-07-12",
+      "reviewDate": "2027-01-12"
+    },
+    {
+      "id": "bcp-wallet-sales",
+      "statement": "Kevin led digital-wallet API partnerships at BCP that grew monthly sales from zero to $20M in under six months.",
+      "short": "Digital-wallet API partnerships grew monthly sales to $20M",
+      "context": "Production partnership outcome from Kevin's public resume.",
+      "source": "https://portfolio.kevinastuhuaman.com/resume/",
+      "evidenceType": "public resume claim",
+      "verified": "2026-07-12",
+      "reviewDate": "2027-01-12"
+    },
+    {
+      "id": "bcp-digital-sales",
+      "statement": "Kevin co-led a BCP go-to-market program that grew monthly digital sales from $24M to $55M in 11 months.",
+      "short": "Monthly digital sales grew from $24M to $55M",
+      "context": "Production go-to-market outcome from Kevin's public resume.",
+      "source": "https://portfolio.kevinastuhuaman.com/resume/",
+      "evidenceType": "public resume claim",
+      "verified": "2026-07-12",
+      "reviewDate": "2027-01-12"
     },
     {
       "id": "trackly-cli-mcp",
       "statement": "Trackly ships a public command-line interface and Model Context Protocol server.",
       "short": "Public CLI and MCP server",
+      "context": "Public technical distribution artifact; separate from the App Store listing.",
       "source": "https://github.com/trackly-app/trackly-cli",
-      "checked": "2026-07-12",
-      "state": "public source repository",
-      "context": "Public technical distribution artifact; separate from the App Store listing."
+      "evidenceType": "public source repository",
+      "verified": "2026-07-12",
+      "reviewDate": "2026-10-12"
     },
     {
       "id": "enterprise-interface-kit-public",
       "statement": "Kevin published Enterprise AI Interface Kit, one interactive operator workflow with seven product contracts for provenance, calibrated confidence, permissions, approval, observable traces, scoped recovery, and honest empty states.",
       "short": "Seven product contracts in one enterprise AI operator workflow",
+      "context": "An original reference product with fictional data, not employer work, production authorization logic, or a disclosure of Trackly internals.",
       "source": "https://kevinastuhuaman.github.io/enterprise-ai-interface-kit/",
-      "checked": "2026-07-12",
-      "state": "public interactive artifact",
-      "context": "An original reference product with fictional data, not employer work, production authorization logic, or a disclosure of Trackly internals."
+      "evidenceType": "public interactive artifact",
+      "verified": "2026-07-12",
+      "reviewDate": "2026-10-12"
     },
     {
       "id": "builder-stack-public",
       "statement": "Kevin's public AI Product Builder Stack documents 65 verified tools and product patterns across eight layers, with lifecycle states and implementation evidence.",
       "short": "65 verified tools and patterns across eight capability layers",
+      "context": "A maintained evidence map, not a claim that every tool is current production infrastructure.",
       "source": "https://kevinastuhuaman.github.io/ai-product-builder-stack/",
-      "checked": "2026-07-12",
-      "state": "public interactive artifact",
-      "context": "A maintained evidence map, not a claim that every tool is current production infrastructure."
+      "evidenceType": "public interactive artifact",
+      "verified": "2026-07-12",
+      "reviewDate": "2026-10-12"
     },
     {
       "id": "human-control-plane-public",
       "statement": "Kevin published Human Control Plane, an interactive product study that maps consequence, reversibility, model uncertainty, and intent freshness to four human-oversight patterns.",
       "short": "Four human-control patterns for consequential AI actions",
+      "context": "A deterministic product-design study built with synthetic scenarios, not a production authorization framework.",
       "source": "https://kevinastuhuaman.github.io/human-in-the-loop-patterns/",
-      "checked": "2026-07-12",
-      "state": "public interactive artifact",
-      "context": "A deterministic product-design study built with synthetic scenarios, not a production authorization framework."
+      "evidenceType": "public interactive artifact",
+      "verified": "2026-07-12",
+      "reviewDate": "2026-10-12"
     },
     {
       "id": "motion-studies-public",
       "statement": "Kevin published AI Product Motion Studies, three interactive product-design studies with 13 inspectable states for workflow structure, accountable recovery, and cross-surface continuity.",
       "short": "Three motion studies with 13 inspectable product states",
+      "context": "Original interfaces with synthetic data and a public motion contract, not employer product work or a disclosure of Trackly internals.",
       "source": "https://kevinastuhuaman.github.io/ai-product-motion-studies/",
-      "checked": "2026-07-12",
-      "state": "public interactive artifact",
-      "context": "Original interfaces with synthetic data and a public motion contract, not employer product work or a disclosure of Trackly internals."
+      "evidenceType": "public interactive artifact",
+      "verified": "2026-07-12",
+      "reviewDate": "2026-10-12"
     },
     {
       "id": "berkeley-mobagel-brief",
       "statement": "Berkeley Haas's official past-challenges page lists the Fujitsu and MoBagel AI Business Adoption Acceleration Challenge.",
       "short": "Official Berkeley Fujitsu and MoBagel AI challenge",
+      "context": "Official program context only. Kevin's participation and deliverables are public resume claims.",
       "source": "https://haas.berkeley.edu/open-innovation/programs/past-challenges/",
-      "checked": "2026-07-12",
-      "state": "official program listing",
-      "context": "Official program context only. Kevin's participation and deliverables are public resume claims."
+      "evidenceType": "official program listing",
+      "verified": "2026-07-12",
+      "reviewDate": "2027-01-12"
+    },
+    {
+      "id": "berkeley-tech-ai-summit",
+      "statement": "At Berkeley Haas, Kevin co-launched the school's first Tech and AI Summit, which received more than 560 registrations.",
+      "short": "560+ registrations for the first Haas Tech and AI Summit",
+      "context": "Public campus leadership claim.",
+      "source": "https://portfolio.kevinastuhuaman.com/resume/",
+      "evidenceType": "public resume claim",
+      "verified": "2026-07-12",
+      "reviewDate": "2027-01-12"
     }
   ],
   "links": {

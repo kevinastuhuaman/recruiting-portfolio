@@ -80,6 +80,8 @@ Sitemap: ${absolute("/sitemap.xml")}
 
 const profile = {
   lastUpdated: site.updated,
+  resumeVersion: site.updated,
+  resumeLenses: ["Applied AI", "Enterprise Platform", "Zero-to-One / Growth", "Leadership"],
   canonicalUrl: `${site.origin}/`,
   name: site.name,
   headline: site.title,
@@ -121,12 +123,13 @@ const proofRegistry = {
   schemaVersion: 1,
   lastUpdated: site.updated,
   canonicalUrl: absolute("/proof/"),
-  claims: publicClaims.map(({ id, statement, source, checked, state, context }) => ({
+  claims: publicClaims.map(({ id, statement, source, verified, reviewDate, evidenceType, context }) => ({
     id,
     statement,
     source: absolute(source),
-    checked,
-    state,
+    verified,
+    reviewDate,
+    evidenceType,
     context,
   })),
 };
@@ -280,6 +283,10 @@ const resumeMarkdown = `# Kevin Astuhuaman
 AI Product Manager | Ex-PayPal AI/ML Observability | Berkeley Haas MBA '26 | ${site.location}
 
 LinkedIn: ${links.linkedin} | GitHub: ${links.github} | Portfolio: ${site.origin}
+
+Version: ${site.updated}
+
+Role lenses: Applied AI | Enterprise Platform | Zero-to-One / Growth | Leadership
 
 ## Experience
 

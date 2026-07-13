@@ -2,6 +2,7 @@
 import { Download, ExternalLink, Mail, Printer } from "@lucide/astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { experience, links, site } from "../../data/site.js";
+import { claimsById } from "../../data/claims.js";
 ---
 
 <BaseLayout
@@ -32,13 +33,14 @@ import { experience, links, site } from "../../data/site.js";
     <div class="resume-toolbar">
       <div>
         <p class="eyebrow">Emphasis</p>
-        <p>Highlight the evidence most relevant to the role. The full chronology always remains visible.</p>
+        <p>Version {site.updated}. Highlight the evidence most relevant to the role. The full chronology always remains visible.</p>
       </div>
       <fieldset data-resume-lenses>
         <legend class="sr-only">Resume emphasis</legend>
         <label><input type="radio" name="resume-lens" value="all" checked /> All</label>
         <label><input type="radio" name="resume-lens" value="ai" /> Applied AI</label>
-        <label><input type="radio" name="resume-lens" value="platform" /> Platform</label>
+        <label><input type="radio" name="resume-lens" value="platform" /> Enterprise Platform</label>
+        <label><input type="radio" name="resume-lens" value="growth" /> Zero-to-One / Growth</label>
         <label><input type="radio" name="resume-lens" value="leadership" /> Leadership</label>
       </fieldset>
     </div>
@@ -67,9 +69,8 @@ import { experience, links, site } from "../../data/site.js";
           <p>{experience[0].summary}</p>
           <ul>
             <li class="resume-bullet lens-ai lens-leadership">Drove strategy for a Checkout AI observability prototype across a diagnostic environment serving a multi-sided marketplace.</li>
-            <li class="resume-bullet lens-ai lens-platform">Built an agentic diagnostic workflow using Claude, Datadog, APIs, and MCP patterns, reducing issue-detection time 75% in the internship prototype workflow.</li>
-            <li class="resume-bullet lens-platform">Unified the investigation path across 15+ diagnostic tools and defined success measures for mean time to detect and resolve.</li>
-            <li class="resume-bullet lens-ai">Designed an auto-triage POC that diagnosed issues, estimated impact, and routed alerts to owners, completing triage 5x faster.</li>
+            <li class="resume-bullet lens-ai lens-platform">{claimsById["paypal-detection"].statement}</li>
+            <li class="resume-bullet lens-ai">{claimsById["paypal-triage"].statement}</li>
           </ul>
         </article>
 
@@ -80,9 +81,9 @@ import { experience, links, site } from "../../data/site.js";
           </header>
           <p>{experience[1].summary}</p>
           <ul>
-            <li class="resume-bullet lens-ai lens-platform">Built the direct career-page monitoring, normalization, matching, eval, and delivery system behind a public inventory spanning 1,969 companies and 40 ATS/source types as of July 12, 2026.</li>
+            <li class="resume-bullet lens-ai lens-platform lens-growth">{claimsById["trackly-inventory"].statement}</li>
             <li class="resume-bullet lens-ai">Designed LLM classification and review workflows for function, seniority, region, sponsorship, salary, and experience signals, including disagreement review and guarded backfills.</li>
-            <li class="resume-bullet lens-platform">Shipped one product across web, iOS, macOS, a public npm CLI, and an MCP server, with shared API contracts and interface-specific workflows.</li>
+            <li class="resume-bullet lens-platform lens-growth">Shipped one product across web, iOS, macOS, a public npm CLI, and an MCP server, with shared API contracts and interface-specific workflows.</li>
             <li class="resume-bullet lens-ai lens-leadership">Built streaming chat and real-time voice agent workflows with tool status, confirmations, citations, interruption handling, model failover, and observability.</li>
           </ul>
         </article>
@@ -95,8 +96,8 @@ import { experience, links, site } from "../../data/site.js";
           <p>{experience[2].summary}</p>
           <ul>
             <li class="resume-bullet lens-ai">Conducted product and competitive research around how non-technical business users adopt AI and machine-learning workflows.</li>
-            <li class="resume-bullet lens-ai lens-leadership">Contributed feature and UX concepts, a high-fidelity Figma prototype, and a roadmap linking user needs to product capabilities.</li>
-            <li class="resume-bullet lens-leadership">Recommended go-to-market positioning, partnership channels, and usage-based pricing for United States expansion.</li>
+            <li class="resume-bullet lens-ai lens-leadership lens-growth">Contributed feature and UX concepts, a high-fidelity Figma prototype, and a roadmap linking user needs to product capabilities.</li>
+            <li class="resume-bullet lens-leadership lens-growth">Recommended go-to-market positioning, partnership channels, and usage-based pricing for United States expansion.</li>
           </ul>
         </article>
 
@@ -107,11 +108,11 @@ import { experience, links, site } from "../../data/site.js";
           </header>
           <p>{experience[3].summary}</p>
           <ul>
-            <li class="resume-bullet lens-leadership">Helped more than 100,000 small businesses access a first loan.</li>
-            <li class="resume-bullet lens-platform lens-leadership">Designed and launched an online credit-evaluation platform that reduced evaluation time from seven days to one hour and generated $40M in incremental loan disbursements in nine months.</li>
-            <li class="resume-bullet lens-platform">Redesigned the digital value proposition for small businesses, contributing to 14% year-over-year revenue growth and growing monthly website traffic 6x to 180K users in 15 months.</li>
-            <li class="resume-bullet lens-leadership">Managed nine product direct reports and reached 19.55% market share after gaining 129 basis points in seven months.</li>
-            <li class="resume-bullet lens-platform lens-leadership">Led digital-wallet API partnerships that grew monthly sales from zero to $20M in under six months and co-led a GTM program that grew monthly digital sales from $24M to $55M in 11 months.</li>
+            <li class="resume-bullet lens-leadership">{claimsById["bcp-access"].statement}</li>
+            <li class="resume-bullet lens-platform lens-leadership lens-growth">{claimsById["bcp-loans"].statement}</li>
+            <li class="resume-bullet lens-platform lens-growth">{claimsById["bcp-digital-growth"].statement}</li>
+            <li class="resume-bullet lens-leadership lens-growth">{claimsById["bcp-team"].statement} {claimsById["bcp-market-share"].statement}</li>
+            <li class="resume-bullet lens-platform lens-leadership lens-growth">{claimsById["bcp-wallet-sales"].statement} {claimsById["bcp-digital-sales"].statement}</li>
           </ul>
         </article>
       </section>
@@ -125,7 +126,7 @@ import { experience, links, site } from "../../data/site.js";
         <ul>
           <li>Built Trackly across App Store, web, public npm CLI, and MCP; selected for Microsoft for Startups and featured by Berkeley Haas.</li>
           <li>Worked on Berkeley's Fujitsu and MoBagel Open Innovation challenge across AI product strategy, high-fidelity Figma prototyping, roadmap, business model, and go-to-market recommendations.</li>
-          <li>VP, Tech Club; co-launched Haas's first Tech &amp; AI Summit with 560+ registrations.</li>
+          <li>{claimsById["berkeley-tech-ai-summit"].statement}</li>
         </ul>
         <article class="education-row">
           <div><h3>Pontifical Catholic University of Peru</h3><strong>Bachelor of Science, Industrial Engineering</strong></div>
@@ -325,9 +326,10 @@ import { experience, links, site } from "../../data/site.js";
     color: #999994;
   }
 
-  .resume-document[data-lens="ai"] .lens-ai,
-  .resume-document[data-lens="platform"] .lens-platform,
-  .resume-document[data-lens="leadership"] .lens-leadership {
+  .resume-document[data-lens="ai"] .resume-bullet.lens-ai,
+  .resume-document[data-lens="platform"] .resume-bullet.lens-platform,
+  .resume-document[data-lens="leadership"] .resume-bullet.lens-leadership,
+  .resume-document[data-lens="growth"] .resume-bullet.lens-growth {
     color: #111;
     font-weight: 650;
   }

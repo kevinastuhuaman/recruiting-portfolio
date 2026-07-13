@@ -4,6 +4,10 @@ AI Product Manager | Ex-PayPal AI/ML Observability | Berkeley Haas MBA '26 | Bay
 
 LinkedIn: https://www.linkedin.com/in/kevinastuhuaman | GitHub: https://github.com/kevinastuhuaman | Portfolio: https://portfolio.kevinastuhuaman.com
 
+Version: 2026-07-13
+
+Role lenses: Applied AI | Enterprise Platform | Zero-to-One / Growth | Leadership
+
 ## Experience
 
 ### PayPal Checkout
@@ -12,9 +16,8 @@ LinkedIn: https://www.linkedin.com/in/kevinastuhuaman | GitHub: https://github.c
 
 Defined and prototyped an AI-assisted observability workflow for checkout diagnostics.
 
-- Unified the investigation path across 15+ diagnostic tools with success metrics for detection and resolution.
-- Built an agentic diagnostic prototype using Claude, Datadog, APIs, and MCP patterns, reducing issue-detection time 75% in the project workflow.
-- Designed auto-triage orchestration that diagnosed issues, estimated impact, and routed alerts; the POC completed triage 5x faster.
+- A PayPal Checkout internship prototype reduced issue-detection time by 75% in the project workflow across a diagnostic environment spanning 15+ tools.
+- A PayPal Checkout internship auto-triage proof of concept completed triage five times faster in the project workflow.
 
 ### Trackly
 
@@ -43,11 +46,11 @@ Worked on AI product adoption, a high-fidelity Figma prototype, roadmap, busines
 
 Progression: Lead Product Manager (1 year), Senior Product Manager (1.5 years), Product Manager (1.5 years), Product Analyst (2 years).
 
-- Helped more than 100,000 small businesses access a first loan.
-- Designed and launched an online credit-evaluation platform that reduced evaluation time from seven days to one hour and generated $40M in incremental loan disbursements in nine months.
-- Redesigned the digital value proposition for small businesses, contributing to 14% year-over-year revenue growth and growing monthly website traffic 6x to 180K users in 15 months.
-- Managed a team of nine product direct reports and partnered with risk, compliance, design, engineering, analytics, and commercial teams.
-- Reached 19.55% market share after gaining 129 basis points in seven months.
+- At Banco de Credito BCP, Kevin's work helped more than 100,000 small businesses access a first loan.
+- Kevin designed and launched an online credit-evaluation platform that reduced evaluation time from seven days to one hour and generated $40M in incremental loan disbursements in nine months.
+- Kevin redesigned BCP's digital value proposition for small businesses, contributing to 14% year-over-year revenue growth while monthly website traffic grew sixfold to 180,000 in 15 months.
+- As Lead Product Manager at BCP, Kevin managed nine product direct reports.
+- As Lead Product Manager at BCP, Kevin reached 19.55% market share after gaining 129 basis points in seven months.
 
 ## Education
 
