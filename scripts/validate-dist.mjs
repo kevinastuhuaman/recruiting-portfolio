@@ -71,11 +71,29 @@ for (const path of ["next/index.html", "recruiter-packet.md"]) {
   }
 }
 
-for (const path of ["proof.json", "assistant-corpus.json", "2e43f7d61916408ea525527e4bc9b5c7.txt", ".well-known/agent-skills/index.json", ".well-known/agent-skills/site-navigation/SKILL.md"]) {
+for (const path of [
+  "proof.json",
+  "assistant-corpus.json",
+  "2e43f7d61916408ea525527e4bc9b5c7.txt",
+  ".well-known/agent-skills/index.json",
+  ".well-known/agent-skills/site-navigation/SKILL.md",
+]) {
   try {
     await stat(new URL(path, dist));
   } catch {
     failures.push(`${path}: missing public compatibility artifact`);
+  }
+}
+
+for (const [path, expected] of Object.entries({
+  "google03e4f31940241210.html": "google-site-verification: google03e4f31940241210.html",
+  "google5e5c6d4f15731b83.html": "google-site-verification: google5e5c6d4f15731b83.html",
+})) {
+  try {
+    const contents = await readFile(new URL(path, dist), "utf8");
+    if (contents.trim() !== expected) failures.push(`${path}: incorrect Google verification token`);
+  } catch {
+    failures.push(`${path}: missing Google verification artifact`);
   }
 }
 
