@@ -426,6 +426,49 @@ test("public assistant voice input stays editable and voice playback uses only t
   await expect.poll(() => page.evaluate(() => window.sessionStorage.getItem("portfolio_spoken_answer"))).toBe("Kevin built an agentic observability prototype for PayPal Checkout.");
 });
 
+test("submitting during dictation suppresses the browser abort error", async ({ page }) => {
+  await page.addInitScript(() => {
+    class MockRecognition {
+      continuous = false;
+      interimResults = false;
+      lang = "";
+      onstart = null;
+      onresult = null;
+      onerror = null;
+      onend = null;
+      start() { this.onstart?.(); }
+      stop() { this.onend?.(); }
+      abort() {
+        window.setTimeout(() => {
+          this.onerror?.({ error: "aborted" });
+          this.onend?.();
+        }, 0);
+      }
+    }
+    Object.defineProperty(window, "SpeechRecognition", { configurable: true, value: MockRecognition });
+  });
+  let releaseResponse;
+  const responseGate = new Promise((resolve) => { releaseResponse = resolve; });
+  await page.route("https://closeai.mba/api/portfolio/ask", async (route) => {
+    await responseGate;
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ answer: "Public answer.", citations: [], corpusVersion: "test" }),
+    });
+  });
+
+  await page.goto("/ask/");
+  await page.getByLabel("Question about Kevin's work").fill("What did Kevin build at PayPal?");
+  await page.getByRole("button", { name: "Dictate question" }).click();
+  await expect(page.getByRole("status")).toHaveText("Listening...");
+  await page.getByRole("button", { name: "Ask", exact: true }).click();
+  await page.waitForTimeout(20);
+  await expect(page.getByRole("status")).toHaveText("Checking the public portfolio...");
+  releaseResponse();
+  await expect(page.getByRole("status")).toHaveText("Answer complete.");
+});
+
 test("public assistant failure preserves the static cited fallback", async ({ page }) => {
   await page.route("https://closeai.mba/api/portfolio/ask", async (route) => {
     await route.fulfill({

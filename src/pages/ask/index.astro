@@ -289,6 +289,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
         if (captured) setQuestion(captured);
       };
       recognition.onerror = (event) => {
+        if (suppressRecognitionStatus) return;
         failed = true;
         const denied = event.error === "not-allowed" || event.error === "service-not-allowed";
         setStatus(denied ? "Microphone permission was not granted." : "Voice input was unavailable. Type the question instead.");
