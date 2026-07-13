@@ -473,6 +473,108 @@ test("public assistant voice input stays editable and voice playback uses only t
   await expect.poll(() => page.evaluate(() => window.sessionStorage.getItem("portfolio_spoken_answer"))).toBe("Kevin built an agentic observability prototype for PayPal Checkout.");
 });
 
+test("dictation cancels page speech without surfacing stale playback errors", async ({ page }) => {
+  await page.addInitScript(() => {
+    class MockRecognition {
+      continuous = false;
+      interimResults = false;
+      lang = "";
+      onstart = null;
+      onresult = null;
+      onerror = null;
+      onend = null;
+      start() { this.onstart?.(); }
+      stop() { this.onend?.(); }
+      abort() { this.onend?.(); }
+    }
+    Object.defineProperty(window, "SpeechRecognition", { configurable: true, value: MockRecognition });
+    Object.defineProperty(window, "SpeechSynthesisUtterance", {
+      configurable: true,
+      value: class {
+        constructor(text) { this.text = text; }
+      },
+    });
+    Object.defineProperty(window, "speechSynthesis", {
+      configurable: true,
+      value: {
+        speaking: false,
+        current: null,
+        cancel() {
+          const canceled = this.current;
+          this.current = null;
+          this.speaking = false;
+          window.setTimeout(() => canceled?.onerror?.(), 0);
+        },
+        speak(utterance) {
+          this.current = utterance;
+          this.speaking = true;
+        },
+      },
+    });
+  });
+  await page.route("https://closeai.mba/api/portfolio/ask", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ answer: "Public answer.", citations: [], corpusVersion: "test" }),
+    });
+  });
+
+  await page.goto("/ask/");
+  const question = page.getByLabel("Question about Kevin's work");
+  await question.fill("What did Kevin build at PayPal?");
+  await page.getByRole("button", { name: "Ask", exact: true }).click();
+  await expect(page.getByRole("status")).toHaveText("Answer complete.");
+
+  const playback = page.getByRole("button", { name: "Read answer aloud" });
+  await playback.click();
+  await expect(page.getByRole("status")).toHaveText("Reading answer aloud.");
+  await playback.click();
+  await page.waitForTimeout(20);
+  await expect(page.getByRole("status")).toHaveText("Answer complete.");
+
+  await playback.click();
+  await page.getByRole("button", { name: "Dictate question" }).click();
+  await page.waitForTimeout(20);
+  await expect(page.getByRole("status")).toHaveText("Listening...");
+  await expect(playback).toBeDisabled();
+  await expect(question).toHaveValue("What did Kevin build at PayPal?");
+});
+
+test("stale recognition sessions cannot tear down the current dictation", async ({ page }) => {
+  await page.addInitScript(() => {
+    let nextId = 0;
+    class MockRecognition {
+      continuous = false;
+      interimResults = false;
+      lang = "";
+      onstart = null;
+      onresult = null;
+      onerror = null;
+      onend = null;
+      constructor() { this.id = nextId += 1; }
+      start() {
+        window.setTimeout(() => this.onstart?.(), this.id === 1 ? 20 : 0);
+      }
+      stop() { window.setTimeout(() => this.onend?.(), 0); }
+      abort() { window.setTimeout(() => this.onend?.(), 0); }
+    }
+    Object.defineProperty(window, "SpeechRecognition", { configurable: true, value: MockRecognition });
+  });
+
+  await page.goto("/ask/");
+  const dictate = page.getByRole("button", { name: "Dictate question" });
+  await dictate.evaluate((button) => {
+    button.click();
+    button.click();
+  });
+  await page.waitForTimeout(40);
+  const stopDictation = page.getByRole("button", { name: "Stop dictation" });
+  await expect(stopDictation).toHaveAttribute("aria-pressed", "true");
+  await stopDictation.click();
+  await expect(page.getByRole("button", { name: "Dictate question" })).toHaveAttribute("aria-pressed", "false");
+});
+
 test("submitting during dictation suppresses the browser abort error", async ({ page }) => {
   await page.addInitScript(() => {
     class MockRecognition {
