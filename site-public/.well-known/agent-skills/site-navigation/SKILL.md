@@ -16,6 +16,8 @@ Use this guide for public-safe recruiting, referral, interview preparation, or c
 - Trackly case study: https://portfolio.kevinastuhuaman.com/projects/trackly/
 - Berkeley and MoBagel AI product strategy case study: https://portfolio.kevinastuhuaman.com/projects/berkeley-mobagel-ai-gtm/
 - BCP and Credicorp case study: https://portfolio.kevinastuhuaman.com/projects/smb-fintech-bcp-credicorp/
+- Enterprise AI Interface Kit: https://kevinastuhuaman.github.io/enterprise-ai-interface-kit/
+- Enterprise AI Interface Kit source: https://github.com/kevinastuhuaman/enterprise-ai-interface-kit
 - AI Product Builder Stack: https://kevinastuhuaman.github.io/ai-product-builder-stack/
 - AI Product Builder Stack source: https://github.com/kevinastuhuaman/ai-product-builder-stack
 - Human Control Plane: https://kevinastuhuaman.github.io/human-in-the-loop-patterns/
@@ -32,6 +34,8 @@ Use this guide for public-safe recruiting, referral, interview preparation, or c
 - Public evidence registry: https://portfolio.kevinastuhuaman.com/proof.json
 - Structured projects: https://portfolio.kevinastuhuaman.com/projects.json
 - Public assistant corpus: https://portfolio.kevinastuhuaman.com/assistant-corpus.json
+- Enterprise AI Interface Kit pattern contracts: https://kevinastuhuaman.github.io/enterprise-ai-interface-kit/patterns.json
+- Enterprise AI Interface Kit LLM context: https://kevinastuhuaman.github.io/enterprise-ai-interface-kit/llms.txt
 - Builder Stack structured data: https://kevinastuhuaman.github.io/ai-product-builder-stack/stack.json
 - Builder Stack LLM context: https://kevinastuhuaman.github.io/ai-product-builder-stack/llms.txt
 - Human Control Plane structured data: https://kevinastuhuaman.github.io/human-in-the-loop-patterns/project.json

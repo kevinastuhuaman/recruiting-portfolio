@@ -18,6 +18,8 @@ export const links = {
   trackly: "https://usetrackly.app/",
   appStore: "https://apps.apple.com/us/app/trackly-apply-first/id6758267565",
   tracklyCli: "https://github.com/trackly-app/trackly-cli",
+  interfaceKit: "https://kevinastuhuaman.github.io/enterprise-ai-interface-kit/",
+  interfaceKitRepo: "https://github.com/kevinastuhuaman/enterprise-ai-interface-kit",
   builderStack: "https://kevinastuhuaman.github.io/ai-product-builder-stack/",
   builderStackRepo: "https://github.com/kevinastuhuaman/ai-product-builder-stack",
   humanControlPlane: "https://kevinastuhuaman.github.io/human-in-the-loop-patterns/",
@@ -121,6 +123,15 @@ export const publicClaims = [
     context: "Public technical distribution artifact; separate from the App Store listing.",
   },
   {
+    id: "enterprise-interface-kit-public",
+    statement: "Kevin published Enterprise AI Interface Kit, one interactive operator workflow with seven product contracts for provenance, calibrated confidence, permissions, approval, observable traces, scoped recovery, and honest empty states.",
+    short: "Seven product contracts in one enterprise AI operator workflow",
+    source: links.interfaceKit,
+    checked: "2026-07-12",
+    state: "public interactive artifact",
+    context: "An original reference product with fictional data, not employer work, production authorization logic, or a disclosure of Trackly internals.",
+  },
+  {
     id: "builder-stack-public",
     statement: "Kevin's public AI Product Builder Stack documents 65 verified tools and product patterns across eight layers, with lifecycle states and implementation evidence.",
     short: "65 verified tools and patterns across eight capability layers",
@@ -174,6 +185,13 @@ export const assistantCorpus = {
       url: `${site.origin}/projects/trackly/`,
       keywords: ["trackly", "agent", "agents", "job search", "career pages", "scraping", "matching", "eval", "classification", "chat", "voice", "ios", "macos", "cli", "mcp", "builder", "computer use", "browser use", "browser agent", "human in the loop", "human-in-the-loop", "harness", "chrome", "ats"],
       content: "Kevin built Trackly during his MBA job search after seeing strong roles appear on company career pages before job boards. The live product monitors direct sources, normalizes and deduplicates jobs, applies freshness and false-zero guards, classifies job attributes, explains matches, and delivers the same product system through web, iOS, macOS, a public CLI, MCP, chat, and voice. On July 12, 2026, Trackly's public inventory showed 1,969 monitored company career sites, 40 ATS and source types, and 128,975 job records. Kevin also built a recent human-reviewed browser-agent harness: Trackly supplies a user-selected application queue and job context through its CLI and MCP; a domain-specific policy layer handles ATS mechanics, form integrity, and recovery; Codex controls Chrome to prepare forms; and the workflow pauses before submission for fresh, job-specific human approval. Subjective answers and consequential actions remain visible to the user, and any edit, navigation, reload, or reconnect invalidates prior approval. The transferable product pattern is useful when the final workflow lives in a browser instead of a reliable API, including recruiting, financial operations, sales portals, and CRM workflows. It is a recent working experiment, not a claim of fully autonomous application submission. Kevin owned the product problem, prioritization, quality thresholds, interaction decisions, release decisions, operation, and hands-on implementation. AI coding agents accelerated implementation and review but did not decide the product promise or release evidence.",
+    },
+    {
+      id: "enterprise-interface-kit",
+      title: "Enterprise AI Interface Kit",
+      url: `${site.origin}/#enterprise-interface-kit`,
+      keywords: ["enterprise ai interface", "enterprise ai interfaces", "enterprise ai ux", "product design", "design system", "provenance", "calibrated confidence", "permissions", "approval", "observable trace", "failure recovery", "empty state", "human in the loop", "human-in-the-loop", "ai trust", "operator workflow", "figma-level"],
+      content: "Kevin published Enterprise AI Interface Kit, an original reference product that turns seven recurring enterprise AI questions into explicit interface contracts. One synthetic account-onboarding workflow connects evidence provenance, calibrated confidence, role-based permission boundaries, approval bound to an exact state, observable run events without private reasoning, scoped failure recovery, and an honest no-evidence state. Reviewers can switch across five operational states and four user roles while the evidence, authority, approval, recovery path, and next action update together. The artifact publishes responsive Playwright and Axe accessibility checks, decision records, patterns.json, project.json, llms.txt, a public IP boundary, and source code. All companies, people, policies, and records are fictional. It is product-design evidence, not employer work, production authorization logic, or a disclosure of Trackly internals.",
     },
     {
       id: "builder-stack",

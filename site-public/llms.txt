@@ -10,6 +10,7 @@ Kevin's most recent enterprise AI proof is an agentic observability prototype at
 - [PayPal AI observability case study](https://portfolio.kevinastuhuaman.com/projects/paypal-ai-observability/): Agentic investigation, product decisions, prototype outcomes, and public-safety boundaries
 - [Trackly case study](https://portfolio.kevinastuhuaman.com/projects/trackly/): Product decisions, system quality, and cross-platform delivery
 - [Berkeley and MoBagel case study](https://portfolio.kevinastuhuaman.com/projects/berkeley-mobagel-ai-gtm/): AI product adoption, high-fidelity prototyping, roadmap, business model, and GTM
+- [Enterprise AI Interface Kit](https://kevinastuhuaman.github.io/enterprise-ai-interface-kit/): Seven product contracts for evidence, confidence, authority, approval, observable traces, recovery, and honest absence in one operator workflow
 - [AI Product Builder Stack](https://kevinastuhuaman.github.io/ai-product-builder-stack/): 65 verified tools and product patterns organized by outcome, evidence, project, and lifecycle state
 - [Human Control Plane](https://kevinastuhuaman.github.io/human-in-the-loop-patterns/): Interactive product study for Undo, confirmation, fresh approval, and accountable-owner patterns
 - [AI Product Motion Studies](https://kevinastuhuaman.github.io/ai-product-motion-studies/): Three interactive studies for workflow structure, accountable recovery, and cross-surface product continuity
@@ -24,6 +25,8 @@ Kevin's most recent enterprise AI proof is an agentic observability prototype at
 - [Structured profile](https://portfolio.kevinastuhuaman.com/profile.json): Public identity, experience, and claims
 - [Structured projects](https://portfolio.kevinastuhuaman.com/projects.json): Project summaries and canonical links
 - [Public assistant corpus](https://portfolio.kevinastuhuaman.com/assistant-corpus.json): Pre-approved recruiter questions, answers, and citations
+- [Enterprise AI Interface Kit pattern contracts](https://kevinastuhuaman.github.io/enterprise-ai-interface-kit/patterns.json): Machine-readable product questions, minimum contracts, and failures prevented
+- [Enterprise AI Interface Kit LLM context](https://kevinastuhuaman.github.io/enterprise-ai-interface-kit/llms.txt): Plain-text product rationale, reference states, role boundaries, and public boundary
 - [Builder Stack structured data](https://kevinastuhuaman.github.io/ai-product-builder-stack/stack.json): Machine-readable technical range and implementation evidence
 - [Builder Stack LLM context](https://kevinastuhuaman.github.io/ai-product-builder-stack/llms.txt): Plain-text map of tools, systems, and lifecycle states
 - [Human Control Plane structured data](https://kevinastuhuaman.github.io/human-in-the-loop-patterns/project.json): Machine-readable scenarios, policies, thresholds, and public boundary

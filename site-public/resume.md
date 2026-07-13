@@ -60,6 +60,7 @@ Progression: Lead Product Manager (1 year), Senior Product Manager (1.5 years), 
 - Trackly: https://usetrackly.app/
 - Trackly App Store: https://apps.apple.com/us/app/trackly-apply-first/id6758267565
 - Trackly CLI and MCP: https://github.com/trackly-app/trackly-cli
+- Enterprise AI Interface Kit: https://kevinastuhuaman.github.io/enterprise-ai-interface-kit/
 - AI Product Builder Stack: https://kevinastuhuaman.github.io/ai-product-builder-stack/
 - Human Control Plane: https://kevinastuhuaman.github.io/human-in-the-loop-patterns/
 - AI Product Motion Studies: https://kevinastuhuaman.github.io/ai-product-motion-studies/
