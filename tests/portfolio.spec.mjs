@@ -211,8 +211,34 @@ test("human control proof is visible and machine-readable", async ({ page, reque
   expect(claim?.context).toMatch(/not a production authorization framework/i);
 });
 
+test("motion design proof is visible and machine-readable", async ({ page, request }) => {
+  await page.goto("/");
+  const section = page.locator("#motion-studies");
+  await expect(section.getByRole("heading", { name: "Motion should explain what changed." })).toBeVisible();
+  await expect(section.getByRole("link", { name: /Explore the motion studies/i })).toHaveAttribute(
+    "href",
+    "https://kevinastuhuaman.github.io/ai-product-motion-studies/",
+  );
+  await expect(section.getByRole("link", { name: /Inspect the motion spec/i })).toHaveAttribute(
+    "href",
+    "https://github.com/kevinastuhuaman/ai-product-motion-studies",
+  );
+
+  const [corpusResponse, proofResponse] = await Promise.all([
+    request.get("/assistant-corpus.json"),
+    request.get("/proof.json"),
+  ]);
+  const corpus = await corpusResponse.json();
+  const proof = await proofResponse.json();
+  const entry = corpus.entries.find((item) => item.id === "motion-studies");
+  const claim = proof.claims.find((item) => item.id === "motion-studies-public");
+  expect(entry?.content).toMatch(/13 manually inspectable states/i);
+  expect(entry?.keywords).toEqual(expect.arrayContaining(["design taste", "reduced motion", "enterprise ai"]));
+  expect(claim?.context).toMatch(/synthetic data/i);
+});
+
 test("public machine files and resume PDF are fetchable", async ({ request }) => {
-  for (const path of ["/robots.txt", "/sitemap.xml", "/llms.txt", "/profile.json", "/projects.json", "/proof.json", "/assistant-corpus.json", "/resume.md", "/2e43f7d61916408ea525527e4bc9b5c7.txt", "/.well-known/agent-skills/index.json", "/.well-known/agent-skills/site-navigation/SKILL.md", "/kevin-astuhuaman-resume.pdf", "/assets/human-control-plane-preview.png"]) {
+  for (const path of ["/robots.txt", "/sitemap.xml", "/llms.txt", "/profile.json", "/projects.json", "/proof.json", "/assistant-corpus.json", "/resume.md", "/2e43f7d61916408ea525527e4bc9b5c7.txt", "/.well-known/agent-skills/index.json", "/.well-known/agent-skills/site-navigation/SKILL.md", "/kevin-astuhuaman-resume.pdf", "/assets/human-control-plane-preview.png", "/assets/motion-studies-preview.png"]) {
     const response = await request.get(path);
     expect(response.status(), path).toBe(200);
   }
@@ -251,6 +277,23 @@ test("machine entry points link the Human Control Plane", async ({ request }) =>
   expect(profile.links.humanControlPlane).toBe("https://kevinastuhuaman.github.io/human-in-the-loop-patterns/");
   expect(profile.links.humanControlPlaneSource).toBe("https://github.com/kevinastuhuaman/human-in-the-loop-patterns");
   expect(skill).toContain("Human Control Plane LLM context");
+});
+
+test("machine entry points link AI Product Motion Studies", async ({ request }) => {
+  const [llmsResponse, profileResponse, skillResponse] = await Promise.all([
+    request.get("/llms.txt"),
+    request.get("/profile.json"),
+    request.get("/.well-known/agent-skills/site-navigation/SKILL.md"),
+  ]);
+
+  const llms = await llmsResponse.text();
+  const profile = await profileResponse.json();
+  const skill = await skillResponse.text();
+  expect(llms).toContain("https://kevinastuhuaman.github.io/ai-product-motion-studies/");
+  expect(llms).toContain("ai-product-motion-studies/motion-spec.json");
+  expect(profile.links.motionStudies).toBe("https://kevinastuhuaman.github.io/ai-product-motion-studies/");
+  expect(profile.links.motionStudiesSource).toBe("https://github.com/kevinastuhuaman/ai-product-motion-studies");
+  expect(skill).toContain("Motion Studies LLM context");
 });
 
 test("404 output is excluded from indexing and structured data", async ({ page }) => {

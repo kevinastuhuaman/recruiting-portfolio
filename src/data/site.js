@@ -22,6 +22,8 @@ export const links = {
   builderStackRepo: "https://github.com/kevinastuhuaman/ai-product-builder-stack",
   humanControlPlane: "https://kevinastuhuaman.github.io/human-in-the-loop-patterns/",
   humanControlPlaneRepo: "https://github.com/kevinastuhuaman/human-in-the-loop-patterns",
+  motionStudies: "https://kevinastuhuaman.github.io/ai-product-motion-studies/",
+  motionStudiesRepo: "https://github.com/kevinastuhuaman/ai-product-motion-studies",
   gpt56: "https://openai.com/index/gpt-5-6/",
   berkeleyMobagel:
     "https://haas.berkeley.edu/open-innovation/programs/past-challenges/",
@@ -137,6 +139,15 @@ export const publicClaims = [
     context: "A deterministic product-design study built with synthetic scenarios, not a production authorization framework.",
   },
   {
+    id: "motion-studies-public",
+    statement: "Kevin published AI Product Motion Studies, three interactive product-design studies with 13 inspectable states for workflow structure, accountable recovery, and cross-surface continuity.",
+    short: "Three motion studies with 13 inspectable product states",
+    source: links.motionStudies,
+    checked: "2026-07-12",
+    state: "public interactive artifact",
+    context: "Original interfaces with synthetic data and a public motion contract, not employer product work or a disclosure of Trackly internals.",
+  },
+  {
     id: "berkeley-mobagel-brief",
     statement: "Berkeley Haas's official past-challenges page lists the Fujitsu and MoBagel AI Business Adoption Acceleration Challenge.",
     short: "Official Berkeley Fujitsu and MoBagel AI challenge",
@@ -177,6 +188,13 @@ export const assistantCorpus = {
       url: `${site.origin}/#human-control-plane`,
       keywords: ["human in the loop", "human-in-the-loop", "approval", "undo", "agent safety", "ai governance", "consequence", "reversibility", "model uncertainty", "intent freshness", "product design", "enterprise ai"],
       content: "Kevin published Human Control Plane, an original interactive product study for choosing human oversight patterns in consequential AI systems. Users can change consequence, reversibility, model uncertainty, and intent freshness; one deterministic policy model then recommends auto-execute with Undo, preview and confirm, preview with fresh approval, or accountable approval. Four synthetic scenarios make the tradeoffs concrete: a bounded customer refund, CRM enrichment, a human-reviewed job application, and a privileged access change. The interface demonstrates approval bound to committed state, automatic invalidation after an input change, explicit ownership, recovery design, and an audit record containing policy inputs, owner, action, and outcome rather than private chain-of-thought. The public repository contains decision records, responsive interaction tests, Axe accessibility checks, an IP boundary, project.json, and llms.txt. It is a product-design artifact, not a production authorization framework or a disclosure of Trackly internals.",
+    },
+    {
+      id: "motion-studies",
+      title: "AI Product Motion Studies",
+      url: `${site.origin}/#motion-studies`,
+      keywords: ["motion design", "interaction design", "product design", "design taste", "workflow", "recovery", "failure state", "cross-platform", "cross-surface", "reduced motion", "accessibility", "enterprise ai", "figma-level"],
+      content: "Kevin published AI Product Motion Studies, three original interactive studies that use motion to explain product state rather than decorate it. Across 13 manually inspectable states, the studies show a recording becoming an editable workflow, a failed AI run moving through accountable review and recovery, and one normalized product object adapting across web, macOS, mobile, and CLI or MCP surfaces. Each sequence starts paused, supports direct state selection and reduced motion, keeps visually hidden future states out of the accessibility tree, and publishes the timing and state model as motion-spec.json. The repository includes responsive Playwright tests, Axe checks, decision records, project.json, llms.txt, and synthetic data only. This is public proof of interaction design judgment and implementation detail, not employer work or a disclosure of Trackly production code.",
     },
     {
       id: "paypal",

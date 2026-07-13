@@ -69,6 +69,7 @@ Progression: Lead Product Manager (1 year), Senior Product Manager (1.5 years), 
 - Trackly ships a public command-line interface and Model Context Protocol server. Context: Public technical distribution artifact; separate from the App Store listing. Source: https://github.com/trackly-app/trackly-cli
 - Kevin's public AI Product Builder Stack documents 65 verified tools and product patterns across eight layers, with lifecycle states and implementation evidence. Context: A maintained evidence map, not a claim that every tool is current production infrastructure. Source: https://kevinastuhuaman.github.io/ai-product-builder-stack/
 - Kevin published Human Control Plane, an interactive product study that maps consequence, reversibility, model uncertainty, and intent freshness to four human-oversight patterns. Context: A deterministic product-design study built with synthetic scenarios, not a production authorization framework. Source: https://kevinastuhuaman.github.io/human-in-the-loop-patterns/
+- Kevin published AI Product Motion Studies, three interactive product-design studies with 13 inspectable states for workflow structure, accountable recovery, and cross-surface continuity. Context: Original interfaces with synthetic data and a public motion contract, not employer product work or a disclosure of Trackly internals. Source: https://kevinastuhuaman.github.io/ai-product-motion-studies/
 - Berkeley Haas's official past-challenges page lists the Fujitsu and MoBagel AI Business Adoption Acceleration Challenge. Context: Official program context only. Kevin's participation and deliverables are public resume claims. Source: https://haas.berkeley.edu/open-innovation/programs/past-challenges/
 
 ## Public profiles
@@ -81,3 +82,5 @@ Progression: Lead Product Manager (1 year), Senior Product Manager (1.5 years), 
 - AI Product Builder Stack source: https://github.com/kevinastuhuaman/ai-product-builder-stack
 - Human Control Plane: https://kevinastuhuaman.github.io/human-in-the-loop-patterns/
 - Human Control Plane source: https://github.com/kevinastuhuaman/human-in-the-loop-patterns
+- AI Product Motion Studies: https://kevinastuhuaman.github.io/ai-product-motion-studies/
+- AI Product Motion Studies source: https://github.com/kevinastuhuaman/ai-product-motion-studies
