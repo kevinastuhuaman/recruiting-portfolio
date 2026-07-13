@@ -123,7 +123,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
     let recognition: VoiceRecognition | undefined;
     let listening = false;
     let suppressRecognitionStatus = false;
-    let speaking = false;
+    let activeUtterance: SpeechSynthesisUtterance | undefined;
     let spokenAnswer = "";
 
     type VoiceResult = { isFinal: boolean; [index: number]: { transcript: string } };
@@ -170,11 +170,17 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
       voiceInput.setAttribute("aria-pressed", String(active));
       voiceInput.setAttribute("aria-label", active ? "Stop dictation" : "Dictate question");
       voiceInput.title = active ? "Stop dictation" : "Dictate question";
+      if (speak instanceof HTMLButtonElement) speak.disabled = active;
     };
 
     const stopSpeech = () => {
+      const utterance = activeUtterance;
+      activeUtterance = undefined;
+      if (utterance) {
+        utterance.onend = null;
+        utterance.onerror = null;
+      }
       if (speechPlaybackAvailable) voiceWindow.speechSynthesis.cancel();
-      speaking = false;
       if (speak instanceof HTMLButtonElement) speak.setAttribute("aria-pressed", "false");
     };
 
@@ -274,15 +280,23 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
       let captured = "";
       let failed = false;
       suppressRecognitionStatus = false;
-      recognition = new VoiceRecognitionApi();
-      recognition.continuous = false;
-      recognition.interimResults = true;
-      recognition.lang = "en-US";
-      recognition.onstart = () => {
+      stopSpeech();
+      const activeRecognition = new VoiceRecognitionApi();
+      recognition = activeRecognition;
+      if (speak instanceof HTMLButtonElement) speak.disabled = true;
+      activeRecognition.continuous = false;
+      activeRecognition.interimResults = true;
+      activeRecognition.lang = "en-US";
+      activeRecognition.onstart = () => {
+        if (recognition !== activeRecognition) {
+          activeRecognition.abort();
+          return;
+        }
         setListening(true);
         setStatus("Listening...");
       };
-      recognition.onresult = (event) => {
+      activeRecognition.onresult = (event) => {
+        if (recognition !== activeRecognition) return;
         let transcript = "";
         for (let index = 0; index < event.results.length; index += 1) {
           transcript += event.results[index]?.[0]?.transcript ?? "";
@@ -290,13 +304,15 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
         captured = transcript.trim();
         if (captured) setQuestion(captured);
       };
-      recognition.onerror = (event) => {
+      activeRecognition.onerror = (event) => {
+        if (recognition !== activeRecognition) return;
         if (suppressRecognitionStatus) return;
         failed = true;
         const denied = event.error === "not-allowed" || event.error === "service-not-allowed";
         setStatus(denied ? "Microphone permission was not granted." : "Voice input was unavailable. Type the question instead.");
       };
-      recognition.onend = () => {
+      activeRecognition.onend = () => {
+        if (recognition !== activeRecognition) return;
         setListening(false);
         recognition = undefined;
         if (!failed && !suppressRecognitionStatus) setStatus(captured ? "Question captured. Review it, then ask." : "No speech was captured.");
@@ -304,16 +320,19 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
       };
 
       try {
-        recognition.start();
+        activeRecognition.start();
       } catch {
-        recognition = undefined;
-        setListening(false);
-        setStatus("Voice input was unavailable. Type the question instead.");
+        if (recognition === activeRecognition) {
+          recognition = undefined;
+          setListening(false);
+          setStatus("Voice input was unavailable. Type the question instead.");
+        }
       }
     });
     speak?.addEventListener("click", () => {
       if (!speechPlaybackAvailable || !spokenAnswer || !(speak instanceof HTMLButtonElement)) return;
-      if (speaking) {
+      if (recognition || listening) return;
+      if (activeUtterance) {
         stopSpeech();
         setStatus("Answer complete.");
         return;
@@ -323,16 +342,18 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
       utterance.lang = "en-US";
       utterance.rate = 0.95;
       utterance.onend = () => {
-        speaking = false;
+        if (activeUtterance !== utterance) return;
+        activeUtterance = undefined;
         speak.setAttribute("aria-pressed", "false");
         setStatus("Answer complete.");
       };
       utterance.onerror = () => {
-        speaking = false;
+        if (activeUtterance !== utterance) return;
+        activeUtterance = undefined;
         speak.setAttribute("aria-pressed", "false");
         setStatus("Speech playback was unavailable.");
       };
-      speaking = true;
+      activeUtterance = utterance;
       speak.setAttribute("aria-pressed", "true");
       setStatus("Reading answer aloud.");
       voiceWindow.speechSynthesis.speak(utterance);
