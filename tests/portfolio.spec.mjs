@@ -174,7 +174,10 @@ test("builder stack proof is visible and machine-readable", async ({ page, reque
   const response = await request.get("/assistant-corpus.json");
   expect(response.ok()).toBe(true);
   const corpus = await response.json();
-  expect(corpus.entries.find((entry) => entry.id === "builder-stack")?.content).toMatch(/65 verified tools/i);
+  const builderStackEntry = corpus.entries.find((entry) => entry.id === "builder-stack");
+  expect(builderStackEntry?.content).toMatch(/65 verified tools/i);
+  expect(builderStackEntry?.content).toMatch(/Langfuse, PostHog, Umami/i);
+  expect(builderStackEntry?.keywords).toEqual(expect.arrayContaining(["cloud tooling", "ci/cd", "analytics"]));
 });
 
 test("public machine files and resume PDF are fetchable", async ({ request }) => {
