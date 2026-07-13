@@ -274,6 +274,11 @@ test("public machine files and resume PDF are fetchable", async ({ request }) =>
   }
 });
 
+test("supporting navigation links the About page", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("footer").getByRole("link", { name: "About", exact: true })).toHaveAttribute("href", "/about/");
+});
+
 test("machine entry points link the Enterprise AI Interface Kit", async ({ request }) => {
   const [llmsResponse, profileResponse, skillResponse] = await Promise.all([
     request.get("/llms.txt"),
