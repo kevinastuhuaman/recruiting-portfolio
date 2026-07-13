@@ -165,7 +165,7 @@ test("Trackly explains the browser-agent harness and its human approval boundary
 
 test("builder stack proof is visible and machine-readable", async ({ page, request }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: /65 tools, organized by what I built with them/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /65 entries, organized by what I built with them/i })).toBeVisible();
   await expect(page.getByRole("link", { name: /Explore the builder stack/i })).toHaveAttribute(
     "href",
     "https://kevinastuhuaman.github.io/ai-product-builder-stack/",
