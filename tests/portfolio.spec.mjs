@@ -388,8 +388,8 @@ test("public assistant voice input stays editable and voice playback uses only t
     Object.defineProperty(window, "speechSynthesis", {
       configurable: true,
       value: {
-        speaking: false,
-        cancel() { this.speaking = false; },
+        speaking: true,
+        cancel() { this.speaking = true; },
         speak(utterance) {
           this.speaking = true;
           window.sessionStorage.setItem("portfolio_spoken_answer", utterance.text);

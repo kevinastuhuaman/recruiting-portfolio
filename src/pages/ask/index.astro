@@ -123,6 +123,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
     let recognition: VoiceRecognition | undefined;
     let listening = false;
     let suppressRecognitionStatus = false;
+    let speaking = false;
     let spokenAnswer = "";
 
     type VoiceResult = { isFinal: boolean; [index: number]: { transcript: string } };
@@ -173,6 +174,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 
     const stopSpeech = () => {
       if (speechPlaybackAvailable) voiceWindow.speechSynthesis.cancel();
+      speaking = false;
       if (speak instanceof HTMLButtonElement) speak.setAttribute("aria-pressed", "false");
     };
 
@@ -311,7 +313,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
     });
     speak?.addEventListener("click", () => {
       if (!speechPlaybackAvailable || !spokenAnswer || !(speak instanceof HTMLButtonElement)) return;
-      if (voiceWindow.speechSynthesis.speaking) {
+      if (speaking) {
         stopSpeech();
         setStatus("Answer complete.");
         return;
@@ -321,13 +323,16 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
       utterance.lang = "en-US";
       utterance.rate = 0.95;
       utterance.onend = () => {
+        speaking = false;
         speak.setAttribute("aria-pressed", "false");
         setStatus("Answer complete.");
       };
       utterance.onerror = () => {
+        speaking = false;
         speak.setAttribute("aria-pressed", "false");
         setStatus("Speech playback was unavailable.");
       };
+      speaking = true;
       speak.setAttribute("aria-pressed", "true");
       setStatus("Reading answer aloud.");
       voiceWindow.speechSynthesis.speak(utterance);
