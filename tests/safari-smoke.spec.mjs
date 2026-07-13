@@ -24,5 +24,26 @@ test("WebKit renders the recruiter path and assistant without accessibility viol
     expect(result.violations, `${path} WebKit Axe violations`).toEqual([]);
   }
   await page.getByRole("tab", { name: /Voice/ }).click();
-  await expect(page.getByText(/This is an AI guide, not Kevin/i)).toBeVisible();
+  await expect(page.getByText(/This is an AI voice assistant/i)).toBeVisible();
+
+  for (const width of [390, 1024, 1440]) {
+    await page.setViewportSize({ width, height: 1000 });
+    await page.goto("/");
+    expect(await page.evaluate(() => document.documentElement.scrollWidth), `homepage at ${width}px`).toBeLessThanOrEqual(width);
+    for (const card of await page.locator("[data-project-card]").all()) {
+      expect(await card.evaluate((element) => {
+        const copy = element.querySelector(".feature-copy")?.getBoundingClientRect();
+        const heading = element.querySelector("h3")?.getBoundingClientRect();
+        return Boolean(copy && heading && heading.left >= copy.left - 1 && heading.right <= copy.right + 1);
+      }), `project heading at ${width}px`).toBe(true);
+    }
+
+    await page.goto("/ask/");
+    expect(await page.evaluate(() => document.documentElement.scrollWidth), `Ask at ${width}px`).toBeLessThanOrEqual(width);
+    expect(await page.locator(".ask-hero").evaluate((hero) => {
+      const heroRect = hero.getBoundingClientRect();
+      const headingRect = hero.querySelector("h1")?.getBoundingClientRect();
+      return Boolean(headingRect && headingRect.left >= heroRect.left - 1 && headingRect.right <= heroRect.right + 1);
+    }), `Ask heading at ${width}px`).toBe(true);
+  }
 });

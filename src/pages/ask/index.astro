@@ -5,21 +5,16 @@ import { claimsById } from "../../data/claims.js";
 ---
 
 <BaseLayout
-  title="Ask Kevin's portfolio | Grounded Chat and Voice"
-  description="Ask grounded recruiting questions through readable Chat or a separate audio-first synthetic portfolio guide."
+  title="Ask anything about Kevin | Chat and Voice"
+  description="Ask Kevin's AI assistant about his work, product decisions, and experience through Chat or Voice."
   path="/ask/"
   noindex={true}
 >
   <div class="ask-page">
     <header class="ask-hero">
-      <p class="eyebrow">Public evidence, conversationally</p>
-      <h1>Ask the portfolio.</h1>
-      <p>Use Chat for readable answers and citations. Use Voice for a concise, audio-first conversation with Kevin's synthetic AI portfolio guide.</p>
-      <div class="ask-principles" aria-label="Assistant boundaries">
-        <span>Public corpus only</span>
-        <span>No conversation storage</span>
-        <span>Voice never impersonates Kevin</span>
-      </div>
+      <p class="eyebrow">Kevin's AI assistant</p>
+      <h1>Ask anything about Kevin.</h1>
+      <p>Explore his work in Chat or have a voice conversation.</p>
     </header>
 
     <PortfolioAssistant client:only="react">
@@ -68,23 +63,19 @@ import { claimsById } from "../../data/claims.js";
 
 <style is:global>
   .ask-page { max-width: 1200px; margin: 0 auto; padding: 76px 28px 120px; }
-  .ask-hero { display: grid; grid-template-columns: minmax(0,1.25fr) minmax(280px,.75fr); gap: 34px 60px; align-items: end; padding: 50px 0 68px; border-bottom: 1px solid var(--ink); }
-  .ask-hero .eyebrow, .ask-principles { grid-column: 1 / -1; }
-  .ask-hero h1 { margin: 0; font-size: clamp(4rem,10vw,9.4rem); line-height: .84; letter-spacing: -.075em; }
+  .ask-hero { display: grid; grid-template-columns: minmax(0,1.3fr) minmax(260px,.7fr); gap: 24px 54px; align-items: end; padding: 42px 0 58px; border-bottom: 1px solid var(--ink); }
+  .ask-hero .eyebrow { grid-column: 1 / -1; }
+  .ask-hero h1 { max-width: 820px; margin: 0; font-size: clamp(3.4rem,7vw,6.9rem); line-height: .92; letter-spacing: -.055em; text-wrap: balance; }
   .ask-hero > p:not(.eyebrow) { margin: 0; color: var(--muted); font-size: 1.08rem; line-height: 1.65; }
-  .ask-principles { display: flex; flex-wrap: wrap; gap: 9px; }
-  .ask-principles span { padding: 7px 11px; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--muted); font-size: .78rem; }
   .assistant-shell { margin-top: 68px; border: 1px solid var(--ink); background: #fff; box-shadow: 16px 18px 0 rgba(39,23,71,.1); }
   .assistant-placeholder { display: grid; min-height: 680px; margin-top: 68px; padding: 32px; place-items: center; border: 1px solid var(--ink); background: #fff; color: var(--muted); text-align: center; box-shadow: 16px 18px 0 rgba(39,23,71,.1); }
   .assistant-tabs { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--ink); }
   .assistant-tabs button { display: flex; min-height: 68px; padding: 14px 20px; align-items: center; justify-content: space-between; border: 0; border-right: 1px solid var(--ink); background: #fff; font-weight: 750; cursor: pointer; }
   .assistant-tabs button:last-child { border-right: 0; }
   .assistant-tabs button[aria-selected="true"] { background: var(--trackly-dark); color: #fff; }
-  .assistant-tabs small { color: #5a5a56; font-weight: 500; }
-  .assistant-tabs button[aria-selected="true"] small { color: #fff; opacity: .8; }
-  .chat-panel { display: grid; grid-template-columns: minmax(250px,.48fr) minmax(0,1.52fr); min-height: 680px; }
-  .chat-panel > header { padding: 38px; border-right: 1px solid var(--ink); }
-  .chat-panel > header h2 { margin: 54px 0 18px; font-size: clamp(2.5rem,5vw,4.8rem); line-height: .93; letter-spacing: -.05em; }
+  .chat-panel { display: grid; grid-template-columns: minmax(300px,.68fr) minmax(0,1.32fr); min-height: 650px; }
+  .chat-panel > header { padding: 34px; border-right: 1px solid var(--ink); }
+  .chat-panel > header h2 { margin: 42px 0 18px; font-size: clamp(2.35rem,3.7vw,3.75rem); line-height: .98; letter-spacing: -.04em; overflow-wrap: normal; text-wrap: balance; }
   .chat-panel > header > p:last-child { color: var(--muted); }
   .chat-messages { min-height: 410px; max-height: 560px; padding: 34px; overflow-y: auto; }
   .chat-empty { display: grid; gap: 10px; }
@@ -110,25 +101,25 @@ import { claimsById } from "../../data/claims.js";
   .chat-form button:disabled { background: #ecece8; color: #8b8b87; cursor: not-allowed; }
   .chat-form > p { margin: 8px 0 0; color: var(--muted); font-size: .72rem; }
   .assistant-status { grid-column: 2; padding: 0 34px 22px; color: var(--muted); font-size: .74rem; }
-  .voice-panel { display: grid; grid-template-columns: 1fr 1fr; min-height: 660px; background: linear-gradient(135deg,#efedf7,#f8f7f2); }
-  .voice-orb-wrap { display: grid; min-height: 560px; place-items: center; border-right: 1px solid var(--ink); }
+  .voice-panel { display: grid; grid-template-columns: 1fr 1fr; min-height: 660px; background: #15111e; color: #fff; }
+  .voice-orb-wrap { display: grid; min-height: 560px; place-items: center; border-right: 1px solid rgba(255,255,255,.22); background: radial-gradient(circle at 50% 50%,rgba(128,86,245,.12),transparent 58%); }
   .portfolio-voice-orb { display: block; border-radius: 50%; }
-  .portfolio-voice-orb-intro { width: 190px; height: 190px; }
-  .portfolio-voice-orb-active { width: 280px; height: 280px; }
+  .portfolio-voice-orb-intro { width: 260px; height: 260px; }
+  .portfolio-voice-orb-active { width: 300px; height: 300px; }
   .portfolio-voice-orb-fallback { background: radial-gradient(circle at 35% 35%, rgba(139,92,246,.95), rgba(76,194,233,.6) 45%, rgba(16,20,153,.9) 100%); }
   .voice-copy { display: flex; padding: 48px; flex-direction: column; justify-content: center; align-items: flex-start; }
   .voice-copy h2 { margin: 18px 0 22px; font-size: clamp(2.7rem,5vw,5rem); line-height: .92; letter-spacing: -.055em; }
-  .voice-copy > p:not(.eyebrow,.voice-state,.voice-error) { color: var(--muted); }
+  .voice-copy > p:not(.eyebrow,.voice-state,.voice-error) { color: rgba(255,255,255,.68); }
   .voice-primary, .voice-secondary, .voice-controls button { min-height: 48px; padding: 11px 17px; border: 1px solid var(--ink); border-radius: 4px; font-weight: 700; cursor: pointer; }
-  .voice-primary { width: 100%; margin-top: 22px; background: var(--trackly-dark); color: #fff; }
-  .voice-secondary { margin-top: 12px; background: transparent; }
+  .voice-primary { width: 100%; margin-top: 22px; border-color: var(--signal); background: var(--signal); color: var(--ink); }
+  .voice-secondary { margin-top: 12px; border-color: rgba(255,255,255,.55); background: transparent; color: #fff; }
   .voice-copy.active { align-items: center; text-align: center; }
   .voice-state { font-size: clamp(1.8rem,4vw,3.4rem); font-weight: 750; letter-spacing: -.04em; }
   .voice-error { color: #a12020; }
   .voice-controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
-  .voice-controls button { background: #fff; }
-  .voice-controls button:nth-child(2) { background: #1a1725; color: #fff; }
-  .voice-sources { display: grid; width: 100%; gap: 8px; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--line); text-align: left; }
+  .voice-controls button { border-color: rgba(255,255,255,.52); background: #fff; color: var(--ink); }
+  .voice-controls button:nth-child(2) { background: transparent; color: #fff; }
+  .voice-sources { display: grid; width: 100%; gap: 8px; margin-top: 28px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.22); text-align: left; }
   .voice-sources a { font-size: .84rem; }
   .faq-section { display: grid; grid-template-columns: .62fr 1.38fr; gap: 54px; margin-top: 100px; padding-top: 68px; border-top: 1px solid var(--ink); }
   .faq-section header h2 { margin: 42px 0 16px; font-size: clamp(2.5rem,5vw,4.8rem); line-height: .95; letter-spacing: -.05em; }
