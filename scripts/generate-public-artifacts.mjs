@@ -99,6 +99,8 @@ const profile = {
     builderStackSource: links.builderStackRepo,
     humanControlPlane: links.humanControlPlane,
     humanControlPlaneSource: links.humanControlPlaneRepo,
+    motionStudies: links.motionStudies,
+    motionStudiesSource: links.motionStudiesRepo,
   },
 };
 
@@ -149,6 +151,8 @@ Use this guide for public-safe recruiting, referral, interview preparation, or c
 - AI Product Builder Stack source: ${links.builderStackRepo}
 - Human Control Plane: ${links.humanControlPlane}
 - Human Control Plane source: ${links.humanControlPlaneRepo}
+- AI Product Motion Studies: ${links.motionStudies}
+- AI Product Motion Studies source: ${links.motionStudiesRepo}
 - Contact: ${absolute("/contact/")}
 
 ## Machine-readable context
@@ -163,6 +167,8 @@ Use this guide for public-safe recruiting, referral, interview preparation, or c
 - Builder Stack LLM context: ${links.builderStack}llms.txt
 - Human Control Plane structured data: ${links.humanControlPlane}project.json
 - Human Control Plane LLM context: ${links.humanControlPlane}llms.txt
+- Motion Studies structured data: ${links.motionStudies}motion-spec.json
+- Motion Studies LLM context: ${links.motionStudies}llms.txt
 
 ## Boundaries
 
@@ -199,6 +205,7 @@ Kevin's most recent enterprise AI proof is an agentic observability prototype at
 - [Berkeley and MoBagel case study](${absolute("/projects/berkeley-mobagel-ai-gtm/")}): AI product adoption, high-fidelity prototyping, roadmap, business model, and GTM
 - [AI Product Builder Stack](${links.builderStack}): 65 verified tools and product patterns organized by outcome, evidence, project, and lifecycle state
 - [Human Control Plane](${links.humanControlPlane}): Interactive product study for Undo, confirmation, fresh approval, and accountable-owner patterns
+- [AI Product Motion Studies](${links.motionStudies}): Three interactive studies for workflow structure, accountable recovery, and cross-surface product continuity
 - [Resume](${absolute("/resume/")}): Complete chronological experience
 - [Public evidence](${absolute("/proof/")}): Sources and context for published claims
 - [Contact](${absolute("/contact/")}): LinkedIn and email
@@ -214,6 +221,8 @@ Kevin's most recent enterprise AI proof is an agentic observability prototype at
 - [Builder Stack LLM context](${links.builderStack}llms.txt): Plain-text map of tools, systems, and lifecycle states
 - [Human Control Plane structured data](${links.humanControlPlane}project.json): Machine-readable scenarios, policies, thresholds, and public boundary
 - [Human Control Plane LLM context](${links.humanControlPlane}llms.txt): Plain-text human-oversight product decisions and evidence
+- [Motion Studies structured data](${links.motionStudies}motion-spec.json): Machine-readable timing, sequence, and reduced-motion decisions for 13 product states
+- [Motion Studies LLM context](${links.motionStudies}llms.txt): Plain-text interaction-design rationale and public boundary
 - [Markdown resume](${absolute("/resume.md")}): Crawlable resume equivalent
 `;
 
@@ -251,6 +260,8 @@ ${publicClaims.map((claim) => `- ${claim.statement} Context: ${claim.context} So
 - AI Product Builder Stack source: ${links.builderStackRepo}
 - Human Control Plane: ${links.humanControlPlane}
 - Human Control Plane source: ${links.humanControlPlaneRepo}
+- AI Product Motion Studies: ${links.motionStudies}
+- AI Product Motion Studies source: ${links.motionStudiesRepo}
 `;
 
 const resumeMarkdown = `# Kevin Astuhuaman
@@ -280,6 +291,7 @@ ${experience
 - Trackly CLI and MCP: ${links.tracklyCli}
 - AI Product Builder Stack: ${links.builderStack}
 - Human Control Plane: ${links.humanControlPlane}
+- AI Product Motion Studies: ${links.motionStudies}
 - Berkeley and MoBagel public-safe case: ${absolute("/projects/berkeley-mobagel-ai-gtm/")}
 `;
 

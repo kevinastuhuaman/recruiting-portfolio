@@ -118,6 +118,15 @@
       "context": "A deterministic product-design study built with synthetic scenarios, not a production authorization framework."
     },
     {
+      "id": "motion-studies-public",
+      "statement": "Kevin published AI Product Motion Studies, three interactive product-design studies with 13 inspectable states for workflow structure, accountable recovery, and cross-surface continuity.",
+      "short": "Three motion studies with 13 inspectable product states",
+      "source": "https://kevinastuhuaman.github.io/ai-product-motion-studies/",
+      "checked": "2026-07-12",
+      "state": "public interactive artifact",
+      "context": "Original interfaces with synthetic data and a public motion contract, not employer product work or a disclosure of Trackly internals."
+    },
+    {
       "id": "berkeley-mobagel-brief",
       "statement": "Berkeley Haas's official past-challenges page lists the Fujitsu and MoBagel AI Business Adoption Acceleration Challenge.",
       "short": "Official Berkeley Fujitsu and MoBagel AI challenge",
@@ -137,6 +146,8 @@
     "builderStack": "https://kevinastuhuaman.github.io/ai-product-builder-stack/",
     "builderStackSource": "https://github.com/kevinastuhuaman/ai-product-builder-stack",
     "humanControlPlane": "https://kevinastuhuaman.github.io/human-in-the-loop-patterns/",
-    "humanControlPlaneSource": "https://github.com/kevinastuhuaman/human-in-the-loop-patterns"
+    "humanControlPlaneSource": "https://github.com/kevinastuhuaman/human-in-the-loop-patterns",
+    "motionStudies": "https://kevinastuhuaman.github.io/ai-product-motion-studies/",
+    "motionStudiesSource": "https://github.com/kevinastuhuaman/ai-product-motion-studies"
   }
 }

@@ -62,4 +62,5 @@ Progression: Lead Product Manager (1 year), Senior Product Manager (1.5 years), 
 - Trackly CLI and MCP: https://github.com/trackly-app/trackly-cli
 - AI Product Builder Stack: https://kevinastuhuaman.github.io/ai-product-builder-stack/
 - Human Control Plane: https://kevinastuhuaman.github.io/human-in-the-loop-patterns/
+- AI Product Motion Studies: https://kevinastuhuaman.github.io/ai-product-motion-studies/
 - Berkeley and MoBagel public-safe case: https://portfolio.kevinastuhuaman.com/projects/berkeley-mobagel-ai-gtm/

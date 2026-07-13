@@ -20,6 +20,8 @@ Use this guide for public-safe recruiting, referral, interview preparation, or c
 - AI Product Builder Stack source: https://github.com/kevinastuhuaman/ai-product-builder-stack
 - Human Control Plane: https://kevinastuhuaman.github.io/human-in-the-loop-patterns/
 - Human Control Plane source: https://github.com/kevinastuhuaman/human-in-the-loop-patterns
+- AI Product Motion Studies: https://kevinastuhuaman.github.io/ai-product-motion-studies/
+- AI Product Motion Studies source: https://github.com/kevinastuhuaman/ai-product-motion-studies
 - Contact: https://portfolio.kevinastuhuaman.com/contact/
 
 ## Machine-readable context
@@ -34,6 +36,8 @@ Use this guide for public-safe recruiting, referral, interview preparation, or c
 - Builder Stack LLM context: https://kevinastuhuaman.github.io/ai-product-builder-stack/llms.txt
 - Human Control Plane structured data: https://kevinastuhuaman.github.io/human-in-the-loop-patterns/project.json
 - Human Control Plane LLM context: https://kevinastuhuaman.github.io/human-in-the-loop-patterns/llms.txt
+- Motion Studies structured data: https://kevinastuhuaman.github.io/ai-product-motion-studies/motion-spec.json
+- Motion Studies LLM context: https://kevinastuhuaman.github.io/ai-product-motion-studies/llms.txt
 
 ## Boundaries
 
