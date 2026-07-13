@@ -166,6 +166,9 @@ test("the complete recruiting path works without JavaScript", async ({ browser }
     await page.goto("/ask/");
     await expect(page.getByRole("heading", { name: "Five answers without the model." })).toBeVisible();
     await expect(page.getByText(/Interactive questions require JavaScript/i)).toBeVisible();
+    await expect(page.getByText(/Interactive Chat and Voice load only when JavaScript is available/i)).toBeVisible();
+    await expect(page.locator(".assistant-shell")).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Ask", exact: true })).toHaveCount(0);
   } finally {
     await context.close();
   }
@@ -494,6 +497,44 @@ test("malformed Chat stream resets its draft and recovers with the deterministic
   await expect(page.getByText(/prototype and proof of concept/i)).toBeVisible();
   await expect(page.getByText(/partial model draft/i)).toHaveCount(0);
   await expect(page.getByRole("link", { name: "PayPal case study" })).toBeVisible();
+});
+
+test("streamed Chat error events recover with the deterministic answer", async ({ page }) => {
+  await page.route("https://closeai.mba/api/portfolio/chat", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "text/event-stream",
+      body: [
+        'event: delta\ndata: {"text":"Unsupported partial answer."}\n\n',
+        'event: error\ndata: {"reset":true,"code":"synthesis_failed"}\n\n',
+        'event: done\ndata: {"requestId":"test-request"}\n\n',
+      ].join(""),
+    });
+  });
+  await page.route("https://closeai.mba/api/portfolio/ask", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        answer: "Kevin's answer is grounded in the deterministic public corpus.",
+        citations: [{ title: "Public proof", url: "https://portfolio.kevinastuhuaman.com/proof/" }],
+      }),
+    });
+  });
+  await page.goto("/ask/");
+  await page.getByLabel("Question").fill("What evidence supports Kevin's work?");
+  await page.getByRole("button", { name: "Ask", exact: true }).click();
+  await expect(page.getByRole("status")).toHaveText("Showing the deterministic public-corpus answer");
+  await expect(page.getByText(/deterministic public corpus/i)).toBeVisible();
+  await expect(page.getByText(/Unsupported partial answer/i)).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "Public proof" })).toBeVisible();
+});
+
+test("privacy disclosure accurately describes Chat and Realtime Voice", async ({ page }) => {
+  await page.goto("/privacy/");
+  await expect(page.getByText(/Azure-hosted language model/i)).toBeVisible();
+  await expect(page.getByText(/microphone audio is sent over an encrypted WebRTC connection/i)).toBeVisible();
+  await expect(page.getByText(/does not display or retain a transcript or audio recording/i)).toBeVisible();
 });
 
 test("Voice is opt-in, requests one microphone, creates one peer, shows no transcript, and cleans up", async ({ page }) => {

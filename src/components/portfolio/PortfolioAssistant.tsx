@@ -114,7 +114,10 @@ export default function PortfolioAssistant() {
           const data = parseStreamEvent(raw);
           if (event === 'delta' && typeof data.text === 'string') appendAssistantDelta(data.text);
           if (event === 'citations' && Array.isArray(data.citations)) setCitations(data.citations);
-          if (event === 'error' && data.reset === true) resetAssistantDraft();
+          if (event === 'error') {
+            if (data.reset === true) resetAssistantDraft();
+            throw new Error('stream_error');
+          }
           if (event === 'done') receivedDone = true;
         }
         if (done) break;
