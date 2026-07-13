@@ -59,6 +59,7 @@ export class PortfolioVoiceSession {
   private micAnalyser: AnalyserNode | null = null;
   private remoteAnalyser: AnalyserNode | null = null;
   private speaking = false;
+  private remoteDescriptionReady = false;
   private closeSent = false;
   private failureCategory: string | undefined;
   private usage: Usage = { inputAudioTokens: 0, outputAudioTokens: 0, cachedInputTokens: 0, textInputTokens: 0, textOutputTokens: 0 };
@@ -104,7 +105,7 @@ export class PortfolioVoiceSession {
 
       const dc = pc.createDataChannel('oai-events');
       this.dc = dc;
-      dc.onopen = () => this.kickOff();
+      dc.onopen = () => this.markConnected();
       dc.onmessage = (event) => void this.handleEvent(event.data);
 
       const offer = await pc.createOffer({ offerToReceiveAudio: true });
@@ -121,11 +122,8 @@ export class PortfolioVoiceSession {
       if (!sdpResponse.ok) throw new Error('The realtime voice connection could not be opened.');
       await pc.setRemoteDescription({ type: 'answer', sdp: await sdpResponse.text() });
       if (this.disposed) return;
-      this.startedAt = performance.now();
-      this.setState('listening');
-      if (this.connectTimer) window.clearTimeout(this.connectTimer);
-      this.durationTimer = window.setTimeout(() => void this.end('duration_cap'), (this.token.maxDurationSeconds || 300) * 1000);
-      if (dc.readyState === 'open') this.kickOff();
+      this.remoteDescriptionReady = true;
+      this.markConnected();
     } catch (error) {
       if (!this.disposed) {
         const permissionDenied = error instanceof DOMException && ['NotAllowedError', 'SecurityError'].includes(error.name);
@@ -156,6 +154,15 @@ export class PortfolioVoiceSession {
     if (this.kickedOff || this.dc?.readyState !== 'open') return;
     this.kickedOff = true;
     this.send({ type: 'response.create' });
+  }
+
+  private markConnected() {
+    if (this.disposed || this.startedAt || this.dc?.readyState !== 'open' || !this.remoteDescriptionReady || !this.token) return;
+    this.startedAt = performance.now();
+    this.setState('listening');
+    if (this.connectTimer) window.clearTimeout(this.connectTimer);
+    this.durationTimer = window.setTimeout(() => void this.end('duration_cap'), (this.token.maxDurationSeconds || 300) * 1000);
+    this.kickOff();
   }
 
   private send(value: unknown) {

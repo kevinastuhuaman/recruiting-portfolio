@@ -10,6 +10,7 @@ const suggestions = [
   'How does Trackly show product judgment?',
   'What AI product roles fit Kevin best?',
 ];
+const FALLBACK_TIMEOUT_MS = 10_000;
 
 function parseStreamEvent(raw: string): StreamEvent {
   try {
@@ -87,6 +88,7 @@ export default function PortfolioAssistant() {
     const controller = new AbortController();
     const responseTimer = window.setTimeout(() => controller.abort('portfolio_chat_timeout'), 20_000);
     chatAbortRef.current = controller;
+    let activeController = controller;
     let reader: ReadableStreamDefaultReader<Uint8Array> | undefined;
     try {
       const response = await fetch(`${PORTFOLIO_API}/chat`, {
@@ -126,18 +128,25 @@ export default function PortfolioAssistant() {
       controller.abort();
       void reader?.cancel().catch(() => {});
       resetAssistantDraft();
+      const fallbackController = new AbortController();
+      const fallbackTimer = window.setTimeout(() => fallbackController.abort('portfolio_fallback_timeout'), FALLBACK_TIMEOUT_MS);
+      activeController = fallbackController;
+      chatAbortRef.current = fallbackController;
       try {
-        const fallback = await askPublicCorpus(message);
+        const fallback = await askPublicCorpus(message, fallbackController.signal);
         appendAssistantDelta(fallback.answer);
         setCitations(fallback.citations);
         setStatus('Showing the deterministic public-corpus answer');
       } catch {
+        if (chatAbortRef.current !== fallbackController) return;
         appendAssistantDelta('The interactive assistant is unavailable. The cited questions below remain available without JavaScript or an AI connection.');
         setStatus('Interactive assistant unavailable');
+      } finally {
+        window.clearTimeout(fallbackTimer);
       }
     } finally {
       window.clearTimeout(responseTimer);
-      if (chatAbortRef.current === controller) {
+      if (chatAbortRef.current === activeController) {
         chatAbortRef.current = null;
         inFlightRef.current = false;
         setLoading(false);

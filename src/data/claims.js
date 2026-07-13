@@ -40,6 +40,10 @@ export const publicClaims = [
     evidenceType: "public-safe resume claim",
     verified: "2026-07-12",
     reviewDate: "2027-01-12",
+    metrics: [
+      { value: "20+", label: "stakeholder conversations" },
+      { value: "15+", label: "diagnostic tools mapped in internship discovery" },
+    ],
   },
   {
     id: "paypal-detection",

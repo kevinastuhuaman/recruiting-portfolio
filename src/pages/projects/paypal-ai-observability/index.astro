@@ -5,8 +5,10 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { claimsById } from "../../../data/claims.js";
 
 const discovery = claimsById["paypal-discovery"];
+const discoveryToolMetric = discovery.metrics?.[1];
+if (!discoveryToolMetric) throw new Error("paypal-discovery requires its canonical tool-count metric");
 const resultMetrics = [
-  { value: "15+", label: "diagnostic tools mapped in internship discovery" },
+  discoveryToolMetric,
   ...(claimsById["paypal-detection"].metrics ?? []),
   ...(claimsById["paypal-triage"].metrics ?? []),
 ];

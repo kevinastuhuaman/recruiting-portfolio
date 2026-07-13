@@ -144,6 +144,9 @@ test("resume lenses highlight without removing chronology", async ({ page }) => 
   const rolesBefore = await page.locator(".resume-role").count();
   await page.getByLabel("Applied AI").check();
   await expect(page.locator("[data-resume-document]")).toHaveAttribute("data-lens", "ai");
+  await page.getByLabel("Zero-to-One / Growth").check();
+  await expect(page.locator("[data-resume-document]")).toHaveAttribute("data-lens", "growth");
+  await expect(page.locator(".lens-growth").first()).toHaveCSS("color", "rgb(17, 17, 17)");
   expect(await page.locator(".resume-role").count()).toBe(rolesBefore);
   await expect(page.getByRole("link", { name: /Download PDF/i })).toHaveAttribute("href", "/kevin-astuhuaman-resume.pdf");
 });
@@ -265,6 +268,7 @@ test("enterprise AI interface proof is visible and machine-readable", async ({ p
   expect(claim?.context).toMatch(/fictional data/i);
 
   await page.goto("/lab/#enterprise-interface-kit");
+  await expect.poll(() => section.evaluate((element) => element.getBoundingClientRect().top)).toBeLessThanOrEqual(128);
   const anchoredTop = await section.evaluate((element) => element.getBoundingClientRect().top);
   expect(anchoredTop).toBeGreaterThanOrEqual(64);
 });
@@ -495,7 +499,7 @@ test("malformed Chat stream resets its draft and recovers with the deterministic
 test("Voice is opt-in, requests one microphone, creates one peer, shows no transcript, and cleans up", async ({ page }) => {
   let closeRequest = null;
   await page.addInitScript(() => {
-    const counters = { mic: 0, pc: 0, stopped: 0, closed: 0, sent: [] };
+    const counters = { mic: 0, pc: 0, stopped: 0, closed: 0, channelClosed: 0, sent: [] };
     window.__voiceCounters = counters;
     const track = { enabled: true, stop() { counters.stopped += 1; } };
     const stream = { getAudioTracks: () => [track], getTracks: () => [track] };
@@ -510,9 +514,9 @@ test("Voice is opt-in, requests one microphone, creates one peer, shows no trans
       addTrack() {}
       getSenders() { return []; }
       createDataChannel() {
-        const dc = { readyState: "connecting", send(value) { counters.sent.push(JSON.parse(value)); }, close() {}, onopen: null, onmessage: null };
+        const dc = { readyState: "connecting", send(value) { counters.sent.push(JSON.parse(value)); }, close() { counters.channelClosed += 1; this.readyState = "closed"; }, onopen: null, onmessage: null };
         window.__voiceDataChannel = dc;
-        window.setTimeout(() => { dc.readyState = "open"; dc.onopen?.(); }, 0);
+        window.setTimeout(() => { dc.readyState = "open"; dc.onopen?.(); }, 100);
         return dc;
       }
       async createOffer() { return { type: "offer", sdp: "mock-offer" }; }
@@ -555,6 +559,7 @@ test("Voice is opt-in, requests one microphone, creates one peer, shows no trans
   expect(await page.evaluate(() => window.__voiceCounters.mic)).toBe(0);
   await expect(page.getByText(/This is an AI guide, not Kevin/i)).toBeVisible();
   await page.getByRole("button", { name: "Start voice call" }).click();
+  await expect(page.getByText("Connecting securely", { exact: true })).toBeVisible();
   await expect(page.getByText("Listening", { exact: true })).toBeVisible();
   expect(await page.evaluate(() => window.__voiceCounters.mic)).toBe(1);
   expect(await page.evaluate(() => window.__voiceCounters.pc)).toBe(1);
@@ -585,6 +590,7 @@ test("Voice is opt-in, requests one microphone, creates one peer, shows no trans
   await expect(page.getByRole("link", { name: "PayPal case study" })).toBeVisible();
   await expect.poll(() => page.evaluate(() => window.__voiceCounters.stopped)).toBeGreaterThan(0);
   await expect.poll(() => page.evaluate(() => window.__voiceCounters.closed)).toBe(1);
+  await expect.poll(() => page.evaluate(() => window.__voiceCounters.channelClosed)).toBe(1);
   expect(closeRequest.closeToken).toBe("test-close-capability-token-0000000000000000000");
 });
 
