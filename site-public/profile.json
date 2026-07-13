@@ -100,6 +100,15 @@
       "context": "Public technical distribution artifact; separate from the App Store listing."
     },
     {
+      "id": "builder-stack-public",
+      "statement": "Kevin's public AI Product Builder Stack documents 65 verified tools and product patterns across eight layers, with lifecycle states and implementation evidence.",
+      "short": "65 verified tools and patterns across eight capability layers",
+      "source": "https://kevinastuhuaman.github.io/ai-product-builder-stack/",
+      "checked": "2026-07-12",
+      "state": "public interactive artifact",
+      "context": "A maintained evidence map, not a claim that every tool is current production infrastructure."
+    },
+    {
       "id": "berkeley-mobagel-brief",
       "statement": "Berkeley Haas's official past-challenges page lists the Fujitsu and MoBagel AI Business Adoption Acceleration Challenge.",
       "short": "Official Berkeley Fujitsu and MoBagel AI challenge",

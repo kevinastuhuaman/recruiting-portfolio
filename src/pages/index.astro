@@ -2,7 +2,7 @@
 import { ArrowUpRight, Download, Mail } from "@lucide/astro";
 import InvestigationWorkbench from "../components/InvestigationWorkbench.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { experience, projects, publicClaims, site } from "../data/site.js";
+import { experience, links, projects, publicClaims, site } from "../data/site.js";
 
 const paypal = projects.find((project) => project.id === "paypal") ?? projects[0];
 const trackly = projects.find((project) => project.id === "trackly") ?? projects[1];
@@ -137,6 +137,22 @@ const paypalClaim = publicClaims.find((claim) => claim.id === "paypal-detection"
           </div>
         </a>
       </div>
+    </section>
+
+    <section id="builder-stack" class="builder-map-band" aria-labelledby="builder-map-title">
+      <div class="builder-map-copy">
+        <p class="eyebrow">Technical range, made inspectable</p>
+        <h2 id="builder-map-title">65 entries, organized by what I built with them.</h2>
+        <p>I mapped the models, infrastructure, observability, browser automation, voice, design, and delivery tools I have actually used. Every entry names the product outcome and evidence behind it, then labels the work as shipped, active, prototype, or historical.</p>
+        <div class="button-row">
+          <a class="button button-primary" href={links.builderStack}>Explore the builder stack <ArrowUpRight aria-hidden="true" size={17} /></a>
+          <a class="button" href={links.builderStackRepo}>View source <ArrowUpRight aria-hidden="true" size={17} /></a>
+        </div>
+      </div>
+      <a class="builder-map-preview" href={links.builderStack} aria-label="Open the interactive AI Product Builder Stack">
+        <img src="/assets/builder-stack-preview.png" width="1280" height="640" loading="lazy" alt="AI Product Builder Stack showing 65 verified tools and product patterns" />
+        <span><strong>Four end-to-end flows</strong> Trackly discovery, browser agent, voice onboarding, and conversation follow-up</span>
+      </a>
     </section>
 
     <section id="workbench" class="prototype-section" aria-labelledby="prototype-title">
@@ -511,6 +527,61 @@ const paypalClaim = publicClaims.find((claim) => claim.id === "paypal-detection"
     background: #e4f5ef;
   }
 
+  .builder-map-band {
+    display: grid;
+    grid-template-columns: minmax(300px, 0.78fr) minmax(0, 1.22fr);
+    border-bottom: 1px solid #171717;
+    background: #e4f5ef;
+  }
+
+  .builder-map-copy {
+    display: grid;
+    padding: 44px 36px;
+    align-content: center;
+    border-right: 1px solid #171717;
+  }
+
+  .builder-map-copy h2 {
+    max-width: 520px;
+    margin-bottom: 20px;
+    font-size: clamp(2.25rem, 4vw, 3.7rem);
+  }
+
+  .builder-map-copy > p:not(.eyebrow) {
+    max-width: 590px;
+    color: #40444a;
+  }
+
+  .builder-map-preview {
+    display: grid;
+    min-width: 0;
+    grid-template-columns: minmax(0, 1fr);
+    padding: 32px;
+    align-content: center;
+    gap: 14px;
+    color: #40444a;
+    text-decoration: none;
+  }
+
+  .builder-map-preview img {
+    width: 100%;
+    height: auto;
+    min-width: 0;
+    border: 1px solid #171717;
+    border-radius: 6px;
+  }
+
+  .builder-map-preview span {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    font-size: 0.8rem;
+  }
+
+  .builder-map-preview strong {
+    color: #11110f;
+  }
+
   .prototype-section {
     padding: 72px 40px;
     border-bottom: 1px solid #171717;
@@ -669,7 +740,8 @@ const paypalClaim = publicClaims.find((claim) => claim.id === "paypal-detection"
   @media (max-width: 900px) {
     .recruiter-hero,
     .section-grid,
-    .prototype-intro {
+    .prototype-intro,
+    .builder-map-band {
       grid-template-columns: 1fr;
     }
 
@@ -695,6 +767,11 @@ const paypalClaim = publicClaims.find((claim) => claim.id === "paypal-detection"
     .prototype-intro {
       gap: 22px;
     }
+
+    .builder-map-copy {
+      border-right: 0;
+      border-bottom: 1px solid #171717;
+    }
   }
 
   @media (max-width: 640px) {
@@ -702,7 +779,9 @@ const paypalClaim = publicClaims.find((claim) => claim.id === "paypal-detection"
     .hero-copy,
     .prototype-section,
     .section-label,
-    .ask-band {
+    .ask-band,
+    .builder-map-copy,
+    .builder-map-preview {
       padding: 28px 20px;
     }
 
@@ -780,6 +859,16 @@ const paypalClaim = publicClaims.find((claim) => claim.id === "paypal-detection"
 
     .prototype-intro h2 {
       font-size: 2.5rem;
+    }
+
+    .builder-map-copy h2 {
+      font-size: 2.4rem;
+    }
+
+    .builder-map-preview span {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 4px;
     }
 
     .ask-band {
