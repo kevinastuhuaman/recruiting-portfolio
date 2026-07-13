@@ -95,6 +95,8 @@ const profile = {
     github: links.github,
     writing: links.writing,
     trackly: links.trackly,
+    builderStack: links.builderStack,
+    builderStackSource: links.builderStackRepo,
   },
 };
 
@@ -141,6 +143,8 @@ Use this guide for public-safe recruiting, referral, interview preparation, or c
 - Trackly case study: ${absolute("/projects/trackly/")}
 - Berkeley and MoBagel AI product strategy case study: ${absolute("/projects/berkeley-mobagel-ai-gtm/")}
 - BCP and Credicorp case study: ${absolute("/projects/smb-fintech-bcp-credicorp/")}
+- AI Product Builder Stack: ${links.builderStack}
+- AI Product Builder Stack source: ${links.builderStackRepo}
 - Contact: ${absolute("/contact/")}
 
 ## Machine-readable context
@@ -151,6 +155,8 @@ Use this guide for public-safe recruiting, referral, interview preparation, or c
 - Public evidence registry: ${absolute("/proof.json")}
 - Structured projects: ${absolute("/projects.json")}
 - Public assistant corpus: ${absolute("/assistant-corpus.json")}
+- Builder Stack structured data: ${links.builderStack}stack.json
+- Builder Stack LLM context: ${links.builderStack}llms.txt
 
 ## Boundaries
 
@@ -185,6 +191,7 @@ Kevin's most recent enterprise AI proof is an agentic observability prototype at
 - [PayPal AI observability case study](${absolute("/projects/paypal-ai-observability/")}): Agentic investigation, product decisions, prototype outcomes, and public-safety boundaries
 - [Trackly case study](${absolute("/projects/trackly/")}): Product decisions, system quality, and cross-platform delivery
 - [Berkeley and MoBagel case study](${absolute("/projects/berkeley-mobagel-ai-gtm/")}): AI product adoption, high-fidelity prototyping, roadmap, business model, and GTM
+- [AI Product Builder Stack](${links.builderStack}): 65 verified tools and product patterns organized by outcome, evidence, project, and lifecycle state
 - [Resume](${absolute("/resume/")}): Complete chronological experience
 - [Public evidence](${absolute("/proof/")}): Sources and context for published claims
 - [Contact](${absolute("/contact/")}): LinkedIn and email
@@ -195,6 +202,9 @@ Kevin's most recent enterprise AI proof is an agentic observability prototype at
 - [Full plain-text profile](${absolute("/llms-full.txt")}): Detailed public recruiting context
 - [Structured profile](${absolute("/profile.json")}): Public identity, experience, and claims
 - [Structured projects](${absolute("/projects.json")}): Project summaries and canonical links
+- [Public assistant corpus](${absolute("/assistant-corpus.json")}): Pre-approved recruiter questions, answers, and citations
+- [Builder Stack structured data](${links.builderStack}stack.json): Machine-readable technical range and implementation evidence
+- [Builder Stack LLM context](${links.builderStack}llms.txt): Plain-text map of tools, systems, and lifecycle states
 - [Markdown resume](${absolute("/resume.md")}): Crawlable resume equivalent
 `;
 
@@ -228,6 +238,8 @@ ${publicClaims.map((claim) => `- ${claim.statement} Context: ${claim.context} So
 - GitHub: ${links.github}
 - Writing: ${links.writing}
 - Trackly: ${links.trackly}
+- AI Product Builder Stack: ${links.builderStack}
+- AI Product Builder Stack source: ${links.builderStackRepo}
 `;
 
 const resumeMarkdown = `# Kevin Astuhuaman
@@ -255,6 +267,7 @@ ${experience
 - Trackly: ${links.trackly}
 - Trackly App Store: ${links.appStore}
 - Trackly CLI and MCP: ${links.tracklyCli}
+- AI Product Builder Stack: ${links.builderStack}
 - Berkeley and MoBagel public-safe case: ${absolute("/projects/berkeley-mobagel-ai-gtm/")}
 `;
 

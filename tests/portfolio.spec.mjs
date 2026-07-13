@@ -187,6 +187,24 @@ test("public machine files and resume PDF are fetchable", async ({ request }) =>
   }
 });
 
+test("machine entry points link the AI Product Builder Stack", async ({ request }) => {
+  const [llmsResponse, profileResponse, skillResponse] = await Promise.all([
+    request.get("/llms.txt"),
+    request.get("/profile.json"),
+    request.get("/.well-known/agent-skills/site-navigation/SKILL.md"),
+  ]);
+
+  const llms = await llmsResponse.text();
+  const profile = await profileResponse.json();
+  const skill = await skillResponse.text();
+  expect(llms).toContain("https://kevinastuhuaman.github.io/ai-product-builder-stack/");
+  expect(llms).toContain("ai-product-builder-stack/stack.json");
+  expect(profile.links.builderStack).toBe("https://kevinastuhuaman.github.io/ai-product-builder-stack/");
+  expect(profile.links.builderStackSource).toBe("https://github.com/kevinastuhuaman/ai-product-builder-stack");
+  expect(skill).toContain("AI Product Builder Stack");
+  expect(skill).toContain("ai-product-builder-stack/llms.txt");
+});
+
 test("404 output is excluded from indexing and structured data", async ({ page }) => {
   await page.goto("/404.html");
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "noindex, follow");
