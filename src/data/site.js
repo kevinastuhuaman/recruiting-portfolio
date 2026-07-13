@@ -18,6 +18,8 @@ export const links = {
   trackly: "https://usetrackly.app/",
   appStore: "https://apps.apple.com/us/app/trackly-apply-first/id6758267565",
   tracklyCli: "https://github.com/trackly-app/trackly-cli",
+  builderStack: "https://kevinastuhuaman.github.io/ai-product-builder-stack/",
+  builderStackRepo: "https://github.com/kevinastuhuaman/ai-product-builder-stack",
   gpt56: "https://openai.com/index/gpt-5-6/",
   berkeleyMobagel:
     "https://haas.berkeley.edu/open-innovation/programs/past-challenges/",
@@ -115,6 +117,15 @@ export const publicClaims = [
     context: "Public technical distribution artifact; separate from the App Store listing.",
   },
   {
+    id: "builder-stack-public",
+    statement: "Kevin's public AI Product Builder Stack documents 65 verified tools and product patterns across eight layers, with lifecycle states and implementation evidence.",
+    short: "65 verified tools and patterns across eight capability layers",
+    source: links.builderStack,
+    checked: "2026-07-12",
+    state: "public interactive artifact",
+    context: "A maintained evidence map, not a claim that every tool is current production infrastructure.",
+  },
+  {
     id: "berkeley-mobagel-brief",
     statement: "Berkeley Haas's official past-challenges page lists the Fujitsu and MoBagel AI Business Adoption Acceleration Challenge.",
     short: "Official Berkeley Fujitsu and MoBagel AI challenge",
@@ -141,6 +152,13 @@ export const assistantCorpus = {
       url: `${site.origin}/projects/trackly/`,
       keywords: ["trackly", "agent", "agents", "job search", "career pages", "scraping", "matching", "eval", "classification", "chat", "voice", "ios", "macos", "cli", "mcp", "builder", "computer use", "browser use", "browser agent", "human in the loop", "human-in-the-loop", "harness", "chrome", "ats"],
       content: "Kevin built Trackly during his MBA job search after seeing strong roles appear on company career pages before job boards. The live product monitors direct sources, normalizes and deduplicates jobs, applies freshness and false-zero guards, classifies job attributes, explains matches, and delivers the same product system through web, iOS, macOS, a public CLI, MCP, chat, and voice. On July 12, 2026, Trackly's public inventory showed 1,969 monitored company career sites, 40 ATS and source types, and 128,975 job records. Kevin also built a recent human-reviewed browser-agent harness: Trackly supplies a user-selected application queue and job context through its CLI and MCP; a domain-specific policy layer handles ATS mechanics, form integrity, and recovery; Codex controls Chrome to prepare forms; and the workflow pauses before submission for fresh, job-specific human approval. Subjective answers and consequential actions remain visible to the user, and any edit, navigation, reload, or reconnect invalidates prior approval. The transferable product pattern is useful when the final workflow lives in a browser instead of a reliable API, including recruiting, financial operations, sales portals, and CRM workflows. It is a recent working experiment, not a claim of fully autonomous application submission. Kevin owned the product problem, prioritization, quality thresholds, interaction decisions, release decisions, operation, and hands-on implementation. AI coding agents accelerated implementation and review but did not decide the product promise or release evidence.",
+    },
+    {
+      id: "builder-stack",
+      title: "AI Product Builder Stack",
+      url: links.builderStack,
+      keywords: ["ai product builder stack", "tools", "infrastructure", "azure", "aws", "terraform", "observability", "langfuse", "posthog", "browser automation", "voice", "figma", "remotion", "technical fluency"],
+      content: "Kevin published an interactive AI Product Builder Stack that documents 65 verified tools and product patterns across eight capability layers. Each entry identifies the product outcome, implementation or operating evidence, project context, public source, and honest lifecycle state: shipped, active system, prototype, or historical. The map covers model and agent systems, retrieval and data, browser automation, infrastructure, observability, voice, product quality, and go-to-market operations. Four system flows show how the tools combine in Trackly discovery, a human-reviewed browser agent, real-time voice onboarding, and conversation-to-follow-up. The artifact is public-safe: it excludes credentials, user data, private topology, and employer intellectual property. Its structured data is available as stack.json and llms.txt for recruiters and AI systems.",
     },
     {
       id: "paypal",

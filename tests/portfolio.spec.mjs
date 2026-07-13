@@ -163,6 +163,20 @@ test("Trackly explains the browser-agent harness and its human approval boundary
   await expect(harness.getByRole("link", { name: /GPT-5.6 announcement/i })).toHaveAttribute("href", "https://openai.com/index/gpt-5-6/");
 });
 
+test("builder stack proof is visible and machine-readable", async ({ page, request }) => {
+  await page.goto("/");
+  await expect(page.getByRole("heading", { name: /65 tools, organized by what I built with them/i })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Explore the builder stack/i })).toHaveAttribute(
+    "href",
+    "https://kevinastuhuaman.github.io/ai-product-builder-stack/",
+  );
+
+  const response = await request.get("/assistant-corpus.json");
+  expect(response.ok()).toBe(true);
+  const corpus = await response.json();
+  expect(corpus.entries.find((entry) => entry.id === "builder-stack")?.content).toMatch(/65 verified tools/i);
+});
+
 test("public machine files and resume PDF are fetchable", async ({ request }) => {
   for (const path of ["/robots.txt", "/sitemap.xml", "/llms.txt", "/profile.json", "/projects.json", "/proof.json", "/assistant-corpus.json", "/resume.md", "/2e43f7d61916408ea525527e4bc9b5c7.txt", "/.well-known/agent-skills/index.json", "/.well-known/agent-skills/site-navigation/SKILL.md", "/kevin-astuhuaman-resume.pdf"]) {
     const response = await request.get(path);

@@ -5,3 +5,4 @@ tmp/
 .context-lighthouse-*.json
 .vercel/
 .DS_Store
+public/assets/builder-stack-preview.png
