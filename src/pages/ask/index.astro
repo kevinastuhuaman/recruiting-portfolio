@@ -80,7 +80,8 @@ import { claimsById } from "../../data/claims.js";
   .assistant-tabs button { display: flex; min-height: 68px; padding: 14px 20px; align-items: center; justify-content: space-between; border: 0; border-right: 1px solid var(--ink); background: #fff; font-weight: 750; cursor: pointer; }
   .assistant-tabs button:last-child { border-right: 0; }
   .assistant-tabs button[aria-selected="true"] { background: var(--trackly-dark); color: #fff; }
-  .assistant-tabs small { opacity: .65; font-weight: 500; }
+  .assistant-tabs small { color: #5a5a56; font-weight: 500; }
+  .assistant-tabs button[aria-selected="true"] small { color: #fff; opacity: .8; }
   .chat-panel { display: grid; grid-template-columns: minmax(250px,.48fr) minmax(0,1.52fr); min-height: 680px; }
   .chat-panel > header { padding: 38px; border-right: 1px solid var(--ink); }
   .chat-panel > header h2 { margin: 54px 0 18px; font-size: clamp(2.5rem,5vw,4.8rem); line-height: .93; letter-spacing: -.05em; }
