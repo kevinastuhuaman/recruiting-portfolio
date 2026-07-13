@@ -76,3 +76,5 @@ Progression: Lead Product Manager (1 year), Senior Product Manager (1.5 years), 
 - GitHub: https://github.com/kevinastuhuaman
 - Writing: https://kevinastuhuaman.com/
 - Trackly: https://usetrackly.app/
+- AI Product Builder Stack: https://kevinastuhuaman.github.io/ai-product-builder-stack/
+- AI Product Builder Stack source: https://github.com/kevinastuhuaman/ai-product-builder-stack

@@ -16,6 +16,8 @@ Use this guide for public-safe recruiting, referral, interview preparation, or c
 - Trackly case study: https://portfolio.kevinastuhuaman.com/projects/trackly/
 - Berkeley and MoBagel AI product strategy case study: https://portfolio.kevinastuhuaman.com/projects/berkeley-mobagel-ai-gtm/
 - BCP and Credicorp case study: https://portfolio.kevinastuhuaman.com/projects/smb-fintech-bcp-credicorp/
+- AI Product Builder Stack: https://kevinastuhuaman.github.io/ai-product-builder-stack/
+- AI Product Builder Stack source: https://github.com/kevinastuhuaman/ai-product-builder-stack
 - Contact: https://portfolio.kevinastuhuaman.com/contact/
 
 ## Machine-readable context
@@ -26,6 +28,8 @@ Use this guide for public-safe recruiting, referral, interview preparation, or c
 - Public evidence registry: https://portfolio.kevinastuhuaman.com/proof.json
 - Structured projects: https://portfolio.kevinastuhuaman.com/projects.json
 - Public assistant corpus: https://portfolio.kevinastuhuaman.com/assistant-corpus.json
+- Builder Stack structured data: https://kevinastuhuaman.github.io/ai-product-builder-stack/stack.json
+- Builder Stack LLM context: https://kevinastuhuaman.github.io/ai-product-builder-stack/llms.txt
 
 ## Boundaries
 
