@@ -109,6 +109,15 @@
       "context": "A maintained evidence map, not a claim that every tool is current production infrastructure."
     },
     {
+      "id": "human-control-plane-public",
+      "statement": "Kevin published Human Control Plane, an interactive product study that maps consequence, reversibility, model uncertainty, and intent freshness to four human-oversight patterns.",
+      "short": "Four human-control patterns for consequential AI actions",
+      "source": "https://kevinastuhuaman.github.io/human-in-the-loop-patterns/",
+      "checked": "2026-07-12",
+      "state": "public interactive artifact",
+      "context": "A deterministic product-design study built with synthetic scenarios, not a production authorization framework."
+    },
+    {
       "id": "berkeley-mobagel-brief",
       "statement": "Berkeley Haas's official past-challenges page lists the Fujitsu and MoBagel AI Business Adoption Acceleration Challenge.",
       "short": "Official Berkeley Fujitsu and MoBagel AI challenge",
@@ -126,6 +135,8 @@
     "writing": "https://kevinastuhuaman.com/",
     "trackly": "https://usetrackly.app/",
     "builderStack": "https://kevinastuhuaman.github.io/ai-product-builder-stack/",
-    "builderStackSource": "https://github.com/kevinastuhuaman/ai-product-builder-stack"
+    "builderStackSource": "https://github.com/kevinastuhuaman/ai-product-builder-stack",
+    "humanControlPlane": "https://kevinastuhuaman.github.io/human-in-the-loop-patterns/",
+    "humanControlPlaneSource": "https://github.com/kevinastuhuaman/human-in-the-loop-patterns"
   }
 }

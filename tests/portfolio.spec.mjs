@@ -161,6 +161,10 @@ test("Trackly explains the browser-agent harness and its human approval boundary
   await expect(harness.getByText("Sales and CRM", { exact: true })).toBeVisible();
   await expect(harness.getByText("Legacy enterprise workflows", { exact: true })).toBeVisible();
   await expect(harness.getByRole("link", { name: /GPT-5.6 announcement/i })).toHaveAttribute("href", "https://openai.com/index/gpt-5-6/");
+  await expect(harness.getByRole("link", { name: /interactive Human Control Plane/i })).toHaveAttribute(
+    "href",
+    "https://kevinastuhuaman.github.io/human-in-the-loop-patterns/",
+  );
 });
 
 test("builder stack proof is visible and machine-readable", async ({ page, request }) => {
@@ -178,6 +182,32 @@ test("builder stack proof is visible and machine-readable", async ({ page, reque
   expect(builderStackEntry?.content).toMatch(/65 verified tools/i);
   expect(builderStackEntry?.content).toMatch(/Langfuse, PostHog, Umami/i);
   expect(builderStackEntry?.keywords).toEqual(expect.arrayContaining(["cloud tooling", "ci/cd", "analytics"]));
+});
+
+test("human control proof is visible and machine-readable", async ({ page, request }) => {
+  await page.goto("/");
+  const section = page.locator("#human-control-plane");
+  await expect(section.getByRole("heading", { name: "Capability is not permission." })).toBeVisible();
+  await expect(section.getByRole("link", { name: /Try the control plane/i })).toHaveAttribute(
+    "href",
+    "https://kevinastuhuaman.github.io/human-in-the-loop-patterns/",
+  );
+  await expect(section.getByRole("link", { name: /Inspect the decisions/i })).toHaveAttribute(
+    "href",
+    "https://github.com/kevinastuhuaman/human-in-the-loop-patterns",
+  );
+
+  const [corpusResponse, proofResponse] = await Promise.all([
+    request.get("/assistant-corpus.json"),
+    request.get("/proof.json"),
+  ]);
+  const corpus = await corpusResponse.json();
+  const proof = await proofResponse.json();
+  const entry = corpus.entries.find((item) => item.id === "human-control-plane");
+  const claim = proof.claims.find((item) => item.id === "human-control-plane-public");
+  expect(entry?.content).toMatch(/approval bound to committed state/i);
+  expect(entry?.keywords).toEqual(expect.arrayContaining(["human-in-the-loop", "reversibility", "agent safety"]));
+  expect(claim?.context).toMatch(/not a production authorization framework/i);
 });
 
 test("public machine files and resume PDF are fetchable", async ({ request }) => {
@@ -203,6 +233,23 @@ test("machine entry points link the AI Product Builder Stack", async ({ request 
   expect(profile.links.builderStackSource).toBe("https://github.com/kevinastuhuaman/ai-product-builder-stack");
   expect(skill).toContain("AI Product Builder Stack");
   expect(skill).toContain("ai-product-builder-stack/llms.txt");
+});
+
+test("machine entry points link the Human Control Plane", async ({ request }) => {
+  const [llmsResponse, profileResponse, skillResponse] = await Promise.all([
+    request.get("/llms.txt"),
+    request.get("/profile.json"),
+    request.get("/.well-known/agent-skills/site-navigation/SKILL.md"),
+  ]);
+
+  const llms = await llmsResponse.text();
+  const profile = await profileResponse.json();
+  const skill = await skillResponse.text();
+  expect(llms).toContain("https://kevinastuhuaman.github.io/human-in-the-loop-patterns/");
+  expect(llms).toContain("human-in-the-loop-patterns/project.json");
+  expect(profile.links.humanControlPlane).toBe("https://kevinastuhuaman.github.io/human-in-the-loop-patterns/");
+  expect(profile.links.humanControlPlaneSource).toBe("https://github.com/kevinastuhuaman/human-in-the-loop-patterns");
+  expect(skill).toContain("Human Control Plane LLM context");
 });
 
 test("404 output is excluded from indexing and structured data", async ({ page }) => {

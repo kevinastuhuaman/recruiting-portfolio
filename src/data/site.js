@@ -20,6 +20,8 @@ export const links = {
   tracklyCli: "https://github.com/trackly-app/trackly-cli",
   builderStack: "https://kevinastuhuaman.github.io/ai-product-builder-stack/",
   builderStackRepo: "https://github.com/kevinastuhuaman/ai-product-builder-stack",
+  humanControlPlane: "https://kevinastuhuaman.github.io/human-in-the-loop-patterns/",
+  humanControlPlaneRepo: "https://github.com/kevinastuhuaman/human-in-the-loop-patterns",
   gpt56: "https://openai.com/index/gpt-5-6/",
   berkeleyMobagel:
     "https://haas.berkeley.edu/open-innovation/programs/past-challenges/",
@@ -126,6 +128,15 @@ export const publicClaims = [
     context: "A maintained evidence map, not a claim that every tool is current production infrastructure.",
   },
   {
+    id: "human-control-plane-public",
+    statement: "Kevin published Human Control Plane, an interactive product study that maps consequence, reversibility, model uncertainty, and intent freshness to four human-oversight patterns.",
+    short: "Four human-control patterns for consequential AI actions",
+    source: links.humanControlPlane,
+    checked: "2026-07-12",
+    state: "public interactive artifact",
+    context: "A deterministic product-design study built with synthetic scenarios, not a production authorization framework.",
+  },
+  {
     id: "berkeley-mobagel-brief",
     statement: "Berkeley Haas's official past-challenges page lists the Fujitsu and MoBagel AI Business Adoption Acceleration Challenge.",
     short: "Official Berkeley Fujitsu and MoBagel AI challenge",
@@ -159,6 +170,13 @@ export const assistantCorpus = {
       url: `${site.origin}/#builder-stack`,
       keywords: ["ai product builder stack", "technical stack", "tools", "cloud", "cloud tooling", "infrastructure", "deployment", "devops", "ci/cd", "continuous integration", "azure", "aws", "terraform", "observability", "analytics", "langfuse", "posthog", "browser automation", "voice", "figma", "remotion", "technical fluency"],
       content: "Kevin published an interactive AI Product Builder Stack documenting 65 verified tools and product patterns across eight capability layers. Representative entries include OpenAI and Codex, Anthropic Claude, Amazon Bedrock, Azure OpenAI, PostgreSQL, Azure AI Search, Terraform, Docker, GitHub Actions, Langfuse, PostHog, Umami, Gatus, Application Insights, Playwright, Puppeteer, Conductor, CodeRabbit, SwiftUI, Figma, Remotion, WebRTC, and Whisper. The map separately labels shipped work, active systems, prototypes such as Exa, Tavily, Parallel, and LlamaIndex experiments, and historical platforms such as AWS Lightsail and RDS after the Azure cutover. Each entry names the product outcome, implementation or operating evidence, project context, and a reference link. Four flows show how the tools combine in Trackly discovery, a human-reviewed browser agent, real-time voice onboarding, and conversation-to-follow-up. The artifact excludes credentials, user data, private topology, and employer intellectual property. Structured versions are published as stack.json and llms.txt.",
+    },
+    {
+      id: "human-control-plane",
+      title: "Human Control Plane",
+      url: `${site.origin}/#human-control-plane`,
+      keywords: ["human in the loop", "human-in-the-loop", "approval", "undo", "agent safety", "ai governance", "consequence", "reversibility", "model uncertainty", "intent freshness", "product design", "enterprise ai"],
+      content: "Kevin published Human Control Plane, an original interactive product study for choosing human oversight patterns in consequential AI systems. Users can change consequence, reversibility, model uncertainty, and intent freshness; one deterministic policy model then recommends auto-execute with Undo, preview and confirm, preview with fresh approval, or accountable approval. Four synthetic scenarios make the tradeoffs concrete: a bounded customer refund, CRM enrichment, a human-reviewed job application, and a privileged access change. The interface demonstrates approval bound to committed state, automatic invalidation after an input change, explicit ownership, recovery design, and an audit record containing policy inputs, owner, action, and outcome rather than private chain-of-thought. The public repository contains decision records, responsive interaction tests, Axe accessibility checks, an IP boundary, project.json, and llms.txt. It is a product-design artifact, not a production authorization framework or a disclosure of Trackly internals.",
     },
     {
       id: "paypal",
