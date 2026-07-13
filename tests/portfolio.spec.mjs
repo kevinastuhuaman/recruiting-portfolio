@@ -357,6 +357,75 @@ test("public assistant renders plain-text answers and allowlisted citations", as
   await expect(page.getByRole("link", { name: "Trackly case study" })).toHaveAttribute("href", "https://portfolio.kevinastuhuaman.com/projects/trackly/");
 });
 
+test("public assistant voice input stays editable and voice playback uses only the returned answer", async ({ page }) => {
+  await page.addInitScript(() => {
+    class MockRecognition {
+      continuous = false;
+      interimResults = false;
+      lang = "";
+      onstart = null;
+      onresult = null;
+      onerror = null;
+      onend = null;
+      start() {
+        this.onstart?.();
+        this.onresult?.({
+          resultIndex: 0,
+          results: [{ 0: { transcript: "What did Kevin build at PayPal?" }, isFinal: true }],
+        });
+        this.onend?.();
+      }
+      stop() { this.onend?.(); }
+      abort() { this.onend?.(); }
+    }
+    Object.defineProperty(window, "SpeechRecognition", { configurable: true, value: MockRecognition });
+    Object.defineProperty(window, "SpeechSynthesisUtterance", {
+      configurable: true,
+      value: class {
+        constructor(text) { this.text = text; }
+      },
+    });
+    Object.defineProperty(window, "speechSynthesis", {
+      configurable: true,
+      value: {
+        speaking: false,
+        cancel() { this.speaking = false; },
+        speak(utterance) {
+          this.speaking = true;
+          window.sessionStorage.setItem("portfolio_spoken_answer", utterance.text);
+          this.speaking = false;
+          utterance.onend?.();
+        },
+      },
+    });
+  });
+
+  let assistantRequests = 0;
+  await page.route("https://closeai.mba/api/portfolio/ask", async (route) => {
+    assistantRequests += 1;
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ answer: "Kevin built an agentic observability prototype for PayPal Checkout.", citations: [], corpusVersion: "test" }),
+    });
+  });
+
+  await page.goto("/ask/");
+  await expect(page.locator("[data-stop]")).toBeHidden();
+  await expect(page.locator("[data-speak]")).toBeHidden();
+  await page.getByRole("button", { name: "Dictate question" }).click();
+  await expect(page.getByLabel("Question about Kevin's work")).toHaveValue("What did Kevin build at PayPal?");
+  await expect(page.getByRole("status")).toHaveText("Question captured. Review it, then ask.");
+  expect(assistantRequests).toBe(0);
+
+  await page.getByRole("button", { name: "Ask", exact: true }).click();
+  await expect(page.getByRole("status")).toHaveText("Answer complete.");
+  expect(assistantRequests).toBe(1);
+
+  await page.getByRole("button", { name: "Read answer aloud" }).click();
+  await expect.poll(() => page.evaluate(() => window.sessionStorage.getItem("portfolio_spoken_answer"))).toBe("Kevin built an agentic observability prototype for PayPal Checkout.");
+});
+
 test("public assistant failure preserves the static cited fallback", async ({ page }) => {
   await page.route("https://closeai.mba/api/portfolio/ask", async (route) => {
     await route.fulfill({

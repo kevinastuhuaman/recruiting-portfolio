@@ -1,5 +1,5 @@
 ---
-import { ArrowUpRight, Send, Square } from "@lucide/astro";
+import { ArrowUpRight, Mic, Send, Square, Volume2 } from "@lucide/astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 ---
 
@@ -27,6 +27,9 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
               <button class="button button-dark" type="submit" data-submit>
                 <Send aria-hidden="true" size={17} /> Ask
               </button>
+              <button class="voice-button" type="button" data-voice-input aria-label="Dictate question" aria-pressed="false" title="Dictate question" disabled>
+                <Mic aria-hidden="true" size={18} />
+              </button>
               <button class="button" type="button" data-stop hidden>
                 <Square aria-hidden="true" size={15} /> Stop
               </button>
@@ -44,7 +47,12 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 
           <p class="assistant-status" data-status role="status" aria-live="polite"></p>
           <section class="assistant-answer" data-answer-region hidden aria-labelledby="answer-title">
-            <h2 id="answer-title">Answer</h2>
+            <div class="answer-heading">
+              <h2 id="answer-title">Answer</h2>
+              <button class="voice-button" type="button" data-speak aria-label="Read answer aloud" aria-pressed="false" title="Read answer aloud" hidden>
+                <Volume2 aria-hidden="true" size={18} />
+              </button>
+            </div>
             <p data-answer></p>
             <div data-citations></div>
           </section>
@@ -109,7 +117,35 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
     const answerRegion = document.querySelector("[data-answer-region]");
     const answer = document.querySelector("[data-answer]");
     const citations = document.querySelector("[data-citations]");
+    const voiceInput = document.querySelector("[data-voice-input]");
+    const speak = document.querySelector("[data-speak]");
     let controller: AbortController | undefined;
+    let recognition: VoiceRecognition | undefined;
+    let listening = false;
+    let suppressRecognitionStatus = false;
+    let spokenAnswer = "";
+
+    type VoiceResult = { isFinal: boolean; [index: number]: { transcript: string } };
+    type VoiceResultEvent = { resultIndex: number; results: ArrayLike<VoiceResult> };
+    type VoiceRecognition = {
+      continuous: boolean;
+      interimResults: boolean;
+      lang: string;
+      start: () => void;
+      stop: () => void;
+      abort: () => void;
+      onstart: (() => void) | null;
+      onresult: ((event: VoiceResultEvent) => void) | null;
+      onerror: ((event: { error?: string }) => void) | null;
+      onend: (() => void) | null;
+    };
+    type VoiceRecognitionConstructor = new () => VoiceRecognition;
+    const voiceWindow = window as typeof window & {
+      SpeechRecognition?: VoiceRecognitionConstructor;
+      webkitSpeechRecognition?: VoiceRecognitionConstructor;
+    };
+    const VoiceRecognitionApi = voiceWindow.SpeechRecognition ?? voiceWindow.webkitSpeechRecognition;
+    const speechPlaybackAvailable = "speechSynthesis" in voiceWindow && "SpeechSynthesisUtterance" in voiceWindow;
 
     const setStatus = (message: string) => {
       if (status) status.textContent = message;
@@ -118,6 +154,32 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
     const setLoading = (loading: boolean) => {
       if (submit instanceof HTMLButtonElement) submit.disabled = loading;
       if (stop instanceof HTMLButtonElement) stop.hidden = !loading;
+      if (voiceInput instanceof HTMLButtonElement) voiceInput.disabled = loading || !VoiceRecognitionApi;
+    };
+
+    const setQuestion = (value: string) => {
+      if (!(input instanceof HTMLTextAreaElement)) return;
+      input.value = value.slice(0, input.maxLength);
+      if (count) count.textContent = String(input.value.length);
+    };
+
+    const setListening = (active: boolean) => {
+      listening = active;
+      if (!(voiceInput instanceof HTMLButtonElement)) return;
+      voiceInput.setAttribute("aria-pressed", String(active));
+      voiceInput.setAttribute("aria-label", active ? "Stop dictation" : "Dictate question");
+      voiceInput.title = active ? "Stop dictation" : "Dictate question";
+    };
+
+    const stopSpeech = () => {
+      if (speechPlaybackAvailable) voiceWindow.speechSynthesis.cancel();
+      if (speak instanceof HTMLButtonElement) speak.setAttribute("aria-pressed", "false");
+    };
+
+    const stopListening = (abort = false) => {
+      if (!recognition) return;
+      suppressRecognitionStatus = abort;
+      if (abort) recognition.abort(); else recognition.stop();
     };
 
     const renderCitations = (items: unknown) => {
@@ -144,6 +206,10 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 
     const ask = async (message: string) => {
       controller?.abort();
+      stopListening(true);
+      stopSpeech();
+      spokenAnswer = "";
+      if (speak instanceof HTMLButtonElement) speak.hidden = true;
       const activeController = new AbortController();
       controller = activeController;
       const timeout = window.setTimeout(() => activeController.abort(), 15000);
@@ -163,6 +229,8 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
         }
         if (controller !== activeController) return;
         if (answer) answer.textContent = payload.answer;
+        spokenAnswer = payload.answer;
+        if (speak instanceof HTMLButtonElement && speechPlaybackAvailable) speak.hidden = false;
         renderCitations(payload.citations);
         if (answerRegion instanceof HTMLElement) answerRegion.hidden = false;
         setStatus("Answer complete.");
@@ -180,6 +248,10 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
     };
 
     if (root instanceof HTMLElement) root.hidden = false;
+    if (voiceInput instanceof HTMLButtonElement) {
+      if (VoiceRecognitionApi) voiceInput.disabled = false;
+      else voiceInput.title = "Voice input unavailable in this browser";
+    }
     input?.addEventListener("input", () => {
       if (count && input instanceof HTMLTextAreaElement) count.textContent = String(input.value.length);
     });
@@ -190,13 +262,85 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
       if (message.length >= 2) void ask(message);
     });
     stop?.addEventListener("click", () => controller?.abort());
+    voiceInput?.addEventListener("click", () => {
+      if (!VoiceRecognitionApi || !(input instanceof HTMLTextAreaElement)) return;
+      if (listening) {
+        stopListening();
+        return;
+      }
+
+      let captured = "";
+      let failed = false;
+      suppressRecognitionStatus = false;
+      recognition = new VoiceRecognitionApi();
+      recognition.continuous = false;
+      recognition.interimResults = true;
+      recognition.lang = "en-US";
+      recognition.onstart = () => {
+        setListening(true);
+        setStatus("Listening...");
+      };
+      recognition.onresult = (event) => {
+        let transcript = "";
+        for (let index = 0; index < event.results.length; index += 1) {
+          transcript += event.results[index]?.[0]?.transcript ?? "";
+        }
+        captured = transcript.trim();
+        if (captured) setQuestion(captured);
+      };
+      recognition.onerror = (event) => {
+        failed = true;
+        const denied = event.error === "not-allowed" || event.error === "service-not-allowed";
+        setStatus(denied ? "Microphone permission was not granted." : "Voice input was unavailable. Type the question instead.");
+      };
+      recognition.onend = () => {
+        setListening(false);
+        recognition = undefined;
+        if (!failed && !suppressRecognitionStatus) setStatus(captured ? "Question captured. Review it, then ask." : "No speech was captured.");
+        suppressRecognitionStatus = false;
+      };
+
+      try {
+        recognition.start();
+      } catch {
+        recognition = undefined;
+        setListening(false);
+        setStatus("Voice input was unavailable. Type the question instead.");
+      }
+    });
+    speak?.addEventListener("click", () => {
+      if (!speechPlaybackAvailable || !spokenAnswer || !(speak instanceof HTMLButtonElement)) return;
+      if (voiceWindow.speechSynthesis.speaking) {
+        stopSpeech();
+        setStatus("Answer complete.");
+        return;
+      }
+
+      const utterance = new SpeechSynthesisUtterance(spokenAnswer);
+      utterance.lang = "en-US";
+      utterance.rate = 0.95;
+      utterance.onend = () => {
+        speak.setAttribute("aria-pressed", "false");
+        setStatus("Answer complete.");
+      };
+      utterance.onerror = () => {
+        speak.setAttribute("aria-pressed", "false");
+        setStatus("Speech playback was unavailable.");
+      };
+      speak.setAttribute("aria-pressed", "true");
+      setStatus("Reading answer aloud.");
+      voiceWindow.speechSynthesis.speak(utterance);
+    });
     document.querySelectorAll("[data-question]").forEach((button) => {
       button.addEventListener("click", () => {
         if (!(button instanceof HTMLButtonElement) || !(input instanceof HTMLTextAreaElement)) return;
-        input.value = button.dataset.question || "";
-        if (count) count.textContent = String(input.value.length);
+        setQuestion(button.dataset.question || "");
         input.focus();
       });
+    });
+    window.addEventListener("pagehide", () => {
+      stopListening(true);
+      stopSpeech();
     });
   </script>
 </BaseLayout>
@@ -208,14 +352,20 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
   form label { display: block; margin-bottom: 10px; font-weight: 750; }
   textarea { width: 100%; min-height: 140px; padding: 16px; resize: vertical; background: #fafaf7; color: #111; border: 1px solid #a8a8a1; border-radius: 6px; line-height: 1.5; }
   .assistant-actions { display: flex; margin-top: 12px; align-items: center; gap: 10px; }
+  .assistant-actions [hidden], .answer-heading [hidden] { display: none; }
   .assistant-actions button { cursor: pointer; }
   .assistant-actions button:disabled { cursor: wait; opacity: .65; }
   .assistant-actions > span { margin-left: auto; color: #666660; font-size: .78rem; }
+  .voice-button { display: inline-grid; width: 46px; height: 46px; flex: 0 0 46px; place-items: center; padding: 0; color: #111; background: white; border: 1px solid #8e8e87; border-radius: 4px; cursor: pointer; }
+  .voice-button[aria-pressed="true"] { color: white; background: #242146; border-color: #242146; }
+  .voice-button:disabled { cursor: not-allowed; opacity: .42; }
+  .voice-button:focus-visible { outline: 3px solid #8056f5; outline-offset: 3px; }
   .suggestions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
   .suggestions button { min-height: 40px; padding: 8px 11px; background: white; border: 1px solid #c7c7c0; border-radius: 4px; cursor: pointer; }
   .assistant-status { min-height: 24px; margin-top: 22px; color: #555550; }
   .assistant-answer { margin-top: 22px; padding: 28px; background: #f1f1ec; border-left: 4px solid #8056f5; }
   .assistant-answer h2 { font-size: 1.5rem; }
+  .answer-heading { display: flex; min-height: 46px; align-items: center; justify-content: space-between; gap: 16px; }
   .assistant-answer p { white-space: pre-line; }
   .assistant-answer :global(h3) { margin-top: 24px; font-size: .86rem; text-transform: uppercase; }
   .assistant-answer :global(ol) { padding-left: 20px; }
