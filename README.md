@@ -45,6 +45,8 @@ npm run build
 - `/projects.json`: structured project data
 - `/assistant-corpus.json`: exact public answer corpus for drift verification
 - `/2e43f7d61916408ea525527e4bc9b5c7.txt`: public IndexNow ownership key
+- `/google03e4f31940241210.html`: Google Search Console service-account ownership file
+- `/google5e5c6d4f15731b83.html`: Google Search Console delegated-owner verification file
 - `/.well-known/agent-skills/index.json`: site navigation metadata for AI tools
 
 The former `/packet/` and `/projects/agentic-dev-workflows/` URLs remain as `noindex` compatibility pages. They direct old bookmarks to the maintained resume and Trackly evidence without creating duplicate search targets.

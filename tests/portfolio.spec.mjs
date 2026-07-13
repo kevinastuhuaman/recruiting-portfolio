@@ -268,7 +268,7 @@ test("motion design proof is visible and machine-readable", async ({ page, reque
 });
 
 test("public machine files and resume PDF are fetchable", async ({ request }) => {
-  for (const path of ["/robots.txt", "/sitemap.xml", "/llms.txt", "/profile.json", "/projects.json", "/proof.json", "/assistant-corpus.json", "/resume.md", "/2e43f7d61916408ea525527e4bc9b5c7.txt", "/.well-known/agent-skills/index.json", "/.well-known/agent-skills/site-navigation/SKILL.md", "/kevin-astuhuaman-resume.pdf", "/assets/enterprise-ai-interface-kit-preview.png", "/assets/human-control-plane-preview.png", "/assets/motion-studies-preview.png"]) {
+  for (const path of ["/robots.txt", "/sitemap.xml", "/llms.txt", "/profile.json", "/projects.json", "/proof.json", "/assistant-corpus.json", "/resume.md", "/2e43f7d61916408ea525527e4bc9b5c7.txt", "/google03e4f31940241210.html", "/google5e5c6d4f15731b83.html", "/.well-known/agent-skills/index.json", "/.well-known/agent-skills/site-navigation/SKILL.md", "/kevin-astuhuaman-resume.pdf", "/assets/enterprise-ai-interface-kit-preview.png", "/assets/human-control-plane-preview.png", "/assets/motion-studies-preview.png"]) {
     const response = await request.get(path);
     expect(response.status(), path).toBe(200);
   }

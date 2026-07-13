@@ -71,7 +71,15 @@ for (const path of ["next/index.html", "recruiter-packet.md"]) {
   }
 }
 
-for (const path of ["proof.json", "assistant-corpus.json", "2e43f7d61916408ea525527e4bc9b5c7.txt", ".well-known/agent-skills/index.json", ".well-known/agent-skills/site-navigation/SKILL.md"]) {
+for (const path of [
+  "proof.json",
+  "assistant-corpus.json",
+  "2e43f7d61916408ea525527e4bc9b5c7.txt",
+  "google03e4f31940241210.html",
+  "google5e5c6d4f15731b83.html",
+  ".well-known/agent-skills/index.json",
+  ".well-known/agent-skills/site-navigation/SKILL.md",
+]) {
   try {
     await stat(new URL(path, dist));
   } catch {
