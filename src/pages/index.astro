@@ -94,6 +94,7 @@ const paypalClaim = publicClaims.find((claim) => claim.id === "paypal-detection"
       <strong>AI product manager, builder, and fintech operator</strong>
       <nav aria-label="Quick links">
         <a href="#work">Selected work</a>
+        <a href="#human-control-plane">Control patterns</a>
         <a href="#workbench">Interactive prototype</a>
         <a href="#experience">Experience</a>
         <a href="/proof/">Evidence</a>
@@ -153,6 +154,25 @@ const paypalClaim = publicClaims.find((claim) => claim.id === "paypal-detection"
         <img src="/assets/builder-stack-preview.png" width="1280" height="640" loading="lazy" alt="AI Product Builder Stack showing 65 verified tools and product patterns" />
         <span><strong>Four end-to-end flows</strong> Trackly discovery, browser agent, voice onboarding, and conversation follow-up</span>
       </a>
+    </section>
+
+    <section id="human-control-plane" class="control-plane-band" aria-labelledby="control-plane-title">
+      <a class="control-plane-preview" href={links.humanControlPlane} aria-label="Open the interactive Human Control Plane">
+        <img src="/assets/human-control-plane-preview.png" width="1200" height="630" loading="lazy" alt="Human Control Plane showing operating conditions, a recommended approval policy, and an audit record" />
+        <span><strong>Live product study</strong> Four scenarios · deterministic policy · public source</span>
+      </a>
+      <div class="control-plane-copy">
+        <p class="eyebrow">Human oversight, made operational</p>
+        <h2 id="control-plane-title">Capability is not permission.</h2>
+        <p>The right control depends on the action. This interactive lab turns consequence, reversibility, uncertainty, and intent into a visible product policy, then proves what happens when approval expires or a user needs Undo.</p>
+        <div class="control-pattern-list" aria-label="Human control patterns">
+          <span>Execute + Undo</span><span>Preview + Confirm</span><span>Fresh approval</span><span>Accountable owner</span>
+        </div>
+        <div class="button-row">
+          <a class="button button-primary" href={links.humanControlPlane}>Try the control plane <ArrowUpRight aria-hidden="true" size={17} /></a>
+          <a class="button" href={links.humanControlPlaneRepo}>Inspect the decisions <ArrowUpRight aria-hidden="true" size={17} /></a>
+        </div>
+      </div>
     </section>
 
     <section id="workbench" class="prototype-section" aria-labelledby="prototype-title">
@@ -578,6 +598,75 @@ const paypalClaim = publicClaims.find((claim) => claim.id === "paypal-detection"
     font-size: 0.8rem;
   }
 
+  .control-plane-band {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+    border-bottom: 1px solid #171717;
+    background: #fff7ef;
+  }
+
+  .control-plane-preview {
+    display: grid;
+    min-width: 0;
+    padding: 32px;
+    align-content: center;
+    gap: 14px;
+    border-right: 1px solid #171717;
+    color: #40444a;
+    text-decoration: none;
+  }
+
+  .control-plane-preview img {
+    width: 100%;
+    height: auto;
+    min-width: 0;
+    border: 1px solid #171717;
+    border-radius: 6px;
+  }
+
+  .control-plane-preview > span {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    font-size: 0.8rem;
+  }
+
+  .control-plane-copy {
+    display: grid;
+    padding: 44px 36px;
+    align-content: center;
+  }
+
+  .control-plane-copy h2 {
+    max-width: 520px;
+    margin-bottom: 20px;
+    font-size: clamp(2.25rem, 4vw, 3.7rem);
+  }
+
+  .control-plane-copy > p:not(.eyebrow) {
+    max-width: 590px;
+    color: #40444a;
+  }
+
+  .control-pattern-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: 22px 0 26px;
+    border-top: 1px solid #d7cfc5;
+  }
+
+  .control-pattern-list span {
+    padding: 10px 0;
+    border-bottom: 1px solid #d7cfc5;
+    font-size: 0.78rem;
+    font-weight: 800;
+  }
+
+  .control-pattern-list span:nth-child(even) {
+    padding-left: 16px;
+    border-left: 1px solid #d7cfc5;
+  }
+
   .builder-map-preview strong {
     color: #11110f;
   }
@@ -772,6 +861,15 @@ const paypalClaim = publicClaims.find((claim) => claim.id === "paypal-detection"
       border-right: 0;
       border-bottom: 1px solid #171717;
     }
+
+    .control-plane-band {
+      grid-template-columns: 1fr;
+    }
+
+    .control-plane-preview {
+      border-right: 0;
+      border-bottom: 1px solid #171717;
+    }
   }
 
   @media (max-width: 640px) {
@@ -781,7 +879,9 @@ const paypalClaim = publicClaims.find((claim) => claim.id === "paypal-detection"
     .section-label,
     .ask-band,
     .builder-map-copy,
-    .builder-map-preview {
+    .builder-map-preview,
+    .control-plane-copy,
+    .control-plane-preview {
       padding: 28px 20px;
     }
 
@@ -795,7 +895,7 @@ const paypalClaim = publicClaims.find((claim) => claim.id === "paypal-detection"
     }
 
     .identity-panel h1 {
-      font-size: 3.8rem;
+      font-size: clamp(3.2rem, 13.5vw, 3.8rem);
     }
 
     .mode-switch button {
@@ -866,6 +966,16 @@ const paypalClaim = publicClaims.find((claim) => claim.id === "paypal-detection"
     }
 
     .builder-map-preview span {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .control-plane-copy h2 {
+      font-size: 2.4rem;
+    }
+
+    .control-plane-preview > span {
       align-items: flex-start;
       flex-direction: column;
       gap: 4px;

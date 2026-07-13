@@ -97,6 +97,8 @@ const profile = {
     trackly: links.trackly,
     builderStack: links.builderStack,
     builderStackSource: links.builderStackRepo,
+    humanControlPlane: links.humanControlPlane,
+    humanControlPlaneSource: links.humanControlPlaneRepo,
   },
 };
 
@@ -145,6 +147,8 @@ Use this guide for public-safe recruiting, referral, interview preparation, or c
 - BCP and Credicorp case study: ${absolute("/projects/smb-fintech-bcp-credicorp/")}
 - AI Product Builder Stack: ${links.builderStack}
 - AI Product Builder Stack source: ${links.builderStackRepo}
+- Human Control Plane: ${links.humanControlPlane}
+- Human Control Plane source: ${links.humanControlPlaneRepo}
 - Contact: ${absolute("/contact/")}
 
 ## Machine-readable context
@@ -157,6 +161,8 @@ Use this guide for public-safe recruiting, referral, interview preparation, or c
 - Public assistant corpus: ${absolute("/assistant-corpus.json")}
 - Builder Stack structured data: ${links.builderStack}stack.json
 - Builder Stack LLM context: ${links.builderStack}llms.txt
+- Human Control Plane structured data: ${links.humanControlPlane}project.json
+- Human Control Plane LLM context: ${links.humanControlPlane}llms.txt
 
 ## Boundaries
 
@@ -192,6 +198,7 @@ Kevin's most recent enterprise AI proof is an agentic observability prototype at
 - [Trackly case study](${absolute("/projects/trackly/")}): Product decisions, system quality, and cross-platform delivery
 - [Berkeley and MoBagel case study](${absolute("/projects/berkeley-mobagel-ai-gtm/")}): AI product adoption, high-fidelity prototyping, roadmap, business model, and GTM
 - [AI Product Builder Stack](${links.builderStack}): 65 verified tools and product patterns organized by outcome, evidence, project, and lifecycle state
+- [Human Control Plane](${links.humanControlPlane}): Interactive product study for Undo, confirmation, fresh approval, and accountable-owner patterns
 - [Resume](${absolute("/resume/")}): Complete chronological experience
 - [Public evidence](${absolute("/proof/")}): Sources and context for published claims
 - [Contact](${absolute("/contact/")}): LinkedIn and email
@@ -205,6 +212,8 @@ Kevin's most recent enterprise AI proof is an agentic observability prototype at
 - [Public assistant corpus](${absolute("/assistant-corpus.json")}): Pre-approved recruiter questions, answers, and citations
 - [Builder Stack structured data](${links.builderStack}stack.json): Machine-readable technical range and implementation evidence
 - [Builder Stack LLM context](${links.builderStack}llms.txt): Plain-text map of tools, systems, and lifecycle states
+- [Human Control Plane structured data](${links.humanControlPlane}project.json): Machine-readable scenarios, policies, thresholds, and public boundary
+- [Human Control Plane LLM context](${links.humanControlPlane}llms.txt): Plain-text human-oversight product decisions and evidence
 - [Markdown resume](${absolute("/resume.md")}): Crawlable resume equivalent
 `;
 
@@ -240,6 +249,8 @@ ${publicClaims.map((claim) => `- ${claim.statement} Context: ${claim.context} So
 - Trackly: ${links.trackly}
 - AI Product Builder Stack: ${links.builderStack}
 - AI Product Builder Stack source: ${links.builderStackRepo}
+- Human Control Plane: ${links.humanControlPlane}
+- Human Control Plane source: ${links.humanControlPlaneRepo}
 `;
 
 const resumeMarkdown = `# Kevin Astuhuaman
@@ -268,6 +279,7 @@ ${experience
 - Trackly App Store: ${links.appStore}
 - Trackly CLI and MCP: ${links.tracklyCli}
 - AI Product Builder Stack: ${links.builderStack}
+- Human Control Plane: ${links.humanControlPlane}
 - Berkeley and MoBagel public-safe case: ${absolute("/projects/berkeley-mobagel-ai-gtm/")}
 `;
 
