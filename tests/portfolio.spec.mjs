@@ -70,6 +70,7 @@ test("mobile first viewport leads with AI PM, Berkeley, and PayPal evidence", as
     }),
   );
   expect(positions.every((position) => position.top < 844 && position.bottom > 0 && position.width > 0)).toBe(true);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
 
   await page.setViewportSize({ width: 1440, height: 1000 });
   await expect(page.locator(".proof-strip")).toBeVisible();
@@ -211,7 +212,7 @@ test("human control proof is visible and machine-readable", async ({ page, reque
 });
 
 test("public machine files and resume PDF are fetchable", async ({ request }) => {
-  for (const path of ["/robots.txt", "/sitemap.xml", "/llms.txt", "/profile.json", "/projects.json", "/proof.json", "/assistant-corpus.json", "/resume.md", "/2e43f7d61916408ea525527e4bc9b5c7.txt", "/.well-known/agent-skills/index.json", "/.well-known/agent-skills/site-navigation/SKILL.md", "/kevin-astuhuaman-resume.pdf"]) {
+  for (const path of ["/robots.txt", "/sitemap.xml", "/llms.txt", "/profile.json", "/projects.json", "/proof.json", "/assistant-corpus.json", "/resume.md", "/2e43f7d61916408ea525527e4bc9b5c7.txt", "/.well-known/agent-skills/index.json", "/.well-known/agent-skills/site-navigation/SKILL.md", "/kevin-astuhuaman-resume.pdf", "/assets/human-control-plane-preview.png"]) {
     const response = await request.get(path);
     expect(response.status(), path).toBe(200);
   }
