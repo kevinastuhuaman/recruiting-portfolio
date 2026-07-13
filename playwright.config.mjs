@@ -16,7 +16,8 @@ export default defineConfig({
     timeout: 30_000,
   },
   projects: [
-    { name: "desktop-chromium", use: { ...devices["Desktop Chrome"] } },
-    { name: "mobile-chromium", use: { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true } },
+    { name: "desktop-chromium", testIgnore: /safari-smoke\.spec\.mjs/, use: { ...devices["Desktop Chrome"] } },
+    { name: "mobile-chromium", testIgnore: /safari-smoke\.spec\.mjs/, use: { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true } },
+    { name: "desktop-webkit", testMatch: /safari-smoke\.spec\.mjs/, use: { ...devices["Desktop Safari"] } },
   ],
 });

@@ -1,0 +1,82 @@
+---
+import { ArrowUpRight, CodeXml } from "@lucide/astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { labArtifacts } from "../../data/site.js";
+---
+
+<BaseLayout
+  title="AI Product Lab | Kevin Astuhuaman"
+  description="Seven inspectable product studies covering grounded AI, evals, agent workflows, human control, motion, and enterprise interfaces."
+  path="/lab/"
+>
+  <div class="lab-page">
+    <header class="lab-hero">
+      <p class="eyebrow">AI Product Lab</p>
+      <h1>Product judgment you can use, test, and inspect.</h1>
+      <p>Seven public experiments turn recurring AI product decisions into working interfaces. Each uses synthetic data and publishes a clear IP boundary, responsive tests, accessibility checks, and source.</p>
+    </header>
+
+    <section class="lab-grid" aria-label="Interactive product artifacts">
+      {labArtifacts.map((artifact, index) => (
+        <article id={artifact.id} class:list={["lab-card", index === 0 && "lab-card-featured"]}>
+          <a class="lab-visual" href={artifact.live} aria-label={`Open ${artifact.name}`}>
+            {artifact.image ? (
+              <img src={artifact.image} width="1200" height="630" loading={index === 0 ? "eager" : "lazy"} alt={`${artifact.name} interface preview`} />
+            ) : (
+              <div class="lab-monogram" aria-hidden="true"><span>{artifact.monogram}</span><i></i><i></i><i></i></div>
+            )}
+          </a>
+          <div class="lab-copy">
+            <span class="lab-number">0{index + 1}</span>
+            <h2>{artifact.name}</h2>
+            <p>{artifact.signal}</p>
+            <div class="lab-actions">
+              <a href={artifact.live}>Open study <ArrowUpRight aria-hidden="true" size={16} /></a>
+              <a href={artifact.source}><CodeXml aria-hidden="true" size={16} /> Source</a>
+            </div>
+          </div>
+        </article>
+      ))}
+    </section>
+
+    <aside class="lab-boundary">
+      <strong>Evidence boundary</strong>
+      <p>These studies use synthetic data and original public interfaces. They demonstrate product thinking and implementation without publishing employer systems, Trackly user data, private infrastructure, or production authorization logic.</p>
+    </aside>
+  </div>
+</BaseLayout>
+
+<style>
+  .lab-page { max-width: 1280px; margin: 0 auto; padding: 84px 28px 120px; }
+  .lab-hero { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(280px, .6fr); gap: 42px; align-items: end; padding: 56px 0 68px; border-bottom: 1px solid var(--ink); }
+  .lab-hero .eyebrow { grid-column: 1 / -1; margin: 0; }
+  .lab-hero h1 { margin: 0; max-width: 850px; font-size: clamp(3rem, 7vw, 6.8rem); line-height: .92; letter-spacing: -.055em; }
+  .lab-hero > p:last-child { margin: 0; color: var(--muted); font-size: 1.06rem; line-height: 1.65; }
+  .lab-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-left: 1px solid var(--ink); }
+  .lab-card { min-width: 0; border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); background: #fff; }
+  .lab-card-featured { grid-column: 1 / -1; display: grid; grid-template-columns: 1.3fr .7fr; }
+  .lab-visual { display: block; min-height: 290px; overflow: hidden; background: #ebe9f6; }
+  .lab-visual img { display: block; width: 100%; height: 100%; min-height: 290px; object-fit: cover; transition: transform .5s cubic-bezier(.2,.7,.2,1); }
+  .lab-card:hover .lab-visual img { transform: scale(1.018); }
+  .lab-copy { padding: 30px; }
+  .lab-number { color: var(--accent); font: 700 .78rem/1 var(--font-mono); }
+  .lab-copy h2 { margin: 46px 0 12px; font-size: clamp(1.7rem, 3vw, 2.6rem); letter-spacing: -.035em; }
+  .lab-copy p { min-height: 3.5em; margin: 0; color: var(--muted); line-height: 1.55; }
+  .lab-actions { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 32px; }
+  .lab-actions a { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; text-decoration: none; }
+  .lab-monogram { min-height: 290px; position: relative; display: grid; place-items: center; overflow: hidden; background: #141122; color: #fff; }
+  .lab-monogram span { position: relative; z-index: 2; font-size: 5rem; font-weight: 800; letter-spacing: -.08em; }
+  .lab-monogram i { position: absolute; width: 54%; aspect-ratio: 1; border: 1px solid rgba(255,255,255,.28); border-radius: 50%; }
+  .lab-monogram i:nth-child(3) { width: 74%; }
+  .lab-monogram i:nth-child(4) { width: 94%; }
+  .lab-boundary { display: grid; grid-template-columns: 240px 1fr; gap: 28px; margin-top: 64px; padding: 26px 0; border-block: 1px solid var(--ink); }
+  .lab-boundary p { margin: 0; max-width: 800px; color: var(--muted); }
+  @media (max-width: 760px) {
+    .lab-page { padding: 60px 18px 88px; }
+    .lab-hero, .lab-card-featured, .lab-boundary { grid-template-columns: 1fr; }
+    .lab-grid { grid-template-columns: 1fr; }
+    .lab-card-featured { grid-column: auto; display: block; }
+    .lab-copy h2 { margin-top: 28px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .lab-visual img { transition: none; } }
+</style>

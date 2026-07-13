@@ -2,6 +2,11 @@
 import { ArrowUpRight, ExternalLink } from "@lucide/astro";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { links } from "../../../data/site.js";
+import { claimsById } from "../../../data/claims.js";
+
+const access = claimsById["bcp-access"];
+const loans = claimsById["bcp-loans"];
+const digitalGrowth = claimsById["bcp-digital-growth"];
 ---
 
 <BaseLayout
@@ -20,7 +25,7 @@ import { links } from "../../../data/site.js";
       </p>
       <div class="case-meta">
         <span><strong>Progression:</strong> Analyst -> PM -> Senior PM -> Lead PM</span>
-        <span><strong>Leadership:</strong> 9 product direct reports</span>
+        <span><strong>Leadership:</strong> {claimsById["bcp-team"].short}</span>
         <span><strong>Partners:</strong> Risk, compliance, engineering, design, analytics, commercial</span>
       </div>
     </div>
@@ -51,9 +56,9 @@ import { links } from "../../../data/site.js";
         <p class="eyebrow">Access to credit</p>
         <h3>Help more small businesses receive their first loan.</h3>
         <p>
-          The outcome I am proudest of was helping more than 100,000 small businesses access a first loan. It made the work concrete: faster, better-designed financial products could widen access for owners whose businesses depended on working capital.
+          {access.statement} It made the work concrete: faster, better-designed financial products could widen access for owners whose businesses depended on working capital.
         </p>
-        <div class="story-metrics"><strong>100K+ businesses</strong><strong>First-loan access</strong></div>
+        <div class="story-metrics">{(access.metrics ?? []).map((metric) => <strong>{metric.value} {metric.label}</strong>)}</div>
       </div>
     </section>
 
@@ -63,9 +68,9 @@ import { links } from "../../../data/site.js";
         <p class="eyebrow">Credit evaluation</p>
         <h3>Move the credit evaluation from a seven-day process to one hour.</h3>
         <p>
-          I designed and launched an online evaluation platform that reduced credit-evaluation time from seven days to one hour and generated $40M in incremental loan disbursements in nine months.
+          {loans.statement}
         </p>
-        <div class="story-metrics"><strong>7 days -> 1 hour</strong><strong>$40M incremental in 9 months</strong></div>
+        <div class="story-metrics">{(loans.metrics ?? []).map((metric) => <strong>{metric.value} {metric.label}</strong>)}</div>
       </div>
     </section>
 
@@ -75,9 +80,9 @@ import { links } from "../../../data/site.js";
         <p class="eyebrow">Digital value proposition</p>
         <h3>Make the digital channel useful enough to become a growth engine.</h3>
         <p>
-          I redesigned the digital value proposition for small businesses by launching products and enabling new channels. Revenue grew 14% year over year, while monthly website traffic grew sixfold to 180K users in 15 months.
+          {digitalGrowth.statement}
         </p>
-        <div class="story-metrics"><strong>+14% revenue YoY</strong><strong>6x to 180K monthly users</strong></div>
+        <div class="story-metrics">{(digitalGrowth.metrics ?? []).map((metric) => <strong>{metric.value} {metric.label}</strong>)}</div>
       </div>
     </section>
 
@@ -89,7 +94,7 @@ import { links } from "../../../data/site.js";
         <li><strong>Customer evidence</strong><span>Research, journey analysis, and portfolio data</span></li>
         <li><strong>Risk and pricing</strong><span>Automated evaluation and controlled experiments</span></li>
         <li><strong>Product platform</strong><span>Online evaluation, data, identity, and APIs</span></li>
-        <li><strong>Distribution</strong><span>Web, mobile, and 15M+ user channel partners</span></li>
+        <li><strong>Distribution</strong><span>Web, mobile, and partner APIs</span></li>
         <li><strong>Operation</strong><span>Compliance, availability, performance, and P&amp;L</span></li>
       </ul>
       <p>The artifact is reconstructed from public resume content and contains no internal bank architecture.</p>
@@ -103,11 +108,11 @@ import { links } from "../../../data/site.js";
       </div>
       <div class="decision">
         <dt>Lead through other product managers</dt>
-        <dd>As Lead Product Manager, I directed nine product reports and aligned cross-functional teams around availability, growth, and customer-segment decisions.</dd>
+        <dd>{claimsById["bcp-team"].statement} I aligned cross-functional teams around availability, growth, and customer-segment decisions.</dd>
       </div>
       <div class="decision">
         <dt>Connect platform to outcome</dt>
-        <dd>Digital products and channels mattered because they contributed to 14% year-over-year revenue growth and grew monthly website traffic sixfold to 180K users.</dd>
+        <dd>{digitalGrowth.statement}</dd>
       </div>
     </dl>
 

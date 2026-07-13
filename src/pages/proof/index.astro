@@ -26,9 +26,10 @@ import { publicClaims } from "../../data/site.js";
             <h2>{claim.short}</h2>
             <p>{claim.statement}</p>
             <dl>
-              <div><dt>State</dt><dd>{claim.state}</dd></div>
+              <div><dt>Evidence</dt><dd>{claim.evidenceType}</dd></div>
               <div><dt>Context</dt><dd>{claim.context}</dd></div>
-              <div><dt>Checked</dt><dd>{claim.checked}</dd></div>
+              <div><dt>Verified</dt><dd>{claim.verified}</dd></div>
+              <div><dt>Review by</dt><dd>{claim.reviewDate}</dd></div>
             </dl>
             <a class="text-link" href={claim.source}>
               {claim.source.startsWith("/") ? "Read claim context" : "Open public source"}
