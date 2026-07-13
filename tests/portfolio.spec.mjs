@@ -185,6 +185,36 @@ test("builder stack proof is visible and machine-readable", async ({ page, reque
   expect(builderStackEntry?.keywords).toEqual(expect.arrayContaining(["cloud tooling", "ci/cd", "analytics"]));
 });
 
+test("enterprise AI interface proof is visible and machine-readable", async ({ page, request }) => {
+  await page.goto("/");
+  const section = page.locator("#enterprise-interface-kit");
+  await expect(section.getByRole("heading", { name: "Trust comes from visible boundaries." })).toBeVisible();
+  await expect(section.getByRole("link", { name: /Open the interface kit/i })).toHaveAttribute(
+    "href",
+    "https://kevinastuhuaman.github.io/enterprise-ai-interface-kit/",
+  );
+  await expect(section.getByRole("link", { name: /Inspect seven contracts/i })).toHaveAttribute(
+    "href",
+    "https://github.com/kevinastuhuaman/enterprise-ai-interface-kit",
+  );
+
+  const [corpusResponse, proofResponse] = await Promise.all([
+    request.get("/assistant-corpus.json"),
+    request.get("/proof.json"),
+  ]);
+  const corpus = await corpusResponse.json();
+  const proof = await proofResponse.json();
+  const entry = corpus.entries.find((item) => item.id === "enterprise-interface-kit");
+  const claim = proof.claims.find((item) => item.id === "enterprise-interface-kit-public");
+  expect(entry?.content).toMatch(/seven recurring enterprise AI questions/i);
+  expect(entry?.keywords).toEqual(expect.arrayContaining(["calibrated confidence", "observable trace", "empty state"]));
+  expect(claim?.context).toMatch(/fictional data/i);
+
+  await page.goto("/#enterprise-interface-kit");
+  const anchoredTop = await section.evaluate((element) => element.getBoundingClientRect().top);
+  expect(anchoredTop).toBeGreaterThanOrEqual(64);
+});
+
 test("human control proof is visible and machine-readable", async ({ page, request }) => {
   await page.goto("/");
   const section = page.locator("#human-control-plane");
@@ -238,10 +268,27 @@ test("motion design proof is visible and machine-readable", async ({ page, reque
 });
 
 test("public machine files and resume PDF are fetchable", async ({ request }) => {
-  for (const path of ["/robots.txt", "/sitemap.xml", "/llms.txt", "/profile.json", "/projects.json", "/proof.json", "/assistant-corpus.json", "/resume.md", "/2e43f7d61916408ea525527e4bc9b5c7.txt", "/.well-known/agent-skills/index.json", "/.well-known/agent-skills/site-navigation/SKILL.md", "/kevin-astuhuaman-resume.pdf", "/assets/human-control-plane-preview.png", "/assets/motion-studies-preview.png"]) {
+  for (const path of ["/robots.txt", "/sitemap.xml", "/llms.txt", "/profile.json", "/projects.json", "/proof.json", "/assistant-corpus.json", "/resume.md", "/2e43f7d61916408ea525527e4bc9b5c7.txt", "/.well-known/agent-skills/index.json", "/.well-known/agent-skills/site-navigation/SKILL.md", "/kevin-astuhuaman-resume.pdf", "/assets/enterprise-ai-interface-kit-preview.png", "/assets/human-control-plane-preview.png", "/assets/motion-studies-preview.png"]) {
     const response = await request.get(path);
     expect(response.status(), path).toBe(200);
   }
+});
+
+test("machine entry points link the Enterprise AI Interface Kit", async ({ request }) => {
+  const [llmsResponse, profileResponse, skillResponse] = await Promise.all([
+    request.get("/llms.txt"),
+    request.get("/profile.json"),
+    request.get("/.well-known/agent-skills/site-navigation/SKILL.md"),
+  ]);
+
+  const llms = await llmsResponse.text();
+  const profile = await profileResponse.json();
+  const skill = await skillResponse.text();
+  expect(llms).toContain("https://kevinastuhuaman.github.io/enterprise-ai-interface-kit/");
+  expect(llms).toContain("enterprise-ai-interface-kit/patterns.json");
+  expect(profile.links.enterpriseAiInterfaceKit).toBe("https://kevinastuhuaman.github.io/enterprise-ai-interface-kit/");
+  expect(profile.links.enterpriseAiInterfaceKitSource).toBe("https://github.com/kevinastuhuaman/enterprise-ai-interface-kit");
+  expect(skill).toContain("Enterprise AI Interface Kit LLM context");
 });
 
 test("machine entry points link the AI Product Builder Stack", async ({ request }) => {

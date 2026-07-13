@@ -95,6 +95,8 @@ const profile = {
     github: links.github,
     writing: links.writing,
     trackly: links.trackly,
+    enterpriseAiInterfaceKit: links.interfaceKit,
+    enterpriseAiInterfaceKitSource: links.interfaceKitRepo,
     builderStack: links.builderStack,
     builderStackSource: links.builderStackRepo,
     humanControlPlane: links.humanControlPlane,
@@ -147,6 +149,8 @@ Use this guide for public-safe recruiting, referral, interview preparation, or c
 - Trackly case study: ${absolute("/projects/trackly/")}
 - Berkeley and MoBagel AI product strategy case study: ${absolute("/projects/berkeley-mobagel-ai-gtm/")}
 - BCP and Credicorp case study: ${absolute("/projects/smb-fintech-bcp-credicorp/")}
+- Enterprise AI Interface Kit: ${links.interfaceKit}
+- Enterprise AI Interface Kit source: ${links.interfaceKitRepo}
 - AI Product Builder Stack: ${links.builderStack}
 - AI Product Builder Stack source: ${links.builderStackRepo}
 - Human Control Plane: ${links.humanControlPlane}
@@ -163,6 +167,8 @@ Use this guide for public-safe recruiting, referral, interview preparation, or c
 - Public evidence registry: ${absolute("/proof.json")}
 - Structured projects: ${absolute("/projects.json")}
 - Public assistant corpus: ${absolute("/assistant-corpus.json")}
+- Enterprise AI Interface Kit pattern contracts: ${links.interfaceKit}patterns.json
+- Enterprise AI Interface Kit LLM context: ${links.interfaceKit}llms.txt
 - Builder Stack structured data: ${links.builderStack}stack.json
 - Builder Stack LLM context: ${links.builderStack}llms.txt
 - Human Control Plane structured data: ${links.humanControlPlane}project.json
@@ -203,6 +209,7 @@ Kevin's most recent enterprise AI proof is an agentic observability prototype at
 - [PayPal AI observability case study](${absolute("/projects/paypal-ai-observability/")}): Agentic investigation, product decisions, prototype outcomes, and public-safety boundaries
 - [Trackly case study](${absolute("/projects/trackly/")}): Product decisions, system quality, and cross-platform delivery
 - [Berkeley and MoBagel case study](${absolute("/projects/berkeley-mobagel-ai-gtm/")}): AI product adoption, high-fidelity prototyping, roadmap, business model, and GTM
+- [Enterprise AI Interface Kit](${links.interfaceKit}): Seven product contracts for evidence, confidence, authority, approval, observable traces, recovery, and honest absence in one operator workflow
 - [AI Product Builder Stack](${links.builderStack}): 65 verified tools and product patterns organized by outcome, evidence, project, and lifecycle state
 - [Human Control Plane](${links.humanControlPlane}): Interactive product study for Undo, confirmation, fresh approval, and accountable-owner patterns
 - [AI Product Motion Studies](${links.motionStudies}): Three interactive studies for workflow structure, accountable recovery, and cross-surface product continuity
@@ -217,6 +224,8 @@ Kevin's most recent enterprise AI proof is an agentic observability prototype at
 - [Structured profile](${absolute("/profile.json")}): Public identity, experience, and claims
 - [Structured projects](${absolute("/projects.json")}): Project summaries and canonical links
 - [Public assistant corpus](${absolute("/assistant-corpus.json")}): Pre-approved recruiter questions, answers, and citations
+- [Enterprise AI Interface Kit pattern contracts](${links.interfaceKit}patterns.json): Machine-readable product questions, minimum contracts, and failures prevented
+- [Enterprise AI Interface Kit LLM context](${links.interfaceKit}llms.txt): Plain-text product rationale, reference states, role boundaries, and public boundary
 - [Builder Stack structured data](${links.builderStack}stack.json): Machine-readable technical range and implementation evidence
 - [Builder Stack LLM context](${links.builderStack}llms.txt): Plain-text map of tools, systems, and lifecycle states
 - [Human Control Plane structured data](${links.humanControlPlane}project.json): Machine-readable scenarios, policies, thresholds, and public boundary
@@ -256,6 +265,8 @@ ${publicClaims.map((claim) => `- ${claim.statement} Context: ${claim.context} So
 - GitHub: ${links.github}
 - Writing: ${links.writing}
 - Trackly: ${links.trackly}
+- Enterprise AI Interface Kit: ${links.interfaceKit}
+- Enterprise AI Interface Kit source: ${links.interfaceKitRepo}
 - AI Product Builder Stack: ${links.builderStack}
 - AI Product Builder Stack source: ${links.builderStackRepo}
 - Human Control Plane: ${links.humanControlPlane}
@@ -289,6 +300,7 @@ ${experience
 - Trackly: ${links.trackly}
 - Trackly App Store: ${links.appStore}
 - Trackly CLI and MCP: ${links.tracklyCli}
+- Enterprise AI Interface Kit: ${links.interfaceKit}
 - AI Product Builder Stack: ${links.builderStack}
 - Human Control Plane: ${links.humanControlPlane}
 - AI Product Motion Studies: ${links.motionStudies}

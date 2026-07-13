@@ -60,6 +60,14 @@
       "context": "Public technical distribution artifact; separate from the App Store listing."
     },
     {
+      "id": "enterprise-interface-kit-public",
+      "statement": "Kevin published Enterprise AI Interface Kit, one interactive operator workflow with seven product contracts for provenance, calibrated confidence, permissions, approval, observable traces, scoped recovery, and honest empty states.",
+      "source": "https://kevinastuhuaman.github.io/enterprise-ai-interface-kit/",
+      "checked": "2026-07-12",
+      "state": "public interactive artifact",
+      "context": "An original reference product with fictional data, not employer work, production authorization logic, or a disclosure of Trackly internals."
+    },
+    {
       "id": "builder-stack-public",
       "statement": "Kevin's public AI Product Builder Stack documents 65 verified tools and product patterns across eight layers, with lifecycle states and implementation evidence.",
       "source": "https://kevinastuhuaman.github.io/ai-product-builder-stack/",

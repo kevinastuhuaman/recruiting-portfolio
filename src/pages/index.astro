@@ -94,6 +94,7 @@ const paypalClaim = publicClaims.find((claim) => claim.id === "paypal-detection"
       <strong>AI product manager, builder, and fintech operator</strong>
       <nav aria-label="Quick links">
         <a href="#work">Selected work</a>
+        <a href="#enterprise-interface-kit">Interface kit</a>
         <a href="#human-control-plane">Control patterns</a>
         <a href="#motion-studies">Motion studies</a>
         <a href="#workbench">Interactive prototype</a>
@@ -154,6 +155,25 @@ const paypalClaim = publicClaims.find((claim) => claim.id === "paypal-detection"
       <a class="builder-map-preview" href={links.builderStack} aria-label="Open the interactive AI Product Builder Stack">
         <img src="/assets/builder-stack-preview.png" width="1280" height="640" loading="lazy" alt="AI Product Builder Stack showing 65 verified tools and product patterns" />
         <span><strong>Four end-to-end flows</strong> Trackly discovery, browser agent, voice onboarding, and conversation follow-up</span>
+      </a>
+    </section>
+
+    <section id="enterprise-interface-kit" class="interface-kit-band" aria-labelledby="interface-kit-title">
+      <div class="interface-kit-copy">
+        <p class="eyebrow">Enterprise AI judgment, made inspectable</p>
+        <h2 id="interface-kit-title">Trust comes from visible boundaries.</h2>
+        <p>One original operator workflow packages seven recurring product decisions: where evidence came from, how uncertainty affects the next action, who has authority, what approval covers, what happened, what failed, and what the system knows when evidence is absent.</p>
+        <div class="interface-contract-list" aria-label="Enterprise AI interface contracts">
+          <span>Evidence</span><span>Confidence</span><span>Authority</span><span>Recovery</span>
+        </div>
+        <div class="button-row">
+          <a class="button button-primary" href={links.interfaceKit}>Open the interface kit <ArrowUpRight aria-hidden="true" size={17} /></a>
+          <a class="button" href={links.interfaceKitRepo}>Inspect seven contracts <ArrowUpRight aria-hidden="true" size={17} /></a>
+        </div>
+      </div>
+      <a class="interface-kit-preview" href={links.interfaceKit} aria-label="Open the Enterprise AI Interface Kit">
+        <img src="/assets/enterprise-ai-interface-kit-preview.png" width="1200" height="630" loading="lazy" alt="Enterprise AI Interface Kit showing evidence, confidence, permission, approval, and next action in one operator workflow" />
+        <span><strong>One coherent reference product</strong> Five states · four roles · seven public contracts</span>
       </a>
     </section>
 
@@ -618,6 +638,78 @@ const paypalClaim = publicClaims.find((claim) => claim.id === "paypal-detection"
     font-size: 0.8rem;
   }
 
+  .interface-kit-band {
+    display: grid;
+    grid-template-columns: minmax(320px, 0.82fr) minmax(0, 1.18fr);
+    scroll-margin-top: 72px;
+    border-bottom: 1px solid #171717;
+    background: #f4f4ef;
+  }
+
+  .interface-kit-copy {
+    display: grid;
+    padding: 44px 36px;
+    align-content: center;
+    border-right: 1px solid #171717;
+  }
+
+  .interface-kit-copy h2 {
+    max-width: 520px;
+    margin-bottom: 20px;
+    font-size: clamp(2.25rem, 4vw, 3.7rem);
+  }
+
+  .interface-kit-copy > p:not(.eyebrow) {
+    max-width: 590px;
+    color: #40444a;
+  }
+
+  .interface-contract-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: 22px 0 26px;
+    border-top: 1px solid #cacac3;
+  }
+
+  .interface-contract-list span {
+    padding: 10px 0;
+    border-bottom: 1px solid #cacac3;
+    font-size: 0.78rem;
+    font-weight: 800;
+  }
+
+  .interface-contract-list span:nth-child(even) {
+    padding-left: 16px;
+    border-left: 1px solid #cacac3;
+  }
+
+  .interface-kit-preview {
+    display: grid;
+    min-width: 0;
+    padding: 32px;
+    align-content: center;
+    gap: 14px;
+    color: #40444a;
+    text-decoration: none;
+  }
+
+  .interface-kit-preview img {
+    width: 100%;
+    height: auto;
+    min-width: 0;
+    border: 1px solid #171717;
+    border-radius: 6px;
+  }
+
+  .interface-kit-preview > span {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    font-size: 0.8rem;
+  }
+
+  .interface-kit-preview strong { color: #11110f; }
+
   .control-plane-band {
     display: grid;
     grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
@@ -924,6 +1016,7 @@ const paypalClaim = publicClaims.find((claim) => claim.id === "paypal-detection"
     .section-grid,
     .prototype-intro,
     .builder-map-band,
+    .interface-kit-band,
     .motion-studies-band {
       grid-template-columns: 1fr;
     }
@@ -956,6 +1049,11 @@ const paypalClaim = publicClaims.find((claim) => claim.id === "paypal-detection"
       border-bottom: 1px solid #171717;
     }
 
+    .interface-kit-copy {
+      border-right: 0;
+      border-bottom: 1px solid #171717;
+    }
+
     .motion-studies-copy {
       border-right: 0;
       border-bottom: 1px solid #171717;
@@ -979,6 +1077,8 @@ const paypalClaim = publicClaims.find((claim) => claim.id === "paypal-detection"
     .ask-band,
     .builder-map-copy,
     .builder-map-preview,
+    .interface-kit-copy,
+    .interface-kit-preview,
     .control-plane-copy,
     .control-plane-preview,
     .motion-studies-copy,
@@ -1067,6 +1167,14 @@ const paypalClaim = publicClaims.find((claim) => claim.id === "paypal-detection"
     }
 
     .builder-map-preview span {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .interface-kit-copy h2 { font-size: 2.4rem; }
+
+    .interface-kit-preview > span {
       align-items: flex-start;
       flex-direction: column;
       gap: 4px;

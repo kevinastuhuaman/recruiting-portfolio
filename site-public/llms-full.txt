@@ -67,6 +67,7 @@ Progression: Lead Product Manager (1 year), Senior Product Manager (1.5 years), 
 - Kevin designed and launched an online credit-evaluation platform that reduced evaluation time from seven days to one hour and generated $40M in incremental loan disbursements in nine months. Context: Production lending outcome. Source: https://portfolio.kevinastuhuaman.com/projects/smb-fintech-bcp-credicorp/
 - Kevin redesigned BCP's digital value proposition for small businesses, contributing to 14% year-over-year revenue growth and growing monthly website traffic sixfold to 180,000 users in 15 months. Context: Production digital-channel outcome; 180K is monthly website traffic, not product MAU. Source: https://portfolio.kevinastuhuaman.com/projects/smb-fintech-bcp-credicorp/
 - Trackly ships a public command-line interface and Model Context Protocol server. Context: Public technical distribution artifact; separate from the App Store listing. Source: https://github.com/trackly-app/trackly-cli
+- Kevin published Enterprise AI Interface Kit, one interactive operator workflow with seven product contracts for provenance, calibrated confidence, permissions, approval, observable traces, scoped recovery, and honest empty states. Context: An original reference product with fictional data, not employer work, production authorization logic, or a disclosure of Trackly internals. Source: https://kevinastuhuaman.github.io/enterprise-ai-interface-kit/
 - Kevin's public AI Product Builder Stack documents 65 verified tools and product patterns across eight layers, with lifecycle states and implementation evidence. Context: A maintained evidence map, not a claim that every tool is current production infrastructure. Source: https://kevinastuhuaman.github.io/ai-product-builder-stack/
 - Kevin published Human Control Plane, an interactive product study that maps consequence, reversibility, model uncertainty, and intent freshness to four human-oversight patterns. Context: A deterministic product-design study built with synthetic scenarios, not a production authorization framework. Source: https://kevinastuhuaman.github.io/human-in-the-loop-patterns/
 - Kevin published AI Product Motion Studies, three interactive product-design studies with 13 inspectable states for workflow structure, accountable recovery, and cross-surface continuity. Context: Original interfaces with synthetic data and a public motion contract, not employer product work or a disclosure of Trackly internals. Source: https://kevinastuhuaman.github.io/ai-product-motion-studies/
@@ -78,6 +79,8 @@ Progression: Lead Product Manager (1 year), Senior Product Manager (1.5 years), 
 - GitHub: https://github.com/kevinastuhuaman
 - Writing: https://kevinastuhuaman.com/
 - Trackly: https://usetrackly.app/
+- Enterprise AI Interface Kit: https://kevinastuhuaman.github.io/enterprise-ai-interface-kit/
+- Enterprise AI Interface Kit source: https://github.com/kevinastuhuaman/enterprise-ai-interface-kit
 - AI Product Builder Stack: https://kevinastuhuaman.github.io/ai-product-builder-stack/
 - AI Product Builder Stack source: https://github.com/kevinastuhuaman/ai-product-builder-stack
 - Human Control Plane: https://kevinastuhuaman.github.io/human-in-the-loop-patterns/
