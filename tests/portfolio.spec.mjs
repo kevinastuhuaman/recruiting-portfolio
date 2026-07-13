@@ -462,6 +462,36 @@ test("grounded Chat streams plain text and server-controlled citations", async (
   await expect(page.getByRole("link", { name: "Trackly case study" })).toHaveAttribute("href", "https://portfolio.kevinastuhuaman.com/projects/trackly/");
 });
 
+test("malformed Chat stream resets its draft and recovers with the deterministic answer", async ({ page }) => {
+  await page.route("https://closeai.mba/api/portfolio/chat", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "text/event-stream",
+      body: [
+        'event: delta\ndata: {"text":"This partial model draft must disappear."}\n\n',
+        'event: citations\ndata: {malformed-json}\n\n',
+      ].join(""),
+    });
+  });
+  await page.route("https://closeai.mba/api/portfolio/ask", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        answer: "Kevin led a PayPal AI/ML observability prototype and proof of concept.",
+        citations: [{ title: "PayPal case study", url: "https://portfolio.kevinastuhuaman.com/projects/paypal-ai-observability/" }],
+      }),
+    });
+  });
+  await page.goto("/ask/");
+  await page.getByLabel("Question").fill("What did Kevin build at PayPal?");
+  await page.getByRole("button", { name: "Ask", exact: true }).click();
+  await expect(page.getByRole("status")).toHaveText("Showing the deterministic public-corpus answer");
+  await expect(page.getByText(/prototype and proof of concept/i)).toBeVisible();
+  await expect(page.getByText(/partial model draft/i)).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "PayPal case study" })).toBeVisible();
+});
+
 test("Voice is opt-in, requests one microphone, creates one peer, shows no transcript, and cleans up", async ({ page }) => {
   let closeRequest = null;
   await page.addInitScript(() => {

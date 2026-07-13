@@ -3,12 +3,23 @@ import { askPublicCorpus, PORTFOLIO_API, type PortfolioCitation } from './portfo
 
 type Mode = 'chat' | 'voice';
 type Message = { role: 'user' | 'assistant'; content: string };
+type StreamEvent = Record<string, unknown>;
 const PortfolioVoiceExperience = lazy(() => import('./PortfolioVoiceExperience'));
 const suggestions = [
   'What did Kevin build at PayPal?',
   'How does Trackly show product judgment?',
   'What AI product roles fit Kevin best?',
 ];
+
+function parseStreamEvent(raw: string): StreamEvent {
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error('invalid_event_shape');
+    return parsed as StreamEvent;
+  } catch {
+    throw new Error('stream_malformed');
+  }
+}
 
 export default function PortfolioAssistant() {
   const [mode, setMode] = useState<Mode>('chat');
@@ -98,7 +109,7 @@ export default function PortfolioAssistant() {
           const event = block.split('\n').find((line) => line.startsWith('event: '))?.slice(7);
           const raw = block.split('\n').find((line) => line.startsWith('data: '))?.slice(6);
           if (!event || !raw) continue;
-          const data = JSON.parse(raw);
+          const data = parseStreamEvent(raw);
           if (event === 'delta' && typeof data.text === 'string') appendAssistantDelta(data.text);
           if (event === 'citations' && Array.isArray(data.citations)) setCitations(data.citations);
           if (event === 'error' && data.reset === true) resetAssistantDraft();
