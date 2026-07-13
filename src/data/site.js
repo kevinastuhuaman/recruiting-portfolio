@@ -156,7 +156,7 @@ export const assistantCorpus = {
     {
       id: "builder-stack",
       title: "AI Product Builder Stack",
-      url: links.builderStack,
+      url: `${site.origin}/#builder-stack`,
       keywords: ["ai product builder stack", "tools", "infrastructure", "azure", "aws", "terraform", "observability", "langfuse", "posthog", "browser automation", "voice", "figma", "remotion", "technical fluency"],
       content: "Kevin published an interactive AI Product Builder Stack that documents 65 verified tools and product patterns across eight capability layers. Each entry identifies the product outcome, implementation or operating evidence, project context, public source, and honest lifecycle state: shipped, active system, prototype, or historical. The map covers model and agent systems, retrieval and data, browser automation, infrastructure, observability, voice, product quality, and go-to-market operations. Four system flows show how the tools combine in Trackly discovery, a human-reviewed browser agent, real-time voice onboarding, and conversation-to-follow-up. The artifact is public-safe: it excludes credentials, user data, private topology, and employer intellectual property. Its structured data is available as stack.json and llms.txt for recruiters and AI systems.",
     },
