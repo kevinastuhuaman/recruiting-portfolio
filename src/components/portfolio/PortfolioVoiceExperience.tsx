@@ -8,6 +8,8 @@ interface Props {
   onSwitchToChat: () => void;
 }
 
+type VoiceAnalyticsEndReason = 'user_ended' | 'switched_to_chat' | 'page_hidden';
+
 export default function PortfolioVoiceExperience({ onSwitchToChat }: Props) {
   const [voiceState, setVoiceState] = useState<'intro' | PortfolioVoiceState>('intro');
   const [voiceError, setVoiceError] = useState('');
@@ -19,14 +21,26 @@ export default function PortfolioVoiceExperience({ onSwitchToChat }: Props) {
   const voiceTerminalTrackedRef = useRef(false);
   const levelRef = useRef(0);
 
+  const trackVoiceEnd = (reason: VoiceAnalyticsEndReason) => {
+    if (voiceTerminalTrackedRef.current) return;
+    voiceTerminalTrackedRef.current = true;
+    capturePortfolioEvent('portfolio_voice_ended', { end_reason: reason });
+  };
+
   useEffect(() => {
-    const pageHide = () => { void voiceSessionRef.current?.end('page_hidden'); };
+    const pageHide = () => {
+      const session = voiceSessionRef.current;
+      voiceSessionRef.current = null;
+      if (session) trackVoiceEnd('page_hidden');
+      void session?.end('page_hidden');
+    };
     window.addEventListener('pagehide', pageHide);
     return () => {
       window.removeEventListener('pagehide', pageHide);
       voiceGenerationRef.current += 1;
       const session = voiceSessionRef.current;
       voiceSessionRef.current = null;
+      if (session) trackVoiceEnd('switched_to_chat');
       void session?.end('switched_to_chat');
     };
   }, []);
@@ -73,11 +87,8 @@ export default function PortfolioVoiceExperience({ onSwitchToChat }: Props) {
   const endVoice = async (reason: 'user_ended' | 'switched_to_chat' = 'user_ended') => {
     const session = voiceSessionRef.current;
     voiceSessionRef.current = null;
+    if (session) trackVoiceEnd(reason);
     await session?.end(reason);
-    if (session && !voiceTerminalTrackedRef.current) {
-      voiceTerminalTrackedRef.current = true;
-      capturePortfolioEvent('portfolio_voice_ended', { end_reason: reason });
-    }
   };
 
   const switchToChat = () => {

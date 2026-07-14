@@ -90,6 +90,7 @@ function dispatch(event: string, properties: SafeProperties = {}, useBeacon = fa
     api_key: projectKey,
     event,
     properties: {
+      ...sanitizeProperties(properties),
       distinct_id: `portfolio:${sessionId}`,
       $session_id: sessionId,
       $process_person_profile: false,
@@ -98,13 +99,11 @@ function dispatch(event: string, properties: SafeProperties = {}, useBeacon = fa
       $pathname: pathname,
       environment: "production",
       product: "recruiting_portfolio",
-      ...sanitizeProperties(properties),
     },
   });
 
   try {
-    if (useBeacon && navigator.sendBeacon) {
-      navigator.sendBeacon(captureEndpoint, new Blob([payload], { type: "application/json" }));
+    if (useBeacon && navigator.sendBeacon?.(captureEndpoint, new Blob([payload], { type: "application/json" }))) {
       return;
     }
     void fetch(captureEndpoint, {

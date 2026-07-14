@@ -141,8 +141,8 @@ export const assistantCorpus = {
       id: "lab-overview",
       title: "AI Product Lab",
       url: `${site.origin}/lab/`,
-      keywords: ["lab", "ai product lab", "artifacts", "interactive artifacts", "experiments", "product studies", "portfolio lab"],
-      content: "Kevin's AI Product Lab collects seven public, interactive artifacts that make his product judgment inspectable. The collection covers enterprise AI interface patterns, agent workflows, evaluation design, human control, technical range, and motion. Every artifact uses synthetic or public-safe data and links to supporting decisions, structured files, tests, and source material where available.",
+      keywords: ["lab", "ai product lab", "artifacts", "interactive artifacts", "experiments", "product studies", "portfolio lab", "ai investigation workbench", "agent workflow canvas", "evals control room"],
+      content: "Kevin's AI Product Lab collects seven public, interactive artifacts that make his product judgment inspectable: AI Investigation Workbench, AI Product Builder Stack, Agent Workflow Canvas, Evals Control Room, Human Control Plane, AI Product Motion Studies, and Enterprise AI Interface Kit. The collection covers enterprise AI interface patterns, agent workflows, evaluation design, human control, technical range, and motion. Every artifact uses synthetic or public-safe data and links to supporting decisions, structured files, tests, and source material where available.",
     },
     {
       id: "trackly",
@@ -197,8 +197,8 @@ export const assistantCorpus = {
       id: "bcp",
       title: "BCP and Credicorp product leadership case study",
       url: `${site.origin}/projects/smb-fintech-bcp-credicorp/`,
-      keywords: ["bcp", "credicorp", "fintech", "bank", "smb", "lending", "digital channels", "leadership", "team", "teams", "managed", "reports", "risk", "compliance", "growth"],
-      content: `From 2018 through 2024, Kevin progressed from Product Analyst to Product Manager, Senior Product Manager, and Lead Product Manager at Banco de Credito BCP, part of Credicorp. ${claim("bcp-access").statement} ${claim("bcp-loans").statement} ${claim("bcp-digital-growth").statement} ${claim("bcp-market-share").statement} ${claim("bcp-team").statement}`,
+      keywords: ["bcp", "credicorp", "fintech", "bank", "smb", "lending", "digital channels", "leadership", "team", "teams", "managed", "reports", "risk", "compliance", "growth", "180k", "180k users", "monthly users"],
+      content: `From 2018 through 2024, Kevin progressed from Product Analyst to Product Manager, Senior Product Manager, and Lead Product Manager at Banco de Credito BCP, part of Credicorp. ${claim("bcp-access").statement} ${claim("bcp-loans").statement} ${claim("bcp-digital-growth").statement} The 180K figure is monthly website traffic, not monthly users. ${claim("bcp-market-share").statement} ${claim("bcp-team").statement}`,
     },
     {
       id: "resume",

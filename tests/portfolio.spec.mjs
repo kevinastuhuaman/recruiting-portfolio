@@ -577,7 +577,7 @@ test("404 output is excluded from indexing and structured data", async ({ page }
   await expect(page.locator(".page-hero h1")).toHaveCSS("color", "rgb(11, 11, 11)");
 });
 
-test("local previews never send production analytics", async ({ page }) => {
+test("analytics payload excludes private content", async ({ page }) => {
   const events = [];
   await page.route("https://us.i.posthog.com/i/v0/e/", async (route) => {
     events.push(JSON.parse(route.request().postData() ?? "{}"));
