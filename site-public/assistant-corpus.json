@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "corpusVersion": "2026-07-13.1",
-  "sourceCommit": "25a04e0fde98d572e928b8c000ccb65024072ef5",
-  "checksum": "3aa0f7d9f8b4379854b187f60681702ac18809d66d140f772719d7caa19a7288",
+  "sourceCommit": "c66d2b71534b7e8213937c40909528c9b6672533",
+  "checksum": "d2b9404d21d3b6bcc7d5e86598a193d12b1920e8ace2de73dc56cfb066aa1612",
   "entries": [
     {
       "id": "overview",
@@ -33,6 +33,7 @@
         "evals",
         "evals built",
         "evaluation",
+        "evaluations",
         "product studies",
         "portfolio lab",
         "ai investigation workbench",
@@ -65,6 +66,8 @@
         "computer use",
         "browser use",
         "browser agent",
+        "human reviewed",
+        "human reviewed browser agent",
         "human in the loop",
         "human-in-the-loop",
         "harness",
@@ -161,7 +164,9 @@
         "recovery",
         "failure state",
         "cross-platform",
+        "cross platform",
         "cross-surface",
+        "cross surface",
         "reduced motion",
         "accessibility",
         "enterprise ai",
@@ -228,8 +233,14 @@
         "compliance",
         "growth",
         "180k",
-        "180k users",
-        "monthly users"
+        "monthly website traffic",
+        "market share",
+        "19.55 market share",
+        "basis points",
+        "129 basis points",
+        "credit evaluation",
+        "online credit evaluation platform",
+        "evaluation time"
       ],
       "content": "From 2018 through 2024, Kevin progressed from Product Analyst to Product Manager, Senior Product Manager, and Lead Product Manager at Banco de Credito BCP, part of Credicorp. At Banco de Credito BCP, Kevin's work helped more than 100,000 small businesses access a first loan. Kevin designed and launched an online credit-evaluation platform that reduced evaluation time from seven days to one hour and generated $40M in incremental loan disbursements in nine months. Kevin redesigned BCP's digital value proposition for small businesses, contributing to 14% year-over-year revenue growth while monthly website traffic grew sixfold to 180,000 in 15 months. The 180K figure is monthly website traffic, not monthly users. As Lead Product Manager at BCP, Kevin reached 19.55% market share after gaining 129 basis points in seven months. As Lead Product Manager at BCP, Kevin managed nine product direct reports."
     },
