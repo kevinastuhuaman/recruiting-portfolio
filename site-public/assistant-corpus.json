@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "corpusVersion": "2026-07-13.1",
-  "sourceCommit": "dac41c67c1c4bca395d8ccb4c715292c42411e93",
-  "checksum": "acc583056d054edb9598963182a2afe9543354d5be9ba72932539f5faac84e31",
+  "sourceCommit": "25a04e0fde98d572e928b8c000ccb65024072ef5",
+  "checksum": "3aa0f7d9f8b4379854b187f60681702ac18809d66d140f772719d7caa19a7288",
   "entries": [
     {
       "id": "overview",
@@ -31,6 +31,7 @@
         "interactive artifacts",
         "experiments",
         "evals",
+        "evals built",
         "evaluation",
         "product studies",
         "portfolio lab",
