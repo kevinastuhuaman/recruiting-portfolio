@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "corpusVersion": "2026-07-13.1",
-  "sourceCommit": "f5d8d6204e602ce18b6e55230c7bed050f72efbb",
-  "checksum": "9d17932ea5adab168b331bfa1f31c265ee72422ee0f7e2fcdc4174250090bc37",
+  "sourceCommit": "dac41c67c1c4bca395d8ccb4c715292c42411e93",
+  "checksum": "acc583056d054edb9598963182a2afe9543354d5be9ba72932539f5faac84e31",
   "entries": [
     {
       "id": "overview",
@@ -30,6 +30,8 @@
         "artifacts",
         "interactive artifacts",
         "experiments",
+        "evals",
+        "evaluation",
         "product studies",
         "portfolio lab",
         "ai investigation workbench",
@@ -246,7 +248,10 @@
         "career",
         "background",
         "mo bagel",
-        "summit"
+        "summit",
+        "tech and ai summit",
+        "tech ai summit",
+        "560 registrations"
       ],
       "content": "Kevin earned a STEM-designated MBA from the University of California, Berkeley, Haas School of Business in May 2026 and a Bachelor of Science in Industrial Engineering from the Pontifical Catholic University of Peru in July 2018. At Haas, he built Trackly, worked with Berkeley's Open Innovation Squad on the Fujitsu and MoBagel AI product challenge, and served as VP of the Tech Club. At Berkeley Haas, Kevin co-launched the school's first Tech and AI Summit, which received more than 560 registrations."
     },
