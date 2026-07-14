@@ -10,7 +10,11 @@ const indexRoutes = routes.filter((route) => route.state === "index");
 const absolute = (path) => new URL(path, site.origin).href;
 const sourceCommit = process.env.PORTFOLIO_SOURCE_COMMIT
   ?? process.env.GITHUB_SHA
-  ?? execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
+  ?? execFileSync(
+    "git",
+    ["log", "-1", "--format=%H", "--", "src/data", "scripts/generate-public-artifacts.mjs"],
+    { encoding: "utf8" },
+  ).trim();
 const assistantCorpusArtifact = {
   schemaVersion: assistantCorpus.schemaVersion,
   corpusVersion: `${site.updated}.1`,

@@ -89,6 +89,7 @@ function dispatch(event: string, properties: SafeProperties = {}, useBeacon = fa
   const payload = JSON.stringify({
     api_key: projectKey,
     event,
+    distinct_id: `portfolio:${sessionId}`,
     properties: {
       ...sanitizeProperties(properties),
       distinct_id: `portfolio:${sessionId}`,
@@ -135,6 +136,7 @@ function classifyLink(element: Element) {
   if (!link) return undefined;
   const href = link.getAttribute("href") ?? "";
   if (href.includes("linkedin.com")) return { event: "portfolio_contact_action" as const, properties: { action: "linkedin" } };
+  if (href.endsWith(".pdf")) return { event: "portfolio_contact_action" as const, properties: { action: "resume_download" } };
   if (href === "/resume/" || href.startsWith("/resume/")) return { event: "portfolio_contact_action" as const, properties: { action: "resume" } };
   if (href === "/ask/" || href.startsWith("/ask/")) return { event: "portfolio_assistant_opened" as const, properties: { source: "site_link" } };
   if (href.startsWith("/projects/")) {
@@ -165,8 +167,12 @@ export function capturePortfolioEvent(event: PortfolioEvent, properties: SafePro
   dispatch(event, properties);
 }
 
-export function initializePortfolioAnalytics(key: string | undefined, host = POSTHOG_DEFAULT_HOST) {
-  if (initialized || !key?.startsWith("phc_") || privacySignalEnabled()) return;
+export function initializePortfolioAnalytics(
+  key: string | undefined,
+  host = POSTHOG_DEFAULT_HOST,
+  allowedHost = "portfolio.kevinastuhuaman.com",
+) {
+  if (initialized || window.location.hostname !== allowedHost || !key?.startsWith("phc_") || privacySignalEnabled()) return;
   projectKey = key;
   captureEndpoint = `${host.replace(/\/$/, "")}/i/v0/e/`;
   sessionId = getSessionId();

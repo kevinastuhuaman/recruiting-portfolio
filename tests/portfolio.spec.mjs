@@ -597,8 +597,16 @@ test("analytics payload excludes private content", async ({ page }) => {
   expect(JSON.stringify(events)).not.toContain("private recruiter question text");
   if (process.env.PUBLIC_POSTHOG_KEY?.startsWith("phc_")) {
     expect(events.length).toBeGreaterThan(0);
+    expect(events.every((entry) => entry.distinct_id === entry?.properties?.distinct_id)).toBe(true);
     expect(events.every((entry) => entry?.properties?.$process_person_profile === false)).toBe(true);
     expect(events.every((entry) => !String(entry?.properties?.$current_url ?? "").includes("utm_source"))).toBe(true);
+    await page.goto("/resume/");
+    const download = page.waitForEvent("download");
+    await page.getByRole("link", { name: /Download PDF/i }).click();
+    await download;
+    await expect.poll(() => events.some((entry) => (
+      entry.event === "portfolio_contact_action" && entry.properties?.action === "resume_download"
+    ))).toBe(true);
   } else {
     expect(events).toEqual([]);
   }
