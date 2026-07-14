@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "corpusVersion": "2026-07-13.1",
-  "sourceCommit": "ae3bd99cb4db772d3d55556659c2f2e253a35990",
-  "checksum": "f520b545ca4ac821f41231f83137254b70b556e153e8825fca7eb72177cc3600",
+  "sourceCommit": "660a25c1ad6f6f4ea7e125cbcbc3916f6042d6f0",
+  "checksum": "be686d1772b3a289f5fc6767088f226fc6e3b3fd7676b05792cb41a86a7cdfa2",
   "entries": [
     {
       "id": "overview",
-      "title": "Kevin Astuhuaman portfolio",
+      "title": "Kevin Astuhuaman — AI Product Manager",
       "url": "https://portfolio.kevinastuhuaman.com/",
       "keywords": [
         "about",
@@ -19,6 +19,21 @@
         "hire"
       ],
       "content": "Kevin Astuhuaman is an AI Product Manager, ex-PayPal in AI/ML observability, and Berkeley Haas MBA in the Bay Area. His two recruiting lanes are applied AI and agent products, and AI platform or technical product management. His most recent enterprise AI proof is an agentic observability prototype at PayPal Checkout. Trackly proves hands-on product building across web, native apps, CLI, MCP, chat, and voice. Berkeley's Open Innovation Squad work with Fujitsu and MoBagel adds AI product strategy, high-fidelity prototyping, and go-to-market experience. His BCP experience shows six years of progression, regulated-product judgment, team leadership, and operating scale."
+    },
+    {
+      "id": "lab-overview",
+      "title": "AI Product Lab",
+      "url": "https://portfolio.kevinastuhuaman.com/lab/",
+      "keywords": [
+        "lab",
+        "ai product lab",
+        "artifacts",
+        "interactive artifacts",
+        "experiments",
+        "product studies",
+        "portfolio lab"
+      ],
+      "content": "Kevin's AI Product Lab collects seven public, interactive artifacts that make his product judgment inspectable. The collection covers enterprise AI interface patterns, agent workflows, evaluation design, human control, technical range, and motion. Every artifact uses synthetic or public-safe data and links to supporting decisions, structured files, tests, and source material where available."
     },
     {
       "id": "trackly",
