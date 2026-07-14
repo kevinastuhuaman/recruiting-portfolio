@@ -141,7 +141,7 @@ export const assistantCorpus = {
       id: "lab-overview",
       title: "AI Product Lab",
       url: `${site.origin}/lab/`,
-      keywords: ["lab", "ai product lab", "artifacts", "interactive artifacts", "experiments", "evals", "evaluation", "product studies", "portfolio lab", "ai investigation workbench", "agent workflow canvas", "evals control room"],
+      keywords: ["lab", "ai product lab", "artifacts", "interactive artifacts", "experiments", "evals", "evals built", "evaluation", "product studies", "portfolio lab", "ai investigation workbench", "agent workflow canvas", "evals control room"],
       content: "Kevin's AI Product Lab collects seven public, interactive artifacts that make his product judgment inspectable: AI Investigation Workbench, AI Product Builder Stack, Agent Workflow Canvas, Evals Control Room, Human Control Plane, AI Product Motion Studies, and Enterprise AI Interface Kit. The collection covers enterprise AI interface patterns, agent workflows, evaluation design, human control, technical range, and motion. Every artifact uses synthetic or public-safe data and links to supporting decisions, structured files, tests, and source material where available.",
     },
     {
