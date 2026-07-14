@@ -181,6 +181,19 @@ test("homepage orb renders one frame when reduced motion is requested", async ({
   expect(secondFrame.equals(firstFrame)).toBe(true);
 });
 
+test("homepage orb keeps its static artwork when WebGL is unavailable", async ({ page }) => {
+  await page.addInitScript(() => {
+    HTMLCanvasElement.prototype.getContext = () => null;
+  });
+  await page.goto("/", { waitUntil: "networkidle" });
+
+  await page.locator("#assistant").scrollIntoViewIfNeeded();
+  const fallback = page.locator(".homepage-portfolio-orb-canvas.portfolio-voice-orb-fallback");
+  await expect(fallback).toBeVisible();
+  await expect(fallback).toHaveAttribute("data-motion", "static");
+  await expect(fallback).toHaveCSS("background-image", /portfolio-orb-static\.png/);
+});
+
 test("homepage exposes one contact invitation with copy-email and resume actions", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { name: "Building an AI product where judgment matters?" })).toHaveCount(1);
