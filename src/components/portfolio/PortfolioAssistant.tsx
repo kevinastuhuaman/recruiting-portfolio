@@ -84,7 +84,7 @@ export default function PortfolioAssistant() {
     setQuestion('');
     setCitations([]);
     setLoading(true);
-    setStatus('Reading public evidence');
+    setStatus("Searching Kevin's portfolio");
     const controller = new AbortController();
     const responseTimer = window.setTimeout(() => controller.abort('portfolio_chat_timeout'), 20_000);
     chatAbortRef.current = controller;
@@ -102,6 +102,7 @@ export default function PortfolioAssistant() {
       const decoder = new TextDecoder();
       let buffer = '';
       let receivedDone = false;
+      let receivedFirstDelta = false;
       while (true) {
         const { done, value: bytes } = await reader.read();
         buffer += decoder.decode(bytes ?? new Uint8Array(), { stream: !done });
@@ -112,7 +113,17 @@ export default function PortfolioAssistant() {
           const raw = block.split('\n').find((line) => line.startsWith('data: '))?.slice(6);
           if (!event || !raw) continue;
           const data = parseStreamEvent(raw);
-          if (event === 'delta' && typeof data.text === 'string') appendAssistantDelta(data.text);
+          if (event === 'meta' && typeof data.sourceCount === 'number') {
+            const sourceLabel = data.sourceCount === 1 ? 'source' : 'sources';
+            setStatus(`Reviewing ${data.sourceCount} ${sourceLabel}`);
+          }
+          if (event === 'delta' && typeof data.text === 'string') {
+            if (!receivedFirstDelta) {
+              receivedFirstDelta = true;
+              setStatus('Writing answer');
+            }
+            appendAssistantDelta(data.text);
+          }
           if (event === 'citations' && Array.isArray(data.citations)) setCitations(data.citations);
           if (event === 'error') {
             if (data.reset === true) resetAssistantDraft();
@@ -124,7 +135,7 @@ export default function PortfolioAssistant() {
       }
       flushAssistantDelta();
       if (!receivedDone) throw new Error('stream_truncated');
-      setStatus('Answer grounded in public evidence');
+      setStatus('Ready');
     } catch {
       const unmounted = chatAbortRef.current !== controller;
       if (unmounted) return;
@@ -139,11 +150,11 @@ export default function PortfolioAssistant() {
         const fallback = await askPublicCorpus(message, fallbackController.signal);
         appendAssistantDelta(fallback.answer);
         setCitations(fallback.citations);
-        setStatus('Showing the deterministic public-corpus answer');
+        setStatus('Ready');
       } catch {
         if (chatAbortRef.current !== fallbackController) return;
         appendAssistantDelta('The interactive assistant is unavailable. The cited questions below remain available without JavaScript or an AI connection.');
-        setStatus('Interactive assistant unavailable');
+        setStatus('Assistant unavailable');
       } finally {
         window.clearTimeout(fallbackTimer);
       }
@@ -159,6 +170,12 @@ export default function PortfolioAssistant() {
 
   const onSubmit = (event: React.SyntheticEvent<HTMLFormElement>) => { event.preventDefault(); void ask(question); };
 
+  const onComposerKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key !== 'Enter' || event.shiftKey || event.nativeEvent.isComposing) return;
+    event.preventDefault();
+    void ask(question);
+  };
+
   const changeMode = (next: Mode) => {
     setMode(next);
   };
@@ -166,26 +183,26 @@ export default function PortfolioAssistant() {
   return (
     <section className="assistant-shell" aria-label="Portfolio assistant">
       <div className="assistant-tabs" role="tablist" aria-label="Assistant mode">
-        <button role="tab" aria-selected={mode === 'chat'} onClick={() => changeMode('chat')}>Chat <small>readable + cited</small></button>
-        <button role="tab" aria-selected={mode === 'voice'} onClick={() => changeMode('voice')}>Voice <small>audio-first</small></button>
+        <button role="tab" aria-selected={mode === 'chat'} onClick={() => changeMode('chat')}>Chat</button>
+        <button role="tab" aria-selected={mode === 'voice'} onClick={() => changeMode('voice')}>Voice</button>
       </div>
 
       {mode === 'chat' ? (
         <div className="chat-panel" role="tabpanel">
-          <header><p className="eyebrow">Grounded Chat</p><h2>Ask a recruiter question.</h2><p>Answers use Kevin's versioned public portfolio corpus. Conversation history stays in this browser tab and is never saved.</p></header>
+          <header><p className="eyebrow">Kevin's assistant</p><h2>Ask anything about Kevin.</h2><p>Explore his work, product decisions, experience, or the kind of role he is looking for.</p></header>
           <div className="chat-messages" aria-live="polite">
             {messages.length === 0 ? (
               <div className="chat-empty"><strong>Good starting points</strong>{suggestions.map((item) => <button key={item} onClick={() => void ask(item)}>{item}</button>)}</div>
             ) : messages.map((message, index) => (
-              <article className={`chat-message ${message.role}`} key={`${message.role}-${index}`}><span>{message.role === 'user' ? 'You' : 'Portfolio guide'}</span><p>{message.content}</p></article>
+              <article className={`chat-message ${message.role}`} key={`${message.role}-${index}`}><span>{message.role === 'user' ? 'You' : "Kevin's assistant"}</span><p>{message.content}</p></article>
             ))}
             {loading && <div className="chat-thinking"><i></i><i></i><i></i><span className="sr-only">Preparing grounded answer</span></div>}
           </div>
           {citations.length > 0 && <div className="chat-citations"><strong>Public sources</strong>{citations.map((citation) => <a href={citation.url} key={citation.url}>{citation.title}</a>)}</div>}
           <form onSubmit={onSubmit} className="chat-form">
             <label htmlFor="portfolio-question">Question</label>
-            <div><textarea id="portfolio-question" value={question} onChange={(event) => setQuestion(event.target.value)} maxLength={600} rows={3} placeholder="Ask about PayPal, Trackly, Berkeley, BCP, or product decisions" /><button type="submit" disabled={loading || question.trim().length < 2}>Ask</button></div>
-            <p>Do not include private, confidential, or recruiting-sensitive information.</p>
+            <div><textarea id="portfolio-question" value={question} onChange={(event) => setQuestion(event.target.value)} onKeyDown={onComposerKeyDown} maxLength={600} rows={2} placeholder="Ask anything about Kevin" /><button type="submit" disabled={loading || question.trim().length < 2}>Ask</button></div>
+            <p>Press Enter to send. Shift+Enter adds a new line. Please keep confidential information out of the chat.</p>
           </form>
           <div className="assistant-status" role="status">{status}</div>
         </div>

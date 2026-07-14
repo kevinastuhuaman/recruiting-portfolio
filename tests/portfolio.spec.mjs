@@ -63,7 +63,7 @@ test("mobile first viewport leads with AI PM, Berkeley, and PayPal evidence", as
   await expect(hero.getByRole("heading", { level: 1, name: /Kevin Astuhuaman/i })).toBeVisible();
   await expect(hero.getByText(/Ex-PayPal AI\/ML observability/i)).toBeVisible();
   await expect(hero.getByText(/Berkeley Haas MBA/i)).toBeVisible();
-  await expect(hero.getByRole("link", { name: "Resume", exact: true })).toBeVisible();
+  await expect(hero.getByRole("link", { name: "View resume", exact: true })).toBeVisible();
   await expect(page.locator(".mobile-nav summary")).toBeVisible();
   await expect(hero.getByText("Seven years building products and enjoying every minute of it.")).toBeVisible();
   await expect(hero.getByRole("link", { name: /View selected work/i })).toBeVisible();
@@ -88,7 +88,108 @@ test("homepage follows the recruiter-first narrative order", async ({ page }) =>
   const ids = ["credibility", "paypal", "trackly", "mobagel", "experience", "lab", "assistant", "contact"];
   const tops = await Promise.all(ids.map((id) => page.locator(`#${id}`).evaluate((element) => element.getBoundingClientRect().top + window.scrollY)));
   expect(tops).toEqual([...tops].sort((a, b) => a - b));
+  await expect(page.locator("#credibility")).toHaveCSS("border-bottom-width", "1px");
   await expect(page.locator("#lab").getByRole("link", { name: /Explore the AI Product Lab/i })).toHaveAttribute("href", "/lab/");
+});
+
+test("homepage project system keeps type, media, and Berkeley steps readable", async ({ page }) => {
+  for (const width of [390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: 1000 });
+    await page.goto("/", { waitUntil: "networkidle" });
+
+    for (const card of await page.locator("[data-project-card]").all()) {
+      const contained = await card.evaluate((element) => {
+        const copyRect = element.querySelector(".feature-copy")?.getBoundingClientRect();
+        const headingRect = element.querySelector("h3")?.getBoundingClientRect();
+        return Boolean(
+          headingRect
+          && copyRect
+          && headingRect.left >= copyRect.left - 1
+          && headingRect.right <= copyRect.right + 1
+          && headingRect.top >= copyRect.top - 1
+          && headingRect.bottom <= copyRect.bottom + 1
+          && headingRect.width > 0,
+        );
+      });
+      expect(contained, `project heading contained at ${width}px`).toBe(true);
+    }
+
+    const paypalImage = page.locator("#paypal [data-project-media] img");
+    await expect(paypalImage).toBeVisible();
+    const aspectDelta = await paypalImage.evaluate((image) => {
+      const rendered = image.getBoundingClientRect();
+      const renderedRatio = rendered.width / rendered.height;
+      const intrinsicRatio = image.naturalWidth / image.naturalHeight;
+      return Math.abs(renderedRatio - intrinsicRatio);
+    });
+    expect(aspectDelta, `PayPal image ratio at ${width}px`).toBeLessThan(0.03);
+
+    const tracklyImage = page.locator("#trackly .trackly-proof > img");
+    await expect(tracklyImage).toBeVisible();
+    await expect(tracklyImage).toHaveCSS("object-fit", "contain");
+    const tracklyAspectDelta = await tracklyImage.evaluate((image) => {
+      const rendered = image.getBoundingClientRect();
+      return Math.abs((rendered.width / rendered.height) - (image.naturalWidth / image.naturalHeight));
+    });
+    expect(tracklyAspectDelta, `Trackly image ratio at ${width}px`).toBeLessThan(0.03);
+  }
+
+  await expect(page.locator("[data-berkeley-step]").first()).toHaveCSS("writing-mode", "horizontal-tb");
+  const orbImage = page.locator(".assistant-orb-static img");
+  await orbImage.scrollIntoViewIfNeeded();
+  await expect(orbImage).toBeVisible();
+  await expect.poll(() => orbImage.evaluate((image) => [image.naturalWidth, image.naturalHeight])).toEqual([600, 602]);
+});
+
+test("homepage exposes one contact invitation with copy-email and resume actions", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByRole("heading", { name: "Building an AI product where judgment matters?" })).toHaveCount(1);
+  await expect(page.getByRole("button", { name: "Copy email" })).toHaveCount(1);
+  await expect(page.locator('a[href^="mailto:"]')).toHaveCount(0);
+  await expect(page.locator("#contact")).not.toContainText("kevin.astuhuaman@berkeley.edu");
+  await expect(page.locator("#contact").getByRole("link", { name: "View resume" })).toHaveAttribute("href", "/resume/");
+
+  await page.evaluate(() => {
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText: async (value) => window.sessionStorage.setItem("copied-email", value) },
+    });
+  });
+  await page.getByRole("button", { name: "Copy email" }).click();
+  await expect(page.locator(".footer-copy-status")).toHaveText("Email copied");
+  await expect.poll(() => page.evaluate(() => window.sessionStorage.getItem("copied-email"))).toBe("kevin.astuhuaman@berkeley.edu");
+
+  await page.evaluate(() => {
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText: async () => { throw new Error("clipboard_denied"); } },
+    });
+    window.prompt = () => null;
+  });
+  await page.getByRole("button", { name: "Email copied" }).click();
+  await expect(page.locator(".footer-copy-status")).toHaveText("Copy email");
+});
+
+test("email copy failure opens the manual-copy fallback without navigating", async ({ page }) => {
+  await page.goto("/");
+  await page.evaluate(() => {
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText: async () => { throw new Error("clipboard_denied"); } },
+    });
+    window.prompt = (message, value) => {
+      window.sessionStorage.setItem("copy-prompt", JSON.stringify({ message, value }));
+      return null;
+    };
+  });
+
+  const url = page.url();
+  await page.getByRole("button", { name: "Copy email" }).click();
+  await expect.poll(() => page.evaluate(() => window.sessionStorage.getItem("copy-prompt"))).toBe(
+    JSON.stringify({ message: "Copy Kevin's email", value: "kevin.astuhuaman@berkeley.edu" }),
+  );
+  expect(page.url()).toBe(url);
+  await expect(page.locator(".footer-copy-status")).toHaveText("Copy email");
 });
 
 test("required responsive widths avoid horizontal overflow", async ({ page }) => {
@@ -175,6 +276,7 @@ test("the complete recruiting path works without JavaScript", async ({ browser }
 });
 
 test("AI Investigation Workbench exposes plan, evidence, uncertainty, and human approval", async ({ page }) => {
+  test.setTimeout(60_000);
   await page.goto("/projects/paypal-ai-observability/");
   const workbench = page.locator("[data-workbench]");
   const scanWorkbench = async () => {
@@ -434,7 +536,7 @@ test("local previews never send production analytics", async ({ page }) => {
   await page.goto("/ask/?utm_source=linkedin");
   await page.getByLabel("Question").fill("private recruiter question text");
   await page.getByRole("button", { name: "Ask", exact: true }).click();
-  await expect(page.getByRole("status")).toHaveText("Answer grounded in public evidence");
+  await expect(page.getByRole("status")).toHaveText("Ready");
   expect(JSON.stringify(events)).not.toContain("private recruiter question text");
   expect(events).toEqual([]);
 });
@@ -464,9 +566,70 @@ test("grounded Chat streams plain text and server-controlled citations", async (
   });
   await page.goto("/ask/");
   await page.getByRole("button", { name: "How does Trackly show product judgment?" }).click();
-  await expect(page.getByRole("status")).toHaveText("Answer grounded in public evidence");
+  await expect(page.getByRole("status")).toHaveText("Ready");
   await expect(page.getByText(/direct career pages/i)).toBeVisible();
   await expect(page.getByRole("link", { name: "Trackly case study" })).toHaveAttribute("href", "https://portfolio.kevinastuhuaman.com/projects/trackly/");
+});
+
+test("Chat uses real activity phases and natural keyboard submission", async ({ page }) => {
+  await page.addInitScript(() => {
+    const originalFetch = window.fetch.bind(window);
+    window.fetch = async (input, init) => {
+      const url = typeof input === "string" ? input : input.url;
+      if (!url.endsWith("/api/portfolio/chat")) return originalFetch(input, init);
+      const encoder = new TextEncoder();
+      const stream = new ReadableStream({
+        start(controller) {
+          window.__portfolioChatStream = {
+            meta() { controller.enqueue(encoder.encode('event: meta\ndata: {"sourceCount":2}\n\n')); },
+            delta() { controller.enqueue(encoder.encode('event: delta\ndata: {"text":"Kevin built Trackly"}\n\n')); },
+            done() {
+            controller.enqueue(encoder.encode('event: citations\ndata: {"citations":[]}\n\nevent: done\ndata: {}\n\n'));
+            controller.close();
+            },
+          };
+        },
+      });
+      return new Response(stream, { status: 200, headers: { "Content-Type": "text/event-stream" } });
+    };
+  });
+  await page.goto("/ask/");
+  const composer = page.getByPlaceholder("Ask anything about Kevin");
+  await composer.fill("What did Kevin build?");
+  await composer.press("Enter");
+  await expect(page.getByRole("status")).toHaveText("Searching Kevin's portfolio");
+  await page.evaluate(() => window.__portfolioChatStream.meta());
+  await expect(page.getByRole("status")).toHaveText("Reviewing 2 sources");
+  await page.evaluate(() => window.__portfolioChatStream.delta());
+  await expect(page.getByRole("status")).toHaveText("Writing answer");
+  await expect(page.getByText("Kevin built Trackly", { exact: true })).toBeVisible();
+  await page.evaluate(() => window.__portfolioChatStream.done());
+  await expect(page.getByRole("status")).toHaveText("Ready");
+
+  await composer.fill("First line");
+  await composer.press("Shift+Enter");
+  await expect(composer).toHaveValue("First line\n");
+
+  await composer.fill("Composing text");
+  await composer.evaluate((element) => {
+    const event = new KeyboardEvent("keydown", { key: "Enter", bubbles: true, cancelable: true });
+    Object.defineProperty(event, "isComposing", { value: true });
+    element.dispatchEvent(event);
+  });
+  await expect(composer).toHaveValue("Composing text");
+  await expect(page.locator(".chat-message.user")).toHaveCount(1);
+});
+
+test("Ask page removes artificial boundary copy and keeps concise AI disclosure", async ({ page }) => {
+  await page.goto("/ask/");
+  await expect(page.locator("h1")).toHaveText("Ask anything about Kevin.");
+  await expect(page.getByText("Grounded Chat", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("Answer grounded in public evidence", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("Public corpus only", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("Voice never impersonates Kevin", { exact: true })).toHaveCount(0);
+
+  await page.getByRole("tab", { name: /Voice/ }).click();
+  await expect(page.getByText(/AI voice assistant.*public portfolio.*no transcript is retained/i)).toBeVisible();
 });
 
 test("malformed Chat stream resets its draft and recovers with the deterministic answer", async ({ page }) => {
@@ -493,7 +656,7 @@ test("malformed Chat stream resets its draft and recovers with the deterministic
   await page.goto("/ask/");
   await page.getByLabel("Question").fill("What did Kevin build at PayPal?");
   await page.getByRole("button", { name: "Ask", exact: true }).click();
-  await expect(page.getByRole("status")).toHaveText("Showing the deterministic public-corpus answer");
+  await expect(page.getByRole("status")).toHaveText("Ready");
   await expect(page.getByText(/prototype and proof of concept/i)).toBeVisible();
   await expect(page.getByText(/partial model draft/i)).toHaveCount(0);
   await expect(page.getByRole("link", { name: "PayPal case study" })).toBeVisible();
@@ -524,7 +687,7 @@ test("streamed Chat error events recover with the deterministic answer", async (
   await page.goto("/ask/");
   await page.getByLabel("Question").fill("What evidence supports Kevin's work?");
   await page.getByRole("button", { name: "Ask", exact: true }).click();
-  await expect(page.getByRole("status")).toHaveText("Showing the deterministic public-corpus answer");
+  await expect(page.getByRole("status")).toHaveText("Ready");
   await expect(page.getByText(/deterministic public corpus/i)).toBeVisible();
   await expect(page.getByText(/Unsupported partial answer/i)).toHaveCount(0);
   await expect(page.getByRole("link", { name: "Public proof" })).toBeVisible();
@@ -538,7 +701,9 @@ test("privacy disclosure accurately describes Chat and Realtime Voice", async ({
 });
 
 test("Voice is opt-in, requests one microphone, creates one peer, shows no transcript, and cleans up", async ({ page }) => {
+  test.setTimeout(60_000);
   let closeRequest = null;
+  let closeCount = 0;
   await page.addInitScript(() => {
     const counters = { mic: 0, pc: 0, stopped: 0, closed: 0, channelClosed: 0, sent: [] };
     window.__voiceCounters = counters;
@@ -546,7 +711,13 @@ test("Voice is opt-in, requests one microphone, creates one peer, shows no trans
     const stream = { getAudioTracks: () => [track], getTracks: () => [track] };
     Object.defineProperty(navigator, "mediaDevices", {
       configurable: true,
-      value: { getUserMedia: async () => { counters.mic += 1; return stream; } },
+      value: {
+        getUserMedia: async () => {
+          counters.mic += 1;
+          await new Promise((resolve) => window.setTimeout(resolve, 180));
+          return stream;
+        },
+      },
     });
     Object.defineProperty(window, "AudioContext", { configurable: true, value: undefined });
     Object.defineProperty(window, "webkitAudioContext", { configurable: true, value: undefined });
@@ -586,11 +757,15 @@ test("Voice is opt-in, requests one microphone, creates one peer, shows no trans
   });
   await page.route("https://closeai.mba/api/portfolio/voice/close", async (route) => {
     closeRequest = JSON.parse(route.request().postData() ?? "{}");
+    const thisClose = ++closeCount;
+    if (thisClose === 1) await new Promise((resolve) => setTimeout(resolve, 900));
     await route.fulfill({
       status: 200,
       contentType: "application/json",
       body: JSON.stringify({
-        sources: [{ title: "PayPal case study", url: "https://portfolio.kevinastuhuaman.com/projects/paypal-ai-observability/" }],
+        sources: thisClose === 1
+          ? [{ title: "Old call source", url: "https://portfolio.kevinastuhuaman.com/projects/paypal-ai-observability/" }]
+          : [{ title: "Current call source", url: "https://portfolio.kevinastuhuaman.com/projects/trackly/" }],
       }),
     });
   });
@@ -598,10 +773,14 @@ test("Voice is opt-in, requests one microphone, creates one peer, shows no trans
   await page.goto("/ask/");
   await page.getByRole("tab", { name: /Voice/ }).click();
   expect(await page.evaluate(() => window.__voiceCounters.mic)).toBe(0);
-  await expect(page.getByText(/This is an AI guide, not Kevin/i)).toBeVisible();
+  await expect(page.getByText(/AI voice assistant.*public portfolio.*no transcript is retained/i)).toBeVisible();
+  await expect(page.locator(".portfolio-voice-orb-intro")).toHaveCSS("width", "260px");
+  await expect(page.locator(".portfolio-voice-orb-intro")).toHaveCSS("height", "260px");
   await page.getByRole("button", { name: "Start voice call" }).click();
-  await expect(page.getByText("Connecting securely", { exact: true })).toBeVisible();
+  await expect(page.getByText("Connecting", { exact: true })).toBeVisible();
   await expect(page.getByText("Listening", { exact: true })).toBeVisible();
+  await expect(page.locator(".portfolio-voice-orb-active")).toHaveCSS("width", "300px");
+  await expect(page.locator(".portfolio-voice-orb-active")).toHaveCSS("height", "300px");
   expect(await page.evaluate(() => window.__voiceCounters.mic)).toBe(1);
   expect(await page.evaluate(() => window.__voiceCounters.pc)).toBe(1);
   await page.evaluate(() => {
@@ -613,7 +792,7 @@ test("Voice is opt-in, requests one microphone, creates one peer, shows no trans
   await expect(page.getByText("SECRET_TRANSCRIPT_SENTINEL")).toHaveCount(0);
   await expect(page.locator("[data-voice-transcript]")).toHaveCount(0);
   await page.evaluate(() => window.__voiceDataChannel.onmessage?.({ data: JSON.stringify({ type: "response.output_audio.delta", delta: "audio" }) }));
-  await expect(page.getByText("Portfolio guide is speaking", { exact: true })).toBeVisible();
+  await expect(page.getByText("Speaking", { exact: true })).toBeVisible();
   await page.evaluate(() => window.__voiceDataChannel.onmessage?.({ data: JSON.stringify({ type: "response.output_audio.done" }) }));
   await expect(page.getByText("Listening", { exact: true })).toBeVisible();
   await page.evaluate(() => {
@@ -628,11 +807,23 @@ test("Voice is opt-in, requests one microphone, creates one peer, shows no trans
   await expect(page.getByText("Listening", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "End call" }).click();
   await expect(page.getByText("Call ended", { exact: true })).toBeVisible();
-  await expect(page.getByRole("link", { name: "PayPal case study" })).toBeVisible();
   await expect.poll(() => page.evaluate(() => window.__voiceCounters.stopped)).toBeGreaterThan(0);
   await expect.poll(() => page.evaluate(() => window.__voiceCounters.closed)).toBe(1);
   await expect.poll(() => page.evaluate(() => window.__voiceCounters.channelClosed)).toBe(1);
   expect(closeRequest.closeToken).toBe("test-close-capability-token-0000000000000000000");
+
+  await page.getByRole("button", { name: "Start another call" }).click();
+  await expect(page.getByRole("button", { name: "Start voice call" })).toBeVisible();
+  await page.getByRole("button", { name: "Start voice call" }).click();
+  await expect(page.getByText("Listening", { exact: true })).toBeVisible();
+  expect(await page.evaluate(() => window.__voiceCounters.mic)).toBe(2);
+  expect(await page.evaluate(() => window.__voiceCounters.pc)).toBe(2);
+  await page.getByRole("button", { name: "End call" }).click();
+  await expect(page.getByText("Call ended", { exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Current call source" })).toBeVisible();
+  await page.waitForTimeout(950);
+  await expect(page.getByRole("link", { name: "Old call source" })).toHaveCount(0);
+  await expect.poll(() => page.evaluate(() => window.__voiceCounters.closed)).toBe(2);
 });
 
 test("Voice surfaces connecting and microphone denial, then recovers to Chat or retry", async ({ page }) => {
@@ -641,7 +832,7 @@ test("Voice surfaces connecting and microphone denial, then recovers to Chat or 
       configurable: true,
       value: {
         getUserMedia: () => new Promise((_, reject) => {
-          window.setTimeout(() => reject(new DOMException("denied", "NotAllowedError")), 150);
+          window.__denyPortfolioMic = () => reject(new DOMException("denied", "NotAllowedError"));
         }),
       },
     });
@@ -649,13 +840,15 @@ test("Voice surfaces connecting and microphone denial, then recovers to Chat or 
   await page.goto("/ask/");
   await page.getByRole("tab", { name: /Voice/ }).click();
   await page.getByRole("button", { name: "Start voice call" }).click();
-  await expect(page.getByText("Connecting securely", { exact: true })).toBeVisible();
-  await expect(page.getByText("Voice unavailable", { exact: true })).toBeVisible();
+  await expect(page.getByText("Connecting", { exact: true })).toBeVisible();
+  await page.evaluate(() => window.__denyPortfolioMic());
+  await expect(page.getByText("Assistant unavailable", { exact: true })).toBeVisible();
   await expect(page.getByText(/Microphone permission was denied/i)).toBeVisible();
+  await expect(page.locator(".voice-error")).toHaveCSS("color", "rgb(255, 155, 155)");
   await page.getByRole("button", { name: "Try again" }).click();
   await expect(page.getByRole("button", { name: "Start voice call" })).toBeVisible();
-  await page.getByRole("button", { name: "Use Chat instead" }).click();
-  await expect(page.getByRole("heading", { name: "Ask a recruiter question." })).toBeVisible();
+  await page.getByRole("button", { name: "Back to Chat" }).click();
+  await expect(page.locator(".chat-panel h2")).toHaveText("Ask anything about Kevin.");
 });
 
 test("assistant failure preserves the static cited fallback", async ({ page }) => {
@@ -668,6 +861,6 @@ test("assistant failure preserves the static cited fallback", async ({ page }) =
   await page.goto("/ask/");
   await page.getByLabel("Question").fill("What did Kevin build at PayPal?");
   await page.getByRole("button", { name: "Ask", exact: true }).click();
-  await expect(page.getByRole("status")).toHaveText("Interactive assistant unavailable");
+  await expect(page.getByRole("status")).toHaveText("Assistant unavailable");
   await expect(page.getByRole("heading", { name: "Five answers without the model." })).toBeVisible();
 });

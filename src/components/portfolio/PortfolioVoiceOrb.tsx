@@ -150,7 +150,7 @@ void main() {
 const BASE_ROTATION_SPEED = 0.3;
 const MAX_ROTATION_SPEED = 1.2;
 const MAX_HOVER_INTENSITY = 0.8;
-const VOICE_THRESHOLD = 0.05;
+const VOICE_THRESHOLD = 0.01;
 
 function compile(gl: WebGLRenderingContext, type: number, src: string): WebGLShader | null {
   const shader = gl.createShader(type);
@@ -169,13 +169,14 @@ interface VoiceOrbProps {
   levelRef: React.RefObject<number>;
   /** Rendered pixel size (square). */
   size?: number;
+  variant?: 'intro' | 'active';
   className?: string;
 }
 
-export default function PortfolioVoiceOrb({ levelRef, size = 260, className }: VoiceOrbProps) {
+export default function PortfolioVoiceOrb({ levelRef, size = 260, variant = 'active', className }: VoiceOrbProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [webglFailed, setWebglFailed] = useState(false);
-  const orbClass = ["portfolio-voice-orb", size <= 200 ? "portfolio-voice-orb-intro" : "portfolio-voice-orb-active", className]
+  const orbClass = ["portfolio-voice-orb", `portfolio-voice-orb-${variant}`, className]
     .filter(Boolean)
     .join(" ");
 
@@ -287,7 +288,7 @@ export default function PortfolioVoiceOrb({ levelRef, size = 260, className }: V
 
     if (reduceMotion) {
       // Single static frame — no animation loop.
-      render(0);
+      render(1_250);
     } else {
       raf = requestAnimationFrame(render);
     }

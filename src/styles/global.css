@@ -246,6 +246,7 @@ h3 {
   font-weight: 720;
   line-height: 1;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .button-dark {
@@ -465,6 +466,10 @@ h3 {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.footer-copy-email {
+  background: transparent;
 }
 
 .footer-meta {

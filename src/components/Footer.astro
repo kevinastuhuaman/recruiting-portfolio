@@ -1,9 +1,9 @@
 ---
-import { ArrowUpRight, BriefcaseBusiness, CodeXml, Mail } from "@lucide/astro";
+import { ArrowUpRight, BriefcaseBusiness, CodeXml, Copy, FileText } from "@lucide/astro";
 import { links, site } from "../data/site.js";
 ---
 
-<footer class="site-footer">
+<footer id="contact" class="site-footer">
   <div class="footer-primary">
     <div>
       <p class="eyebrow">Start a conversation</p>
@@ -13,8 +13,11 @@ import { links, site } from "../data/site.js";
       <a class="button button-light" href={links.linkedin}>
         <BriefcaseBusiness aria-hidden="true" size={18} /> LinkedIn <ArrowUpRight aria-hidden="true" size={16} />
       </a>
-      <a class="button button-outline-light" href={`mailto:${site.email}`}>
-        <Mail aria-hidden="true" size={18} /> Email
+      <button class="button button-outline-light footer-copy-email" type="button" data-copy-email={site.email}>
+        <Copy aria-hidden="true" size={18} /> <span class="footer-copy-status" aria-live="polite" aria-atomic="true">Copy email</span>
+      </button>
+      <a class="button button-outline-light" href="/resume/">
+        <FileText aria-hidden="true" size={18} /> View resume
       </a>
     </div>
   </div>
@@ -31,3 +34,27 @@ import { links, site } from "../data/site.js";
     </nav>
   </div>
 </footer>
+
+<script>
+  const copyButton = document.querySelector<HTMLButtonElement>("[data-copy-email]");
+  const copyStatus = document.querySelector<HTMLElement>(".footer-copy-status");
+  let statusTimer: number | undefined;
+
+  copyButton?.addEventListener("click", async () => {
+    const email = copyButton.dataset.copyEmail;
+    if (!email) return;
+
+    try {
+      await navigator.clipboard.writeText(email);
+      if (copyStatus) copyStatus.textContent = "Email copied";
+      window.clearTimeout(statusTimer);
+      statusTimer = window.setTimeout(() => {
+        if (copyStatus) copyStatus.textContent = "Copy email";
+      }, 2200);
+    } catch {
+      window.clearTimeout(statusTimer);
+      if (copyStatus) copyStatus.textContent = "Copy email";
+      window.prompt("Copy Kevin's email", email);
+    }
+  });
+</script>
