@@ -1,6 +1,7 @@
 ---
 import { ArrowUpRight, FileText, MessageCircle, Mic } from "@lucide/astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import HomepagePortfolioOrb from "../components/portfolio/HomepagePortfolioOrb";
 import { experience, projects, site } from "../data/site.js";
 import { claimsById } from "../data/claims.js";
 
@@ -124,7 +125,7 @@ const paypalClaim = claimsById["paypal-detection"];
     </section>
 
     <section id="assistant" class="assistant-preview-v2" aria-labelledby="assistant-title">
-      <div class="assistant-orb-static" aria-hidden="true"><img src="/assets/portfolio-orb-static.png" width="600" height="602" loading="lazy" alt="" /></div>
+      <div class="assistant-orb-live" aria-hidden="true"><HomepagePortfolioOrb client:visible /></div>
       <div>
         <p class="eyebrow">Ask the portfolio</p>
         <h2 id="assistant-title">Have a question? Ask.</h2>
@@ -1134,8 +1135,14 @@ const paypalClaim = claimsById["paypal-detection"];
   .lab-teaser-media strong { font-size: 1.2rem; }
   .assistant-preview-v2 { grid-template-columns: .8fr 1.2fr; background: #15111e; color: #fff; }
   .assistant-preview-v2 > div > p:not(.eyebrow) { color: rgba(255,255,255,.7); }
-  .assistant-orb-static { display: grid; min-height: 430px; place-items: center; }
-  .assistant-orb-static img { width: min(340px,65vw); height: auto; object-fit: contain; clip-path: inset(0 0 2px 0); filter: drop-shadow(0 30px 42px rgba(128,86,245,.25)); }
+  .assistant-orb-live { display: grid; min-height: 430px; place-items: center; }
+  .assistant-orb-live :global(.homepage-portfolio-orb) { position: relative; width: min(340px,65vw); aspect-ratio: 1; }
+  .assistant-orb-live :global(.homepage-portfolio-orb-fallback),
+  .assistant-orb-live :global(.homepage-portfolio-orb-canvas) { position: absolute; inset: 0; display: block; width: 100%; height: 100%; border-radius: 50%; filter: drop-shadow(0 30px 42px rgba(128,86,245,.25)); transition: opacity .2s ease; }
+  .assistant-orb-live :global(.homepage-portfolio-orb-fallback) { object-fit: contain; clip-path: inset(0 0 2px 0); opacity: 1; }
+  .assistant-orb-live :global(.homepage-portfolio-orb-canvas) { opacity: 0; }
+  .assistant-orb-live :global(.homepage-portfolio-orb.is-ready .homepage-portfolio-orb-fallback) { opacity: 0; }
+  .assistant-orb-live :global(.homepage-portfolio-orb.is-ready .homepage-portfolio-orb-canvas) { opacity: 1; }
   .assistant-modes { display: flex; flex-wrap: wrap; gap: 10px; margin: 26px 0 34px; }
   .assistant-modes span { display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid rgba(255,255,255,.24); border-radius: 999px; background: rgba(255,255,255,.07); font-size: .82rem; }
   @media (max-width: 900px) {
@@ -1166,7 +1173,10 @@ const paypalClaim = claimsById["paypal-detection"];
     .experience-list summary { grid-template-columns: 42px 1fr; }
     .experience-list time { grid-column: 2; }
     .experience-detail { grid-template-columns: 1fr; padding-left: 42px; gap: 16px; }
-    .assistant-orb-static { min-height: 300px; }
+    .assistant-orb-live { min-height: 300px; }
   }
-  @media (prefers-reduced-motion: reduce) { .assistant-orb-static img { filter: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .assistant-orb-live :global(.homepage-portfolio-orb-fallback),
+    .assistant-orb-live :global(.homepage-portfolio-orb-canvas) { filter: none; transition: none; }
+  }
 </style>
