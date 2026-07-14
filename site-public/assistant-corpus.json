@@ -1,9 +1,12 @@
 {
   "schemaVersion": 1,
+  "corpusVersion": "2026-07-13.1",
+  "sourceCommit": "b7e6c85d0879219009163f3c279ec1f08f2639be",
+  "checksum": "d2b9404d21d3b6bcc7d5e86598a193d12b1920e8ace2de73dc56cfb066aa1612",
   "entries": [
     {
       "id": "overview",
-      "title": "Kevin Astuhuaman portfolio",
+      "title": "Kevin Astuhuaman — AI Product Manager",
       "url": "https://portfolio.kevinastuhuaman.com/",
       "keywords": [
         "about",
@@ -16,6 +19,28 @@
         "hire"
       ],
       "content": "Kevin Astuhuaman is an AI Product Manager, ex-PayPal in AI/ML observability, and Berkeley Haas MBA in the Bay Area. His two recruiting lanes are applied AI and agent products, and AI platform or technical product management. His most recent enterprise AI proof is an agentic observability prototype at PayPal Checkout. Trackly proves hands-on product building across web, native apps, CLI, MCP, chat, and voice. Berkeley's Open Innovation Squad work with Fujitsu and MoBagel adds AI product strategy, high-fidelity prototyping, and go-to-market experience. His BCP experience shows six years of progression, regulated-product judgment, team leadership, and operating scale."
+    },
+    {
+      "id": "lab-overview",
+      "title": "AI Product Lab",
+      "url": "https://portfolio.kevinastuhuaman.com/lab/",
+      "keywords": [
+        "lab",
+        "ai product lab",
+        "artifacts",
+        "interactive artifacts",
+        "experiments",
+        "evals",
+        "evals built",
+        "evaluation",
+        "evaluations",
+        "product studies",
+        "portfolio lab",
+        "ai investigation workbench",
+        "agent workflow canvas",
+        "evals control room"
+      ],
+      "content": "Kevin's AI Product Lab collects seven public, interactive artifacts that make his product judgment inspectable: AI Investigation Workbench, AI Product Builder Stack, Agent Workflow Canvas, Evals Control Room, Human Control Plane, AI Product Motion Studies, and Enterprise AI Interface Kit. The collection covers enterprise AI interface patterns, agent workflows, evaluation design, human control, technical range, and motion. Every artifact uses synthetic or public-safe data and links to supporting decisions, structured files, tests, and source material where available."
     },
     {
       "id": "trackly",
@@ -41,6 +66,8 @@
         "computer use",
         "browser use",
         "browser agent",
+        "human reviewed",
+        "human reviewed browser agent",
         "human in the loop",
         "human-in-the-loop",
         "harness",
@@ -137,7 +164,9 @@
         "recovery",
         "failure state",
         "cross-platform",
+        "cross platform",
         "cross-surface",
+        "cross surface",
         "reduced motion",
         "accessibility",
         "enterprise ai",
@@ -202,9 +231,18 @@
         "reports",
         "risk",
         "compliance",
-        "growth"
+        "growth",
+        "180k",
+        "monthly website traffic",
+        "market share",
+        "19.55 market share",
+        "basis points",
+        "129 basis points",
+        "credit evaluation",
+        "online credit evaluation platform",
+        "evaluation time"
       ],
-      "content": "From 2018 through 2024, Kevin progressed from Product Analyst to Product Manager, Senior Product Manager, and Lead Product Manager at Banco de Credito BCP, part of Credicorp. At Banco de Credito BCP, Kevin's work helped more than 100,000 small businesses access a first loan. Kevin designed and launched an online credit-evaluation platform that reduced evaluation time from seven days to one hour and generated $40M in incremental loan disbursements in nine months. Kevin redesigned BCP's digital value proposition for small businesses, contributing to 14% year-over-year revenue growth while monthly website traffic grew sixfold to 180,000 in 15 months. As Lead Product Manager at BCP, Kevin reached 19.55% market share after gaining 129 basis points in seven months. As Lead Product Manager at BCP, Kevin managed nine product direct reports."
+      "content": "From 2018 through 2024, Kevin progressed from Product Analyst to Product Manager, Senior Product Manager, and Lead Product Manager at Banco de Credito BCP, part of Credicorp. At Banco de Credito BCP, Kevin's work helped more than 100,000 small businesses access a first loan. Kevin designed and launched an online credit-evaluation platform that reduced evaluation time from seven days to one hour and generated $40M in incremental loan disbursements in nine months. Kevin redesigned BCP's digital value proposition for small businesses, contributing to 14% year-over-year revenue growth while monthly website traffic grew sixfold to 180,000 in 15 months. The 180K figure is monthly website traffic, not monthly users. As Lead Product Manager at BCP, Kevin reached 19.55% market share after gaining 129 basis points in seven months. As Lead Product Manager at BCP, Kevin managed nine product direct reports."
     },
     {
       "id": "resume",
@@ -222,7 +260,10 @@
         "career",
         "background",
         "mo bagel",
-        "summit"
+        "summit",
+        "tech and ai summit",
+        "tech ai summit",
+        "560 registrations"
       ],
       "content": "Kevin earned a STEM-designated MBA from the University of California, Berkeley, Haas School of Business in May 2026 and a Bachelor of Science in Industrial Engineering from the Pontifical Catholic University of Peru in July 2018. At Haas, he built Trackly, worked with Berkeley's Open Innovation Squad on the Fujitsu and MoBagel AI product challenge, and served as VP of the Tech Club. At Berkeley Haas, Kevin co-launched the school's first Tech and AI Summit, which received more than 560 registrations."
     },

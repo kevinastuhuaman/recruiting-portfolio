@@ -1,7 +1,7 @@
 import { PORTFOLIO_API } from './portfolioApi';
 
 export type PortfolioVoiceState = 'connecting' | 'listening' | 'speaking' | 'reconnecting' | 'ended' | 'failed';
-type PortfolioVoiceEndReason = 'user_ended' | 'duration_cap' | 'page_hidden' | 'failed' | 'switched_to_chat';
+export type PortfolioVoiceEndReason = 'user_ended' | 'duration_cap' | 'page_hidden' | 'failed' | 'switched_to_chat';
 type PortfolioVoiceFinalState = 'ended' | 'failed';
 
 interface TokenResponse {
@@ -30,7 +30,7 @@ function asRecord(value: unknown): JsonRecord {
 interface PortfolioVoiceSessionOptions {
   audioElement: HTMLAudioElement;
   levelRef: { current: number };
-  onStateChange: (state: PortfolioVoiceState) => void;
+  onStateChange: (state: PortfolioVoiceState, endReason?: PortfolioVoiceEndReason) => void;
   onSource: (source: { title: string; url: string }) => void;
   onError: (message: string) => void;
 }
@@ -66,10 +66,10 @@ export class PortfolioVoiceSession {
 
   constructor(options: PortfolioVoiceSessionOptions) { this.opts = options; }
 
-  private setState(next: PortfolioVoiceState) {
+  private setState(next: PortfolioVoiceState, endReason?: PortfolioVoiceEndReason) {
     if (this.state === next) return;
     this.state = next;
-    this.opts.onStateChange(next);
+    this.opts.onStateChange(next, endReason);
   }
 
   async start(): Promise<void> {
@@ -144,7 +144,7 @@ export class PortfolioVoiceSession {
   async end(reason: PortfolioVoiceEndReason = 'user_ended'): Promise<void> {
     if (this.disposed) return;
     const finalState: PortfolioVoiceFinalState = reason === 'failed' ? 'failed' : 'ended';
-    this.setState(finalState);
+    this.setState(finalState, reason);
     const closeRequest = this.sendClose(reason, finalState);
     this.teardown();
     await closeRequest;
@@ -270,7 +270,7 @@ export class PortfolioVoiceSession {
   private fail(message: string, category: string) {
     if (this.disposed) return;
     this.failureCategory = category;
-    this.setState('failed');
+    this.setState('failed', 'failed');
     this.opts.onError(message);
     void this.sendClose('failed', 'failed');
     this.teardown();

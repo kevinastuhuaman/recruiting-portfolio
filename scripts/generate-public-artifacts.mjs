@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
 import { mkdir, writeFile } from "node:fs/promises";
 import { assistantCorpus, experience, links, projects, publicClaims, routes, site } from "../src/data/site.js";
 
@@ -7,6 +8,19 @@ await mkdir(publicDir, { recursive: true });
 
 const indexRoutes = routes.filter((route) => route.state === "index");
 const absolute = (path) => new URL(path, site.origin).href;
+const sourceCommit = process.env.PORTFOLIO_SOURCE_COMMIT
+  ?? execFileSync(
+    "git",
+    ["log", "-1", "--format=%H", "--", "src/data", "scripts/generate-public-artifacts.mjs"],
+    { encoding: "utf8" },
+  ).trim();
+const assistantCorpusArtifact = {
+  schemaVersion: assistantCorpus.schemaVersion,
+  corpusVersion: `${site.updated}.1`,
+  sourceCommit,
+  checksum: createHash("sha256").update(JSON.stringify(assistantCorpus.entries)).digest("hex"),
+  entries: assistantCorpus.entries,
+};
 
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -320,7 +334,7 @@ await Promise.all([
   writeFile(new URL("profile.json", publicDir), `${JSON.stringify(profile, null, 2)}\n`),
   writeFile(new URL("projects.json", publicDir), `${JSON.stringify(projectJson, null, 2)}\n`),
   writeFile(new URL("proof.json", publicDir), `${JSON.stringify(proofRegistry, null, 2)}\n`),
-  writeFile(new URL("assistant-corpus.json", publicDir), `${JSON.stringify(assistantCorpus, null, 2)}\n`),
+  writeFile(new URL("assistant-corpus.json", publicDir), `${JSON.stringify(assistantCorpusArtifact, null, 2)}\n`),
   writeFile(new URL("llms.txt", publicDir), llms),
   writeFile(new URL("llms-full.txt", publicDir), fullText),
   writeFile(new URL("resume.md", publicDir), resumeMarkdown),

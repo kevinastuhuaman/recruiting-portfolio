@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
+import { createHash } from "node:crypto";
 
 const routes = [
   "/",
@@ -394,6 +395,9 @@ test("builder stack proof is visible and machine-readable", async ({ page, reque
   const response = await request.get("/assistant-corpus.json");
   expect(response.ok()).toBe(true);
   const corpus = await response.json();
+  expect(corpus.corpusVersion).toBe("2026-07-13.1");
+  expect(corpus.sourceCommit).toMatch(/^[a-f0-9]{40}$/);
+  expect(corpus.checksum).toBe(createHash("sha256").update(JSON.stringify(corpus.entries)).digest("hex"));
   const builderStackEntry = corpus.entries.find((entry) => entry.id === "builder-stack");
   expect(builderStackEntry?.content).toMatch(/65 verified tools/i);
   expect(builderStackEntry?.content).toMatch(/Langfuse, PostHog, Umami/i);
@@ -573,17 +577,17 @@ test("404 output is excluded from indexing and structured data", async ({ page }
   await expect(page.locator(".page-hero h1")).toHaveCSS("color", "rgb(11, 11, 11)");
 });
 
-test("local previews never send production analytics", async ({ page }) => {
+test("analytics payload excludes private content", async ({ page }) => {
   const events = [];
-  await page.route("https://us.i.posthog.com/capture/", async (route) => {
+  await page.route("https://us.i.posthog.com/i/v0/e/", async (route) => {
     events.push(JSON.parse(route.request().postData() ?? "{}"));
     await route.fulfill({ status: 200, contentType: "application/json", body: "{}" });
   });
-  await page.route("https://closeai.mba/api/portfolio/chat", async (route) => {
+  await page.route("https://api.portfolio.kevinastuhuaman.com/api/portfolio/chat", async (route) => {
     await route.fulfill({
       status: 200,
       contentType: "text/event-stream",
-      body: 'event: meta\ndata: {}\n\nevent: delta\ndata: {"text":"Public Trackly evidence."}\n\nevent: citations\ndata: {"citations":[]}\n\nevent: done\ndata: {}\n\n',
+      body: 'event: meta\ndata: {}\n\nevent: error\ndata: {"reset":true,"recoverable":true}\n\nevent: delta\ndata: {"text":"Public Trackly evidence."}\n\nevent: citations\ndata: {"citations":[]}\n\nevent: done\ndata: {"fallback":true}\n\n',
     });
   });
   await page.goto("/ask/?utm_source=linkedin");
@@ -591,7 +595,43 @@ test("local previews never send production analytics", async ({ page }) => {
   await page.getByRole("button", { name: "Ask", exact: true }).click();
   await expect(page.getByRole("status")).toHaveText("Ready");
   expect(JSON.stringify(events)).not.toContain("private recruiter question text");
-  expect(events).toEqual([]);
+  if (process.env.PUBLIC_POSTHOG_KEY?.startsWith("phc_")) {
+    expect(events.length).toBeGreaterThan(0);
+    expect(events.every((entry) => entry.distinct_id === entry?.properties?.distinct_id)).toBe(true);
+    expect(events.every((entry) => entry?.properties?.$process_person_profile === false)).toBe(true);
+    expect(events.every((entry) => !String(entry?.properties?.$current_url ?? "").includes("utm_source"))).toBe(true);
+    expect(events.some((entry) => (
+      entry.event === "portfolio_chat_completed"
+      && entry.properties?.outcome === "streamed_fallback"
+      && entry.properties?.recovered === true
+    ))).toBe(true);
+    await page.goto("/resume/");
+    const download = page.waitForEvent("download");
+    await page.getByRole("link", { name: /Download PDF/i }).click();
+    await download;
+    await expect.poll(() => events.some((entry) => (
+      entry.event === "portfolio_contact_action" && entry.properties?.action === "resume_download"
+    ))).toBe(true);
+    await page.goto("/privacy/");
+    await page.locator('a[href^="mailto:"]').first().evaluate((link) => {
+      link.addEventListener("click", (event) => event.preventDefault(), { once: true });
+      link.click();
+    });
+    await expect.poll(() => events.some((entry) => (
+      entry.event === "portfolio_contact_action" && entry.properties?.action === "email"
+    ))).toBe(true);
+  } else {
+    expect(events).toEqual([]);
+  }
+});
+
+test("analytics stay inert when the portfolio project key is absent", async ({ page }) => {
+  const requests = [];
+  page.on("request", (request) => requests.push(request.url()));
+  await page.goto("/", { waitUntil: "networkidle" });
+  const html = await page.content();
+  expect(requests.some((url) => url.includes("posthog.com") || url.includes("phc_"))).toBe(Boolean(process.env.PUBLIC_POSTHOG_KEY));
+  expect(html).not.toContain("phc_");
 });
 
 test("resume print control works under the site CSP", async ({ page }) => {
@@ -604,12 +644,14 @@ test("resume print control works under the site CSP", async ({ page }) => {
 });
 
 test("grounded Chat streams plain text and server-controlled citations", async ({ page }) => {
-  await page.route("https://closeai.mba/api/portfolio/chat", async (route) => {
+  await page.route("https://api.portfolio.kevinastuhuaman.com/api/portfolio/chat", async (route) => {
     await route.fulfill({
       status: 200,
       contentType: "text/event-stream",
       body: [
-        'event: meta\ndata: {"sourceCount":1}\n\n',
+        'event: meta\ndata: {"sessionId":"ses_11111111111111111111111111111111","turnId":"turn_11111111111111111111111111111111"}\n\n',
+        'event: status\ndata: {"phase":"retrieving"}\n\n',
+        'event: status\ndata: {"phase":"synthesizing"}\n\n',
         'event: delta\ndata: {"text":"Kevin chose direct career pages "}\n\n',
         'event: delta\ndata: {"text":"as Trackly\'s source of earlier signal."}\n\n',
         'event: citations\ndata: {"citations":[{"id":"trackly","title":"Trackly case study","url":"https://portfolio.kevinastuhuaman.com/projects/trackly/"}]}\n\n',
@@ -622,6 +664,80 @@ test("grounded Chat streams plain text and server-controlled citations", async (
   await expect(page.getByRole("status")).toHaveText("Ready");
   await expect(page.getByText(/direct career pages/i)).toBeVisible();
   await expect(page.getByRole("link", { name: "Trackly case study" })).toHaveAttribute("href", "https://portfolio.kevinastuhuaman.com/projects/trackly/");
+  await expect(page.getByText("Was this helpful?")).toBeVisible();
+});
+
+test("Chat preserves the server session and records turn-only feedback", async ({ page }) => {
+  const requests = [];
+  let feedbackPayload = null;
+  await page.route("https://api.portfolio.kevinastuhuaman.com/api/portfolio/chat", async (route) => {
+    requests.push(route.request().postDataJSON());
+    const turn = requests.length === 1 ? "1" : "2";
+    await route.fulfill({
+      status: 200,
+      contentType: "text/event-stream",
+      body: [
+        `event: meta\ndata: {"sessionId":"ses_11111111111111111111111111111111","turnId":"turn_${turn.repeat(32)}"}\n\n`,
+        `event: delta\ndata: {"text":"Answer ${turn}."}\n\n`,
+        'event: citations\ndata: {"citations":[]}\n\n',
+        'event: done\ndata: {"fallback":false}\n\n',
+      ].join(""),
+    });
+  });
+  await page.route("https://api.portfolio.kevinastuhuaman.com/api/portfolio/feedback", async (route) => {
+    feedbackPayload = route.request().postDataJSON();
+    await route.fulfill({ status: 204, body: "" });
+  });
+  await page.goto("/ask/");
+  const composer = page.getByPlaceholder("Ask anything about Kevin");
+  await composer.fill("First question");
+  await composer.press("Enter");
+  await expect(page.getByText("Answer 1.", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Helpful" }).click();
+  await expect(page.getByText("Thanks for the feedback.")).toBeVisible();
+  expect(feedbackPayload).toEqual({ turnId: "turn_11111111111111111111111111111111", rating: "helpful" });
+  await composer.fill("What do you mean?");
+  await composer.press("Enter");
+  await expect(page.getByText("Answer 2.", { exact: true })).toBeVisible();
+  expect(requests[1].sessionId).toBe("ses_11111111111111111111111111111111");
+  expect(requests[1].history.at(-1)).toEqual({ role: "assistant", content: "Answer 1." });
+});
+
+test("late feedback completion cannot update a newer Chat turn", async ({ page }) => {
+  let chatCount = 0;
+  let releaseFeedback;
+  const feedbackPending = new Promise((resolve) => { releaseFeedback = resolve; });
+  await page.route("https://api.portfolio.kevinastuhuaman.com/api/portfolio/chat", async (route) => {
+    chatCount += 1;
+    const digit = String(chatCount);
+    await route.fulfill({
+      status: 200,
+      contentType: "text/event-stream",
+      body: [
+        `event: meta\ndata: {"sessionId":"ses_33333333333333333333333333333333","turnId":"turn_${digit.repeat(32)}"}\n\n`,
+        `event: delta\ndata: {"text":"Answer ${digit}."}\n\n`,
+        'event: citations\ndata: {"citations":[]}\n\n',
+        'event: done\ndata: {}\n\n',
+      ].join(""),
+    });
+  });
+  await page.route("https://api.portfolio.kevinastuhuaman.com/api/portfolio/feedback", async (route) => {
+    await feedbackPending;
+    await route.fulfill({ status: 204, body: "" });
+  });
+  await page.goto("/ask/");
+  const composer = page.getByPlaceholder("Ask anything about Kevin");
+  await composer.fill("First question");
+  await composer.press("Enter");
+  await expect(page.getByText("Answer 1.", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Helpful" }).click();
+  await expect(page.getByText("Sending feedback…")).toBeVisible();
+  await composer.fill("Second question");
+  await composer.press("Enter");
+  await expect(page.getByText("Answer 2.", { exact: true })).toBeVisible();
+  releaseFeedback();
+  await expect(page.getByText("Was this helpful?")).toBeVisible();
+  await expect(page.getByText("Thanks for the feedback.")).toHaveCount(0);
 });
 
 test("Chat uses real activity phases and natural keyboard submission", async ({ page }) => {
@@ -634,7 +750,9 @@ test("Chat uses real activity phases and natural keyboard submission", async ({ 
       const stream = new ReadableStream({
         start(controller) {
           window.__portfolioChatStream = {
-            meta() { controller.enqueue(encoder.encode('event: meta\ndata: {"sourceCount":2}\n\n')); },
+            meta() { controller.enqueue(encoder.encode('event: meta\ndata: {"sessionId":"ses_22222222222222222222222222222222","turnId":"turn_22222222222222222222222222222222"}\n\n')); },
+            retrieving() { controller.enqueue(encoder.encode('event: status\ndata: {"phase":"retrieving"}\n\n')); },
+            synthesizing() { controller.enqueue(encoder.encode('event: status\ndata: {"phase":"synthesizing"}\n\n')); },
             delta() { controller.enqueue(encoder.encode('event: delta\ndata: {"text":"Kevin built Trackly"}\n\n')); },
             done() {
             controller.enqueue(encoder.encode('event: citations\ndata: {"citations":[]}\n\nevent: done\ndata: {}\n\n'));
@@ -652,7 +770,10 @@ test("Chat uses real activity phases and natural keyboard submission", async ({ 
   await composer.press("Enter");
   await expect(page.getByRole("status")).toHaveText("Searching Kevin's portfolio");
   await page.evaluate(() => window.__portfolioChatStream.meta());
-  await expect(page.getByRole("status")).toHaveText("Reviewing 2 sources");
+  await page.evaluate(() => window.__portfolioChatStream.retrieving());
+  await expect(page.getByRole("status")).toHaveText("Looking through Kevin's portfolio");
+  await page.evaluate(() => window.__portfolioChatStream.synthesizing());
+  await expect(page.getByRole("status")).toHaveText("Summarizing what matters");
   await page.evaluate(() => window.__portfolioChatStream.delta());
   await expect(page.getByRole("status")).toHaveText("Writing answer");
   await expect(page.getByText("Kevin built Trackly", { exact: true })).toBeVisible();
@@ -686,7 +807,7 @@ test("Ask page removes artificial boundary copy and keeps concise AI disclosure"
 });
 
 test("malformed Chat stream resets its draft and recovers with the deterministic answer", async ({ page }) => {
-  await page.route("https://closeai.mba/api/portfolio/chat", async (route) => {
+  await page.route("https://api.portfolio.kevinastuhuaman.com/api/portfolio/chat", async (route) => {
     await route.fulfill({
       status: 200,
       contentType: "text/event-stream",
@@ -696,7 +817,8 @@ test("malformed Chat stream resets its draft and recovers with the deterministic
       ].join(""),
     });
   });
-  await page.route("https://closeai.mba/api/portfolio/ask", async (route) => {
+  await page.route("https://api.portfolio.kevinastuhuaman.com/api/portfolio/ask", async (route) => {
+    expect(route.request().postDataJSON()).toEqual({ question: "What did Kevin build at PayPal?" });
     await route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -715,26 +837,38 @@ test("malformed Chat stream resets its draft and recovers with the deterministic
   await expect(page.getByRole("link", { name: "PayPal case study" })).toBeVisible();
 });
 
-test("streamed Chat error events recover with the deterministic answer", async ({ page }) => {
-  await page.route("https://closeai.mba/api/portfolio/chat", async (route) => {
+test("malformed deterministic fallback is rejected without rendering unsafe values", async ({ page }) => {
+  await page.route("https://api.portfolio.kevinastuhuaman.com/api/portfolio/chat", async (route) => {
+    await route.fulfill({ status: 503, contentType: "application/json", body: "{}" });
+  });
+  await page.route("https://api.portfolio.kevinastuhuaman.com/api/portfolio/ask", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ answer: 7, citations: "not-an-array" }),
+    });
+  });
+  await page.goto("/ask/");
+  await page.getByLabel("Question").fill("What did Kevin build?");
+  await page.getByRole("button", { name: "Ask", exact: true }).click();
+  await expect(page.getByRole("status")).toHaveText("Assistant unavailable");
+  await expect(page.getByText(/interactive assistant is unavailable/i)).toBeVisible();
+  await expect(page.getByText("undefined", { exact: true })).toHaveCount(0);
+});
+
+test("recoverable streamed Chat errors keep the server-provided fallback", async ({ page }) => {
+  await page.route("https://api.portfolio.kevinastuhuaman.com/api/portfolio/chat", async (route) => {
     await route.fulfill({
       status: 200,
       contentType: "text/event-stream",
       body: [
         'event: delta\ndata: {"text":"Unsupported partial answer."}\n\n',
-        'event: error\ndata: {"reset":true,"code":"synthesis_failed"}\n\n',
-        'event: done\ndata: {"requestId":"test-request"}\n\n',
+        'event: citations\ndata: {"citations":[{"title":"Discarded source","url":"https://portfolio.kevinastuhuaman.com/discarded/"}]}\n\n',
+        'event: error\ndata: {"reset":true,"recoverable":true,"code":"synthesis_unavailable"}\n\n',
+        'event: delta\ndata: {"text":"Kevin’s answer comes from the deterministic public corpus."}\n\n',
+        'event: citations\ndata: {"citations":[{"title":"Public proof","url":"https://portfolio.kevinastuhuaman.com/proof/"}]}\n\n',
+        'event: done\ndata: {"fallback":true}\n\n',
       ].join(""),
-    });
-  });
-  await page.route("https://closeai.mba/api/portfolio/ask", async (route) => {
-    await route.fulfill({
-      status: 200,
-      contentType: "application/json",
-      body: JSON.stringify({
-        answer: "Kevin's answer is grounded in the deterministic public corpus.",
-        citations: [{ title: "Public proof", url: "https://portfolio.kevinastuhuaman.com/proof/" }],
-      }),
     });
   });
   await page.goto("/ask/");
@@ -743,6 +877,7 @@ test("streamed Chat error events recover with the deterministic answer", async (
   await expect(page.getByRole("status")).toHaveText("Ready");
   await expect(page.getByText(/deterministic public corpus/i)).toBeVisible();
   await expect(page.getByText(/Unsupported partial answer/i)).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "Discarded source" })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "Public proof" })).toBeVisible();
 });
 
@@ -791,24 +926,24 @@ test("Voice is opt-in, requests one microphone, creates one peer, shows no trans
     }
     Object.defineProperty(window, "RTCPeerConnection", { configurable: true, value: MockPeerConnection });
   });
-  await page.route("https://closeai.mba/api/portfolio/voice/token", async (route) => {
+  await page.route("https://api.portfolio.kevinastuhuaman.com/api/portfolio/voice/token", async (route) => {
     await route.fulfill({
       status: 200,
       contentType: "application/json",
       body: JSON.stringify({
         ephemeralKey: "test-ephemeral",
         closeToken: "test-close-capability-token-0000000000000000000",
-        webrtcUrl: "https://closeai.mba/api/portfolio/voice/connect?sessionId=00000000-0000-4000-8000-000000000001",
+        webrtcUrl: "https://api.portfolio.kevinastuhuaman.com/api/portfolio/voice/connect?sessionId=voice_00000000000000000000000000000001",
         model: "gpt-realtime-test",
-        sessionId: "00000000-0000-4000-8000-000000000001",
+        sessionId: "voice_00000000000000000000000000000001",
         maxDurationSeconds: 300,
       }),
     });
   });
-  await page.route("https://closeai.mba/api/portfolio/voice/connect?sessionId=00000000-0000-4000-8000-000000000001&model=gpt-realtime-test", async (route) => {
+  await page.route("https://api.portfolio.kevinastuhuaman.com/api/portfolio/voice/connect?sessionId=voice_00000000000000000000000000000001&model=gpt-realtime-test", async (route) => {
     await route.fulfill({ status: 200, contentType: "application/sdp", body: "mock-answer" });
   });
-  await page.route("https://closeai.mba/api/portfolio/voice/close", async (route) => {
+  await page.route("https://api.portfolio.kevinastuhuaman.com/api/portfolio/voice/close", async (route) => {
     closeRequest = JSON.parse(route.request().postData() ?? "{}");
     const thisClose = ++closeCount;
     if (thisClose === 1) await new Promise((resolve) => setTimeout(resolve, 900));
@@ -905,10 +1040,10 @@ test("Voice surfaces connecting and microphone denial, then recovers to Chat or 
 });
 
 test("assistant failure preserves the static cited fallback", async ({ page }) => {
-  await page.route("https://closeai.mba/api/portfolio/chat", async (route) => {
+  await page.route("https://api.portfolio.kevinastuhuaman.com/api/portfolio/chat", async (route) => {
     await route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ error: "unavailable" }) });
   });
-  await page.route("https://closeai.mba/api/portfolio/ask", async (route) => {
+  await page.route("https://api.portfolio.kevinastuhuaman.com/api/portfolio/ask", async (route) => {
     await route.fulfill({ status: 429, contentType: "application/json", body: JSON.stringify({ message: "hourly limit" }) });
   });
   await page.goto("/ask/");

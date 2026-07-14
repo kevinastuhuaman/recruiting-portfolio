@@ -1,11 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
+import { capturePortfolioEvent } from '../../lib/portfolioAnalytics';
 import PortfolioVoiceOrb from './PortfolioVoiceOrb';
-import { PortfolioVoiceSession, type PortfolioVoiceState } from './PortfolioVoiceSession';
+import {
+  PortfolioVoiceSession,
+  type PortfolioVoiceEndReason,
+  type PortfolioVoiceState,
+} from './PortfolioVoiceSession';
 import type { PortfolioCitation } from './portfolioApi';
 
 interface Props {
   onSwitchToChat: () => void;
 }
+
+type VoiceAnalyticsEndReason = Exclude<PortfolioVoiceEndReason, 'failed'> | 'session_ended';
 
 export default function PortfolioVoiceExperience({ onSwitchToChat }: Props) {
   const [voiceState, setVoiceState] = useState<'intro' | PortfolioVoiceState>('intro');
@@ -15,32 +22,57 @@ export default function PortfolioVoiceExperience({ onSwitchToChat }: Props) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const voiceSessionRef = useRef<PortfolioVoiceSession | null>(null);
   const voiceGenerationRef = useRef(0);
+  const voiceTerminalTrackedRef = useRef(false);
   const levelRef = useRef(0);
 
+  const trackVoiceEnd = (reason: VoiceAnalyticsEndReason) => {
+    if (voiceTerminalTrackedRef.current) return;
+    voiceTerminalTrackedRef.current = true;
+    capturePortfolioEvent('portfolio_voice_ended', { end_reason: reason });
+  };
+
   useEffect(() => {
-    const pageHide = () => { void voiceSessionRef.current?.end('page_hidden'); };
+    const pageHide = () => {
+      const session = voiceSessionRef.current;
+      voiceSessionRef.current = null;
+      if (session) trackVoiceEnd('page_hidden');
+      void session?.end('page_hidden');
+    };
     window.addEventListener('pagehide', pageHide);
     return () => {
       window.removeEventListener('pagehide', pageHide);
       voiceGenerationRef.current += 1;
       const session = voiceSessionRef.current;
       voiceSessionRef.current = null;
+      if (session) trackVoiceEnd('switched_to_chat');
       void session?.end('switched_to_chat');
     };
   }, []);
 
   const startVoice = async () => {
     if (!audioRef.current || voiceSessionRef.current) return;
+    capturePortfolioEvent('portfolio_voice_started');
     setVoiceError('');
     setVoiceSources([]);
     setMuted(false);
+    voiceTerminalTrackedRef.current = false;
     const generation = voiceGenerationRef.current + 1;
     voiceGenerationRef.current = generation;
     const session = new PortfolioVoiceSession({
       audioElement: audioRef.current,
       levelRef,
-      onStateChange: (state) => {
-        if (voiceGenerationRef.current === generation) setVoiceState(state);
+      onStateChange: (state, endReason) => {
+        if (voiceGenerationRef.current !== generation) return;
+        setVoiceState(state);
+        capturePortfolioEvent('portfolio_voice_state_changed', { state });
+        if (state === 'failed' && !voiceTerminalTrackedRef.current) {
+          voiceTerminalTrackedRef.current = true;
+          capturePortfolioEvent('portfolio_voice_failed', { failure_stage: 'session' });
+        }
+        if (state === 'ended' && !voiceTerminalTrackedRef.current) {
+          voiceTerminalTrackedRef.current = true;
+          capturePortfolioEvent('portfolio_voice_ended', { end_reason: endReason ?? 'session_ended' });
+        }
       },
       onSource: (source) => {
         if (voiceGenerationRef.current !== generation) return;
@@ -59,6 +91,7 @@ export default function PortfolioVoiceExperience({ onSwitchToChat }: Props) {
   const endVoice = async (reason: 'user_ended' | 'switched_to_chat' = 'user_ended') => {
     const session = voiceSessionRef.current;
     voiceSessionRef.current = null;
+    if (session) trackVoiceEnd(reason);
     await session?.end(reason);
   };
 

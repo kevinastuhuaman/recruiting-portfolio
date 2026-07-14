@@ -13,7 +13,7 @@ export default defineConfig({
         "default-src 'self'",
         "img-src 'self' data:",
         "font-src 'self'",
-        "connect-src 'self' https://closeai.mba https://*.openai.azure.com https://*.services.ai.azure.com https://*.api.cognitive.microsoft.com https://us.i.posthog.com https://cloudflareinsights.com",
+        "connect-src 'self' https://api.portfolio.kevinastuhuaman.com https://cloudflareinsights.com https://us.i.posthog.com",
         "object-src 'none'",
         "base-uri 'self'",
         "form-action 'self'",

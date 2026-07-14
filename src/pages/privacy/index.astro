@@ -17,13 +17,13 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 
   <article class="reading-shell section-pad prose">
     <h2>What is measured</h2>
-    <p>Page views and a small set of commands are sent to PostHog: resume downloads, assistant opens, contact clicks, and outbound links. Events can include the page path and explicit UTM source, medium, or campaign values.</p>
+    <p>The portfolio sends privacy-limited events to a dedicated PostHog project: page views without query strings, broad engaged-time buckets, section visibility, case-study clicks, resume and contact actions, assistant mode and lifecycle events, and Helpful or Needs work feedback. Session replay, heatmaps, automatic click capture, visitor identification, and person profiles are disabled.</p>
 
     <h2>What is not measured</h2>
-    <p>The portfolio analytics client does not send assistant question text, form text, resume lens selections, email content, application history, or Trackly user data. It does not set a persistent analytics cookie. A random identifier lasts for the current browser tab when session storage is available.</p>
+    <p>The assistant does not send question text, answers, form text, resume lens selections, email content, application history, or Trackly user data to behavioral analytics. It does not create a behavioral profile for the visitor.</p>
 
     <h2>Control</h2>
-    <p>Global Privacy Control and browser Do Not Track signals disable the portfolio analytics client. Blocking the analytics request does not change any page, resume, or assistant functionality.</p>
+    <p>Analytics use a random identifier that lasts only for the current browser tab session. Global Privacy Control and browser Do Not Track signals disable analytics entirely. Blocking PostHog never changes page, resume, or assistant functionality.</p>
 
     <h2>Public assistant</h2>
     <p>Chat sends the current question and up to six prior messages to a separate public endpoint only after the visitor selects Ask. It retrieves evidence from the published public corpus and may use an Azure-hosted language model to synthesize a plain-text answer; the deterministic public-corpus endpoint remains the fallback. Chat never queries Trackly accounts or private user data. Conversation history stays in the current browser tab, and questions, history, answers, and recruiter-identifying information are not stored in portfolio analytics, application logs, or a database.</p>

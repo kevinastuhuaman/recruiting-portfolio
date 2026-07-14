@@ -1,60 +1,9 @@
 <script>
-  const endpoint = "https://us.i.posthog.com/capture/";
-  const apiKey = "phc_tdngvWuIvSIwuhcTBxWKTwWF74uWJuWUvAPvnRPhYo2";
-  const privacyNavigator = navigator as Navigator & { globalPrivacyControl?: boolean };
-  const trackingDisabled = privacyNavigator.globalPrivacyControl === true || navigator.doNotTrack === "1";
-  const isProductionHost = location.hostname === "portfolio.kevinastuhuaman.com";
+  import { initializePortfolioAnalytics } from "../lib/portfolioAnalytics";
 
-  if (isProductionHost && !trackingDisabled) {
-    let sessionId: string = crypto.randomUUID();
-    try {
-      sessionId = sessionStorage.getItem("portfolio_session") ?? sessionId;
-      sessionStorage.setItem("portfolio_session", sessionId);
-    } catch {
-      // A blocked storage API leaves the identifier scoped to this page only.
-    }
-
-    const campaign = new URLSearchParams(location.search);
-    const baseProperties = {
-      path: location.pathname,
-      utm_source: campaign.get("utm_source") ?? undefined,
-      utm_medium: campaign.get("utm_medium") ?? undefined,
-      utm_campaign: campaign.get("utm_campaign") ?? undefined,
-      $lib: "kevin-portfolio",
-    };
-
-    const capture = (event: string, properties: Record<string, unknown> = {}) => {
-      void fetch(endpoint, {
-        method: "POST",
-        mode: "cors",
-        credentials: "omit",
-        keepalive: true,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          api_key: apiKey,
-          event,
-          distinct_id: sessionId,
-          properties: { ...baseProperties, ...properties },
-        }),
-      }).catch(() => undefined);
-    };
-
-    capture("portfolio:page_view");
-
-    document.addEventListener("click", (event) => {
-      const link = (event.target as Element | null)?.closest("a[href]") as HTMLAnchorElement | null;
-      if (!link) return;
-      const destination = new URL(link.href, location.href);
-      let command = "navigation";
-      if (destination.pathname.endsWith(".pdf")) command = "resume_download";
-      else if (destination.pathname === "/ask/") command = "assistant_open";
-      else if (destination.protocol === "mailto:" || destination.hostname === "www.linkedin.com") command = "contact";
-      else if (destination.origin !== location.origin) command = "outbound";
-      if (command === "navigation") return;
-      capture(`portfolio:${command}`, {
-        destination_host: destination.hostname || destination.protocol,
-        destination_path: destination.pathname,
-      });
-    });
-  }
+  initializePortfolioAnalytics(
+    import.meta.env.PUBLIC_POSTHOG_KEY,
+    import.meta.env.PUBLIC_POSTHOG_HOST || "https://us.i.posthog.com",
+    import.meta.env.PUBLIC_POSTHOG_ALLOWED_HOST || "portfolio.kevinastuhuaman.com",
+  );
 </script>

@@ -132,16 +132,23 @@ export const assistantCorpus = {
   entries: [
     {
       id: "overview",
-      title: "Kevin Astuhuaman portfolio",
+      title: "Kevin Astuhuaman — AI Product Manager",
       url: `${site.origin}/`,
       keywords: ["about", "overview", "ai product manager", "technical product manager", "technical builder", "role", "fit", "hire"],
       content: "Kevin Astuhuaman is an AI Product Manager, ex-PayPal in AI/ML observability, and Berkeley Haas MBA in the Bay Area. His two recruiting lanes are applied AI and agent products, and AI platform or technical product management. His most recent enterprise AI proof is an agentic observability prototype at PayPal Checkout. Trackly proves hands-on product building across web, native apps, CLI, MCP, chat, and voice. Berkeley's Open Innovation Squad work with Fujitsu and MoBagel adds AI product strategy, high-fidelity prototyping, and go-to-market experience. His BCP experience shows six years of progression, regulated-product judgment, team leadership, and operating scale.",
     },
     {
+      id: "lab-overview",
+      title: "AI Product Lab",
+      url: `${site.origin}/lab/`,
+      keywords: ["lab", "ai product lab", "artifacts", "interactive artifacts", "experiments", "evals", "evals built", "evaluation", "evaluations", "product studies", "portfolio lab", "ai investigation workbench", "agent workflow canvas", "evals control room"],
+      content: "Kevin's AI Product Lab collects seven public, interactive artifacts that make his product judgment inspectable: AI Investigation Workbench, AI Product Builder Stack, Agent Workflow Canvas, Evals Control Room, Human Control Plane, AI Product Motion Studies, and Enterprise AI Interface Kit. The collection covers enterprise AI interface patterns, agent workflows, evaluation design, human control, technical range, and motion. Every artifact uses synthetic or public-safe data and links to supporting decisions, structured files, tests, and source material where available.",
+    },
+    {
       id: "trackly",
       title: "Trackly case study",
       url: `${site.origin}/projects/trackly/`,
-      keywords: ["trackly", "agent", "agents", "job search", "career pages", "scraping", "matching", "eval", "classification", "chat", "voice", "ios", "macos", "cli", "mcp", "builder", "computer use", "browser use", "browser agent", "human in the loop", "human-in-the-loop", "harness", "chrome", "ats"],
+      keywords: ["trackly", "agent", "agents", "job search", "career pages", "scraping", "matching", "eval", "classification", "chat", "voice", "ios", "macos", "cli", "mcp", "builder", "computer use", "browser use", "browser agent", "human reviewed", "human reviewed browser agent", "human in the loop", "human-in-the-loop", "harness", "chrome", "ats"],
       content: `Kevin built Trackly during his MBA job search after seeing strong roles appear on company career pages before job boards. The live product monitors direct sources, normalizes and deduplicates jobs, applies freshness and false-zero guards, classifies job attributes, explains matches, and delivers the same product system through web, iOS, macOS, a public CLI, MCP, chat, and voice. ${claim("trackly-inventory").statement} Kevin also built a recent human-reviewed browser-agent harness: Trackly supplies a user-selected application queue and job context through its CLI and MCP; a domain-specific policy layer handles ATS mechanics, form integrity, and recovery; Codex controls Chrome to prepare forms; and the workflow pauses before submission for fresh, job-specific human approval. Subjective answers and consequential actions remain visible to the user, and any edit, navigation, reload, or reconnect invalidates prior approval. The transferable product pattern is useful when the final workflow lives in a browser instead of a reliable API, including recruiting, financial operations, sales portals, and CRM workflows. It is a recent working experiment, not a claim of fully autonomous application submission. Kevin owned the product problem, prioritization, quality thresholds, interaction decisions, release decisions, operation, and hands-on implementation. AI coding agents accelerated implementation and review but did not decide the product promise or release evidence.`,
     },
     {
@@ -169,7 +176,7 @@ export const assistantCorpus = {
       id: "motion-studies",
       title: "AI Product Motion Studies",
       url: `${site.origin}/lab/#motion-studies`,
-      keywords: ["motion design", "interaction design", "product design", "design taste", "workflow", "recovery", "failure state", "cross-platform", "cross-surface", "reduced motion", "accessibility", "enterprise ai", "figma-level"],
+      keywords: ["motion design", "interaction design", "product design", "design taste", "workflow", "recovery", "failure state", "cross-platform", "cross platform", "cross-surface", "cross surface", "reduced motion", "accessibility", "enterprise ai", "figma-level"],
       content: "Kevin published AI Product Motion Studies, three original interactive studies that use motion to explain product state rather than decorate it. Across 13 manually inspectable states, the studies show a recording becoming an editable workflow, a failed AI run moving through accountable review and recovery, and one normalized product object adapting across web, macOS, mobile, and CLI or MCP surfaces. Each sequence starts paused, supports direct state selection and reduced motion, keeps visually hidden future states out of the accessibility tree, and publishes the timing and state model as motion-spec.json. The repository includes responsive Playwright tests, Axe checks, decision records, project.json, llms.txt, and synthetic data only. This is public proof of interaction design judgment and implementation detail, not employer work or a disclosure of Trackly production code.",
     },
     {
@@ -190,14 +197,14 @@ export const assistantCorpus = {
       id: "bcp",
       title: "BCP and Credicorp product leadership case study",
       url: `${site.origin}/projects/smb-fintech-bcp-credicorp/`,
-      keywords: ["bcp", "credicorp", "fintech", "bank", "smb", "lending", "digital channels", "leadership", "team", "teams", "managed", "reports", "risk", "compliance", "growth"],
-      content: `From 2018 through 2024, Kevin progressed from Product Analyst to Product Manager, Senior Product Manager, and Lead Product Manager at Banco de Credito BCP, part of Credicorp. ${claim("bcp-access").statement} ${claim("bcp-loans").statement} ${claim("bcp-digital-growth").statement} ${claim("bcp-market-share").statement} ${claim("bcp-team").statement}`,
+      keywords: ["bcp", "credicorp", "fintech", "bank", "smb", "lending", "digital channels", "leadership", "team", "teams", "managed", "reports", "risk", "compliance", "growth", "180k", "monthly website traffic", "market share", "19.55 market share", "basis points", "129 basis points", "credit evaluation", "online credit evaluation platform", "evaluation time"],
+      content: `From 2018 through 2024, Kevin progressed from Product Analyst to Product Manager, Senior Product Manager, and Lead Product Manager at Banco de Credito BCP, part of Credicorp. ${claim("bcp-access").statement} ${claim("bcp-loans").statement} ${claim("bcp-digital-growth").statement} The 180K figure is monthly website traffic, not monthly users. ${claim("bcp-market-share").statement} ${claim("bcp-team").statement}`,
     },
     {
       id: "resume",
       title: "Kevin Astuhuaman resume",
       url: `${site.origin}/resume/`,
-      keywords: ["resume", "experience", "education", "berkeley haas", "haas", "berkeley", "mba", "skills", "career", "background", "mo bagel", "summit"],
+      keywords: ["resume", "experience", "education", "berkeley haas", "haas", "berkeley", "mba", "skills", "career", "background", "mo bagel", "summit", "tech and ai summit", "tech ai summit", "560 registrations"],
       content: `Kevin earned a STEM-designated MBA from the University of California, Berkeley, Haas School of Business in May 2026 and a Bachelor of Science in Industrial Engineering from the Pontifical Catholic University of Peru in July 2018. At Haas, he built Trackly, worked with Berkeley's Open Innovation Squad on the Fujitsu and MoBagel AI product challenge, and served as VP of the Tech Club. ${claim("berkeley-tech-ai-summit").statement}`,
     },
     {
