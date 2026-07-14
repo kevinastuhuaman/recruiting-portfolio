@@ -171,9 +171,11 @@ interface VoiceOrbProps {
   size?: number;
   variant?: 'intro' | 'active';
   className?: string;
+  /** Fires after WebGL has painted its first complete frame. */
+  onReady?: () => void;
 }
 
-export default function PortfolioVoiceOrb({ levelRef, size = 260, variant = 'active', className }: VoiceOrbProps) {
+export default function PortfolioVoiceOrb({ levelRef, size = 260, variant = 'active', className, onReady }: VoiceOrbProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [webglFailed, setWebglFailed] = useState(false);
   const orbClass = ["portfolio-voice-orb", `portfolio-voice-orb-${variant}`, className]
@@ -263,6 +265,7 @@ export default function PortfolioVoiceOrb({ levelRef, size = 260, variant = 'act
     let raf = 0;
     let rot = 0;
     let last = 0;
+    let hasRendered = false;
     const render = (nowMs: number) => {
       const t = nowMs / 1000;
       const dt = last === 0 ? 0 : Math.min(t - last, 0.05);
@@ -283,6 +286,11 @@ export default function PortfolioVoiceOrb({ levelRef, size = 260, variant = 'act
       gl.uniform1f(uHover, hover);
       gl.uniform1f(uHoverIntensity, hoverIntensity);
       gl.drawArrays(gl.TRIANGLES, 0, 6);
+      if (!hasRendered) {
+        hasRendered = true;
+        canvas.dataset.rendered = "true";
+        onReady?.();
+      }
       if (!reduceMotion) raf = requestAnimationFrame(render);
     };
 
@@ -308,7 +316,7 @@ export default function PortfolioVoiceOrb({ levelRef, size = 260, variant = 'act
       // context there would blank the orb on first render.
       if (!canvas.isConnected) gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
-  }, [levelRef, size]);
+  }, [levelRef, onReady, size]);
 
   // Fallback for browsers/devices without WebGL: a static gradient orb so the
   // voice affordance never renders as a blank canvas.

@@ -14,6 +14,17 @@ const suggestions = [
 ];
 const FALLBACK_TIMEOUT_MS = 10_000;
 
+function AssistantTrace({ animated = false }: { animated?: boolean }) {
+  return (
+    <svg className={`assistant-trace${animated ? ' is-animated' : ''}`} viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M6 4.5h8.5a3 3 0 0 1 3 3v8" />
+      <path d="M6 9.5h7M6 14.5h5" />
+      <circle cx="4" cy="4.5" r="1.25" />
+      <circle cx="17.5" cy="18" r="1.25" />
+    </svg>
+  );
+}
+
 function parseStreamEvent(raw: string): StreamEvent {
   try {
     const parsed: unknown = JSON.parse(raw);
@@ -250,6 +261,7 @@ export default function PortfolioAssistant() {
   };
 
   const currentFeedback = feedback && feedback.turnId === latestTurnId ? feedback.status : undefined;
+  const isStreamingAnswer = loading && messages.at(-1)?.role === 'assistant' && Boolean(messages.at(-1)?.content);
 
   return (
     <section className="assistant-shell" aria-label="Portfolio assistant">
@@ -265,9 +277,17 @@ export default function PortfolioAssistant() {
             {messages.length === 0 ? (
               <div className="chat-empty"><strong>Good starting points</strong>{suggestions.map((item) => <button key={item} onClick={() => void ask(item)}>{item}</button>)}</div>
             ) : messages.map((message, index) => (
-              <article className={`chat-message ${message.role}`} key={`${message.role}-${index}`}><span>{message.role === 'user' ? 'You' : "Kevin's assistant"}</span><p>{message.content}</p></article>
+              <article className={`chat-message ${message.role}`} key={`${message.role}-${index}`}>
+                <span className="chat-message-label">{message.role === 'assistant' && <AssistantTrace />}{message.role === 'user' ? 'You' : "Kevin's assistant"}</span>
+                <p>{message.content}</p>
+              </article>
             ))}
-            {loading && <div className="chat-thinking"><i></i><i></i><i></i><span className="sr-only">Preparing grounded answer</span></div>}
+            {loading && !isStreamingAnswer && (
+              <div className="chat-activity" aria-hidden="true">
+                <AssistantTrace animated />
+                <span>{status}</span>
+              </div>
+            )}
           </div>
           {citations.length > 0 && <div className="chat-citations"><strong>Public sources</strong>{citations.map((citation) => <a href={citation.url} key={citation.url}>{citation.title}</a>)}</div>}
           {latestTurnId && !loading && <div className="chat-feedback" aria-label="Rate this answer"><span>{currentFeedback === 'pending' ? 'Sending feedback…' : currentFeedback ? 'Thanks for the feedback.' : 'Was this helpful?'}</span><button type="button" disabled={Boolean(currentFeedback)} onClick={() => void rateAnswer('helpful')}>Helpful</button><button type="button" disabled={Boolean(currentFeedback)} onClick={() => void rateAnswer('needs_work')}>Needs work</button></div>}
@@ -276,7 +296,7 @@ export default function PortfolioAssistant() {
             <div><textarea id="portfolio-question" value={question} onChange={(event) => setQuestion(event.target.value)} onKeyDown={onComposerKeyDown} maxLength={600} rows={2} placeholder="Ask anything about Kevin" /><button type="submit" disabled={loading || question.trim().length < 2}>Ask</button></div>
             <p>Press Enter to send. Shift+Enter adds a new line. Please keep confidential information out of the chat.</p>
           </form>
-          <div className="assistant-status" role="status">{status}</div>
+          <div className={`assistant-status${loading || status === 'Ready' ? ' sr-only' : ''}`} role="status">{status}</div>
         </div>
       ) : (
         <Suspense fallback={<div className="voice-panel voice-loading" role="tabpanel">Preparing Voice…</div>}>

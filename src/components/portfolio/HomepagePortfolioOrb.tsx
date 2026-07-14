@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import PortfolioVoiceOrb from "./PortfolioVoiceOrb";
 
 /**
@@ -8,25 +8,20 @@ import PortfolioVoiceOrb from "./PortfolioVoiceOrb";
 export default function HomepagePortfolioOrb() {
   const levelRef = useRef(0);
   const [ready, setReady] = useState(false);
-
-  useEffect(() => setReady(true), []);
+  const markReady = useCallback(() => setReady(true), []);
 
   return (
     <div className={`homepage-portfolio-orb${ready ? " is-ready" : ""}`}>
-      <img
+      <span
         className="homepage-portfolio-orb-fallback"
-        src="/assets/portfolio-orb-static.png"
-        width="600"
-        height="602"
-        loading="lazy"
-        decoding="async"
-        alt=""
+        aria-hidden="true"
       />
       <PortfolioVoiceOrb
         className="homepage-portfolio-orb-canvas"
         levelRef={levelRef}
         size={340}
         variant="intro"
+        onReady={markReady}
       />
     </div>
   );

@@ -152,6 +152,8 @@ test("homepage assistant preview reuses the moving voice orb without requesting 
   await page.locator("#assistant").scrollIntoViewIfNeeded();
   await expect(orb).toBeVisible();
   await expect(orb).toHaveAttribute("data-motion", "animated");
+  await expect(orb).toHaveAttribute("data-rendered", "true");
+  await expect(page.locator(".homepage-portfolio-orb")).toHaveClass(/is-ready/);
   const dimensions = await orb.evaluate((canvas) => {
     const rect = canvas.getBoundingClientRect();
     return { width: rect.width, height: rect.height };
@@ -189,10 +191,11 @@ test("homepage orb keeps its static artwork when WebGL is unavailable", async ({
   await page.goto("/", { waitUntil: "networkidle" });
 
   await page.locator("#assistant").scrollIntoViewIfNeeded();
-  const fallback = page.locator(".homepage-portfolio-orb-canvas.portfolio-voice-orb-fallback");
+  const fallback = page.locator(".homepage-portfolio-orb-fallback");
   await expect(fallback).toBeVisible();
-  await expect(fallback).toHaveAttribute("data-motion", "static");
-  await expect(fallback).toHaveCSS("background-image", /portfolio-orb-static\.png/);
+  await expect(fallback).toHaveCSS("border-radius", "50%");
+  await expect(fallback).not.toHaveCSS("background-image", /url\(/);
+  await expect(page.locator(".homepage-portfolio-orb")).not.toHaveClass(/is-ready/);
 });
 
 test("homepage exposes one contact invitation with copy-email and resume actions", async ({ page }) => {
@@ -769,14 +772,17 @@ test("Chat uses real activity phases and natural keyboard submission", async ({ 
   await composer.fill("What did Kevin build?");
   await composer.press("Enter");
   await expect(page.getByRole("status")).toHaveText("Searching Kevin's portfolio");
+  await expect(page.locator(".chat-activity")).toContainText("Searching Kevin's portfolio");
   await page.evaluate(() => window.__portfolioChatStream.meta());
   await page.evaluate(() => window.__portfolioChatStream.retrieving());
   await expect(page.getByRole("status")).toHaveText("Looking through Kevin's portfolio");
   await page.evaluate(() => window.__portfolioChatStream.synthesizing());
   await expect(page.getByRole("status")).toHaveText("Summarizing what matters");
+  await expect(page.locator(".chat-activity")).toContainText("Summarizing what matters");
   await page.evaluate(() => window.__portfolioChatStream.delta());
   await expect(page.getByRole("status")).toHaveText("Writing answer");
   await expect(page.getByText("Kevin built Trackly", { exact: true })).toBeVisible();
+  await expect(page.locator(".chat-activity")).toHaveCount(0);
   await page.evaluate(() => window.__portfolioChatStream.done());
   await expect(page.getByRole("status")).toHaveText("Ready");
 
