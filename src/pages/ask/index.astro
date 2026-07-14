@@ -93,6 +93,10 @@ import { claimsById } from "../../data/claims.js";
   .chat-citations { grid-column: 2; display: flex; padding: 18px 34px; flex-wrap: wrap; gap: 8px 14px; border-top: 1px solid var(--line); font-size: .78rem; }
   .chat-citations strong { width: 100%; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; }
   .chat-citations a { padding: 5px 8px; border: 1px solid var(--line); border-radius: 999px; text-decoration: none; }
+  .chat-feedback { grid-column: 2; display: flex; padding: 12px 34px; align-items: center; flex-wrap: wrap; gap: 8px; border-top: 1px solid var(--line); color: var(--muted); font-size: .76rem; }
+  .chat-feedback span { margin-right: 4px; }
+  .chat-feedback button { padding: 6px 10px; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--ink); cursor: pointer; }
+  .chat-feedback button:disabled { color: var(--muted); cursor: default; opacity: .65; }
   .chat-form { grid-column: 2; padding: 24px 34px 18px; border-top: 1px solid var(--ink); }
   .chat-form > label { display: block; margin-bottom: 8px; font-weight: 700; }
   .chat-form > div { display: grid; grid-template-columns: 1fr auto; border: 1px solid var(--ink); }
@@ -135,7 +139,7 @@ import { claimsById } from "../../data/claims.js";
     .ask-hero, .chat-panel, .voice-panel, .faq-section { grid-template-columns: 1fr; }
     .chat-panel > header, .voice-orb-wrap { border-right: 0; border-bottom: 1px solid var(--ink); }
     .chat-messages { min-height: 360px; }
-    .chat-citations, .chat-form, .assistant-status { grid-column: 1; }
+    .chat-citations, .chat-feedback, .chat-form, .assistant-status { grid-column: 1; }
     .voice-orb-wrap { min-height: 390px; }
     .voice-copy { padding: 34px 24px 44px; }
     .assistant-placeholder { min-height: 760px; }

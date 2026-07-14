@@ -1,8 +1,8 @@
 import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
-import { askPublicCorpus, PORTFOLIO_API, type PortfolioCitation } from './portfolioApi';
+import { askPublicCorpus, PORTFOLIO_API, submitPortfolioFeedback, type PortfolioCitation } from './portfolioApi';
 
 type Mode = 'chat' | 'voice';
-type Message = { role: 'user' | 'assistant'; content: string };
+type Message = { role: 'user' | 'assistant'; content: string; turnId?: string };
 type StreamEvent = Record<string, unknown>;
 const PortfolioVoiceExperience = lazy(() => import('./PortfolioVoiceExperience'));
 const suggestions = [
@@ -29,7 +29,11 @@ export default function PortfolioAssistant() {
   const [citations, setCitations] = useState<PortfolioCitation[]>([]);
   const [status, setStatus] = useState('Ready');
   const [loading, setLoading] = useState(false);
+  const [latestTurnId, setLatestTurnId] = useState<string>();
+  const [feedback, setFeedback] = useState<'helpful' | 'needs_work'>();
   const chatAbortRef = useRef<AbortController | null>(null);
+  const sessionIdRef = useRef<string | undefined>(undefined);
+  const activeTurnIdRef = useRef<string | undefined>(undefined);
   const inFlightRef = useRef(false);
   const pendingDeltaRef = useRef('');
   const deltaFrameRef = useRef<number | null>(null);
@@ -47,7 +51,7 @@ export default function PortfolioAssistant() {
       const next = [...current];
       const last = next[next.length - 1];
       if (last?.role === 'assistant') next[next.length - 1] = { ...last, content: last.content + text };
-      else next.push({ role: 'assistant', content: text });
+      else next.push({ role: 'assistant', content: text, turnId: activeTurnIdRef.current });
       return next;
     });
   };
@@ -79,10 +83,13 @@ export default function PortfolioAssistant() {
     const message = value.trim();
     if (message.length < 2 || inFlightRef.current) return;
     inFlightRef.current = true;
-    const history = messages.slice(-6);
+    const history = messages.slice(-6).map(({ role, content }) => ({ role, content }));
     setMessages((current) => [...current, { role: 'user', content: message }]);
     setQuestion('');
     setCitations([]);
+    setLatestTurnId(undefined);
+    setFeedback(undefined);
+    activeTurnIdRef.current = undefined;
     setLoading(true);
     setStatus("Searching Kevin's portfolio");
     const controller = new AbortController();
@@ -94,7 +101,7 @@ export default function PortfolioAssistant() {
       const response = await fetch(`${PORTFOLIO_API}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message, history }),
+        body: JSON.stringify({ message, history, ...(sessionIdRef.current ? { sessionId: sessionIdRef.current } : {}) }),
         signal: controller.signal,
       });
       if (!response.ok || !response.body) throw new Error('stream_unavailable');
@@ -113,9 +120,18 @@ export default function PortfolioAssistant() {
           const raw = block.split('\n').find((line) => line.startsWith('data: '))?.slice(6);
           if (!event || !raw) continue;
           const data = parseStreamEvent(raw);
-          if (event === 'meta' && typeof data.sourceCount === 'number') {
-            const sourceLabel = data.sourceCount === 1 ? 'source' : 'sources';
-            setStatus(`Reviewing ${data.sourceCount} ${sourceLabel}`);
+          if (event === 'meta') {
+            if (typeof data.sessionId === 'string') sessionIdRef.current = data.sessionId;
+            if (typeof data.turnId === 'string') {
+              activeTurnIdRef.current = data.turnId;
+              setLatestTurnId(data.turnId);
+            }
+          }
+          if (event === 'status' && data.phase === 'retrieving') {
+            setStatus("Looking through Kevin's portfolio");
+          }
+          if (event === 'status' && data.phase === 'synthesizing') {
+            setStatus('Summarizing what matters');
           }
           if (event === 'delta' && typeof data.text === 'string') {
             if (!receivedFirstDelta) {
@@ -127,7 +143,8 @@ export default function PortfolioAssistant() {
           if (event === 'citations' && Array.isArray(data.citations)) setCitations(data.citations);
           if (event === 'error') {
             if (data.reset === true) resetAssistantDraft();
-            throw new Error('stream_error');
+            if (data.recoverable === true) setStatus('Using portfolio evidence');
+            else throw new Error('stream_error');
           }
           if (event === 'done') receivedDone = true;
         }
@@ -142,6 +159,8 @@ export default function PortfolioAssistant() {
       controller.abort();
       void reader?.cancel().catch(() => {});
       resetAssistantDraft();
+      activeTurnIdRef.current = undefined;
+      setLatestTurnId(undefined);
       const fallbackController = new AbortController();
       const fallbackTimer = window.setTimeout(() => fallbackController.abort('portfolio_fallback_timeout'), FALLBACK_TIMEOUT_MS);
       activeController = fallbackController;
@@ -180,6 +199,17 @@ export default function PortfolioAssistant() {
     setMode(next);
   };
 
+  const rateAnswer = async (rating: 'helpful' | 'needs_work') => {
+    if (!latestTurnId || feedback) return;
+    try {
+      await submitPortfolioFeedback(latestTurnId, rating);
+      setFeedback(rating);
+      setStatus('Thanks for the feedback');
+    } catch {
+      setStatus('Feedback unavailable');
+    }
+  };
+
   return (
     <section className="assistant-shell" aria-label="Portfolio assistant">
       <div className="assistant-tabs" role="tablist" aria-label="Assistant mode">
@@ -199,6 +229,7 @@ export default function PortfolioAssistant() {
             {loading && <div className="chat-thinking"><i></i><i></i><i></i><span className="sr-only">Preparing grounded answer</span></div>}
           </div>
           {citations.length > 0 && <div className="chat-citations"><strong>Public sources</strong>{citations.map((citation) => <a href={citation.url} key={citation.url}>{citation.title}</a>)}</div>}
+          {latestTurnId && !loading && <div className="chat-feedback" aria-label="Rate this answer"><span>{feedback ? 'Thanks for the feedback.' : 'Was this helpful?'}</span><button type="button" disabled={Boolean(feedback)} onClick={() => void rateAnswer('helpful')}>Helpful</button><button type="button" disabled={Boolean(feedback)} onClick={() => void rateAnswer('needs_work')}>Needs work</button></div>}
           <form onSubmit={onSubmit} className="chat-form">
             <label htmlFor="portfolio-question">Question</label>
             <div><textarea id="portfolio-question" value={question} onChange={(event) => setQuestion(event.target.value)} onKeyDown={onComposerKeyDown} maxLength={600} rows={2} placeholder="Ask anything about Kevin" /><button type="submit" disabled={loading || question.trim().length < 2}>Ask</button></div>
