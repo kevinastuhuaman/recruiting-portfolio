@@ -141,7 +141,7 @@ export const assistantCorpus = {
       id: "lab-overview",
       title: "AI Product Lab",
       url: `${site.origin}/lab/`,
-      keywords: ["lab", "ai product lab", "artifacts", "interactive artifacts", "experiments", "product studies", "portfolio lab", "ai investigation workbench", "agent workflow canvas", "evals control room"],
+      keywords: ["lab", "ai product lab", "artifacts", "interactive artifacts", "experiments", "evals", "evaluation", "product studies", "portfolio lab", "ai investigation workbench", "agent workflow canvas", "evals control room"],
       content: "Kevin's AI Product Lab collects seven public, interactive artifacts that make his product judgment inspectable: AI Investigation Workbench, AI Product Builder Stack, Agent Workflow Canvas, Evals Control Room, Human Control Plane, AI Product Motion Studies, and Enterprise AI Interface Kit. The collection covers enterprise AI interface patterns, agent workflows, evaluation design, human control, technical range, and motion. Every artifact uses synthetic or public-safe data and links to supporting decisions, structured files, tests, and source material where available.",
     },
     {
@@ -204,7 +204,7 @@ export const assistantCorpus = {
       id: "resume",
       title: "Kevin Astuhuaman resume",
       url: `${site.origin}/resume/`,
-      keywords: ["resume", "experience", "education", "berkeley haas", "haas", "berkeley", "mba", "skills", "career", "background", "mo bagel", "summit"],
+      keywords: ["resume", "experience", "education", "berkeley haas", "haas", "berkeley", "mba", "skills", "career", "background", "mo bagel", "summit", "tech and ai summit", "tech ai summit", "560 registrations"],
       content: `Kevin earned a STEM-designated MBA from the University of California, Berkeley, Haas School of Business in May 2026 and a Bachelor of Science in Industrial Engineering from the Pontifical Catholic University of Peru in July 2018. At Haas, he built Trackly, worked with Berkeley's Open Innovation Squad on the Fujitsu and MoBagel AI product challenge, and served as VP of the Tech Club. ${claim("berkeley-tech-ai-summit").statement}`,
     },
     {
