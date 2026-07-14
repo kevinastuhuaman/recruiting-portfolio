@@ -135,10 +135,63 @@ test("homepage project system keeps type, media, and Berkeley steps readable", a
   }
 
   await expect(page.locator("[data-berkeley-step]").first()).toHaveCSS("writing-mode", "horizontal-tb");
-  const orbImage = page.locator(".assistant-orb-static img");
-  await orbImage.scrollIntoViewIfNeeded();
-  await expect(orbImage).toBeVisible();
-  await expect.poll(() => orbImage.evaluate((image) => [image.naturalWidth, image.naturalHeight])).toEqual([600, 602]);
+});
+
+test("homepage assistant preview reuses the moving voice orb without requesting audio", async ({ page }) => {
+  await page.addInitScript(() => {
+    window.__homepageMicRequests = 0;
+    Object.defineProperty(navigator, "mediaDevices", {
+      configurable: true,
+      value: { getUserMedia: async () => { window.__homepageMicRequests += 1; throw new Error("unexpected_microphone_request"); } },
+    });
+  });
+  await page.goto("/", { waitUntil: "networkidle" });
+
+  const orb = page.locator(".homepage-portfolio-orb-canvas");
+  await page.locator("#assistant").scrollIntoViewIfNeeded();
+  await expect(orb).toBeVisible();
+  await expect(orb).toHaveAttribute("data-motion", "animated");
+  const dimensions = await orb.evaluate((canvas) => {
+    const rect = canvas.getBoundingClientRect();
+    return { width: rect.width, height: rect.height };
+  });
+  expect(dimensions.width).toBeGreaterThanOrEqual(250);
+  expect(dimensions.width).toBeLessThanOrEqual(340);
+  expect(Math.abs(dimensions.width - dimensions.height)).toBeLessThan(1);
+
+  const firstFrame = await orb.screenshot();
+  await page.waitForTimeout(180);
+  const secondFrame = await orb.screenshot();
+  expect(secondFrame.equals(firstFrame)).toBe(false);
+  expect(await page.evaluate(() => window.__homepageMicRequests)).toBe(0);
+});
+
+test("homepage orb renders one frame when reduced motion is requested", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/", { waitUntil: "networkidle" });
+
+  const orb = page.locator(".homepage-portfolio-orb-canvas");
+  await page.locator("#assistant").scrollIntoViewIfNeeded();
+  await expect(orb).toBeVisible();
+  await expect(orb).toHaveAttribute("data-motion", "static");
+
+  const firstFrame = await orb.screenshot();
+  await page.waitForTimeout(180);
+  const secondFrame = await orb.screenshot();
+  expect(secondFrame.equals(firstFrame)).toBe(true);
+});
+
+test("homepage orb keeps its static artwork when WebGL is unavailable", async ({ page }) => {
+  await page.addInitScript(() => {
+    HTMLCanvasElement.prototype.getContext = () => null;
+  });
+  await page.goto("/", { waitUntil: "networkidle" });
+
+  await page.locator("#assistant").scrollIntoViewIfNeeded();
+  const fallback = page.locator(".homepage-portfolio-orb-canvas.portfolio-voice-orb-fallback");
+  await expect(fallback).toBeVisible();
+  await expect(fallback).toHaveAttribute("data-motion", "static");
+  await expect(fallback).toHaveCSS("background-image", /portfolio-orb-static\.png/);
 });
 
 test("homepage exposes one contact invitation with copy-email and resume actions", async ({ page }) => {
