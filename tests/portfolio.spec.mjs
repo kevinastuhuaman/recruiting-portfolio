@@ -607,6 +607,14 @@ test("analytics payload excludes private content", async ({ page }) => {
     await expect.poll(() => events.some((entry) => (
       entry.event === "portfolio_contact_action" && entry.properties?.action === "resume_download"
     ))).toBe(true);
+    await page.goto("/privacy/");
+    await page.locator('a[href^="mailto:"]').first().evaluate((link) => {
+      link.addEventListener("click", (event) => event.preventDefault(), { once: true });
+      link.click();
+    });
+    await expect.poll(() => events.some((entry) => (
+      entry.event === "portfolio_contact_action" && entry.properties?.action === "email"
+    ))).toBe(true);
   } else {
     expect(events).toEqual([]);
   }

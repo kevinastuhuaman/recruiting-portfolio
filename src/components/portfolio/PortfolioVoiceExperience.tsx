@@ -1,14 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import { capturePortfolioEvent } from '../../lib/portfolioAnalytics';
 import PortfolioVoiceOrb from './PortfolioVoiceOrb';
-import { PortfolioVoiceSession, type PortfolioVoiceState } from './PortfolioVoiceSession';
+import {
+  PortfolioVoiceSession,
+  type PortfolioVoiceEndReason,
+  type PortfolioVoiceState,
+} from './PortfolioVoiceSession';
 import type { PortfolioCitation } from './portfolioApi';
 
 interface Props {
   onSwitchToChat: () => void;
 }
 
-type VoiceAnalyticsEndReason = 'user_ended' | 'switched_to_chat' | 'page_hidden';
+type VoiceAnalyticsEndReason = Exclude<PortfolioVoiceEndReason, 'failed'> | 'session_ended';
 
 export default function PortfolioVoiceExperience({ onSwitchToChat }: Props) {
   const [voiceState, setVoiceState] = useState<'intro' | PortfolioVoiceState>('intro');
@@ -57,7 +61,7 @@ export default function PortfolioVoiceExperience({ onSwitchToChat }: Props) {
     const session = new PortfolioVoiceSession({
       audioElement: audioRef.current,
       levelRef,
-      onStateChange: (state) => {
+      onStateChange: (state, endReason) => {
         if (voiceGenerationRef.current !== generation) return;
         setVoiceState(state);
         capturePortfolioEvent('portfolio_voice_state_changed', { state });
@@ -67,7 +71,7 @@ export default function PortfolioVoiceExperience({ onSwitchToChat }: Props) {
         }
         if (state === 'ended' && !voiceTerminalTrackedRef.current) {
           voiceTerminalTrackedRef.current = true;
-          capturePortfolioEvent('portfolio_voice_ended', { end_reason: 'session_ended' });
+          capturePortfolioEvent('portfolio_voice_ended', { end_reason: endReason ?? 'session_ended' });
         }
       },
       onSource: (source) => {
