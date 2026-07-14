@@ -114,6 +114,7 @@ export default function PortfolioAssistant() {
       let buffer = '';
       let receivedDone = false;
       let receivedFirstDelta = false;
+      let recoveredFallback = false;
       while (true) {
         const { done, value: bytes } = await reader.read();
         buffer += decoder.decode(bytes ?? new Uint8Array(), { stream: !done });
@@ -153,18 +154,28 @@ export default function PortfolioAssistant() {
           }
           if (event === 'citations' && Array.isArray(data.citations)) setCitations(data.citations);
           if (event === 'error') {
-            if (data.reset === true) resetAssistantDraft();
-            if (data.recoverable === true) setStatus('Using portfolio evidence');
+            if (data.reset === true) {
+              resetAssistantDraft();
+              setCitations([]);
+            }
+            if (data.recoverable === true) {
+              recoveredFallback = true;
+              setStatus('Using portfolio evidence');
+            }
             else throw new Error('stream_error');
           }
-          if (event === 'done') receivedDone = true;
+          if (event === 'done') {
+            receivedDone = true;
+            if (data.fallback === true) recoveredFallback = true;
+          }
         }
         if (done) break;
       }
       flushAssistantDelta();
       if (!receivedDone) throw new Error('stream_truncated');
       capturePortfolioEvent('portfolio_chat_completed', {
-        outcome: 'streamed',
+        outcome: recoveredFallback ? 'streamed_fallback' : 'streamed',
+        recovered: recoveredFallback,
         ...(activeTurnIdRef.current ? { turn_id: activeTurnIdRef.current } : {}),
         ...(sessionIdRef.current ? { session_id: sessionIdRef.current } : {}),
       });

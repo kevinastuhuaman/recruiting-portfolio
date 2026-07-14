@@ -9,7 +9,6 @@ await mkdir(publicDir, { recursive: true });
 const indexRoutes = routes.filter((route) => route.state === "index");
 const absolute = (path) => new URL(path, site.origin).href;
 const sourceCommit = process.env.PORTFOLIO_SOURCE_COMMIT
-  ?? process.env.GITHUB_SHA
   ?? execFileSync(
     "git",
     ["log", "-1", "--format=%H", "--", "src/data", "scripts/generate-public-artifacts.mjs"],

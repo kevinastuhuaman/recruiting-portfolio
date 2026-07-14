@@ -587,7 +587,7 @@ test("analytics payload excludes private content", async ({ page }) => {
     await route.fulfill({
       status: 200,
       contentType: "text/event-stream",
-      body: 'event: meta\ndata: {}\n\nevent: delta\ndata: {"text":"Public Trackly evidence."}\n\nevent: citations\ndata: {"citations":[]}\n\nevent: done\ndata: {}\n\n',
+      body: 'event: meta\ndata: {}\n\nevent: error\ndata: {"reset":true,"recoverable":true}\n\nevent: delta\ndata: {"text":"Public Trackly evidence."}\n\nevent: citations\ndata: {"citations":[]}\n\nevent: done\ndata: {"fallback":true}\n\n',
     });
   });
   await page.goto("/ask/?utm_source=linkedin");
@@ -600,6 +600,11 @@ test("analytics payload excludes private content", async ({ page }) => {
     expect(events.every((entry) => entry.distinct_id === entry?.properties?.distinct_id)).toBe(true);
     expect(events.every((entry) => entry?.properties?.$process_person_profile === false)).toBe(true);
     expect(events.every((entry) => !String(entry?.properties?.$current_url ?? "").includes("utm_source"))).toBe(true);
+    expect(events.some((entry) => (
+      entry.event === "portfolio_chat_completed"
+      && entry.properties?.outcome === "streamed_fallback"
+      && entry.properties?.recovered === true
+    ))).toBe(true);
     await page.goto("/resume/");
     const download = page.waitForEvent("download");
     await page.getByRole("link", { name: /Download PDF/i }).click();
@@ -858,6 +863,7 @@ test("recoverable streamed Chat errors keep the server-provided fallback", async
       contentType: "text/event-stream",
       body: [
         'event: delta\ndata: {"text":"Unsupported partial answer."}\n\n',
+        'event: citations\ndata: {"citations":[{"title":"Discarded source","url":"https://portfolio.kevinastuhuaman.com/discarded/"}]}\n\n',
         'event: error\ndata: {"reset":true,"recoverable":true,"code":"synthesis_unavailable"}\n\n',
         'event: delta\ndata: {"text":"Kevin’s answer comes from the deterministic public corpus."}\n\n',
         'event: citations\ndata: {"citations":[{"title":"Public proof","url":"https://portfolio.kevinastuhuaman.com/proof/"}]}\n\n',
@@ -871,6 +877,7 @@ test("recoverable streamed Chat errors keep the server-provided fallback", async
   await expect(page.getByRole("status")).toHaveText("Ready");
   await expect(page.getByText(/deterministic public corpus/i)).toBeVisible();
   await expect(page.getByText(/Unsupported partial answer/i)).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "Discarded source" })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "Public proof" })).toBeVisible();
 });
 
