@@ -88,6 +88,7 @@ test("homepage follows the recruiter-first narrative order", async ({ page }) =>
   const ids = ["credibility", "paypal", "trackly", "mobagel", "experience", "lab", "assistant", "contact"];
   const tops = await Promise.all(ids.map((id) => page.locator(`#${id}`).evaluate((element) => element.getBoundingClientRect().top + window.scrollY)));
   expect(tops).toEqual([...tops].sort((a, b) => a - b));
+  await expect(page.locator("#credibility")).toHaveCSS("border-bottom-width", "1px");
   await expect(page.locator("#lab").getByRole("link", { name: /Explore the AI Product Lab/i })).toHaveAttribute("href", "/lab/");
 });
 
@@ -122,6 +123,15 @@ test("homepage project system keeps type, media, and Berkeley steps readable", a
       return Math.abs(renderedRatio - intrinsicRatio);
     });
     expect(aspectDelta, `PayPal image ratio at ${width}px`).toBeLessThan(0.03);
+
+    const tracklyImage = page.locator("#trackly .trackly-proof > img");
+    await expect(tracklyImage).toBeVisible();
+    await expect(tracklyImage).toHaveCSS("object-fit", "contain");
+    const tracklyAspectDelta = await tracklyImage.evaluate((image) => {
+      const rendered = image.getBoundingClientRect();
+      return Math.abs((rendered.width / rendered.height) - (image.naturalWidth / image.naturalHeight));
+    });
+    expect(tracklyAspectDelta, `Trackly image ratio at ${width}px`).toBeLessThan(0.03);
   }
 
   await expect(page.locator("[data-berkeley-step]").first()).toHaveCSS("writing-mode", "horizontal-tb");
@@ -131,11 +141,12 @@ test("homepage project system keeps type, media, and Berkeley steps readable", a
   await expect.poll(() => orbImage.evaluate((image) => [image.naturalWidth, image.naturalHeight])).toEqual([600, 602]);
 });
 
-test("homepage exposes one contact invitation with literal email and resume actions", async ({ page }) => {
+test("homepage exposes one contact invitation with copy-email and resume actions", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { name: "Building an AI product where judgment matters?" })).toHaveCount(1);
   await expect(page.getByRole("button", { name: "Copy email" })).toHaveCount(1);
   await expect(page.locator('a[href^="mailto:"]')).toHaveCount(0);
+  await expect(page.locator("#contact")).not.toContainText("kevin.astuhuaman@berkeley.edu");
   await expect(page.locator("#contact").getByRole("link", { name: "View resume" })).toHaveAttribute("href", "/resume/");
 
   await page.evaluate(() => {
@@ -147,6 +158,16 @@ test("homepage exposes one contact invitation with literal email and resume acti
   await page.getByRole("button", { name: "Copy email" }).click();
   await expect(page.locator(".footer-copy-status")).toHaveText("Email copied");
   await expect.poll(() => page.evaluate(() => window.sessionStorage.getItem("copied-email"))).toBe("kevin.astuhuaman@berkeley.edu");
+
+  await page.evaluate(() => {
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText: async () => { throw new Error("clipboard_denied"); } },
+    });
+    window.prompt = () => null;
+  });
+  await page.getByRole("button", { name: "Email copied" }).click();
+  await expect(page.locator(".footer-copy-status")).toHaveText("Copy email");
 });
 
 test("email copy failure opens the manual-copy fallback without navigating", async ({ page }) => {
@@ -168,7 +189,7 @@ test("email copy failure opens the manual-copy fallback without navigating", asy
     JSON.stringify({ message: "Copy Kevin's email", value: "kevin.astuhuaman@berkeley.edu" }),
   );
   expect(page.url()).toBe(url);
-  await expect(page.locator(".footer-copy-status")).toBeEmpty();
+  await expect(page.locator(".footer-copy-status")).toHaveText("Copy email");
 });
 
 test("required responsive widths avoid horizontal overflow", async ({ page }) => {
@@ -823,6 +844,7 @@ test("Voice surfaces connecting and microphone denial, then recovers to Chat or 
   await page.evaluate(() => window.__denyPortfolioMic());
   await expect(page.getByText("Assistant unavailable", { exact: true })).toBeVisible();
   await expect(page.getByText(/Microphone permission was denied/i)).toBeVisible();
+  await expect(page.locator(".voice-error")).toHaveCSS("color", "rgb(255, 155, 155)");
   await page.getByRole("button", { name: "Try again" }).click();
   await expect(page.getByRole("button", { name: "Start voice call" })).toBeVisible();
   await page.getByRole("button", { name: "Back to Chat" }).click();

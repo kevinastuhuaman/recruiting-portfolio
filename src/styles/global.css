@@ -472,24 +472,6 @@ h3 {
   background: transparent;
 }
 
-.footer-contact-note {
-  display: flex;
-  max-width: var(--max);
-  min-height: 32px;
-  margin: -54px auto 38px;
-  align-items: center;
-  gap: 14px;
-  color: #bdbdb7;
-  font-size: 0.82rem;
-}
-
-.footer-copy-status:not(:empty) {
-  padding: 5px 9px;
-  border: 1px solid #4f4f4a;
-  border-radius: 999px;
-  color: var(--white);
-}
-
 .footer-meta {
   display: flex;
   max-width: var(--max);
@@ -588,12 +570,6 @@ h3 {
   .footer-meta {
     flex-direction: column;
     align-items: flex-start;
-  }
-
-  .footer-contact-note {
-    margin-top: -52px;
-    align-items: flex-start;
-    flex-direction: column;
   }
 }
 

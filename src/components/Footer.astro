@@ -14,16 +14,12 @@ import { links, site } from "../data/site.js";
         <BriefcaseBusiness aria-hidden="true" size={18} /> LinkedIn <ArrowUpRight aria-hidden="true" size={16} />
       </a>
       <button class="button button-outline-light footer-copy-email" type="button" data-copy-email={site.email}>
-        <Copy aria-hidden="true" size={18} /> Copy email
+        <Copy aria-hidden="true" size={18} /> <span class="footer-copy-status" aria-live="polite" aria-atomic="true">Copy email</span>
       </button>
       <a class="button button-outline-light" href="/resume/">
         <FileText aria-hidden="true" size={18} /> View resume
       </a>
     </div>
-  </div>
-  <div class="footer-contact-note">
-    <span>{site.email}</span>
-    <span class="footer-copy-status" aria-live="polite"></span>
   </div>
   <div class="footer-meta">
     <span>Kevin Astuhuaman | Bay Area</span>
@@ -53,9 +49,11 @@ import { links, site } from "../data/site.js";
       if (copyStatus) copyStatus.textContent = "Email copied";
       window.clearTimeout(statusTimer);
       statusTimer = window.setTimeout(() => {
-        if (copyStatus) copyStatus.textContent = "";
+        if (copyStatus) copyStatus.textContent = "Copy email";
       }, 2200);
     } catch {
+      window.clearTimeout(statusTimer);
+      if (copyStatus) copyStatus.textContent = "Copy email";
       window.prompt("Copy Kevin's email", email);
     }
   });

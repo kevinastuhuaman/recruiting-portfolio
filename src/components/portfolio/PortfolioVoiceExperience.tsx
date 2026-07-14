@@ -104,7 +104,7 @@ export default function PortfolioVoiceExperience({ onSwitchToChat }: Props) {
           {['connecting', 'listening', 'speaking', 'reconnecting'].includes(voiceState) && (
             <div className="voice-controls">
               <button onClick={() => setMuted(voiceSessionRef.current?.toggleMute() ?? false)}>{muted ? 'Unmute' : 'Mute'}</button>
-              <button onClick={() => void endVoice()}>End call</button>
+              <button className="voice-end-call" onClick={() => void endVoice()}>End call</button>
               <button onClick={switchToChat}>Switch to Chat</button>
             </div>
           )}
