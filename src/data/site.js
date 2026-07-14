@@ -132,10 +132,17 @@ export const assistantCorpus = {
   entries: [
     {
       id: "overview",
-      title: "Kevin Astuhuaman portfolio",
+      title: "Kevin Astuhuaman — AI Product Manager",
       url: `${site.origin}/`,
       keywords: ["about", "overview", "ai product manager", "technical product manager", "technical builder", "role", "fit", "hire"],
       content: "Kevin Astuhuaman is an AI Product Manager, ex-PayPal in AI/ML observability, and Berkeley Haas MBA in the Bay Area. His two recruiting lanes are applied AI and agent products, and AI platform or technical product management. His most recent enterprise AI proof is an agentic observability prototype at PayPal Checkout. Trackly proves hands-on product building across web, native apps, CLI, MCP, chat, and voice. Berkeley's Open Innovation Squad work with Fujitsu and MoBagel adds AI product strategy, high-fidelity prototyping, and go-to-market experience. His BCP experience shows six years of progression, regulated-product judgment, team leadership, and operating scale.",
+    },
+    {
+      id: "lab-overview",
+      title: "AI Product Lab",
+      url: `${site.origin}/lab/`,
+      keywords: ["lab", "ai product lab", "artifacts", "interactive artifacts", "experiments", "product studies", "portfolio lab"],
+      content: "Kevin's AI Product Lab collects seven public, interactive artifacts that make his product judgment inspectable. The collection covers enterprise AI interface patterns, agent workflows, evaluation design, human control, technical range, and motion. Every artifact uses synthetic or public-safe data and links to supporting decisions, structured files, tests, and source material where available.",
     },
     {
       id: "trackly",

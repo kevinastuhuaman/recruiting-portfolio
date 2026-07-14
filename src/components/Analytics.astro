@@ -1,4 +1,8 @@
----
-// Behavioral analytics remain intentionally disabled until Kevin approves the
-// portfolio-specific PostHog isolation and privacy plan.
----
+<script>
+  import { initializePortfolioAnalytics } from "../lib/portfolioAnalytics";
+
+  initializePortfolioAnalytics(
+    import.meta.env.PUBLIC_POSTHOG_KEY,
+    import.meta.env.PUBLIC_POSTHOG_HOST || "https://us.i.posthog.com",
+  );
+</script>

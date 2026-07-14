@@ -22,9 +22,9 @@ jobs:
       - name: Dispatch immutable source revision
         if: env.GH_TOKEN != ''
         run: |
-          gh api --method POST repos/kevinastuhuaman/portfolio-assistant-api/dispatches \
-            -f event_type=portfolio_corpus_updated \
-            -f "client_payload[source_sha]=$GITHUB_SHA"
+          jq -n --arg source_sha "$GITHUB_SHA" \
+            '{event_type: "portfolio_corpus_updated", client_payload: {source_sha: $source_sha}}' \
+            | gh api --method POST repos/kevinastuhuaman/portfolio-assistant-api/dispatches --input -
 
       - name: Explain disabled dispatch
         if: env.GH_TOKEN == ''

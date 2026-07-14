@@ -1,6 +1,7 @@
 ---
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import Analytics from "../components/Analytics.astro";
 import { links, site } from "../data/site.js";
 import "../styles/global.css";
 
@@ -149,5 +150,6 @@ const schemaJson = JSON.stringify(schema);
       <slot />
     </main>
     <Footer />
+    <Analytics />
   </body>
 </html>

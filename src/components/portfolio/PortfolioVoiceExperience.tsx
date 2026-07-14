@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { capturePortfolioEvent } from '../../lib/portfolioAnalytics';
 import PortfolioVoiceOrb from './PortfolioVoiceOrb';
 import { PortfolioVoiceSession, type PortfolioVoiceState } from './PortfolioVoiceSession';
 import type { PortfolioCitation } from './portfolioApi';
@@ -15,6 +16,7 @@ export default function PortfolioVoiceExperience({ onSwitchToChat }: Props) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const voiceSessionRef = useRef<PortfolioVoiceSession | null>(null);
   const voiceGenerationRef = useRef(0);
+  const voiceTerminalTrackedRef = useRef(false);
   const levelRef = useRef(0);
 
   useEffect(() => {
@@ -31,16 +33,28 @@ export default function PortfolioVoiceExperience({ onSwitchToChat }: Props) {
 
   const startVoice = async () => {
     if (!audioRef.current || voiceSessionRef.current) return;
+    capturePortfolioEvent('portfolio_voice_started');
     setVoiceError('');
     setVoiceSources([]);
     setMuted(false);
+    voiceTerminalTrackedRef.current = false;
     const generation = voiceGenerationRef.current + 1;
     voiceGenerationRef.current = generation;
     const session = new PortfolioVoiceSession({
       audioElement: audioRef.current,
       levelRef,
       onStateChange: (state) => {
-        if (voiceGenerationRef.current === generation) setVoiceState(state);
+        if (voiceGenerationRef.current !== generation) return;
+        setVoiceState(state);
+        capturePortfolioEvent('portfolio_voice_state_changed', { state });
+        if (state === 'failed' && !voiceTerminalTrackedRef.current) {
+          voiceTerminalTrackedRef.current = true;
+          capturePortfolioEvent('portfolio_voice_failed', { failure_stage: 'session' });
+        }
+        if (state === 'ended' && !voiceTerminalTrackedRef.current) {
+          voiceTerminalTrackedRef.current = true;
+          capturePortfolioEvent('portfolio_voice_ended', { end_reason: 'session_ended' });
+        }
       },
       onSource: (source) => {
         if (voiceGenerationRef.current !== generation) return;
@@ -60,6 +74,10 @@ export default function PortfolioVoiceExperience({ onSwitchToChat }: Props) {
     const session = voiceSessionRef.current;
     voiceSessionRef.current = null;
     await session?.end(reason);
+    if (session && !voiceTerminalTrackedRef.current) {
+      voiceTerminalTrackedRef.current = true;
+      capturePortfolioEvent('portfolio_voice_ended', { end_reason: reason });
+    }
   };
 
   const switchToChat = () => {

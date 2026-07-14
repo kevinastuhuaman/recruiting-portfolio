@@ -579,7 +579,7 @@ test("404 output is excluded from indexing and structured data", async ({ page }
 
 test("local previews never send production analytics", async ({ page }) => {
   const events = [];
-  await page.route("https://us.i.posthog.com/capture/", async (route) => {
+  await page.route("https://us.i.posthog.com/i/v0/e/", async (route) => {
     events.push(JSON.parse(route.request().postData() ?? "{}"));
     await route.fulfill({ status: 200, contentType: "application/json", body: "{}" });
   });
@@ -595,13 +595,21 @@ test("local previews never send production analytics", async ({ page }) => {
   await page.getByRole("button", { name: "Ask", exact: true }).click();
   await expect(page.getByRole("status")).toHaveText("Ready");
   expect(JSON.stringify(events)).not.toContain("private recruiter question text");
-  expect(events).toEqual([]);
+  if (process.env.PUBLIC_POSTHOG_KEY?.startsWith("phc_")) {
+    expect(events.length).toBeGreaterThan(0);
+    expect(events.every((entry) => entry?.properties?.$process_person_profile === false)).toBe(true);
+    expect(events.every((entry) => !String(entry?.properties?.$current_url ?? "").includes("utm_source"))).toBe(true);
+  } else {
+    expect(events).toEqual([]);
+  }
 });
 
-test("the built portfolio does not load PostHog while analytics are under review", async ({ request }) => {
-  const response = await request.get("/");
-  const html = await response.text();
-  expect(html).not.toContain("us.i.posthog.com");
+test("analytics stay inert when the portfolio project key is absent", async ({ page }) => {
+  const requests = [];
+  page.on("request", (request) => requests.push(request.url()));
+  await page.goto("/", { waitUntil: "networkidle" });
+  const html = await page.content();
+  expect(requests.some((url) => url.includes("posthog.com") || url.includes("phc_"))).toBe(Boolean(process.env.PUBLIC_POSTHOG_KEY));
   expect(html).not.toContain("phc_");
 });
 
@@ -672,6 +680,43 @@ test("Chat preserves the server session and records turn-only feedback", async (
   await expect(page.getByText("Answer 2.", { exact: true })).toBeVisible();
   expect(requests[1].sessionId).toBe("ses_11111111111111111111111111111111");
   expect(requests[1].history.at(-1)).toEqual({ role: "assistant", content: "Answer 1." });
+});
+
+test("late feedback completion cannot update a newer Chat turn", async ({ page }) => {
+  let chatCount = 0;
+  let releaseFeedback;
+  const feedbackPending = new Promise((resolve) => { releaseFeedback = resolve; });
+  await page.route("https://api.portfolio.kevinastuhuaman.com/api/portfolio/chat", async (route) => {
+    chatCount += 1;
+    const digit = String(chatCount);
+    await route.fulfill({
+      status: 200,
+      contentType: "text/event-stream",
+      body: [
+        `event: meta\ndata: {"sessionId":"ses_33333333333333333333333333333333","turnId":"turn_${digit.repeat(32)}"}\n\n`,
+        `event: delta\ndata: {"text":"Answer ${digit}."}\n\n`,
+        'event: citations\ndata: {"citations":[]}\n\n',
+        'event: done\ndata: {}\n\n',
+      ].join(""),
+    });
+  });
+  await page.route("https://api.portfolio.kevinastuhuaman.com/api/portfolio/feedback", async (route) => {
+    await feedbackPending;
+    await route.fulfill({ status: 204, body: "" });
+  });
+  await page.goto("/ask/");
+  const composer = page.getByPlaceholder("Ask anything about Kevin");
+  await composer.fill("First question");
+  await composer.press("Enter");
+  await expect(page.getByText("Answer 1.", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Helpful" }).click();
+  await expect(page.getByText("Sending feedback…")).toBeVisible();
+  await composer.fill("Second question");
+  await composer.press("Enter");
+  await expect(page.getByText("Answer 2.", { exact: true })).toBeVisible();
+  releaseFeedback();
+  await expect(page.getByText("Was this helpful?")).toBeVisible();
+  await expect(page.getByText("Thanks for the feedback.")).toHaveCount(0);
 });
 
 test("Chat uses real activity phases and natural keyboard submission", async ({ page }) => {
@@ -769,6 +814,25 @@ test("malformed Chat stream resets its draft and recovers with the deterministic
   await expect(page.getByText(/prototype and proof of concept/i)).toBeVisible();
   await expect(page.getByText(/partial model draft/i)).toHaveCount(0);
   await expect(page.getByRole("link", { name: "PayPal case study" })).toBeVisible();
+});
+
+test("malformed deterministic fallback is rejected without rendering unsafe values", async ({ page }) => {
+  await page.route("https://api.portfolio.kevinastuhuaman.com/api/portfolio/chat", async (route) => {
+    await route.fulfill({ status: 503, contentType: "application/json", body: "{}" });
+  });
+  await page.route("https://api.portfolio.kevinastuhuaman.com/api/portfolio/ask", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ answer: 7, citations: "not-an-array" }),
+    });
+  });
+  await page.goto("/ask/");
+  await page.getByLabel("Question").fill("What did Kevin build?");
+  await page.getByRole("button", { name: "Ask", exact: true }).click();
+  await expect(page.getByRole("status")).toHaveText("Assistant unavailable");
+  await expect(page.getByText(/interactive assistant is unavailable/i)).toBeVisible();
+  await expect(page.getByText("undefined", { exact: true })).toHaveCount(0);
 });
 
 test("recoverable streamed Chat errors keep the server-provided fallback", async ({ page }) => {

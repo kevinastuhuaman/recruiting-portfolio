@@ -1,9 +1,11 @@
 import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import { capturePortfolioEvent } from '../../lib/portfolioAnalytics';
 import { askPublicCorpus, PORTFOLIO_API, submitPortfolioFeedback, type PortfolioCitation } from './portfolioApi';
 
 type Mode = 'chat' | 'voice';
 type Message = { role: 'user' | 'assistant'; content: string; turnId?: string };
 type StreamEvent = Record<string, unknown>;
+type FeedbackState = { turnId: string; status: 'pending' | 'helpful' | 'needs_work' };
 const PortfolioVoiceExperience = lazy(() => import('./PortfolioVoiceExperience'));
 const suggestions = [
   'What did Kevin build at PayPal?',
@@ -30,13 +32,14 @@ export default function PortfolioAssistant() {
   const [status, setStatus] = useState('Ready');
   const [loading, setLoading] = useState(false);
   const [latestTurnId, setLatestTurnId] = useState<string>();
-  const [feedback, setFeedback] = useState<'helpful' | 'needs_work'>();
+  const [feedback, setFeedback] = useState<FeedbackState>();
   const chatAbortRef = useRef<AbortController | null>(null);
   const sessionIdRef = useRef<string | undefined>(undefined);
   const activeTurnIdRef = useRef<string | undefined>(undefined);
   const inFlightRef = useRef(false);
   const pendingDeltaRef = useRef('');
   const deltaFrameRef = useRef<number | null>(null);
+  const analyticsStartedRef = useRef(false);
 
   useEffect(() => {
     return () => {
@@ -90,6 +93,7 @@ export default function PortfolioAssistant() {
     setLatestTurnId(undefined);
     setFeedback(undefined);
     activeTurnIdRef.current = undefined;
+    analyticsStartedRef.current = false;
     setLoading(true);
     setStatus("Searching Kevin's portfolio");
     const controller = new AbortController();
@@ -126,6 +130,13 @@ export default function PortfolioAssistant() {
               activeTurnIdRef.current = data.turnId;
               setLatestTurnId(data.turnId);
             }
+            if (!analyticsStartedRef.current && typeof data.turnId === 'string') {
+              analyticsStartedRef.current = true;
+              capturePortfolioEvent('portfolio_chat_started', {
+                turn_id: data.turnId,
+                ...(typeof data.sessionId === 'string' ? { session_id: data.sessionId } : {}),
+              });
+            }
           }
           if (event === 'status' && data.phase === 'retrieving') {
             setStatus("Looking through Kevin's portfolio");
@@ -152,6 +163,11 @@ export default function PortfolioAssistant() {
       }
       flushAssistantDelta();
       if (!receivedDone) throw new Error('stream_truncated');
+      capturePortfolioEvent('portfolio_chat_completed', {
+        outcome: 'streamed',
+        ...(activeTurnIdRef.current ? { turn_id: activeTurnIdRef.current } : {}),
+        ...(sessionIdRef.current ? { session_id: sessionIdRef.current } : {}),
+      });
       setStatus('Ready');
     } catch {
       const unmounted = chatAbortRef.current !== controller;
@@ -166,13 +182,16 @@ export default function PortfolioAssistant() {
       activeController = fallbackController;
       chatAbortRef.current = fallbackController;
       try {
+        capturePortfolioEvent('portfolio_chat_failed', { failure_stage: 'stream', recovered: true });
         const fallback = await askPublicCorpus(message, fallbackController.signal);
         appendAssistantDelta(fallback.answer);
         setCitations(fallback.citations);
+        capturePortfolioEvent('portfolio_chat_completed', { outcome: 'deterministic_fallback' });
         setStatus('Ready');
       } catch {
         if (chatAbortRef.current !== fallbackController) return;
         appendAssistantDelta('The interactive assistant is unavailable. The cited questions below remain available without JavaScript or an AI connection.');
+        capturePortfolioEvent('portfolio_chat_failed', { failure_stage: 'fallback', recovered: false });
         setStatus('Assistant unavailable');
       } finally {
         window.clearTimeout(fallbackTimer);
@@ -197,18 +216,29 @@ export default function PortfolioAssistant() {
 
   const changeMode = (next: Mode) => {
     setMode(next);
+    capturePortfolioEvent('portfolio_assistant_mode_selected', { mode: next });
   };
 
   const rateAnswer = async (rating: 'helpful' | 'needs_work') => {
-    if (!latestTurnId || feedback) return;
+    const turnId = latestTurnId;
+    if (!turnId || feedback?.turnId === turnId) return;
+    setFeedback({ turnId, status: 'pending' });
     try {
-      await submitPortfolioFeedback(latestTurnId, rating);
-      setFeedback(rating);
-      setStatus('Thanks for the feedback');
+      await submitPortfolioFeedback(turnId, rating);
+      if (activeTurnIdRef.current === turnId) {
+        setFeedback({ turnId, status: rating });
+        capturePortfolioEvent('portfolio_chat_feedback', { rating, turn_id: turnId });
+        setStatus('Thanks for the feedback');
+      }
     } catch {
-      setStatus('Feedback unavailable');
+      if (activeTurnIdRef.current === turnId) {
+        setFeedback(undefined);
+        setStatus('Feedback unavailable');
+      }
     }
   };
+
+  const currentFeedback = feedback && feedback.turnId === latestTurnId ? feedback.status : undefined;
 
   return (
     <section className="assistant-shell" aria-label="Portfolio assistant">
@@ -229,7 +259,7 @@ export default function PortfolioAssistant() {
             {loading && <div className="chat-thinking"><i></i><i></i><i></i><span className="sr-only">Preparing grounded answer</span></div>}
           </div>
           {citations.length > 0 && <div className="chat-citations"><strong>Public sources</strong>{citations.map((citation) => <a href={citation.url} key={citation.url}>{citation.title}</a>)}</div>}
-          {latestTurnId && !loading && <div className="chat-feedback" aria-label="Rate this answer"><span>{feedback ? 'Thanks for the feedback.' : 'Was this helpful?'}</span><button type="button" disabled={Boolean(feedback)} onClick={() => void rateAnswer('helpful')}>Helpful</button><button type="button" disabled={Boolean(feedback)} onClick={() => void rateAnswer('needs_work')}>Needs work</button></div>}
+          {latestTurnId && !loading && <div className="chat-feedback" aria-label="Rate this answer"><span>{currentFeedback === 'pending' ? 'Sending feedback…' : currentFeedback ? 'Thanks for the feedback.' : 'Was this helpful?'}</span><button type="button" disabled={Boolean(currentFeedback)} onClick={() => void rateAnswer('helpful')}>Helpful</button><button type="button" disabled={Boolean(currentFeedback)} onClick={() => void rateAnswer('needs_work')}>Needs work</button></div>}
           <form onSubmit={onSubmit} className="chat-form">
             <label htmlFor="portfolio-question">Question</label>
             <div><textarea id="portfolio-question" value={question} onChange={(event) => setQuestion(event.target.value)} onKeyDown={onComposerKeyDown} maxLength={600} rows={2} placeholder="Ask anything about Kevin" /><button type="submit" disabled={loading || question.trim().length < 2}>Ask</button></div>
