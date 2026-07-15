@@ -8,17 +8,17 @@ const PORTFOLIO_ORIGIN = "https://portfolio.kevinastuhuaman.com";
 export const publicClaims = [
   {
     id: "trackly-inventory",
-    statement: "Trackly monitored 1,969 company career sites across 40 ATS and source types, with 128,975 job records in its public inventory on July 12, 2026.",
-    short: "1,969 company career sites across 40 source types",
-    context: "Dated inventory, not a user-adoption claim.",
+    statement: "As of July 14, 2026, Trackly monitored 3,884 active company career sites across 40 ATS and source types, with 173,864 active jobs in its public inventory.",
+    short: "3,884 active company career sites across 40 source types",
+    context: "Dated active inventory from the verified Azure production report, not a user-adoption claim.",
     source: "https://usetrackly.app/",
     evidenceType: "live public product",
-    verified: "2026-07-12",
-    reviewDate: "2026-10-12",
+    verified: "2026-07-14",
+    reviewDate: "2026-10-14",
     metrics: [
-      { value: "1,969", label: "company career sites monitored" },
+      { value: "3,884", label: "active company career sites monitored" },
       { value: "40", label: "ATS and source types" },
-      { value: "128,975", label: "job records in the July 12, 2026 public inventory" },
+      { value: "173,864", label: "active jobs in the July 14, 2026 public inventory" },
     ],
   },
   {

@@ -64,7 +64,7 @@ const inventory = claimsById["trackly-inventory"];
     </p>
 
     <figure class="system-artifact" aria-labelledby="system-title">
-      <figcaption id="system-title">A public-safe reconstruction of the Trackly product loop</figcaption>
+      <figcaption id="system-title"><span>A public-safe reconstruction of the Trackly product loop</span></figcaption>
       <ol>
         <li><strong>Observe</strong><span>Direct career pages and ATS sources</span></li>
         <li><strong>Normalize</strong><span>Hydrate fields, merge duplicates, resolve location</span></li>
@@ -80,19 +80,31 @@ const inventory = claimsById["trackly-inventory"];
       <div class="decision">
         <dt>1. Direct signal first</dt>
         <dd>
-          <strong>Choice:</strong> build source monitoring before building a polished application tracker. <strong>Rejected:</strong> another job-board search layer. <strong>Why:</strong> earlier signal was the unique user advantage and the hardest capability to copy credibly.
+          <dl class="decision-anatomy">
+            <div class="decision-option decision-option-choice"><dt>Choice</dt><dd>Build source monitoring before building a polished application tracker.</dd></div>
+            <div class="decision-option decision-option-rejected"><dt>Rejected</dt><dd>Another job-board search layer.</dd></div>
+            <div class="decision-option decision-option-why"><dt>Why</dt><dd>Earlier signal was the unique user advantage and the hardest capability to copy credibly.</dd></div>
+          </dl>
         </dd>
       </div>
       <div class="decision">
         <dt>2. Quality is visible</dt>
         <dd>
-          <strong>Choice:</strong> expose match reasoning and operate explicit failure guards. <strong>Rejected:</strong> hide uncertainty behind a single AI score. <strong>Why:</strong> a confident wrong recommendation costs the user time and erodes trust faster than a cautious explanation.
+          <dl class="decision-anatomy">
+            <div class="decision-option decision-option-choice"><dt>Choice</dt><dd>Expose match reasoning and operate explicit failure guards.</dd></div>
+            <div class="decision-option decision-option-rejected"><dt>Rejected</dt><dd>Hide uncertainty behind a single AI score.</dd></div>
+            <div class="decision-option decision-option-why"><dt>Why</dt><dd>A confident wrong recommendation costs the user time and erodes trust faster than a cautious explanation.</dd></div>
+          </dl>
         </dd>
       </div>
       <div class="decision">
         <dt>3. Shared system, native behavior</dt>
         <dd>
-          <strong>Choice:</strong> keep product rules in shared services while designing each surface for its context. <strong>Rejected:</strong> wrap the web product everywhere. <strong>Why:</strong> alerts, keyboard workflows, agent calls, and mobile triage each need a different interaction model.
+          <dl class="decision-anatomy">
+            <div class="decision-option decision-option-choice"><dt>Choice</dt><dd>Keep product rules in shared services while designing each surface for its context.</dd></div>
+            <div class="decision-option decision-option-rejected"><dt>Rejected</dt><dd>Wrap the web product everywhere.</dd></div>
+            <div class="decision-option decision-option-why"><dt>Why</dt><dd>Alerts, keyboard workflows, agent calls, and mobile triage each need a different interaction model.</dd></div>
+          </dl>
         </dd>
       </div>
     </dl>
@@ -229,7 +241,7 @@ const inventory = claimsById["trackly-inventory"];
       <a class="button" href="/resume/">View resume</a>
       <a class="button" href="/contact/">Contact Kevin</a>
     </div>
-    <p class="source-line">Inventory source checked July 12, 2026: <a href={inventory.source}>Trackly public site</a>.</p>
+    <p class="source-line">Inventory source checked July 14, 2026: <a href={inventory.source}>Trackly public site</a>.</p>
   </article>
 </BaseLayout>
 
@@ -248,16 +260,26 @@ const inventory = claimsById["trackly-inventory"];
     background: #15121d;
     color: white;
     border-radius: 6px;
+    user-select: none;
   }
 
   .system-artifact figcaption {
+    width: fit-content;
     margin-bottom: 32px;
     font-weight: 720;
+  }
+
+  .system-artifact figcaption > span,
+  .system-artifact li > strong,
+  .system-artifact li > span,
+  .system-artifact > p {
+    user-select: text;
   }
 
   .system-artifact ol {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
+    align-items: stretch;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -265,13 +287,17 @@ const inventory = claimsById["trackly-inventory"];
 
   .system-artifact li {
     position: relative;
+    display: grid;
+    min-width: 0;
+    height: 100%;
+    grid-template-rows: auto 1fr;
     padding: 18px;
     background: #292334;
     border-left: 3px solid #8056f5;
   }
 
   .system-artifact li + li {
-    margin-left: 10px;
+    margin: 0 0 0 10px;
   }
 
   .system-artifact li + li::before {
@@ -289,6 +315,10 @@ const inventory = claimsById["trackly-inventory"];
     display: block;
   }
 
+  .system-artifact figcaption > span {
+    display: inline;
+  }
+
   .system-artifact span {
     margin-top: 8px;
     color: #c9c4d0;
@@ -299,6 +329,52 @@ const inventory = claimsById["trackly-inventory"];
     margin: 26px 0 0;
     color: #c9c4d0;
     font-size: 0.86rem;
+  }
+
+  .decision-anatomy {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin: 0;
+  }
+
+  .decision-option {
+    min-width: 0;
+    padding: 18px 20px;
+    background: #fff;
+    border: 1px solid #d7d7d0;
+    border-radius: 4px;
+  }
+
+  .decision-option dt {
+    margin-bottom: 8px;
+    color: #5b5b57;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .decision-option dd {
+    margin: 0;
+    color: #242421;
+    line-height: 1.5;
+  }
+
+  .decision-option-choice {
+    border-top: 3px solid #8056f5;
+  }
+
+  .decision-option-rejected {
+    background: #f0f0eb;
+    border-top: 3px solid #9c9c95;
+  }
+
+  .decision-option-why {
+    grid-column: 1 / -1;
+    background: color-mix(in srgb, #d8ff52 22%, #fff);
+    border-top: 3px solid #d8ff52;
   }
 
   .eval-artifact {
@@ -579,6 +655,14 @@ const inventory = claimsById["trackly-inventory"];
     .autonomy-boundary,
     .transfer-grid {
       grid-template-columns: 1fr;
+    }
+
+    .decision-anatomy {
+      grid-template-columns: 1fr;
+    }
+
+    .decision-option-why {
+      grid-column: auto;
     }
 
     .system-artifact li + li {

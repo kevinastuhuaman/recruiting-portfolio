@@ -386,6 +386,35 @@ test("Trackly explains the browser-agent harness and its human approval boundary
   );
 });
 
+test("Trackly inventory and product decisions stay current and visually structured", async ({ page, request }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/projects/trackly/");
+
+  const metrics = page.locator(".metric-row .metric");
+  await expect(metrics).toHaveCount(3);
+  await expect(metrics.nth(0)).toContainText("3,884");
+  await expect(metrics.nth(2)).toContainText("173,864");
+
+  const steps = page.locator(".system-artifact li");
+  const boxes = await steps.evaluateAll((elements) => elements.map((element) => {
+    const rect = element.getBoundingClientRect();
+    return { top: rect.top, bottom: rect.bottom, height: rect.height };
+  }));
+  expect(Math.max(...boxes.map((box) => box.top)) - Math.min(...boxes.map((box) => box.top))).toBeLessThan(1);
+  expect(Math.max(...boxes.map((box) => box.bottom)) - Math.min(...boxes.map((box) => box.bottom))).toBeLessThan(1);
+
+  const decisions = page.locator(".decision-anatomy");
+  await expect(decisions).toHaveCount(3);
+  for (const decision of await decisions.all()) {
+    await expect(decision.getByText("Choice", { exact: true })).toHaveCount(1);
+    await expect(decision.getByText("Rejected", { exact: true })).toHaveCount(1);
+    await expect(decision.getByText("Why", { exact: true })).toHaveCount(1);
+  }
+
+  const proof = await (await request.get("/proof.json")).json();
+  expect(proof.claims.find((claim) => claim.id === "trackly-inventory")?.statement).toContain("3,884 active company career sites");
+});
+
 test("builder stack proof is visible and machine-readable", async ({ page, request }) => {
   await page.goto("/lab/");
   const section = page.locator("#builder-stack");
@@ -398,7 +427,7 @@ test("builder stack proof is visible and machine-readable", async ({ page, reque
   const response = await request.get("/assistant-corpus.json");
   expect(response.ok()).toBe(true);
   const corpus = await response.json();
-  expect(corpus.corpusVersion).toBe("2026-07-13.1");
+  expect(corpus.corpusVersion).toBe("2026-07-14.1");
   expect(corpus.sourceCommit).toMatch(/^[a-f0-9]{40}$/);
   expect(corpus.checksum).toBe(createHash("sha256").update(JSON.stringify(corpus.entries)).digest("hex"));
   const builderStackEntry = corpus.entries.find((entry) => entry.id === "builder-stack");

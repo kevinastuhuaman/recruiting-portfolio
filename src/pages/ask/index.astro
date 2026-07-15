@@ -88,7 +88,7 @@ import { claimsById } from "../../data/claims.js";
   .chat-message-label { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
   .chat-message p { margin: 7px 0 0; white-space: pre-wrap; }
   .assistant-trace { width: 18px; height: 18px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 1.55; stroke-linecap: round; stroke-linejoin: round; }
-  .assistant-trace circle { fill: currentColor; stroke: none; }
+  .assistant-trace circle { fill: currentColor; stroke: none; transform-box: fill-box; }
   .chat-activity { display: inline-flex; position: relative; min-height: 44px; padding: 10px 14px; align-items: center; gap: 10px; overflow: hidden; border: 1px solid var(--line); border-radius: 999px; background: rgba(248,247,251,.88); color: var(--muted); }
   .chat-activity::after { position: absolute; inset: 0; background: linear-gradient(100deg, transparent 20%, rgba(128,86,245,.11) 48%, transparent 76%); content: ""; transform: translateX(-100%); animation: activity-scan 1.7s ease-in-out infinite; }
   .chat-activity > * { position: relative; z-index: 1; }
@@ -160,6 +160,6 @@ import { claimsById } from "../../data/claims.js";
     .chat-form button { min-height: 48px; border-top: 1px solid var(--ink); border-left: 0; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .chat-activity::after, .assistant-trace.is-animated circle { animation: none; }
+    .chat-activity::after, .assistant-trace.is-animated circle { animation: none !important; }
   }
 </style>
