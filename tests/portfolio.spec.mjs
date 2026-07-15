@@ -152,6 +152,8 @@ test("homepage assistant preview reuses the moving voice orb without requesting 
   await page.locator("#assistant").scrollIntoViewIfNeeded();
   await expect(orb).toBeVisible();
   await expect(orb).toHaveAttribute("data-motion", "animated");
+  await expect(orb).toHaveAttribute("data-rendered", "true");
+  await expect(page.locator(".homepage-portfolio-orb")).toHaveClass(/is-ready/);
   const dimensions = await orb.evaluate((canvas) => {
     const rect = canvas.getBoundingClientRect();
     return { width: rect.width, height: rect.height };
@@ -189,10 +191,11 @@ test("homepage orb keeps its static artwork when WebGL is unavailable", async ({
   await page.goto("/", { waitUntil: "networkidle" });
 
   await page.locator("#assistant").scrollIntoViewIfNeeded();
-  const fallback = page.locator(".homepage-portfolio-orb-canvas.portfolio-voice-orb-fallback");
+  const fallback = page.locator(".homepage-portfolio-orb-fallback");
   await expect(fallback).toBeVisible();
-  await expect(fallback).toHaveAttribute("data-motion", "static");
-  await expect(fallback).toHaveCSS("background-image", /portfolio-orb-static\.png/);
+  await expect(fallback).toHaveCSS("border-radius", "50%");
+  await expect(fallback).not.toHaveCSS("background-image", /url\(/);
+  await expect(page.locator(".homepage-portfolio-orb")).not.toHaveClass(/is-ready/);
 });
 
 test("homepage exposes one contact invitation with copy-email and resume actions", async ({ page }) => {
@@ -383,6 +386,36 @@ test("Trackly explains the browser-agent harness and its human approval boundary
   );
 });
 
+test("Trackly inventory and product decisions stay current and visually structured", async ({ page, request }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/projects/trackly/");
+
+  const metrics = page.locator(".metric-row .metric");
+  await expect(metrics).toHaveCount(3);
+  await expect(metrics.nth(0)).toContainText("3,884");
+  await expect(metrics.nth(2)).toContainText("173,864");
+
+  const steps = page.locator(".system-artifact li");
+  await expect(steps).toHaveCount(5);
+  const boxes = await steps.evaluateAll((elements) => elements.map((element) => {
+    const rect = element.getBoundingClientRect();
+    return { top: rect.top, bottom: rect.bottom, height: rect.height };
+  }));
+  expect(Math.max(...boxes.map((box) => box.top)) - Math.min(...boxes.map((box) => box.top))).toBeLessThan(1);
+  expect(Math.max(...boxes.map((box) => box.bottom)) - Math.min(...boxes.map((box) => box.bottom))).toBeLessThan(1);
+
+  const decisions = page.locator(".decision-anatomy");
+  await expect(decisions).toHaveCount(3);
+  for (const decision of await decisions.all()) {
+    await expect(decision.getByText("Choice", { exact: true })).toHaveCount(1);
+    await expect(decision.getByText("Rejected", { exact: true })).toHaveCount(1);
+    await expect(decision.getByText("Why", { exact: true })).toHaveCount(1);
+  }
+
+  const proof = await (await request.get("/proof.json")).json();
+  expect(proof.claims.find((claim) => claim.id === "trackly-inventory")?.statement).toContain("3,884 active company career sites");
+});
+
 test("builder stack proof is visible and machine-readable", async ({ page, request }) => {
   await page.goto("/lab/");
   const section = page.locator("#builder-stack");
@@ -395,7 +428,7 @@ test("builder stack proof is visible and machine-readable", async ({ page, reque
   const response = await request.get("/assistant-corpus.json");
   expect(response.ok()).toBe(true);
   const corpus = await response.json();
-  expect(corpus.corpusVersion).toBe("2026-07-13.1");
+  expect(corpus.corpusVersion).toBe("2026-07-14.1");
   expect(corpus.sourceCommit).toMatch(/^[a-f0-9]{40}$/);
   expect(corpus.checksum).toBe(createHash("sha256").update(JSON.stringify(corpus.entries)).digest("hex"));
   const builderStackEntry = corpus.entries.find((entry) => entry.id === "builder-stack");
@@ -769,14 +802,17 @@ test("Chat uses real activity phases and natural keyboard submission", async ({ 
   await composer.fill("What did Kevin build?");
   await composer.press("Enter");
   await expect(page.getByRole("status")).toHaveText("Searching Kevin's portfolio");
+  await expect(page.locator(".chat-activity")).toContainText("Searching Kevin's portfolio");
   await page.evaluate(() => window.__portfolioChatStream.meta());
   await page.evaluate(() => window.__portfolioChatStream.retrieving());
   await expect(page.getByRole("status")).toHaveText("Looking through Kevin's portfolio");
   await page.evaluate(() => window.__portfolioChatStream.synthesizing());
   await expect(page.getByRole("status")).toHaveText("Summarizing what matters");
+  await expect(page.locator(".chat-activity")).toContainText("Summarizing what matters");
   await page.evaluate(() => window.__portfolioChatStream.delta());
   await expect(page.getByRole("status")).toHaveText("Writing answer");
   await expect(page.getByText("Kevin built Trackly", { exact: true })).toBeVisible();
+  await expect(page.locator(".chat-activity")).toHaveCount(0);
   await page.evaluate(() => window.__portfolioChatStream.done());
   await expect(page.getByRole("status")).toHaveText("Ready");
 

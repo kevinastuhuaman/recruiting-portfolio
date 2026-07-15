@@ -1,6 +1,6 @@
 # Kevin Astuhuaman
 
-Last updated: 2026-07-13
+Last updated: 2026-07-14
 
 ## Positioning
 
@@ -59,7 +59,7 @@ Progression: Lead Product Manager (1 year), Senior Product Manager (1.5 years), 
 
 ## Public evidence
 
-- Trackly monitored 1,969 company career sites across 40 ATS and source types, with 128,975 job records in its public inventory on July 12, 2026. Context: Dated inventory, not a user-adoption claim. Source: https://usetrackly.app/
+- As of July 14, 2026, Trackly monitored 3,884 active company career sites across 40 ATS and source types, with 173,864 active jobs in its public inventory. Context: Dated active inventory from the verified Azure production report, not a user-adoption claim. Source: https://usetrackly.app/
 - Trackly is available publicly on Apple's App Store. Context: Public distribution artifact for the native product. Source: https://apps.apple.com/us/app/trackly-apply-first/id6758267565
 - During his PayPal Checkout internship, Kevin conducted more than 20 stakeholder conversations and mapped a diagnostic environment spanning more than 15 tools. Context: Internship discovery scope, not a PayPal-wide system inventory. Source: https://portfolio.kevinastuhuaman.com/projects/paypal-ai-observability/
 - A PayPal Checkout internship prototype reduced issue-detection time by 75% in the project workflow across a diagnostic environment spanning 15+ tools. Context: Prototype-workflow result, not a PayPal-wide production claim. Source: https://portfolio.kevinastuhuaman.com/projects/paypal-ai-observability/

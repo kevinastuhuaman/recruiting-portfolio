@@ -1139,9 +1139,14 @@ const paypalClaim = claimsById["paypal-detection"];
   .assistant-orb-live :global(.homepage-portfolio-orb) { position: relative; width: min(340px,65vw); aspect-ratio: 1; }
   .assistant-orb-live :global(.homepage-portfolio-orb-fallback),
   .assistant-orb-live :global(.homepage-portfolio-orb-canvas) { position: absolute; inset: 0; display: block; width: 100%; height: 100%; border-radius: 50%; filter: drop-shadow(0 30px 42px rgba(128,86,245,.25)); transition: opacity .2s ease; }
-  .assistant-orb-live :global(.homepage-portfolio-orb-fallback) { object-fit: contain; clip-path: inset(0 0 2px 0); opacity: 1; }
+  .assistant-orb-live :global(.homepage-portfolio-orb-fallback) {
+    opacity: 1;
+    background:
+      radial-gradient(circle closest-side, #15111e 0 78%, transparent 79%),
+      conic-gradient(from 214deg, #eefeff, #51d2f0 14%, #5866ff 38%, #a541ff 68%, #f4efff 90%, #51d2f0);
+    box-shadow: inset 0 0 28px rgba(255,255,255,.2), 0 0 38px rgba(93,99,255,.42);
+  }
   .assistant-orb-live :global(.homepage-portfolio-orb-canvas) { opacity: 0; }
-  .assistant-orb-live :global(.portfolio-voice-orb-fallback.homepage-portfolio-orb-canvas) { background: transparent url("/assets/portfolio-orb-static.png") center / contain no-repeat; }
   .assistant-orb-live :global(.homepage-portfolio-orb.is-ready .homepage-portfolio-orb-fallback) { opacity: 0; }
   .assistant-orb-live :global(.homepage-portfolio-orb.is-ready .homepage-portfolio-orb-canvas) { opacity: 1; }
   .assistant-modes { display: flex; flex-wrap: wrap; gap: 10px; margin: 26px 0 34px; }
