@@ -396,6 +396,7 @@ test("Trackly inventory and product decisions stay current and visually structur
   await expect(metrics.nth(2)).toContainText("173,864");
 
   const steps = page.locator(".system-artifact li");
+  await expect(steps).toHaveCount(5);
   const boxes = await steps.evaluateAll((elements) => elements.map((element) => {
     const rect = element.getBoundingClientRect();
     return { top: rect.top, bottom: rect.bottom, height: rect.height };
