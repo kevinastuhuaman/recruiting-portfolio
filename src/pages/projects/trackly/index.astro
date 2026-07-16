@@ -96,24 +96,24 @@ const inventory = claimsById["trackly-inventory"];
       </header>
       <div class="surface-rail" tabindex="0" role="region" aria-label="Trackly product surfaces; scroll horizontally for more">
         <figure>
-          <img src="/assets/trackly-home.webp" width="1440" height="1000" loading="eager" decoding="async" alt="Trackly web product homepage" />
+          <img src="/assets/trackly-home.webp" width="1440" height="1000" loading="lazy" decoding="async" alt="Trackly web product homepage" />
           <figcaption><strong>Web</strong><span>Research and explain</span></figcaption>
         </figure>
         <figure>
-          <img src="/assets/trackly-app-store.webp" width="1284" height="1291" loading="eager" decoding="async" alt="Trackly iOS App Store product page" />
+          <img src="/assets/trackly-app-store.webp" width="1284" height="1291" loading="lazy" decoding="async" alt="Trackly iOS App Store product page" />
           <figcaption><strong>iOS</strong><span>Act while a role is new</span></figcaption>
         </figure>
         <figure>
-          <img src="/assets/trackly-macos-appstore.webp" width="1920" height="1080" loading="eager" decoding="async" alt="Trackly macOS App Store product page" />
+          <img src="/assets/trackly-macos-appstore.webp" width="1920" height="1080" loading="lazy" decoding="async" alt="Trackly macOS App Store product page" />
           <figcaption><strong>macOS</strong><span>Keyboard-first triage</span></figcaption>
         </figure>
         <figure class="surface-cli">
-          <div><img src="/assets/trackly-cli.webp" width="720" height="720" loading="eager" decoding="async" alt="Trackly command-line search results" /><img src="/assets/trackly-mcp.webp" width="720" height="720" loading="eager" decoding="async" alt="Trackly MCP server configuration" /></div>
+          <div><img src="/assets/trackly-cli.webp" width="720" height="720" loading="lazy" decoding="async" alt="Trackly command-line search results" /><img src="/assets/trackly-mcp.webp" width="720" height="720" loading="lazy" decoding="async" alt="Trackly MCP server configuration" /></div>
           <figcaption><strong>CLI + MCP</strong><span>Agent-ready access</span></figcaption>
         </figure>
         <figure class="surface-conversation">
           <div class="conversation-preview" aria-hidden="true">
-            <img src="/assets/portfolio-orb-static.png" width="768" height="768" alt="" />
+            <img src="/assets/portfolio-orb-static.png" width="768" height="768" loading="lazy" decoding="async" alt="" />
             <div><span>Looking through current roles</span><strong>3 relevant product openings</strong><small>Ready for a follow-up by chat or voice</small></div>
           </div>
           <figcaption><strong>Chat + voice</strong><span>Public-safe interface reconstruction</span></figcaption>
@@ -121,7 +121,7 @@ const inventory = claimsById["trackly-inventory"];
       </div>
     </section>
 
-    <details class="case-depth">
+    <details class="case-depth" data-case-depth>
       <summary><span>Explore the full product decision record</span><small>System quality, evals, failure recovery, and human control</small></summary>
       <div class="case-depth-content">
 
@@ -312,6 +312,17 @@ const inventory = claimsById["trackly-inventory"];
     </div>
     <p class="source-line">Inventory source checked July 14, 2026: <a href={inventory.source}>Trackly public site</a>.</p>
   </article>
+
+  <script>
+    const openDeepLinkedEvidence = () => {
+      const targetId = window.location.hash.slice(1);
+      const target = targetId ? document.getElementById(targetId) : null;
+      const disclosure = target?.closest<HTMLDetailsElement>("details[data-case-depth]");
+      if (disclosure) disclosure.open = true;
+    };
+    openDeepLinkedEvidence();
+    window.addEventListener("hashchange", openDeepLinkedEvidence);
+  </script>
 
   <script>
     const film = document.querySelector<HTMLVideoElement>("[data-trackly-film]");

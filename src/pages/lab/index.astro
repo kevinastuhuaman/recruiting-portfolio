@@ -25,7 +25,7 @@ import { labArtifacts } from "../../data/site.js";
                 src={artifact.image}
                 width="1200"
                 height="630"
-                loading="eager"
+                loading={index < 2 ? "eager" : "lazy"}
                 decoding="async"
                 fetchpriority={index === 0 ? "high" : "auto"}
                 alt={`${artifact.name} interface preview`}

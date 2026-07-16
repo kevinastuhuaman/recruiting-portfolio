@@ -279,8 +279,9 @@ test("lab previews show complete interfaces without cropped or empty media", asy
   const previews = page.locator(".lab-visual img");
   await expect(previews).toHaveCount(7);
   for (const preview of await previews.all()) {
+    await preview.scrollIntoViewIfNeeded();
     await expect(preview).toHaveCSS("object-fit", "contain");
-    expect(await preview.evaluate((image) => image.complete && image.naturalWidth > 0)).toBe(true);
+    await expect.poll(() => preview.evaluate((image) => image.complete && image.naturalWidth > 0)).toBe(true);
   }
 });
 
@@ -303,7 +304,7 @@ test("contact uses one compact copy-email interaction", async ({ page }) => {
   await expect(page.getByRole("button", { name: /Copy email/i })).toHaveCount(1);
   await expect(page.locator('a[href^="mailto:"]')).toHaveCount(0);
   await expect(page.locator("main")).not.toContainText("kevin.astuhuaman@berkeley.edu");
-  await expect(page.locator("footer .footer-cta")).toHaveCount(0);
+  await expect(page.locator("footer .footer-primary")).toHaveCount(0);
 });
 
 test("Trackly leads with motion and immediate cross-platform proof", async ({ page }) => {
@@ -312,11 +313,18 @@ test("Trackly leads with motion and immediate cross-platform proof", async ({ pa
 
   await expect(page.locator("[data-trackly-film]")).toHaveAttribute("poster", "/assets/trackly-demo-poster.webp");
   await expect(page.locator(".surface-rail figure")).toHaveCount(5);
+  await page.locator(".surface-rail").scrollIntoViewIfNeeded();
   for (const image of await page.locator(".surface-rail img").all()) {
-    expect(await image.evaluate((element) => element.complete && element.naturalWidth > 0)).toBe(true);
+    await expect.poll(() => image.evaluate((element) => element.complete && element.naturalWidth > 0)).toBe(true);
   }
   await expect(page.locator(".case-depth")).not.toHaveAttribute("open", "");
   await expect(page.locator(".case-depth > summary")).toContainText("Explore the full product decision record");
+});
+
+test("Trackly deep links open progressively disclosed evidence", async ({ page }) => {
+  await page.goto("/projects/trackly/#how-i-worked");
+  await expect(page.locator(".case-depth")).toHaveAttribute("open", "");
+  await expect(page.locator("#how-i-worked")).toBeVisible();
 });
 
 test("200 percent zoom equivalent and reduced motion preserve the core path", async ({ page }) => {
@@ -676,7 +684,15 @@ test("404 output is excluded from indexing and structured data", async ({ page }
 
 test("analytics payload excludes private content", async ({ page }) => {
   const events = [];
-  await page.route("https://us.i.posthog.com/i/v0/e/", async (route) => {
+  // PostHog intentionally ignores HeadlessChrome as bot traffic. This test
+  // exercises the production visitor path with a normal Chrome user agent.
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "userAgent", {
+      configurable: true,
+      get: () => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/149.0.0.0 Safari/537.36",
+    });
+  });
+  await page.route("https://us.i.posthog.com/i/v0/e/**", async (route) => {
     events.push(JSON.parse(route.request().postData() ?? "{}"));
     await route.fulfill({ status: 200, contentType: "application/json", body: "{}" });
   });
@@ -693,7 +709,7 @@ test("analytics payload excludes private content", async ({ page }) => {
   await expect(page.getByRole("status")).toHaveText("Ready");
   expect(JSON.stringify(events)).not.toContain("private recruiter question text");
   if (process.env.PUBLIC_POSTHOG_KEY?.startsWith("phc_")) {
-    expect(events.length).toBeGreaterThan(0);
+    await expect.poll(() => events.length, { message: "analytics initializes after browser idle" }).toBeGreaterThan(0);
     expect(events.every((entry) => entry.distinct_id === entry?.properties?.distinct_id)).toBe(true);
     expect(events.every((entry) => entry?.properties?.$process_person_profile === false)).toBe(true);
     expect(events.every((entry) => !String(entry?.properties?.$current_url ?? "").includes("utm_source"))).toBe(true);
@@ -716,6 +732,11 @@ test("analytics payload excludes private content", async ({ page }) => {
     });
     await expect.poll(() => events.some((entry) => (
       entry.event === "portfolio_contact_action" && entry.properties?.action === "email"
+    ))).toBe(true);
+    await page.goto("/contact/");
+    await page.getByRole("button", { name: /Copy email/i }).click();
+    await expect.poll(() => events.some((entry) => (
+      entry.event === "portfolio_contact_action" && entry.properties?.action === "copy_email"
     ))).toBe(true);
   } else {
     expect(events).toEqual([]);

@@ -88,7 +88,7 @@ function sanitizeProperties(properties: SafeProperties = {}) {
 function beforeSend(event: CaptureResult | null): CaptureResult | null {
   if (!event) return null;
   const properties = event.properties ?? {};
-  for (const key of ["$current_url", "$referrer", "$referring_domain", "$pathname"]) {
+  for (const key of ["$current_url", "$referrer"]) {
     if (key in properties) properties[key] = cleanUrl(properties[key]);
   }
   delete properties.$el_text;
@@ -131,12 +131,13 @@ function sendEngagement() {
 }
 
 function classifyLink(element: Element) {
-  const copyEmail = element.closest<HTMLElement>("[data-copy-email]");
+  const copyEmail = element.closest<HTMLElement>("[data-copy-email], [data-contact-copy-email]");
   if (copyEmail) return { event: "portfolio_contact_action" as const, properties: { action: "copy_email" } };
 
   const link = element.closest<HTMLAnchorElement>("a[href]");
   if (!link) return undefined;
   const href = link.getAttribute("href") ?? "";
+  if (href.startsWith("mailto:")) return { event: "portfolio_contact_action" as const, properties: { action: "email" } };
   if (href.includes("linkedin.com")) return { event: "portfolio_contact_action" as const, properties: { action: "linkedin" } };
   if (href.endsWith(".pdf")) return { event: "portfolio_contact_action" as const, properties: { action: "resume_download" } };
   if (href === "/resume/" || href.startsWith("/resume/")) return { event: "portfolio_contact_action" as const, properties: { action: "resume" } };
