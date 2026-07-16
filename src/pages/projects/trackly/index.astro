@@ -1,10 +1,11 @@
 ---
 import { ArrowUpRight, ExternalLink } from "@lucide/astro";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-import { links } from "../../../data/site.js";
+import { links, routes } from "../../../data/site.js";
 import { claimsById } from "../../../data/claims.js";
 
 const inventory = claimsById["trackly-inventory"];
+const route = routes.find((entry) => entry.path === "/projects/trackly/");
 const inventoryMetrics = [
   { value: inventory.metrics?.[0]?.value, label: "active company career sites" },
   { value: inventory.metrics?.[1]?.value, label: "ATS and source types" },
@@ -18,6 +19,7 @@ const inventoryMetrics = [
   path="/projects/trackly/"
   pageType="article"
   about="Trackly"
+  modified={route?.modified}
 >
   <header class="page-hero trackly-hero">
     <div class="section-shell">

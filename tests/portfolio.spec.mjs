@@ -475,6 +475,8 @@ test("Trackly inventory and product decisions stay current and visually structur
   await expect(metrics.nth(2)).toContainText("173,864");
   await expect(page.locator(".metric-row")).not.toContainText("July 14");
   await expect(page.locator("main")).not.toContainText("Inventory source checked");
+  const schema = JSON.parse(await page.locator('script[type="application/ld+json"]').textContent());
+  expect(schema["@graph"].find((entry) => entry["@type"] === "Article")?.dateModified).toBe("2026-07-16");
 
   const steps = page.locator(".system-artifact li");
   await expect(steps).toHaveCount(5);
