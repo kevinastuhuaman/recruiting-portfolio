@@ -88,8 +88,12 @@ function sanitizeProperties(properties: SafeProperties = {}) {
 function beforeSend(event: CaptureResult | null): CaptureResult | null {
   if (!event) return null;
   const properties = event.properties ?? {};
-  for (const key of ["$current_url", "$referrer"]) {
+  for (const key of ["$current_url", "$referrer", "$session_entry_url", "$session_entry_referrer"]) {
     if (key in properties) properties[key] = cleanUrl(properties[key]);
+  }
+  const campaignProperty = /^(?:\$session_entry_)?(?:utm_|gad_source$|mc_cid$|gclid$|gclsrc$|dclid$|gbraid$|wbraid$|fbclid$|msclkid$|twclid$|igshid$|ttclid$|rdt_cid$|epik$|qclid$|sccid$|irclid$|li_fat_id$|_kx$)/;
+  for (const key of Object.keys(properties)) {
+    if (campaignProperty.test(key)) delete properties[key];
   }
   delete properties.$el_text;
   delete properties.$elements_chain;
@@ -179,6 +183,8 @@ export function initializePortfolioAnalytics(
 ) {
   if (initialized || window.location.hostname !== allowedHost || !key?.startsWith("phc_") || privacySignalEnabled()) return;
 
+  const isLocalVerification = allowedHost === "127.0.0.1" || allowedHost === "localhost";
+
   sessionId = getSessionId();
   pageStartedAt = performance.now();
   markAllowlistedInteractions();
@@ -189,6 +195,9 @@ export function initializePortfolioAnalytics(
     defaults: "2026-05-30",
     capture_pageview: false,
     capture_pageleave: false,
+    disable_compression: isLocalVerification,
+    opt_out_useragent_filter: isLocalVerification,
+    request_batching: !isLocalVerification,
     person_profiles: "never",
     persistence: "sessionStorage",
     cross_subdomain_cookie: false,

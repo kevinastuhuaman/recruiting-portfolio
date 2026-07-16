@@ -684,16 +684,25 @@ test("404 output is excluded from indexing and structured data", async ({ page }
 
 test("analytics payload excludes private content", async ({ page }) => {
   const events = [];
-  // PostHog intentionally ignores HeadlessChrome as bot traffic. This test
-  // exercises the production visitor path with a normal Chrome user agent.
+  // PostHog intentionally ignores automated browsers as bot traffic. This
+  // exercises the production visitor path with normal Chrome browser signals.
   await page.addInitScript(() => {
     Object.defineProperty(navigator, "userAgent", {
       configurable: true,
       get: () => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/149.0.0.0 Safari/537.36",
     });
+    Object.defineProperty(navigator, "webdriver", {
+      configurable: true,
+      get: () => false,
+    });
   });
-  await page.route("https://us.i.posthog.com/i/v0/e/**", async (route) => {
-    events.push(JSON.parse(route.request().postData() ?? "{}"));
+  await page.route("https://us-assets.i.posthog.com/**", async (route) => {
+    await route.fulfill({ status: 200, contentType: "application/json", body: "{}" });
+  });
+  await page.route("https://us.i.posthog.com/**", async (route) => {
+    if (route.request().url().includes("/e/")) {
+      events.push(JSON.parse(route.request().postData() ?? "{}"));
+    }
     await route.fulfill({ status: 200, contentType: "application/json", body: "{}" });
   });
   await page.route("https://api.portfolio.kevinastuhuaman.com/api/portfolio/chat", async (route) => {
@@ -710,9 +719,12 @@ test("analytics payload excludes private content", async ({ page }) => {
   expect(JSON.stringify(events)).not.toContain("private recruiter question text");
   if (process.env.PUBLIC_POSTHOG_KEY?.startsWith("phc_")) {
     await expect.poll(() => events.length, { message: "analytics initializes after browser idle" }).toBeGreaterThan(0);
-    expect(events.every((entry) => entry.distinct_id === entry?.properties?.distinct_id)).toBe(true);
+    const anonymousIds = new Set(events.map((entry) => entry?.properties?.distinct_id));
+    expect(anonymousIds.size).toBe(1);
+    expect([...anonymousIds].every((id) => typeof id === "string" && id.length > 0)).toBe(true);
     expect(events.every((entry) => entry?.properties?.$process_person_profile === false)).toBe(true);
     expect(events.every((entry) => !String(entry?.properties?.$current_url ?? "").includes("utm_source"))).toBe(true);
+    expect(JSON.stringify(events)).not.toContain("utm_source");
     expect(events.some((entry) => (
       entry.event === "portfolio_chat_completed"
       && entry.properties?.outcome === "streamed_fallback"
