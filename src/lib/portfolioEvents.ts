@@ -21,8 +21,28 @@ export type QueuedPortfolioEvent = { event: PortfolioEvent; properties: SafeProp
 declare global {
   interface Window {
     __portfolioAnalyticsCapture?: (event: PortfolioEvent, properties: SafeProperties) => void;
+    __portfolioEarlyClickHandler?: (event: MouseEvent) => void;
     __portfolioEventQueue?: QueuedPortfolioEvent[];
   }
+}
+
+export function classifyPortfolioInteraction(element: Element) {
+  const copyEmail = element.closest<HTMLElement>("[data-copy-email], [data-contact-copy-email]");
+  if (copyEmail) return { event: "portfolio_contact_action" as const, properties: { action: "copy_email" } };
+
+  const link = element.closest<HTMLAnchorElement>("a[href]");
+  if (!link) return undefined;
+  const href = link.getAttribute("href") ?? "";
+  if (href.startsWith("mailto:")) return { event: "portfolio_contact_action" as const, properties: { action: "email" } };
+  if (href.includes("linkedin.com")) return { event: "portfolio_contact_action" as const, properties: { action: "linkedin" } };
+  if (href.endsWith(".pdf")) return { event: "portfolio_contact_action" as const, properties: { action: "resume_download" } };
+  if (href === "/resume/" || href.startsWith("/resume/")) return { event: "portfolio_contact_action" as const, properties: { action: "resume" } };
+  if (href === "/ask/" || href.startsWith("/ask/")) return { event: "portfolio_assistant_opened" as const, properties: { source: "site_link" } };
+  if (href.startsWith("/projects/")) {
+    const project = href.split("/").filter(Boolean).at(1) ?? "unknown";
+    return { event: "portfolio_case_study_opened" as const, properties: { project } };
+  }
+  return undefined;
 }
 
 export function capturePortfolioEvent(event: PortfolioEvent, properties: SafeProperties = {}) {

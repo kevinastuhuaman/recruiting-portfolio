@@ -20,7 +20,7 @@ const { variant = "full" } = Astro.props;
         <a class="button button-light" href={links.linkedin}>
           <BriefcaseBusiness aria-hidden="true" size={18} /> LinkedIn <ArrowUpRight aria-hidden="true" size={16} />
         </a>
-        <button class="button button-outline-light footer-copy-email" type="button" data-copy-email={site.email}>
+        <button class="button button-outline-light footer-copy-email ph-no-capture" type="button" data-copy-email={site.email} data-ph-no-autocapture>
           <Copy aria-hidden="true" size={18} /> <span class="footer-copy-status" aria-live="polite" aria-atomic="true">Copy email</span>
         </button>
         <a class="button button-outline-light" href="/resume/">

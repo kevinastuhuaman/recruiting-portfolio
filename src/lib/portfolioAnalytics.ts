@@ -1,5 +1,5 @@
 import posthog, { type CaptureResult } from "posthog-js";
-import { drainPortfolioEvents, type SafeProperties } from "./portfolioEvents";
+import { classifyPortfolioInteraction, drainPortfolioEvents, type SafeProperties } from "./portfolioEvents";
 
 const POSTHOG_DEFAULT_HOST = "https://us.i.posthog.com";
 const REPLAY_SAMPLE_PERCENT = 10;
@@ -87,17 +87,27 @@ function sanitizeProperties(properties: SafeProperties = {}) {
 
 function beforeSend(event: CaptureResult | null): CaptureResult | null {
   if (!event) return null;
-  const properties = event.properties ?? {};
-  for (const key of ["$current_url", "$referrer", "$session_entry_url", "$session_entry_referrer"]) {
-    if (key in properties) properties[key] = cleanUrl(properties[key]);
+  const properties = event.properties ?? {} as Record<string, unknown>;
+  const urlProperty = new Set([
+    "$current_url", "$referrer", "$session_entry_url", "$session_entry_referrer",
+    "$initial_current_url", "$initial_referrer", "$initial_session_entry_url", "$initial_session_entry_referrer",
+  ]);
+  const campaignProperty = /^(?:(?:\$initial_|\$session_entry_))?(?:utm_|gad_source$|mc_cid$|gclid$|gclsrc$|dclid$|gbraid$|wbraid$|fbclid$|msclkid$|twclid$|igshid$|ttclid$|rdt_cid$|epik$|qclid$|sccid$|irclid$|li_fat_id$|_kx$)/;
+  const sanitizeAttribution = (record: Record<string, unknown>) => {
+    for (const key of Object.keys(record)) {
+      if (campaignProperty.test(key)) {
+        delete record[key];
+        continue;
+      }
+      if (urlProperty.has(key)) record[key] = cleanUrl(record[key]);
+      const value = record[key];
+      if (value && typeof value === "object" && !Array.isArray(value)) sanitizeAttribution(value as Record<string, unknown>);
+    }
+  };
+  sanitizeAttribution(properties);
+  for (const key of ["$el_text", "$elements_chain", "$elements"]) {
+    delete properties[key];
   }
-  const campaignProperty = /^(?:\$session_entry_)?(?:utm_|gad_source$|mc_cid$|gclid$|gclsrc$|dclid$|gbraid$|wbraid$|fbclid$|msclkid$|twclid$|igshid$|ttclid$|rdt_cid$|epik$|qclid$|sccid$|irclid$|li_fat_id$|_kx$)/;
-  for (const key of Object.keys(properties)) {
-    if (campaignProperty.test(key)) delete properties[key];
-  }
-  delete properties.$el_text;
-  delete properties.$elements_chain;
-  delete properties.$elements;
   event.properties = properties;
   return event;
 }
@@ -134,28 +144,9 @@ function sendEngagement() {
   });
 }
 
-function classifyLink(element: Element) {
-  const copyEmail = element.closest<HTMLElement>("[data-copy-email], [data-contact-copy-email]");
-  if (copyEmail) return { event: "portfolio_contact_action" as const, properties: { action: "copy_email" } };
-
-  const link = element.closest<HTMLAnchorElement>("a[href]");
-  if (!link) return undefined;
-  const href = link.getAttribute("href") ?? "";
-  if (href.startsWith("mailto:")) return { event: "portfolio_contact_action" as const, properties: { action: "email" } };
-  if (href.includes("linkedin.com")) return { event: "portfolio_contact_action" as const, properties: { action: "linkedin" } };
-  if (href.endsWith(".pdf")) return { event: "portfolio_contact_action" as const, properties: { action: "resume_download" } };
-  if (href === "/resume/" || href.startsWith("/resume/")) return { event: "portfolio_contact_action" as const, properties: { action: "resume" } };
-  if (href === "/ask/" || href.startsWith("/ask/")) return { event: "portfolio_assistant_opened" as const, properties: { source: "site_link" } };
-  if (href.startsWith("/projects/")) {
-    const project = href.split("/").filter(Boolean).at(1) ?? "unknown";
-    return { event: "portfolio_case_study_opened" as const, properties: { project } };
-  }
-  return undefined;
-}
-
 function markAllowlistedInteractions() {
   document.querySelectorAll<HTMLElement>("a[href], button").forEach((element) => {
-    if (classifyLink(element)) element.dataset.analyticsCapture = "true";
+    if (classifyPortfolioInteraction(element)) element.dataset.analyticsCapture = "true";
   });
 }
 
@@ -236,6 +227,10 @@ export function initializePortfolioAnalytics(
         environment: "production",
         product: "recruiting_portfolio",
       });
+      if (window.__portfolioEarlyClickHandler) {
+        document.removeEventListener("click", window.__portfolioEarlyClickHandler, { capture: true });
+        delete window.__portfolioEarlyClickHandler;
+      }
       if (shouldRecordReplay(sessionId, safePath())) posthog.startSessionRecording();
       capture("$pageview", { page_path: safePath() });
       if (safePath() === "/ask/") capture("portfolio_assistant_opened", { source: "direct" });
@@ -243,7 +238,7 @@ export function initializePortfolioAnalytics(
       observeSections();
       document.addEventListener("click", (event) => {
         if (!(event.target instanceof Element)) return;
-        const classified = classifyLink(event.target);
+        const classified = classifyPortfolioInteraction(event.target);
         if (classified) capture(classified.event, classified.properties);
       }, { capture: true });
       window.addEventListener("pagehide", sendEngagement, { once: true });

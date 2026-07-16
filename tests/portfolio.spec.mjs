@@ -302,6 +302,8 @@ test("contact uses one compact copy-email interaction", async ({ page }) => {
   await page.goto("/contact/", { waitUntil: "networkidle" });
 
   await expect(page.getByRole("button", { name: /Copy email/i })).toHaveCount(1);
+  await expect(page.getByRole("button", { name: /Copy email/i })).toHaveClass(/ph-no-capture/);
+  await expect(page.getByRole("button", { name: /Copy email/i })).toHaveAttribute("data-ph-no-autocapture", "");
   await expect(page.locator('a[href^="mailto:"]')).toHaveCount(0);
   await expect(page.locator("main")).not.toContainText("kevin.astuhuaman@berkeley.edu");
   await expect(page.locator("footer .footer-primary")).toHaveCount(0);
@@ -695,6 +697,10 @@ test("analytics payload excludes private content", async ({ page }) => {
       configurable: true,
       get: () => false,
     });
+    window.requestIdleCallback = (callback) => window.setTimeout(() => callback({
+      didTimeout: false,
+      timeRemaining: () => 0,
+    }), 750);
   });
   await page.route("https://us-assets.i.posthog.com/**", async (route) => {
     await route.fulfill({ status: 200, contentType: "application/json", body: "{}" });
@@ -713,6 +719,10 @@ test("analytics payload excludes private content", async ({ page }) => {
     });
   });
   await page.goto("/ask/?utm_source=linkedin");
+  await page.locator('a[href="/resume/"]').first().evaluate((link) => {
+    link.addEventListener("click", (event) => event.preventDefault(), { once: true });
+    link.click();
+  });
   await page.getByLabel("Question").fill("private recruiter question text");
   await page.getByRole("button", { name: "Ask", exact: true }).click();
   await expect(page.getByRole("status")).toHaveText("Ready");
@@ -725,6 +735,10 @@ test("analytics payload excludes private content", async ({ page }) => {
     expect(events.every((entry) => entry?.properties?.$process_person_profile === false)).toBe(true);
     expect(events.every((entry) => !String(entry?.properties?.$current_url ?? "").includes("utm_source"))).toBe(true);
     expect(JSON.stringify(events)).not.toContain("utm_source");
+    expect(JSON.stringify(events)).not.toContain("$initial_utm_");
+    expect(events.some((entry) => (
+      entry.event === "portfolio_contact_action" && entry.properties?.action === "resume"
+    ))).toBe(true);
     expect(events.some((entry) => (
       entry.event === "portfolio_chat_completed"
       && entry.properties?.outcome === "streamed_fallback"
@@ -756,6 +770,7 @@ test("analytics payload excludes private content", async ({ page }) => {
 });
 
 test("analytics stay inert when the portfolio project key is absent", async ({ page }) => {
+  test.skip(Boolean(process.env.PUBLIC_POSTHOG_KEY), "requires a build without the optional PostHog project key");
   const requests = [];
   page.on("request", (request) => requests.push(request.url()));
   await page.goto("/", { waitUntil: "networkidle" });
