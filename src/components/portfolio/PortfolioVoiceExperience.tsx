@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { capturePortfolioEvent } from '../../lib/portfolioAnalytics';
+import { capturePortfolioEvent } from '../../lib/portfolioEvents';
 import PortfolioVoiceOrb from './PortfolioVoiceOrb';
 import {
   PortfolioVoiceSession,

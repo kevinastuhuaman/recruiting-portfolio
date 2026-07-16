@@ -45,6 +45,25 @@ const inventory = claimsById["trackly-inventory"];
       {(inventory.metrics ?? []).map((metric) => <div class="metric"><strong>{metric.value}</strong><span>{metric.label}</span></div>)}
     </div>
 
+    <figure class="trackly-film">
+      <video
+        data-trackly-film
+        controls
+        loop
+        muted
+        playsinline
+        preload="metadata"
+        poster="/assets/trackly-demo-poster.webp"
+        aria-label="Short Trackly product film"
+      >
+        <source src="/assets/trackly-demo-preview.mp4" type="video/mp4" />
+      </video>
+      <figcaption>
+        <span><strong>18-second product film.</strong> Real Trackly product motion, from direct signal to native delivery.</span>
+        <a href="https://youtu.be/gGQ1NOzykDo">Watch the full demo <ArrowUpRight aria-hidden="true" size={15} /></a>
+      </figcaption>
+    </figure>
+
     <figure class="artifact-frame">
       <img
         src="/assets/trackly-home.webp"
@@ -57,6 +76,54 @@ const inventory = claimsById["trackly-inventory"];
         <span>Live public product capture</span>
       </figcaption>
     </figure>
+
+    <section class="case-snapshot" aria-labelledby="snapshot-title">
+      <div>
+        <p class="eyebrow">60-second read</p>
+        <h2 id="snapshot-title">What Trackly proves</h2>
+      </div>
+      <ul>
+        <li><strong>Found the wedge</strong><span>Direct career-page signal arrives before downstream job boards.</span></li>
+        <li><strong>Built the quality system</strong><span>Freshness, deduplication, classification, false-zero recovery, and explainable matches.</span></li>
+        <li><strong>Shipped the product</strong><span>One product model across web, iOS, macOS, CLI, MCP, chat, and voice.</span></li>
+      </ul>
+    </section>
+
+    <section class="surface-proof" aria-labelledby="surface-proof-title">
+      <header>
+        <p class="eyebrow">Cross-platform proof</p>
+        <h2 id="surface-proof-title">The same signal, designed for the moment it is used.</h2>
+      </header>
+      <div class="surface-rail" tabindex="0" role="region" aria-label="Trackly product surfaces; scroll horizontally for more">
+        <figure>
+          <img src="/assets/trackly-home.webp" width="1440" height="1000" loading="lazy" decoding="async" alt="Trackly web product homepage" />
+          <figcaption><strong>Web</strong><span>Research and explain</span></figcaption>
+        </figure>
+        <figure>
+          <img src="/assets/trackly-app-store.webp" width="1284" height="1291" loading="lazy" decoding="async" alt="Trackly iOS App Store product page" />
+          <figcaption><strong>iOS</strong><span>Act while a role is new</span></figcaption>
+        </figure>
+        <figure>
+          <img src="/assets/trackly-macos-appstore.webp" width="1920" height="1080" loading="lazy" decoding="async" alt="Trackly macOS App Store product page" />
+          <figcaption><strong>macOS</strong><span>Keyboard-first triage</span></figcaption>
+        </figure>
+        <figure class="surface-cli">
+          <div><img src="/assets/trackly-cli.webp" width="720" height="720" loading="lazy" decoding="async" alt="Trackly command-line search results" /><img src="/assets/trackly-mcp.webp" width="720" height="720" loading="lazy" decoding="async" alt="Trackly MCP server configuration" /></div>
+          <figcaption><strong>CLI + MCP</strong><span>Agent-ready access</span></figcaption>
+        </figure>
+        <figure class="surface-conversation">
+          <div class="conversation-preview" aria-hidden="true">
+            <img src="/assets/portfolio-orb-static.png" width="768" height="768" loading="lazy" decoding="async" alt="" />
+            <div><span>Looking through current roles</span><strong>3 relevant product openings</strong><small>Ready for a follow-up by chat or voice</small></div>
+          </div>
+          <figcaption><strong>Chat + voice</strong><span>Public-safe interface reconstruction</span></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <details class="case-depth" data-case-depth>
+      <summary><span>Explore the full product decision record</span><small>System quality, evals, failure recovery, and human control</small></summary>
+      <div class="case-depth-content">
 
     <h2>The product system</h2>
     <p>
@@ -235,6 +302,8 @@ const inventory = claimsById["trackly-inventory"];
     <p>
       I would narrow the default product around a smaller number of repeatable decisions: which opportunities deserve attention now, why the match is credible, and what action moves the search forward. New surfaces earn their place only when they improve one of those decisions.
     </p>
+      </div>
+    </details>
 
     <div class="button-row final-actions">
       <a class="button button-dark" href={links.trackly}>Open Trackly <ArrowUpRight aria-hidden="true" size={17} /></a>
@@ -243,6 +312,29 @@ const inventory = claimsById["trackly-inventory"];
     </div>
     <p class="source-line">Inventory source checked July 14, 2026: <a href={inventory.source}>Trackly public site</a>.</p>
   </article>
+
+  <script>
+    const openDeepLinkedEvidence = () => {
+      const targetId = window.location.hash.slice(1);
+      const target = targetId ? document.getElementById(targetId) : null;
+      const disclosure = target?.closest<HTMLDetailsElement>("details[data-case-depth]");
+      if (disclosure) disclosure.open = true;
+    };
+    openDeepLinkedEvidence();
+    window.addEventListener("hashchange", openDeepLinkedEvidence);
+  </script>
+
+  <script>
+    const film = document.querySelector<HTMLVideoElement>("[data-trackly-film]");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (film && !reduceMotion.matches && "IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(([entry]) => {
+        if (entry?.isIntersecting) void film.play().catch(() => undefined);
+        else film.pause();
+      }, { threshold: 0.45 });
+      observer.observe(film);
+    }
+  </script>
 </BaseLayout>
 
 <style>
@@ -253,6 +345,163 @@ const inventory = claimsById["trackly-inventory"];
   .hero-actions {
     margin-top: 34px;
   }
+
+  .trackly-film {
+    margin: 50px 0 64px;
+    overflow: hidden;
+    border: 1px solid #18151f;
+    border-radius: 7px;
+    background: #0d0b12;
+  }
+
+  .trackly-film video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #0d0b12;
+  }
+
+  .trackly-film figcaption {
+    display: flex;
+    padding: 18px 20px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    background: #fff;
+    font-size: .86rem;
+  }
+
+  .trackly-film figcaption a {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 5px;
+    font-weight: 750;
+  }
+
+  .case-snapshot {
+    display: grid;
+    grid-template-columns: minmax(220px, .65fr) minmax(0, 1.35fr);
+    gap: 48px;
+    margin: 72px 0 86px;
+    padding-block: 34px;
+    border-block: 1px solid #d7d7d0;
+  }
+
+  .case-snapshot h2,
+  .surface-proof h2 {
+    margin: 16px 0 0;
+  }
+
+  .case-snapshot ul {
+    margin: 0 !important;
+    padding: 0;
+    list-style: none;
+  }
+
+  .case-snapshot li {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 20px;
+    padding: 17px 0;
+    border-bottom: 1px solid #d7d7d0;
+  }
+
+  .case-snapshot li:first-child { padding-top: 0; }
+  .case-snapshot li:last-child { padding-bottom: 0; border-bottom: 0; }
+  .case-snapshot li span { color: #555550; }
+
+  .surface-proof {
+    margin: 78px 0 92px;
+  }
+
+  .surface-proof > header {
+    display: grid;
+    grid-template-columns: minmax(180px, .45fr) minmax(0, 1fr);
+    gap: 32px;
+    margin-bottom: 34px;
+    align-items: end;
+  }
+
+  .surface-rail {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .surface-rail figure {
+    min-width: 0;
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid #d7d7d0;
+    border-radius: 6px;
+    background: #0d0b12;
+  }
+
+  .surface-rail figure > img,
+  .surface-cli > div,
+  .conversation-preview {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: contain;
+    background: #0d0b12;
+  }
+
+  .surface-rail figcaption {
+    display: flex;
+    padding: 14px 16px;
+    justify-content: space-between;
+    gap: 16px;
+    background: #fff;
+    font-size: .78rem;
+  }
+
+  .surface-rail figcaption span { color: #666660; text-align: right; }
+
+  .surface-cli > div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .surface-cli img { width: 100%; height: 100%; object-fit: cover; }
+
+  .conversation-preview {
+    display: grid;
+    grid-template-columns: .7fr 1.3fr;
+    align-items: center;
+    padding: 18px;
+    color: white;
+  }
+
+  .conversation-preview img { width: 100%; max-width: 210px; justify-self: center; }
+  .conversation-preview div { display: grid; gap: 8px; }
+  .conversation-preview span, .conversation-preview small { color: #bfb9c9; }
+  .conversation-preview span { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; }
+  .conversation-preview strong { font-size: clamp(1rem, 2.2vw, 1.5rem); }
+
+  .case-depth {
+    margin: 72px 0 0;
+    border-top: 1px solid #11110f;
+    border-bottom: 1px solid #11110f;
+  }
+
+  .case-depth > summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(220px, .7fr) auto;
+    gap: 20px;
+    padding: 24px 0;
+    align-items: center;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .case-depth > summary::-webkit-details-marker { display: none; }
+  .case-depth > summary span { font-size: 1.2rem; font-weight: 780; }
+  .case-depth > summary small { color: #666660; text-align: right; }
+  .case-depth > summary::after { content: "+"; font-size: 1.6rem; line-height: 1; }
+  .case-depth[open] > summary::after { content: "−"; }
+  .case-depth-content { padding-bottom: 24px; }
 
   .system-artifact {
     margin: 48px 0;
@@ -648,6 +897,46 @@ const inventory = claimsById["trackly-inventory"];
   }
 
   @media (max-width: 760px) {
+    .trackly-film figcaption,
+    .case-snapshot,
+    .surface-proof > header,
+    .case-depth > summary {
+      grid-template-columns: 1fr;
+    }
+
+    .trackly-film figcaption {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .case-snapshot {
+      gap: 26px;
+      margin-block: 52px 64px;
+    }
+
+    .case-snapshot li {
+      grid-template-columns: 1fr;
+      gap: 6px;
+    }
+
+    .surface-rail {
+      display: flex;
+      margin-inline: calc(50% - 50vw);
+      padding-inline: 18px;
+      gap: 12px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+
+    .surface-rail figure {
+      flex: 0 0 min(86vw, 520px);
+      scroll-snap-align: center;
+    }
+
+    .case-depth > summary small { text-align: left; }
+    .case-depth > summary::after { grid-column: 1; }
+
     .system-artifact ol,
     .eval-artifact,
     .surface-layout,
@@ -702,5 +991,10 @@ const inventory = claimsById["trackly-inventory"];
     .transfer-grid article:last-child {
       border-bottom: 0;
     }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .trackly-film video { visibility: hidden; }
+    .trackly-film { background: #0d0b12 url('/assets/trackly-demo-poster.webp') center / contain no-repeat; }
   }
 </style>

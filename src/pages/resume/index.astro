@@ -345,8 +345,26 @@ import { claimsById } from "../../data/claims.js";
   }
 
   @media (max-width: 760px) {
+    :global(#main-content > .page-hero.resume-hero h1) {
+      max-width: 15ch;
+      font-size: clamp(2.55rem, 12vw, 4.2rem);
+      line-height: .96;
+      letter-spacing: -.045em;
+      text-wrap: balance;
+    }
+
+    :global(#main-content > .page-hero.resume-hero .lede) {
+      max-width: 34rem;
+      font-size: 1rem;
+      line-height: 1.55;
+    }
+
     .resume-shell {
       width: min(100% - 24px, 1040px);
+    }
+
+    .resume-document {
+      padding: 24px 20px;
     }
 
     .resume-toolbar,
@@ -373,6 +391,22 @@ import { claimsById } from "../../data/claims.js";
 
     .resume-identity h2 {
       font-size: 2.25rem;
+    }
+
+    .resume-role {
+      padding: 24px 0;
+    }
+
+    .resume-role li,
+    .resume-document section > ul li {
+      margin-top: 10px;
+      font-size: .95rem;
+      line-height: 1.55;
+    }
+
+    .resume-role > p {
+      font-size: .94rem;
+      line-height: 1.55;
     }
   }
 

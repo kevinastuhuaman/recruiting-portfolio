@@ -65,7 +65,7 @@ export const labArtifacts = [
     live: "https://kevinastuhuaman.github.io/agent-workflow-canvas/",
     source: "https://github.com/kevinastuhuaman/agent-workflow-canvas",
     signal: "Enterprise workflow state, approvals, traceability, and fail-closed recovery.",
-    monogram: "AW",
+    image: "/assets/agent-workflow-canvas-preview.png",
   },
   {
     id: "evals-control-room",
@@ -73,7 +73,7 @@ export const labArtifacts = [
     live: "https://kevinastuhuaman.github.io/evals-control-room/",
     source: "https://github.com/kevinastuhuaman/evals-control-room",
     signal: "Regression triage, error slices, model tradeoffs, and promotion gates.",
-    monogram: "EC",
+    image: "/assets/evals-control-room-preview.png",
   },
   {
     id: "human-control-plane",

@@ -21,9 +21,17 @@ import { labArtifacts } from "../../data/site.js";
         <article id={artifact.id} class:list={["lab-card", index === 0 && "lab-card-featured"]}>
           <a class="lab-visual" href={artifact.live} aria-label={`Open ${artifact.name}`}>
             {artifact.image ? (
-              <img src={artifact.image} width="1200" height="630" loading={index === 0 ? "eager" : "lazy"} alt={`${artifact.name} interface preview`} />
+              <img
+                src={artifact.image}
+                width="1200"
+                height="630"
+                loading={index < 2 ? "eager" : "lazy"}
+                decoding="async"
+                fetchpriority={index === 0 ? "high" : "auto"}
+                alt={`${artifact.name} interface preview`}
+              />
             ) : (
-              <div class="lab-monogram" aria-hidden="true"><span>{artifact.monogram}</span><i></i><i></i><i></i></div>
+              <div class="lab-monogram" aria-hidden="true"><span>{"monogram" in artifact ? artifact.monogram : "AI"}</span><i></i><i></i><i></i></div>
             )}
           </a>
           <div class="lab-copy">
@@ -55,8 +63,9 @@ import { labArtifacts } from "../../data/site.js";
   .lab-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-left: 1px solid var(--ink); }
   .lab-card { min-width: 0; scroll-margin-top: 88px; border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); background: #fff; }
   .lab-card-featured { grid-column: 1 / -1; display: grid; grid-template-columns: 1.3fr .7fr; }
-  .lab-visual { display: block; min-height: 290px; overflow: hidden; background: #ebe9f6; }
-  .lab-visual img { display: block; width: 100%; height: 100%; min-height: 290px; object-fit: cover; transition: transform .5s cubic-bezier(.2,.7,.2,1); }
+  .lab-visual { position: relative; display: grid; min-height: 290px; aspect-ratio: 16 / 9; place-items: center; overflow: hidden; background: #141122; }
+  .lab-visual::before { position: absolute; inset: 0; background: linear-gradient(rgba(128,86,245,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(128,86,245,.08) 1px, transparent 1px); background-size: 40px 40px; content: ""; }
+  .lab-visual img { position: relative; z-index: 1; display: block; width: 100%; height: 100%; min-height: 0; object-fit: contain; transition: transform .5s cubic-bezier(.2,.7,.2,1), opacity .2s ease; }
   .lab-card:hover .lab-visual img { transform: scale(1.018); }
   .lab-copy { padding: 30px; }
   .lab-number { color: var(--accent); font: 700 .78rem/1 var(--font-mono); }
@@ -76,6 +85,7 @@ import { labArtifacts } from "../../data/site.js";
     .lab-hero, .lab-card-featured, .lab-boundary { grid-template-columns: 1fr; }
     .lab-grid { grid-template-columns: 1fr; }
     .lab-card-featured { grid-column: auto; display: block; }
+    .lab-visual { min-height: 0; }
     .lab-copy h2 { margin-top: 28px; }
   }
   @media (prefers-reduced-motion: reduce) { .lab-visual img { transition: none; } }

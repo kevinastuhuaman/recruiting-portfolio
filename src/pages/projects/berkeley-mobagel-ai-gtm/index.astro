@@ -34,6 +34,37 @@ import { claimsById } from "../../../data/claims.js";
       MoBagel was presented in the challenge as an AI and machine-learning platform designed to simplify how businesses adopt AI. The product question was broader than feature discovery: how should the experience, value proposition, pricing, partnerships, and roadmap work together for a United States customer?
     </p>
 
+    <figure class="prototype-reconstruction" aria-labelledby="prototype-caption">
+      <div class="prototype-chrome">
+        <div class="prototype-topbar"><span>AI adoption workspace</span><small>Public-safe reconstruction</small></div>
+        <div class="prototype-body">
+          <nav aria-label="Reconstructed product steps" tabindex="0">
+            <span class="active">01 Frame</span>
+            <span>02 Connect</span>
+            <span>03 Explore</span>
+            <span>04 Activate</span>
+          </nav>
+          <section>
+            <p class="prototype-kicker">Business question</p>
+            <h3>Which customer segment is most likely to adopt this offer?</h3>
+            <div class="prototype-input"><span>Goal</span><strong>Prioritize a segment for the U.S. launch</strong></div>
+            <div class="prototype-grid">
+              <div><span>Audience</span><strong>Business operator</strong></div>
+              <div><span>Decision</span><strong>Market entry</strong></div>
+              <div><span>Success signal</span><strong>Repeated weekly use</strong></div>
+            </div>
+          </section>
+          <aside>
+            <span>Guided next step</span>
+            <h4>Connect the smallest useful data set.</h4>
+            <p>Explain what is required, what remains optional, and how the result will change the decision.</p>
+            <button type="button" disabled>Review data requirements</button>
+          </aside>
+        </div>
+      </div>
+      <figcaption id="prototype-caption"><strong>Reconstructed experience direction</strong><span>The approved Figma deliverable is private; this original, synthetic interface makes the public product logic inspectable without presenting it as client work.</span></figcaption>
+    </figure>
+
     <div class="adoption-map" aria-label="Public-safe AI product adoption framework">
       <div><span>01</span><strong>Business question</strong><p>Start with the decision a non-technical user needs to make.</p></div>
       <div><span>02</span><strong>Guided workflow</strong><p>Turn data and modeling complexity into understandable product steps.</p></div>
@@ -98,6 +129,102 @@ import { claimsById } from "../../../data/claims.js";
   .mobagel-hero {
     background: #243238;
   }
+
+  .prototype-reconstruction {
+    margin: 48px 0 68px;
+    overflow: hidden;
+    border: 1px solid #203735;
+    border-radius: 7px;
+    background: #e9f0ee;
+  }
+
+  .prototype-chrome {
+    margin: clamp(18px, 4vw, 42px);
+    overflow: hidden;
+    border: 1px solid #203735;
+    border-radius: 4px;
+    background: #f9fbfa;
+    box-shadow: 16px 18px 0 rgba(15,78,70,.09);
+  }
+
+  .prototype-topbar {
+    display: flex;
+    min-height: 58px;
+    padding: 14px 18px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    border-bottom: 1px solid #203735;
+    font-weight: 780;
+  }
+
+  .prototype-topbar small { color: #5b6866; font-weight: 650; }
+
+  .prototype-body {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr) 260px;
+    min-height: 430px;
+  }
+
+  .prototype-body nav {
+    display: flex;
+    padding: 24px 14px;
+    flex-direction: column;
+    gap: 7px;
+    border-right: 1px solid #c8d4d2;
+    background: #163d38;
+  }
+
+  .prototype-body nav span {
+    padding: 11px 10px;
+    color: #c6d4d1;
+    font-size: .74rem;
+    font-weight: 720;
+  }
+
+  .prototype-body nav .active { background: #d8ff52; color: #10221f; }
+
+  .prototype-body > section { padding: 42px 34px; }
+  .prototype-kicker { margin: 0; color: #08766a; font-size: .7rem; font-weight: 820; letter-spacing: .1em; text-transform: uppercase; }
+  .prototype-body h3 { max-width: 570px; margin: 15px 0 34px; font-size: clamp(1.65rem, 3.4vw, 2.7rem); letter-spacing: -.04em; }
+
+  .prototype-input,
+  .prototype-grid > div {
+    display: grid;
+    gap: 8px;
+    padding: 16px;
+    border: 1px solid #c8d4d2;
+    background: white;
+  }
+
+  .prototype-input span,
+  .prototype-grid span,
+  .prototype-body aside > span { color: #5b6866; font-size: .67rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+  .prototype-grid { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 12px; }
+  .prototype-grid > div + div { border-left: 0; }
+  .prototype-grid strong { font-size: .8rem; }
+
+  .prototype-body aside {
+    padding: 34px 26px;
+    border-left: 1px solid #c8d4d2;
+    background: #eff5f3;
+  }
+
+  .prototype-body aside h4 { margin: 52px 0 14px; font-size: 1.35rem; }
+  .prototype-body aside p { color: #515e5c; font-size: .86rem; }
+  .prototype-body aside button { width: 100%; margin-top: 26px; padding: 13px; border: 1px solid #163d38; background: #163d38; color: white; font-weight: 760; }
+
+  .prototype-reconstruction figcaption {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 22px;
+    padding: 18px 22px;
+    border-top: 1px solid #203735;
+    background: white;
+    font-size: .8rem;
+  }
+
+  .prototype-reconstruction figcaption span { color: #5b6866; }
 
   .adoption-map {
     display: grid;
@@ -183,6 +310,25 @@ import { claimsById } from "../../../data/claims.js";
   }
 
   @media (max-width: 700px) {
+    .prototype-body {
+      grid-template-columns: 1fr;
+    }
+
+    .prototype-body nav {
+      padding: 10px;
+      flex-direction: row;
+      overflow-x: auto;
+      border-right: 0;
+      border-bottom: 1px solid #c8d4d2;
+    }
+
+    .prototype-body nav span { flex: 0 0 auto; }
+    .prototype-body > section { padding: 28px 22px; }
+    .prototype-grid { grid-template-columns: 1fr; }
+    .prototype-grid > div + div { border-top: 0; border-left: 1px solid #c8d4d2; }
+    .prototype-body aside { border-top: 1px solid #c8d4d2; border-left: 0; }
+    .prototype-reconstruction figcaption { grid-template-columns: 1fr; }
+
     .adoption-map,
     .workstreams {
       grid-template-columns: 1fr;

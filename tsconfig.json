@@ -5,5 +5,16 @@
     "checkJs": false,
     "types": ["node"]
   },
-  "exclude": ["index.html", "contact", "next", "packet", "proof", "resume/index.html", "projects", "src/main.js", "vite.config.js"]
+  "exclude": [
+    "dist",
+    "index.html",
+    "contact",
+    "next",
+    "packet",
+    "proof",
+    "resume/index.html",
+    "projects",
+    "src/main.js",
+    "vite.config.js"
+  ]
 }

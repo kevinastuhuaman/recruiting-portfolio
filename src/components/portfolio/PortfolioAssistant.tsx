@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
-import { capturePortfolioEvent } from '../../lib/portfolioAnalytics';
+import { capturePortfolioEvent } from '../../lib/portfolioEvents';
 import { askPublicCorpus, PORTFOLIO_API, submitPortfolioFeedback, type PortfolioCitation } from './portfolioApi';
 
 type Mode = 'chat' | 'voice';
