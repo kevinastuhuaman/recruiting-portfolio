@@ -61,7 +61,7 @@ test("mobile first viewport leads with AI PM, Berkeley, and PayPal evidence", as
   await page.goto("/", { waitUntil: "networkidle" });
   const hero = page.locator(".recruiter-hero");
 
-  await expect(hero.getByRole("heading", { level: 1, name: /Kevin Astuhuaman/i })).toBeVisible();
+  await expect(hero.getByRole("heading", { level: 1, name: "Seven years building products and enjoying every minute of it." })).toBeVisible();
   await expect(hero.getByText(/Ex-PayPal AI\/ML observability/i)).toBeVisible();
   await expect(hero.getByText(/Berkeley Haas MBA/i)).toBeVisible();
   await expect(hero.getByRole("link", { name: "View resume", exact: true })).toBeVisible();
@@ -314,11 +314,16 @@ test("Trackly leads with motion and immediate cross-platform proof", async ({ pa
   await page.goto("/projects/trackly/", { waitUntil: "networkidle" });
 
   await expect(page.locator("[data-trackly-film]")).toHaveAttribute("poster", "/assets/trackly-demo-poster.webp");
-  await expect(page.locator(".surface-rail figure")).toHaveCount(5);
+  await expect(page.locator(".surface-rail figure")).toHaveCount(3);
+  await expect(page.locator(".surface-rail figcaption strong")).toHaveText(["iOS", "macOS", "CLI + MCP"]);
   await page.locator(".surface-rail").scrollIntoViewIfNeeded();
   for (const image of await page.locator(".surface-rail img").all()) {
     await expect.poll(() => image.evaluate((element) => element.complete && element.naturalWidth > 0)).toBe(true);
   }
+  const mediaHeights = await page.locator(".surface-media").evaluateAll((elements) =>
+    elements.map((element) => Math.round(element.getBoundingClientRect().height)),
+  );
+  expect(new Set(mediaHeights).size).toBe(1);
   await expect(page.locator(".case-depth")).not.toHaveAttribute("open", "");
   await expect(page.locator(".case-depth > summary")).toContainText("Explore the full product decision record");
 });
@@ -384,7 +389,7 @@ test("the complete recruiting path works without JavaScript", async ({ browser }
   try {
     const page = await context.newPage();
     await page.goto("/");
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Kevin");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Seven years building products");
     await expect(page.getByRole("link", { name: /Read the PayPal case/i })).toBeVisible();
     await page.goto("/resume/");
     await expect(page.getByText("PayPal Checkout", { exact: true })).toBeVisible();
@@ -468,6 +473,10 @@ test("Trackly inventory and product decisions stay current and visually structur
   await expect(metrics).toHaveCount(3);
   await expect(metrics.nth(0)).toContainText("3,884");
   await expect(metrics.nth(2)).toContainText("173,864");
+  await expect(page.locator(".metric-row")).not.toContainText("July 14");
+  await expect(page.locator("main")).not.toContainText("Inventory source checked");
+  const schema = JSON.parse(await page.locator('script[type="application/ld+json"]').textContent());
+  expect(schema["@graph"].find((entry) => entry["@type"] === "Article")?.dateModified).toBe("2026-07-16");
 
   const steps = page.locator(".system-artifact li");
   await expect(steps).toHaveCount(5);
