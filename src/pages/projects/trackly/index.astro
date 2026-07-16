@@ -5,6 +5,11 @@ import { links } from "../../../data/site.js";
 import { claimsById } from "../../../data/claims.js";
 
 const inventory = claimsById["trackly-inventory"];
+const inventoryMetrics = [
+  { value: inventory.metrics?.[0]?.value, label: "active company career sites" },
+  { value: inventory.metrics?.[1]?.value, label: "ATS and source types" },
+  { value: inventory.metrics?.[2]?.value, label: "active jobs" },
+];
 ---
 
 <BaseLayout
@@ -41,8 +46,8 @@ const inventory = claimsById["trackly-inventory"];
       Job boards optimize for aggregation and distribution. A candidate optimizes for timing and relevance. During recruiting, I kept finding roles on company sites before they appeared in my feeds. That gap became the wedge: monitor the source directly, then make the signal reliable enough to act on.
     </p>
 
-    <div class="metric-row" aria-label="Dated Trackly public inventory">
-      {(inventory.metrics ?? []).map((metric) => <div class="metric"><strong>{metric.value}</strong><span>{metric.label}</span></div>)}
+    <div class="metric-row" aria-label="Current Trackly public inventory">
+      {inventoryMetrics.map((metric) => <div class="metric"><strong>{metric.value}</strong><span>{metric.label}</span></div>)}
     </div>
 
     <figure class="trackly-film">
@@ -85,38 +90,27 @@ const inventory = claimsById["trackly-inventory"];
       <ul>
         <li><strong>Found the wedge</strong><span>Direct career-page signal arrives before downstream job boards.</span></li>
         <li><strong>Built the quality system</strong><span>Freshness, deduplication, classification, false-zero recovery, and explainable matches.</span></li>
-        <li><strong>Shipped the product</strong><span>One product model across web, iOS, macOS, CLI, MCP, chat, and voice.</span></li>
+        <li><strong>Shipped the product</strong><span>One product model extended across web, native apps, agent tools, chat, and voice.</span></li>
       </ul>
     </section>
 
     <section class="surface-proof" aria-labelledby="surface-proof-title">
       <header>
-        <p class="eyebrow">Cross-platform proof</p>
-        <h2 id="surface-proof-title">The same signal, designed for the moment it is used.</h2>
+        <p class="eyebrow">Selected product surfaces</p>
+        <h2 id="surface-proof-title">One product, designed for different moments.</h2>
       </header>
-      <div class="surface-rail" tabindex="0" role="region" aria-label="Trackly product surfaces; scroll horizontally for more">
-        <figure>
-          <img src="/assets/trackly-home.webp" width="1440" height="1000" loading="lazy" decoding="async" alt="Trackly web product homepage" />
-          <figcaption><strong>Web</strong><span>Research and explain</span></figcaption>
-        </figure>
-        <figure>
-          <img src="/assets/trackly-app-store.webp" width="1284" height="1291" loading="lazy" decoding="async" alt="Trackly iOS App Store product page" />
+      <div class="surface-rail" tabindex="0" role="region" aria-label="Selected Trackly product surfaces; scroll horizontally for more">
+        <figure class="surface-ios">
+          <div class="surface-media"><img src="/assets/trackly-app-store.webp" width="1284" height="1291" decoding="async" alt="Trackly iOS App Store product page" /></div>
           <figcaption><strong>iOS</strong><span>Act while a role is new</span></figcaption>
         </figure>
-        <figure>
-          <img src="/assets/trackly-macos-appstore.webp" width="1920" height="1080" loading="lazy" decoding="async" alt="Trackly macOS App Store product page" />
+        <figure class="surface-macos">
+          <div class="surface-media"><img src="/assets/trackly-macos-appstore.webp" width="1840" height="1140" decoding="async" alt="Trackly macOS App Store product page" /></div>
           <figcaption><strong>macOS</strong><span>Keyboard-first triage</span></figcaption>
         </figure>
         <figure class="surface-cli">
-          <div><img src="/assets/trackly-cli.webp" width="720" height="720" loading="lazy" decoding="async" alt="Trackly command-line search results" /><img src="/assets/trackly-mcp.webp" width="720" height="720" loading="lazy" decoding="async" alt="Trackly MCP server configuration" /></div>
-          <figcaption><strong>CLI + MCP</strong><span>Agent-ready access</span></figcaption>
-        </figure>
-        <figure class="surface-conversation">
-          <div class="conversation-preview" aria-hidden="true">
-            <img src="/assets/portfolio-orb-static.png" width="768" height="768" loading="lazy" decoding="async" alt="" />
-            <div><span>Looking through current roles</span><strong>3 relevant product openings</strong><small>Ready for a follow-up by chat or voice</small></div>
-          </div>
-          <figcaption><strong>Chat + voice</strong><span>Public-safe interface reconstruction</span></figcaption>
+          <div class="surface-media"><img src="/assets/trackly-cli.webp" width="720" height="720" decoding="async" alt="Trackly command-line search results" /><img src="/assets/trackly-mcp.webp" width="720" height="720" decoding="async" alt="Trackly MCP server configuration" /></div>
+          <figcaption><strong>CLI + MCP</strong><span>Bring the signal into agent workflows</span></figcaption>
         </figure>
       </div>
     </section>
@@ -310,7 +304,6 @@ const inventory = claimsById["trackly-inventory"];
       <a class="button" href="/resume/">View resume</a>
       <a class="button" href="/contact/">Contact Kevin</a>
     </div>
-    <p class="source-line">Inventory source checked July 14, 2026: <a href={inventory.source}>Trackly public site</a>.</p>
   </article>
 
   <script>
@@ -425,27 +418,41 @@ const inventory = claimsById["trackly-inventory"];
 
   .surface-rail {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
+    grid-auto-columns: minmax(420px, 58%);
+    grid-auto-flow: column;
+    gap: 16px;
+    padding-bottom: 14px;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-color: #8f8999 transparent;
   }
 
   .surface-rail figure {
     min-width: 0;
+    align-self: start;
     margin: 0;
     overflow: hidden;
     border: 1px solid #d7d7d0;
     border-radius: 6px;
     background: #0d0b12;
+    scroll-snap-align: start;
   }
 
-  .surface-rail figure > img,
-  .surface-cli > div,
-  .conversation-preview {
+  .surface-media {
+    display: grid;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    place-items: center;
+    overflow: hidden;
+    background: #f2f2ef;
+  }
+
+  .surface-media > img {
     display: block;
     width: 100%;
-    aspect-ratio: 16 / 9;
+    height: 100%;
     object-fit: contain;
-    background: #0d0b12;
   }
 
   .surface-rail figcaption {
@@ -459,26 +466,12 @@ const inventory = claimsById["trackly-inventory"];
 
   .surface-rail figcaption span { color: #666660; text-align: right; }
 
-  .surface-cli > div {
-    display: grid;
+  .surface-cli .surface-media {
     grid-template-columns: 1fr 1fr;
+    background: #0d0b12;
   }
 
-  .surface-cli img { width: 100%; height: 100%; object-fit: cover; }
-
-  .conversation-preview {
-    display: grid;
-    grid-template-columns: .7fr 1.3fr;
-    align-items: center;
-    padding: 18px;
-    color: white;
-  }
-
-  .conversation-preview img { width: 100%; max-width: 210px; justify-self: center; }
-  .conversation-preview div { display: grid; gap: 8px; }
-  .conversation-preview span, .conversation-preview small { color: #bfb9c9; }
-  .conversation-preview span { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; }
-  .conversation-preview strong { font-size: clamp(1rem, 2.2vw, 1.5rem); }
+  .surface-cli img { min-width: 0; }
 
   .case-depth {
     margin: 72px 0 0;
@@ -679,8 +672,7 @@ const inventory = claimsById["trackly-inventory"];
     text-align: right;
   }
 
-  .artifact-note,
-  .source-line {
+  .artifact-note {
     color: #666660 !important;
     font-size: 0.85rem !important;
   }
@@ -920,18 +912,10 @@ const inventory = claimsById["trackly-inventory"];
     }
 
     .surface-rail {
-      display: flex;
+      grid-auto-columns: min(86vw, 520px);
       margin-inline: calc(50% - 50vw);
       padding-inline: 18px;
-      gap: 12px;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
       scrollbar-width: none;
-    }
-
-    .surface-rail figure {
-      flex: 0 0 min(86vw, 520px);
-      scroll-snap-align: center;
     }
 
     .case-depth > summary small { text-align: left; }

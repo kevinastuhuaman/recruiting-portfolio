@@ -102,9 +102,9 @@ export const labArtifacts = [
 ];
 
 export const routes = [
-  { path: "/", state: "index", title: "Kevin Astuhuaman | AI Product Manager", modified: "2026-07-14" },
+  { path: "/", state: "index", title: "Kevin Astuhuaman | AI Product Manager", modified: "2026-07-16" },
   { path: "/lab/", state: "index", title: "AI Product Lab | Kevin Astuhuaman", modified: "2026-07-13" },
-  { path: "/projects/trackly/", state: "index", title: "Trackly case study | Kevin Astuhuaman", modified: "2026-07-14" },
+  { path: "/projects/trackly/", state: "index", title: "Trackly case study | Kevin Astuhuaman", modified: "2026-07-16" },
   { path: "/projects/paypal-ai-observability/", state: "index", title: "PayPal AI observability | Kevin Astuhuaman", modified: "2026-07-12" },
   { path: "/projects/berkeley-mobagel-ai-gtm/", state: "index", title: "Berkeley and MoBagel AI product strategy | Kevin Astuhuaman", modified: "2026-07-12" },
   { path: "/projects/smb-fintech-bcp-credicorp/", state: "index", title: "BCP and Credicorp product leadership | Kevin Astuhuaman", modified: "2026-07-12" },
