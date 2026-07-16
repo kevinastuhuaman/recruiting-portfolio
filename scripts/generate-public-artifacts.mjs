@@ -88,7 +88,6 @@ Disallow: /
 User-agent: *
 Allow: /
 
-Content-Signal: ai-train=no, search=yes, ai-input=yes
 Sitemap: ${absolute("/sitemap.xml")}
 `;
 

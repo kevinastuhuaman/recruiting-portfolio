@@ -17,10 +17,10 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 
   <article class="reading-shell section-pad prose">
     <h2>What is measured</h2>
-    <p>The portfolio sends privacy-limited events to a dedicated PostHog project: page views without query strings, broad engaged-time buckets, section visibility, case-study clicks, resume and contact actions, assistant mode and lifecycle events, and Helpful or Needs work feedback. Session replay, heatmaps, automatic click capture, visitor identification, and person profiles are disabled.</p>
+    <p>The portfolio sends privacy-limited events to a dedicated PostHog project: page views without query strings, broad engaged-time buckets, section visibility, case-study clicks, resume and contact actions, assistant mode and lifecycle events, and Helpful or Needs work feedback. On public pages outside the assistant, ten percent of tab sessions may also be sampled for masked replay and heatmaps. Automatic click capture is restricted to key portfolio actions.</p>
 
     <h2>What is not measured</h2>
-    <p>The assistant does not send question text, answers, form text, resume lens selections, email content, application history, or Trackly user data to behavioral analytics. It does not create a behavioral profile for the visitor.</p>
+    <p>The assistant does not send question text, answers, form text, resume lens selections, email content, application history, or Trackly user data to behavioral analytics. Replay is always disabled on <code>/ask/</code>. On sampled public pages, all page text and inputs are masked before leaving the browser, query strings are removed, cross-origin frames are excluded, and no visitor profile is created.</p>
 
     <h2>Control</h2>
     <p>Analytics use a random identifier that lasts only for the current browser tab session. Global Privacy Control and browser Do Not Track signals disable analytics entirely. Blocking PostHog never changes page, resume, or assistant functionality.</p>

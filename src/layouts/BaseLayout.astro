@@ -16,6 +16,7 @@ interface Props {
   about?: string;
   noindex?: boolean;
   includeSchema?: boolean;
+  footerVariant?: "full" | "compact";
 }
 
 const {
@@ -29,6 +30,7 @@ const {
   about,
   noindex = false,
   includeSchema = true,
+  footerVariant = "full",
 } = Astro.props;
 const canonical = new URL(path, site.origin).href;
 const imageUrl = new URL(image, site.origin).href;
@@ -149,7 +151,7 @@ const schemaJson = JSON.stringify(schema);
     <main id="main-content" tabindex="-1">
       <slot />
     </main>
-    <Footer />
+    <Footer variant={footerVariant} />
     <Analytics />
   </body>
 </html>

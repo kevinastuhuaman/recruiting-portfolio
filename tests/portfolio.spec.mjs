@@ -259,6 +259,66 @@ test("required responsive widths avoid horizontal overflow", async ({ page }) =>
   }
 });
 
+test("mobile resume stays readable instead of shrinking into a desktop sheet", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/resume/", { waitUntil: "networkidle" });
+
+  const heroSize = await page.locator(".resume-hero h1").evaluate((heading) => Number.parseFloat(getComputedStyle(heading).fontSize));
+  const bodySize = await page.locator(".resume-role li").first().evaluate((item) => Number.parseFloat(getComputedStyle(item).fontSize));
+  expect(heroSize).toBeLessThanOrEqual(66);
+  expect(bodySize).toBeGreaterThanOrEqual(14);
+  await page.locator(".resume-role").first().scrollIntoViewIfNeeded();
+  await expect(page.locator(".resume-role").first()).toBeInViewport();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+});
+
+test("lab previews show complete interfaces without cropped or empty media", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/lab/", { waitUntil: "networkidle" });
+
+  const previews = page.locator(".lab-visual img");
+  await expect(previews).toHaveCount(7);
+  for (const preview of await previews.all()) {
+    await expect(preview).toHaveCSS("object-fit", "contain");
+    expect(await preview.evaluate((image) => image.complete && image.naturalWidth > 0)).toBe(true);
+  }
+});
+
+test("Ask renders a useful first impression before client hydration", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
+  const page = await context.newPage();
+  await page.goto(new URL("/ask/", baseURL).href);
+
+  await expect(page.getByRole("heading", { name: "Ask anything about Kevin." }).first()).toBeVisible();
+  await expect(page.getByText("Good starting points")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Five answers without the model." })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+  await context.close();
+});
+
+test("contact uses one compact copy-email interaction", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/contact/", { waitUntil: "networkidle" });
+
+  await expect(page.getByRole("button", { name: /Copy email/i })).toHaveCount(1);
+  await expect(page.locator('a[href^="mailto:"]')).toHaveCount(0);
+  await expect(page.locator("main")).not.toContainText("kevin.astuhuaman@berkeley.edu");
+  await expect(page.locator("footer .footer-cta")).toHaveCount(0);
+});
+
+test("Trackly leads with motion and immediate cross-platform proof", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/projects/trackly/", { waitUntil: "networkidle" });
+
+  await expect(page.locator("[data-trackly-film]")).toHaveAttribute("poster", "/assets/trackly-demo-poster.webp");
+  await expect(page.locator(".surface-rail figure")).toHaveCount(5);
+  for (const image of await page.locator(".surface-rail img").all()) {
+    expect(await image.evaluate((element) => element.complete && element.naturalWidth > 0)).toBe(true);
+  }
+  await expect(page.locator(".case-depth")).not.toHaveAttribute("open", "");
+  await expect(page.locator(".case-depth > summary")).toContainText("Explore the full product decision record");
+});
+
 test("200 percent zoom equivalent and reduced motion preserve the core path", async ({ page }) => {
   await page.setViewportSize({ width: 720, height: 500 });
   await page.goto("/");
@@ -324,9 +384,9 @@ test("the complete recruiting path works without JavaScript", async ({ browser }
     await page.goto("/ask/");
     await expect(page.getByRole("heading", { name: "Five answers without the model." })).toBeVisible();
     await expect(page.getByText(/Interactive questions require JavaScript/i)).toBeVisible();
-    await expect(page.getByText(/Interactive Chat and Voice load only when JavaScript is available/i)).toBeVisible();
-    await expect(page.locator(".assistant-shell")).toHaveCount(0);
-    await expect(page.getByRole("button", { name: "Ask", exact: true })).toHaveCount(0);
+    await expect(page.getByText(/These answers stay available if JavaScript, Chat, Voice, or the backend is unavailable/i)).toBeVisible();
+    await expect(page.locator(".assistant-shell")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Ask anything about Kevin." }).last()).toBeVisible();
   } finally {
     await context.close();
   }
@@ -371,6 +431,10 @@ test("AI Investigation Workbench exposes plan, evidence, uncertainty, and human 
 
 test("Trackly explains the browser-agent harness and its human approval boundary", async ({ page }) => {
   await page.goto("/projects/trackly/");
+  const deepEvidence = page.locator("details.case-depth");
+  await expect(deepEvidence).not.toHaveAttribute("open", "");
+  await deepEvidence.locator("summary").click();
+  await expect(deepEvidence).toHaveAttribute("open", "");
   const harness = page.locator(".browser-harness-section");
   await expect(harness.getByRole("heading", { name: /where autonomy ends/i })).toBeVisible();
   await expect(harness.getByText(/Trackly supplies the selected roles and user context/i)).toBeVisible();

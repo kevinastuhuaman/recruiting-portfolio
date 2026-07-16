@@ -1,9 +1,17 @@
 <script>
-  import { initializePortfolioAnalytics } from "../lib/portfolioAnalytics";
+  const startAnalytics = () => {
+    void import("../lib/portfolioAnalytics").then(({ initializePortfolioAnalytics }) => {
+      initializePortfolioAnalytics(
+        import.meta.env.PUBLIC_POSTHOG_KEY,
+        import.meta.env.PUBLIC_POSTHOG_HOST || "https://us.i.posthog.com",
+        import.meta.env.PUBLIC_POSTHOG_ALLOWED_HOST || "portfolio.kevinastuhuaman.com",
+      );
+    }).catch(() => undefined);
+  };
 
-  initializePortfolioAnalytics(
-    import.meta.env.PUBLIC_POSTHOG_KEY,
-    import.meta.env.PUBLIC_POSTHOG_HOST || "https://us.i.posthog.com",
-    import.meta.env.PUBLIC_POSTHOG_ALLOWED_HOST || "portfolio.kevinastuhuaman.com",
-  );
+  if (typeof window.requestIdleCallback === "function") {
+    window.requestIdleCallback(startAnalytics, { timeout: 3_000 });
+  } else {
+    globalThis.setTimeout(startAnalytics, 1_500);
+  }
 </script>

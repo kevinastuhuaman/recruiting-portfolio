@@ -1,26 +1,34 @@
 ---
 import { ArrowUpRight, BriefcaseBusiness, CodeXml, Copy, FileText } from "@lucide/astro";
 import { links, site } from "../data/site.js";
+
+interface Props {
+  variant?: "full" | "compact";
+}
+
+const { variant = "full" } = Astro.props;
 ---
 
 <footer id="contact" class="site-footer">
-  <div class="footer-primary">
-    <div>
-      <p class="eyebrow">Start a conversation</p>
-      <h2>Building an AI product where judgment matters?</h2>
+  {variant === "full" && (
+    <div class="footer-primary">
+      <div>
+        <p class="eyebrow">Start a conversation</p>
+        <h2>Building an AI product where judgment matters?</h2>
+      </div>
+      <div class="footer-actions">
+        <a class="button button-light" href={links.linkedin}>
+          <BriefcaseBusiness aria-hidden="true" size={18} /> LinkedIn <ArrowUpRight aria-hidden="true" size={16} />
+        </a>
+        <button class="button button-outline-light footer-copy-email" type="button" data-copy-email={site.email}>
+          <Copy aria-hidden="true" size={18} /> <span class="footer-copy-status" aria-live="polite" aria-atomic="true">Copy email</span>
+        </button>
+        <a class="button button-outline-light" href="/resume/">
+          <FileText aria-hidden="true" size={18} /> View resume
+        </a>
+      </div>
     </div>
-    <div class="footer-actions">
-      <a class="button button-light" href={links.linkedin}>
-        <BriefcaseBusiness aria-hidden="true" size={18} /> LinkedIn <ArrowUpRight aria-hidden="true" size={16} />
-      </a>
-      <button class="button button-outline-light footer-copy-email" type="button" data-copy-email={site.email}>
-        <Copy aria-hidden="true" size={18} /> <span class="footer-copy-status" aria-live="polite" aria-atomic="true">Copy email</span>
-      </button>
-      <a class="button button-outline-light" href="/resume/">
-        <FileText aria-hidden="true" size={18} /> View resume
-      </a>
-    </div>
-  </div>
+  )}
   <div class="footer-meta">
     <span>Kevin Astuhuaman | Bay Area</span>
     <nav aria-label="Supporting links">
