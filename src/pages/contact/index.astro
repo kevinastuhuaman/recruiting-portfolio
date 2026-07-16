@@ -39,22 +39,24 @@ import { links, site } from "../../data/site.js";
     const copyStatus = document.querySelector<HTMLElement>("[data-contact-copy-status]");
     let resetTimer: number | undefined;
 
-    copyButton?.addEventListener("click", async () => {
-      const email = copyButton.dataset.contactCopyEmail;
-      if (!email) return;
-      try {
-        await navigator.clipboard.writeText(email);
-        copyButton.dataset.copied = "true";
-        if (copyStatus) copyStatus.textContent = "Email copied";
-        window.clearTimeout(resetTimer);
-        resetTimer = window.setTimeout(() => {
-          delete copyButton.dataset.copied;
-          if (copyStatus) copyStatus.textContent = "Copy email";
-        }, 2200);
-      } catch {
-        window.prompt("Copy Kevin's email", email);
-      }
-    });
+    if (copyButton) {
+      copyButton.addEventListener("click", async () => {
+        const email = copyButton.dataset.contactCopyEmail;
+        if (!email) return;
+        try {
+          await navigator.clipboard.writeText(email);
+          copyButton.dataset.copied = "true";
+          if (copyStatus) copyStatus.textContent = "Email copied";
+          window.clearTimeout(resetTimer);
+          resetTimer = window.setTimeout(() => {
+            delete copyButton.dataset.copied;
+            if (copyStatus) copyStatus.textContent = "Copy email";
+          }, 2200);
+        } catch {
+          window.prompt("Copy Kevin's email", email);
+        }
+      });
+    }
   </script>
 </BaseLayout>
 
