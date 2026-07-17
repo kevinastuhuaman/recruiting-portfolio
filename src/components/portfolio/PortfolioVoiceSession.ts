@@ -200,6 +200,7 @@ export class PortfolioVoiceSession {
       return;
     }
     if (type === 'response.done') {
+      this.opts.onActivityChange(null);
       const response = asRecord(event.response);
       const usage = asRecord(response.usage);
       const inputDetails = asRecord(usage.input_token_details);

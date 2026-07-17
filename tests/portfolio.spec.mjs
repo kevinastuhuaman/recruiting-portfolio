@@ -1306,8 +1306,12 @@ test("Voice is opt-in, requests one microphone, creates one peer, shows no trans
   await expect(page.getByText(/Portfolio lookup · searching approved sources/i)).toBeVisible();
   await page.evaluate(() => window.__voiceDataChannel.onmessage?.({ data: JSON.stringify({ type: "response.output_audio.delta", delta: "audio" }) }));
   await expect(page.getByText("Speaking", { exact: true })).toBeVisible();
+  await expect(page.getByText(/Portfolio lookup · searching approved sources/i)).toHaveCount(0);
   await page.evaluate(() => window.__voiceDataChannel.onmessage?.({ data: JSON.stringify({ type: "response.output_audio.done" }) }));
   await expect(page.getByText("Listening", { exact: true })).toBeVisible();
+  await expect(page.getByText(/Portfolio lookup · searching approved sources/i)).toHaveCount(0);
+  await page.evaluate(() => window.__voiceDataChannel.onmessage?.({ data: JSON.stringify({ type: "response.function_call_arguments.done", name: "lookup_portfolio" }) }));
+  await expect(page.getByText(/Portfolio lookup · searching approved sources/i)).toBeVisible();
   await page.evaluate(() => window.__voiceDataChannel.onmessage?.({ data: JSON.stringify({
     type: "response.done",
     response: {
@@ -1317,6 +1321,7 @@ test("Voice is opt-in, requests one microphone, creates one peer, shows no trans
       },
     },
   }) }));
+  await expect(page.getByText(/Portfolio lookup · searching approved sources/i)).toHaveCount(0);
   await page.evaluate(() => {
     window.__voicePeer.connectionState = "disconnected";
     window.__voicePeer.onconnectionstatechange?.();
