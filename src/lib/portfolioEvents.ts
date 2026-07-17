@@ -25,6 +25,48 @@ const PORTFOLIO_EVENTS = new Set<PortfolioEvent>([
   "portfolio_voice_ended", "portfolio_voice_failed", "portfolio_voice_started", "portfolio_voice_state_changed",
 ]);
 
+export function portfolioPrivacySignalEnabled() {
+  if (typeof window === "undefined" || typeof navigator === "undefined") return false;
+  const navigatorWithGpc = navigator as Navigator & { globalPrivacyControl?: boolean };
+  const windowWithDnt = window as Window & { doNotTrack?: string };
+  return navigatorWithGpc.globalPrivacyControl === true || navigator.doNotTrack === "1" || windowWithDnt.doNotTrack === "1";
+}
+
+function isQueuedPortfolioEvent(value: unknown): value is QueuedPortfolioEvent {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+  const item = value as Partial<QueuedPortfolioEvent>;
+  return Boolean(
+    item.event
+    && PORTFOLIO_EVENTS.has(item.event)
+    && item.properties
+    && typeof item.properties === "object"
+    && !Array.isArray(item.properties),
+  );
+}
+
+function initializePortfolioEventQueue() {
+  if (window.__portfolioEventQueue) {
+    const queue = window.__portfolioEventQueue.filter(isQueuedPortfolioEvent);
+    window.__portfolioEventQueue = queue;
+    return queue;
+  }
+
+  let queue: QueuedPortfolioEvent[] = [];
+  try {
+    const stored = JSON.parse(sessionStorage.getItem(EVENT_QUEUE_KEY) ?? "[]");
+    if (Array.isArray(stored)) queue = stored.filter(isQueuedPortfolioEvent);
+  } catch {
+    // Storage is optional and malformed data is discarded.
+  }
+  window.__portfolioEventQueue = queue;
+  return queue;
+}
+
+function clearPortfolioEventQueue() {
+  window.__portfolioEventQueue = [];
+  try { sessionStorage.removeItem(EVENT_QUEUE_KEY); } catch { /* storage is optional */ }
+}
+
 declare global {
   interface Window {
     __portfolioAnalyticsCapture?: (event: PortfolioEvent, properties: SafeProperties) => void;
@@ -54,11 +96,15 @@ export function classifyPortfolioInteraction(element: Element) {
 
 export function capturePortfolioEvent(event: PortfolioEvent, properties: SafeProperties = {}) {
   if (typeof window === "undefined") return;
+  if (portfolioPrivacySignalEnabled()) {
+    clearPortfolioEventQueue();
+    return;
+  }
   if (window.__portfolioAnalyticsCapture) {
     window.__portfolioAnalyticsCapture(event, properties);
     return;
   }
-  const queue = (window.__portfolioEventQueue ??= []);
+  const queue = initializePortfolioEventQueue();
   queue.push({ event, properties });
   try {
     sessionStorage.setItem(EVENT_QUEUE_KEY, JSON.stringify(queue));
@@ -68,19 +114,13 @@ export function capturePortfolioEvent(event: PortfolioEvent, properties: SafePro
 }
 
 export function drainPortfolioEvents(handler: (event: PortfolioEvent, properties: SafeProperties) => void) {
-  let queue = window.__portfolioEventQueue ?? [];
-  if (queue.length === 0) {
-    try {
-      const stored = JSON.parse(sessionStorage.getItem(EVENT_QUEUE_KEY) ?? "[]");
-      if (Array.isArray(stored)) queue = stored as QueuedPortfolioEvent[];
-    } catch {
-      queue = [];
-    }
+  if (portfolioPrivacySignalEnabled()) {
+    clearPortfolioEventQueue();
+    return;
   }
-  window.__portfolioEventQueue = [];
-  try { sessionStorage.removeItem(EVENT_QUEUE_KEY); } catch { /* storage is optional */ }
+  const queue = initializePortfolioEventQueue();
+  clearPortfolioEventQueue();
   for (const item of queue) {
-    if (!item || !PORTFOLIO_EVENTS.has(item.event) || !item.properties || typeof item.properties !== "object" || Array.isArray(item.properties)) continue;
     handler(item.event, item.properties);
   }
 }

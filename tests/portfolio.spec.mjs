@@ -812,6 +812,46 @@ test("analytics stay inert when the portfolio project key is absent", async ({ p
   expect(html).not.toContain("phc_");
 });
 
+test("early analytics events survive fast cross-page navigation", async ({ page }) => {
+  test.skip(Boolean(process.env.PUBLIC_POSTHOG_KEY), "requires the persisted early-event queue before PostHog drains it");
+  await page.goto("/");
+  await Promise.all([
+    page.waitForURL("**/ask/"),
+    page.locator('a[href="/ask/"]').first().evaluate((link) => link.click()),
+  ]);
+  await page.locator('a[href="/resume/"]').first().evaluate((link) => {
+    link.addEventListener("click", (event) => event.preventDefault(), { once: true });
+    link.click();
+  });
+
+  const queue = await page.evaluate(() => JSON.parse(sessionStorage.getItem("portfolio_event_queue") ?? "[]"));
+  expect(queue.map((item) => item.event)).toEqual([
+    "portfolio_assistant_opened",
+    "portfolio_contact_action",
+  ]);
+  expect(queue[1].properties).toEqual({ action: "resume" });
+});
+
+test("privacy signals prevent and clear the early analytics queue", async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "globalPrivacyControl", {
+      configurable: true,
+      get: () => true,
+    });
+    sessionStorage.setItem("portfolio_event_queue", JSON.stringify([
+      { event: "portfolio_assistant_opened", properties: { source: "stale" } },
+    ]));
+  });
+  await page.goto("/");
+  await page.locator('a[href="/ask/"]').first().evaluate((link) => {
+    link.addEventListener("click", (event) => event.preventDefault(), { once: true });
+    link.click();
+  });
+
+  expect(await page.evaluate(() => sessionStorage.getItem("portfolio_event_queue"))).toBeNull();
+  expect(await page.evaluate(() => window.__portfolioEventQueue ?? [])).toEqual([]);
+});
+
 test("resume print control works under the site CSP", async ({ page }) => {
   await page.addInitScript(() => {
     window.print = () => window.sessionStorage.setItem("portfolio_print_called", "true");

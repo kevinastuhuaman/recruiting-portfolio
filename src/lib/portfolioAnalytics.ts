@@ -1,5 +1,10 @@
 import posthog, { type CaptureResult } from "posthog-js";
-import { classifyPortfolioInteraction, drainPortfolioEvents, type SafeProperties } from "./portfolioEvents";
+import {
+  classifyPortfolioInteraction,
+  drainPortfolioEvents,
+  portfolioPrivacySignalEnabled,
+  type SafeProperties,
+} from "./portfolioEvents";
 
 const POSTHOG_DEFAULT_HOST = "https://us.i.posthog.com";
 const REPLAY_SAMPLE_PERCENT = 10;
@@ -21,12 +26,6 @@ let sessionId = "";
 let visibleStartedAt = 0;
 let visibleDurationMs = 0;
 let engagementFinalized = false;
-
-function privacySignalEnabled() {
-  const navigatorWithGpc = navigator as Navigator & { globalPrivacyControl?: boolean };
-  const windowWithDnt = window as Window & { doNotTrack?: string };
-  return navigatorWithGpc.globalPrivacyControl === true || navigator.doNotTrack === "1" || windowWithDnt.doNotTrack === "1";
-}
 
 function randomId() {
   return globalThis.crypto?.randomUUID?.() ?? `portfolio-${Math.random().toString(36).slice(2)}`;
@@ -121,7 +120,7 @@ function shouldRecordReplay(id: string, pathname: string) {
 }
 
 function capture(event: string, properties: SafeProperties = {}) {
-  if (!initialized || privacySignalEnabled()) return;
+  if (!initialized || portfolioPrivacySignalEnabled()) return;
   try {
     posthog.capture(event, {
       ...sanitizeProperties(properties),
@@ -184,7 +183,7 @@ export function initializePortfolioAnalytics(
   host = POSTHOG_DEFAULT_HOST,
   allowedHost = "portfolio.kevinastuhuaman.com",
 ) {
-  if (initialized || window.location.hostname !== allowedHost || !key?.startsWith("phc_") || privacySignalEnabled()) return;
+  if (initialized || window.location.hostname !== allowedHost || !key?.startsWith("phc_") || portfolioPrivacySignalEnabled()) return;
 
   const isLocalVerification = allowedHost === "127.0.0.1" || allowedHost === "localhost";
 
