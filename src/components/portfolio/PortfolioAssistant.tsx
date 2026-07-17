@@ -94,6 +94,7 @@ export default function PortfolioAssistant() {
   const analyticsStartedRef = useRef(false);
   const chatMessagesRef = useRef<HTMLDivElement | null>(null);
   const stickToBottomRef = useRef(true);
+  const anchorCompletedAnswerRef = useRef(false);
   const chatTabRef = useRef<HTMLButtonElement | null>(null);
   const voiceTabRef = useRef<HTMLButtonElement | null>(null);
 
@@ -113,6 +114,33 @@ export default function PortfolioAssistant() {
     });
     return () => cancelAnimationFrame(frame);
   }, [messages, loading, status]);
+
+  useEffect(() => {
+    if (loading || !anchorCompletedAnswerRef.current) return;
+    let secondFrame = 0;
+    const firstFrame = requestAnimationFrame(() => {
+      secondFrame = requestAnimationFrame(() => {
+        const container = chatMessagesRef.current;
+        const answers = container?.querySelectorAll<HTMLElement>('.chat-message.assistant');
+        const answer = answers?.item((answers?.length ?? 1) - 1);
+        if (!container || !answer) return;
+        anchorCompletedAnswerRef.current = false;
+        if (answer.getBoundingClientRect().height < container.clientHeight * 0.72) {
+          stickToBottomRef.current = true;
+          return;
+        }
+        const activity = answer.previousElementSibling;
+        const anchor = activity instanceof HTMLElement && activity.classList.contains('chat-reasoning') ? activity : answer;
+        const top = container.scrollTop + anchor.getBoundingClientRect().top - container.getBoundingClientRect().top - 8;
+        container.scrollTo({ top: Math.max(0, top), behavior: 'auto' });
+        stickToBottomRef.current = false;
+      });
+    });
+    return () => {
+      cancelAnimationFrame(firstFrame);
+      if (secondFrame) cancelAnimationFrame(secondFrame);
+    };
+  }, [loading, messages]);
 
   const commitAssistantDelta = (text: string, citations = pendingCitationsRef.current) => {
     setMessages((current) => {
@@ -287,6 +315,8 @@ export default function PortfolioAssistant() {
             receivedDone = true;
             if (data.fallback === true) recoveredFallback = true;
             completeActivities();
+            anchorCompletedAnswerRef.current = true;
+            stickToBottomRef.current = false;
           }
         }
         if (done) break;

@@ -907,6 +907,11 @@ test("Chat resumes autoscroll when a visitor asks a new question", async ({ page
   await composer.fill("First question");
   await composer.press("Enter");
   await expect(page.getByText(/Long answer/)).toBeVisible();
+  await expect.poll(() => page.locator(".chat-messages").evaluate((container) => {
+    const answer = container.querySelector(".chat-message.assistant:last-of-type");
+    if (!(answer instanceof HTMLElement)) return Number.POSITIVE_INFINITY;
+    return Math.abs(answer.getBoundingClientRect().top - container.getBoundingClientRect().top);
+  }), { message: "a completed long answer settles at its beginning" }).toBeLessThan(90);
   await page.locator(".chat-messages").evaluate((element) => {
     element.scrollTop = 0;
     element.dispatchEvent(new Event("scroll", { bubbles: true }));
@@ -917,6 +922,12 @@ test("Chat resumes autoscroll when a visitor asks a new question", async ({ page
   await expect.poll(() => page.locator(".chat-messages").evaluate((element) => (
     element.scrollHeight - element.scrollTop - element.clientHeight
   ))).toBeLessThan(80);
+});
+
+test("privacy copy describes safely formatted Chat answers", async ({ page }) => {
+  await page.goto("/privacy/");
+  await expect(page.getByText(/safely formatted answer/i)).toBeVisible();
+  await expect(page.getByText(/plain-text answer/i)).toHaveCount(0);
 });
 
 test("resume print control works under the site CSP", async ({ page }) => {
