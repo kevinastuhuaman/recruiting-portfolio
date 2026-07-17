@@ -1,5 +1,11 @@
 import posthog, { type CaptureResult } from "posthog-js";
-import { classifyPortfolioInteraction, drainPortfolioEvents, type SafeProperties } from "./portfolioEvents";
+import {
+  classifyPortfolioInteraction,
+  clearPortfolioEventQueue,
+  drainPortfolioEvents,
+  portfolioPrivacySignalEnabled,
+  type SafeProperties,
+} from "./portfolioEvents";
 
 const POSTHOG_DEFAULT_HOST = "https://us.i.posthog.com";
 const REPLAY_SAMPLE_PERCENT = 10;
@@ -18,14 +24,9 @@ const SECTION_IDS = new Set([
 
 let initialized = false;
 let sessionId = "";
-let pageStartedAt = 0;
-let engagementSent = false;
-
-function privacySignalEnabled() {
-  const navigatorWithGpc = navigator as Navigator & { globalPrivacyControl?: boolean };
-  const windowWithDnt = window as Window & { doNotTrack?: string };
-  return navigatorWithGpc.globalPrivacyControl === true || navigator.doNotTrack === "1" || windowWithDnt.doNotTrack === "1";
-}
+let visibleStartedAt = 0;
+let visibleDurationMs = 0;
+let engagementFinalized = false;
 
 function randomId() {
   return globalThis.crypto?.randomUUID?.() ?? `portfolio-${Math.random().toString(36).slice(2)}`;
@@ -65,7 +66,7 @@ function durationBucket(durationMs: number) {
   if (durationMs < 10_000) return "under_10s";
   if (durationMs < 30_000) return "10_to_29s";
   if (durationMs < 60_000) return "30_to_59s";
-  if (durationMs < 180_000) return "1_to_2m";
+  if (durationMs < 180_000) return "1_to_3m";
   return "3m_plus";
 }
 
@@ -120,12 +121,16 @@ function shouldRecordReplay(id: string, pathname: string) {
 }
 
 function capture(event: string, properties: SafeProperties = {}) {
-  if (!initialized || privacySignalEnabled()) return;
+  if (!initialized || portfolioPrivacySignalEnabled()) return;
   try {
+    const sanitizedProperties = sanitizeProperties(properties);
+    const pagePath = typeof sanitizedProperties.page_path === "string"
+      ? safePath(sanitizedProperties.page_path)
+      : safePath();
     posthog.capture(event, {
-      ...sanitizeProperties(properties),
+      ...sanitizedProperties,
       $process_person_profile: false,
-      page_path: safePath(),
+      page_path: pagePath,
       portfolio_session_id: sessionId,
       environment: "production",
       product: "recruiting_portfolio",
@@ -137,11 +142,22 @@ function capture(event: string, properties: SafeProperties = {}) {
 }
 
 function sendEngagement() {
-  if (engagementSent || !pageStartedAt) return;
-  engagementSent = true;
+  if (engagementFinalized || (!visibleStartedAt && !visibleDurationMs)) return;
+  if (visibleStartedAt) visibleDurationMs += Math.max(0, performance.now() - visibleStartedAt);
+  visibleStartedAt = 0;
+  engagementFinalized = true;
   capture("portfolio_page_engaged", {
-    duration_bucket: durationBucket(Math.max(0, performance.now() - pageStartedAt)),
+    duration_bucket: durationBucket(visibleDurationMs),
   });
+}
+
+function updateVisibleTime() {
+  if (document.visibilityState === "hidden") {
+    if (visibleStartedAt) visibleDurationMs += Math.max(0, performance.now() - visibleStartedAt);
+    visibleStartedAt = 0;
+    return;
+  }
+  visibleStartedAt = performance.now();
 }
 
 function markAllowlistedInteractions() {
@@ -172,12 +188,19 @@ export function initializePortfolioAnalytics(
   host = POSTHOG_DEFAULT_HOST,
   allowedHost = "portfolio.kevinastuhuaman.com",
 ) {
-  if (initialized || window.location.hostname !== allowedHost || !key?.startsWith("phc_") || privacySignalEnabled()) return;
+  if (initialized || window.location.hostname !== allowedHost) return;
+  if (portfolioPrivacySignalEnabled()) {
+    clearPortfolioEventQueue();
+    return;
+  }
+  if (!key?.startsWith("phc_")) return;
 
   const isLocalVerification = allowedHost === "127.0.0.1" || allowedHost === "localhost";
 
   sessionId = getSessionId();
-  pageStartedAt = performance.now();
+  visibleStartedAt = document.visibilityState === "hidden" ? 0 : performance.now();
+  visibleDurationMs = 0;
+  engagementFinalized = false;
   markAllowlistedInteractions();
 
   posthog.init(key, {
@@ -242,9 +265,7 @@ export function initializePortfolioAnalytics(
         if (classified) capture(classified.event, classified.properties);
       }, { capture: true });
       window.addEventListener("pagehide", sendEngagement, { once: true });
-      document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === "hidden") sendEngagement();
-      });
+      document.addEventListener("visibilitychange", updateVisibleTime);
     },
   });
 }

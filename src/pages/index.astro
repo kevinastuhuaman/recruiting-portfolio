@@ -71,7 +71,7 @@ const paypalClaim = claimsById["paypal-detection"];
           <a class="text-link" href={trackly.href}>Explore Trackly <ArrowUpRight aria-hidden="true" size={17} /></a>
         </div>
         <div class="trackly-proof">
-          <img src={trackly.image} width="1440" height="1000" loading="lazy" alt="Trackly homepage showing direct career-page monitoring" />
+          <img src={trackly.image} width="1440" height="1000" loading="eager" decoding="async" alt="Trackly homepage showing direct career-page monitoring" />
           <ol class="state-flow" aria-label="Trackly product decision sequence">
             <li><span>Problem</span><strong>Strong roles appeared before aggregators.</strong></li>
             <li><span>Decision</span><strong>Monitor the source: company career pages.</strong></li>
@@ -118,7 +118,7 @@ const paypalClaim = claimsById["paypal-detection"];
         <a class="button button-primary" href="/lab/">Explore the AI Product Lab <ArrowUpRight aria-hidden="true" size={17} /></a>
       </div>
       <a class="lab-teaser-media" href="/lab/" aria-label="Open the AI Product Lab">
-        <img src="/assets/enterprise-ai-interface-kit-preview.png" width="1200" height="630" loading="lazy" alt="Enterprise AI Interface Kit preview" />
+        <img src="/assets/enterprise-ai-interface-kit-preview.png" width="1200" height="630" loading="eager" decoding="async" alt="Enterprise AI Interface Kit preview" />
         <span><strong>07</strong> interactive artifacts</span>
       </a>
     </section>

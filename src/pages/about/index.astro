@@ -52,5 +52,9 @@ import { links } from "../../data/site.js";
   .about-copy h3 { margin: 46px 0 14px; }
   .about-copy p { color: #44443f; font-size: 1.05rem; }
   .about-copy .button-row { margin-top: 40px; }
-  @media (max-width: 760px) { .about-layout { grid-template-columns: 1fr; } figure { max-width: 440px; } }
+  @media (max-width: 760px) {
+    .about-layout { grid-template-columns: 1fr; }
+    figure { width: min(100%, 320px); margin-inline: auto; }
+    figure img { aspect-ratio: 1; object-position: center 22%; }
+  }
 </style>

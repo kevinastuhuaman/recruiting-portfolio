@@ -36,8 +36,7 @@ for (const route of routes) {
     expect(() => JSON.parse(jsonLd ?? "")).not.toThrow();
 
     const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
-    const blocking = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact ?? ""));
-    expect(blocking, JSON.stringify(blocking, null, 2)).toEqual([]);
+    expect(results.violations, JSON.stringify(results.violations, null, 2)).toEqual([]);
 
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
     expect(overflow).toBe(false);
@@ -249,10 +248,16 @@ test("email copy failure opens the manual-copy fallback without navigating", asy
   await expect(page.locator(".footer-copy-status")).toHaveText("Copy email");
 });
 
-test("required responsive widths avoid horizontal overflow", async ({ page }) => {
+test("required responsive widths avoid horizontal overflow across the portfolio", async ({ page }) => {
+  test.setTimeout(120_000);
+  const responsiveRoutes = [
+    "/", "/ask/", "/resume/", "/contact/", "/about/", "/lab/", "/proof/",
+    "/projects/trackly/", "/projects/paypal-ai-observability/",
+    "/projects/berkeley-mobagel-ai-gtm/", "/projects/smb-fintech-bcp-credicorp/",
+  ];
   for (const width of [360, 390, 430, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: width < 768 ? 900 : 1000 });
-    for (const path of ["/", "/ask/"]) {
+    for (const path of responsiveRoutes) {
       await page.goto(path);
       expect(await page.evaluate(() => document.documentElement.scrollWidth), `${path} at ${width}px`).toBeLessThanOrEqual(width);
     }
@@ -270,6 +275,23 @@ test("mobile resume stays readable instead of shrinking into a desktop sheet", a
   await page.locator(".resume-role").first().scrollIntoViewIfNeeded();
   await expect(page.locator(".resume-role").first()).toBeInViewport();
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+});
+
+test("resume contact action copies the email instead of opening a composer", async ({ page }) => {
+  await page.goto("/resume/");
+  await page.evaluate(() => {
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText: async (value) => window.sessionStorage.setItem("resume-copied-email", value) },
+    });
+  });
+  const copyButton = page.locator(".resume-actions [data-resume-copy-email]");
+  await expect(copyButton).toHaveAccessibleName("Copy email");
+  await expect(copyButton).toHaveClass(/ph-no-capture/);
+  await copyButton.click();
+  await expect(copyButton).toContainText("Email copied");
+  await expect.poll(() => page.evaluate(() => window.sessionStorage.getItem("resume-copied-email"))).toBe("kevin.astuhuaman@berkeley.edu");
+  await expect(page.locator('.resume-actions a[href^="mailto:"]')).toHaveCount(0);
 });
 
 test("lab previews show complete interfaces without cropped or empty media", async ({ page }) => {
@@ -292,7 +314,7 @@ test("Ask renders a useful first impression before client hydration", async ({ b
 
   await expect(page.getByRole("heading", { name: "Ask anything about Kevin." }).first()).toBeVisible();
   await expect(page.getByText("Good starting points")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Five answers without the model." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Start here." })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   await context.close();
 });
@@ -365,10 +387,13 @@ test("AI Product Lab contains the complete seven-artifact collection", async ({ 
 test("mobile anchor navigation closes the open menu", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
+  await expect(page.locator(".mobile-nav summary")).toHaveAttribute("aria-label", "Open navigation");
   await page.locator(".mobile-nav summary").click();
   await expect(page.locator(".mobile-nav")).toHaveAttribute("open", "");
+  await expect(page.locator(".mobile-nav summary")).toHaveAttribute("aria-label", "Close navigation");
   await page.locator('.mobile-nav a[href="/#work"]').click();
   await expect(page.locator(".mobile-nav")).not.toHaveAttribute("open", "");
+  await expect(page.locator(".mobile-nav summary")).toHaveAttribute("aria-label", "Open navigation");
   await expect(page.locator("#work")).toBeVisible();
 });
 
@@ -397,11 +422,11 @@ test("the complete recruiting path works without JavaScript", async ({ browser }
     await page.goto("/contact/");
     await expect(page.getByRole("link", { name: /LinkedIn/i }).first()).toBeVisible();
     await page.goto("/ask/");
-    await expect(page.getByRole("heading", { name: "Five answers without the model." })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Start here." })).toBeVisible();
     await expect(page.getByText(/Interactive questions require JavaScript/i)).toBeVisible();
-    await expect(page.getByText(/These answers stay available if JavaScript, Chat, Voice, or the backend is unavailable/i)).toBeVisible();
+    await expect(page.getByText(/common questions, answered directly from Kevin's portfolio/i)).toBeVisible();
     await expect(page.locator(".assistant-shell")).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Ask anything about Kevin." }).last()).toBeVisible();
+    await expect(page.getByRole("heading", { name: "What are you curious about?" })).toBeVisible();
   } finally {
     await context.close();
   }
@@ -413,8 +438,7 @@ test("AI Investigation Workbench exposes plan, evidence, uncertainty, and human 
   const workbench = page.locator("[data-workbench]");
   const scanWorkbench = async () => {
     const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
-    const blocking = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact ?? ""));
-    expect(blocking, JSON.stringify(blocking, null, 2)).toEqual([]);
+    expect(results.violations, JSON.stringify(results.violations, null, 2)).toEqual([]);
   };
 
   await workbench.getByRole("button", { name: "Slow authentication" }).click();
@@ -788,6 +812,81 @@ test("analytics stay inert when the portfolio project key is absent", async ({ p
   expect(html).not.toContain("phc_");
 });
 
+test("early analytics events survive fast cross-page navigation", async ({ page }) => {
+  test.skip(Boolean(process.env.PUBLIC_POSTHOG_KEY), "requires the persisted early-event queue before PostHog drains it");
+  await page.goto("/");
+  await Promise.all([
+    page.waitForURL("**/ask/"),
+    page.locator('a[href="/ask/"]').first().evaluate((link) => link.click()),
+  ]);
+  await page.locator('a[href="/resume/"]').first().evaluate((link) => {
+    link.addEventListener("click", (event) => event.preventDefault(), { once: true });
+    link.click();
+  });
+
+  const queue = await page.evaluate(() => JSON.parse(sessionStorage.getItem("portfolio_event_queue") ?? "[]"));
+  expect(queue.map((item) => item.event)).toEqual([
+    "portfolio_assistant_opened",
+    "portfolio_contact_action",
+  ]);
+  expect(queue.map((item) => item.pagePath)).toEqual(["/", "/ask/"]);
+  expect(queue[1].properties).toEqual({ action: "resume" });
+});
+
+test("privacy signals prevent and clear the early analytics queue", async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "globalPrivacyControl", {
+      configurable: true,
+      get: () => true,
+    });
+    sessionStorage.setItem("portfolio_event_queue", JSON.stringify([
+      { event: "portfolio_assistant_opened", properties: { source: "stale" } },
+    ]));
+  });
+  await page.goto("/");
+  expect(await page.evaluate(() => sessionStorage.getItem("portfolio_event_queue"))).toBeNull();
+  await page.locator('a[href="/ask/"]').first().evaluate((link) => {
+    link.addEventListener("click", (event) => event.preventDefault(), { once: true });
+    link.click();
+  });
+
+  expect(await page.evaluate(() => sessionStorage.getItem("portfolio_event_queue"))).toBeNull();
+  expect(await page.evaluate(() => window.__portfolioEventQueue ?? [])).toEqual([]);
+});
+
+test("Chat resumes autoscroll when a visitor asks a new question", async ({ page }) => {
+  let requestCount = 0;
+  await page.route("https://api.portfolio.kevinastuhuaman.com/api/portfolio/chat", async (route) => {
+    requestCount += 1;
+    const answer = requestCount === 1 ? "Long answer. ".repeat(240) : "Second answer.";
+    await route.fulfill({
+      status: 200,
+      contentType: "text/event-stream",
+      body: [
+        `event: meta\ndata: {"sessionId":"ses_44444444444444444444444444444444","turnId":"turn_${String(requestCount).repeat(32)}"}\n\n`,
+        `event: delta\ndata: ${JSON.stringify({ text: answer })}\n\n`,
+        'event: citations\ndata: {"citations":[]}\n\n',
+        'event: done\ndata: {}\n\n',
+      ].join(""),
+    });
+  });
+  await page.goto("/ask/");
+  const composer = page.getByPlaceholder("Ask anything about Kevin");
+  await composer.fill("First question");
+  await composer.press("Enter");
+  await expect(page.getByText(/Long answer/)).toBeVisible();
+  await page.locator(".chat-messages").evaluate((element) => {
+    element.scrollTop = 0;
+    element.dispatchEvent(new Event("scroll", { bubbles: true }));
+  });
+  await composer.fill("Second question");
+  await composer.press("Enter");
+  await expect(page.getByText("Second answer.", { exact: true })).toBeVisible();
+  await expect.poll(() => page.locator(".chat-messages").evaluate((element) => (
+    element.scrollHeight - element.scrollTop - element.clientHeight
+  ))).toBeLessThan(80);
+});
+
 test("resume print control works under the site CSP", async ({ page }) => {
   await page.addInitScript(() => {
     window.print = () => window.sessionStorage.setItem("portfolio_print_called", "true");
@@ -808,7 +907,7 @@ test("grounded Chat streams plain text and server-controlled citations", async (
         'event: status\ndata: {"phase":"synthesizing"}\n\n',
         'event: delta\ndata: {"text":"Kevin chose direct career pages "}\n\n',
         'event: delta\ndata: {"text":"as Trackly\'s source of earlier signal."}\n\n',
-        'event: citations\ndata: {"citations":[{"id":"trackly","title":"Trackly case study","url":"https://portfolio.kevinastuhuaman.com/projects/trackly/"}]}\n\n',
+        'event: citations\ndata: {"citations":[{"id":"trackly","title":"Trackly case study","url":"https://portfolio.kevinastuhuaman.com/projects/trackly/"},{"title":"Unsafe source","url":"javascript:alert(1)"}]}\n\n',
         'event: done\ndata: {"fallback":false}\n\n',
       ].join(""),
     });
@@ -818,7 +917,11 @@ test("grounded Chat streams plain text and server-controlled citations", async (
   await expect(page.getByRole("status")).toHaveText("Ready");
   await expect(page.getByText(/direct career pages/i)).toBeVisible();
   await expect(page.getByRole("link", { name: "Trackly case study" })).toHaveAttribute("href", "https://portfolio.kevinastuhuaman.com/projects/trackly/");
+  await expect(page.getByRole("link", { name: "Unsafe source" })).toHaveCount(0);
+  await expect(page.locator(".chat-message.assistant").getByText("Sources")).toBeVisible();
   await expect(page.getByText("Was this helpful?")).toBeVisible();
+  const results = await new AxeBuilder({ page }).analyze();
+  expect(results.violations, JSON.stringify(results.violations, null, 2)).toEqual([]);
 });
 
 test("Chat preserves the server session and records turn-only feedback", async ({ page }) => {
@@ -908,9 +1011,12 @@ test("Chat uses real activity phases and natural keyboard submission", async ({ 
             retrieving() { controller.enqueue(encoder.encode('event: status\ndata: {"phase":"retrieving"}\n\n')); },
             synthesizing() { controller.enqueue(encoder.encode('event: status\ndata: {"phase":"synthesizing"}\n\n')); },
             delta() { controller.enqueue(encoder.encode('event: delta\ndata: {"text":"Kevin built Trackly"}\n\n')); },
+            citations() {
+              controller.enqueue(encoder.encode('event: citations\ndata: {"citations":[{"title":"Trackly case study","url":"https://portfolio.kevinastuhuaman.com/projects/trackly/"}]}\n\n'));
+            },
             done() {
-            controller.enqueue(encoder.encode('event: citations\ndata: {"citations":[]}\n\nevent: done\ndata: {}\n\n'));
-            controller.close();
+              controller.enqueue(encoder.encode('event: done\ndata: {}\n\n'));
+              controller.close();
             },
           };
         },
@@ -922,8 +1028,8 @@ test("Chat uses real activity phases and natural keyboard submission", async ({ 
   const composer = page.getByPlaceholder("Ask anything about Kevin");
   await composer.fill("What did Kevin build?");
   await composer.press("Enter");
-  await expect(page.getByRole("status")).toHaveText("Searching Kevin's portfolio");
-  await expect(page.locator(".chat-activity")).toContainText("Searching Kevin's portfolio");
+  await expect(page.getByRole("status")).toHaveText("Considering your question");
+  await expect(page.locator(".chat-activity")).toContainText("Considering your question");
   await page.evaluate(() => window.__portfolioChatStream.meta());
   await page.evaluate(() => window.__portfolioChatStream.retrieving());
   await expect(page.getByRole("status")).toHaveText("Looking through Kevin's portfolio");
@@ -934,8 +1040,12 @@ test("Chat uses real activity phases and natural keyboard submission", async ({ 
   await expect(page.getByRole("status")).toHaveText("Writing answer");
   await expect(page.getByText("Kevin built Trackly", { exact: true })).toBeVisible();
   await expect(page.locator(".chat-activity")).toHaveCount(0);
+  await page.evaluate(() => window.__portfolioChatStream.citations());
+  await expect(page.getByRole("link", { name: "Trackly case study" })).toBeVisible();
+  await page.waitForTimeout(50);
   await page.evaluate(() => window.__portfolioChatStream.done());
   await expect(page.getByRole("status")).toHaveText("Ready");
+  await expect(page.getByRole("link", { name: "Trackly case study" })).toBeVisible();
 
   await composer.fill("First line");
   await composer.press("Shift+Enter");
@@ -949,6 +1059,15 @@ test("Chat uses real activity phases and natural keyboard submission", async ({ 
   });
   await expect(composer).toHaveValue("Composing text");
   await expect(page.locator(".chat-message.user")).toHaveCount(1);
+
+  const chatTab = page.getByRole("tab", { name: "Chat" });
+  await chatTab.focus();
+  await chatTab.press("ArrowRight");
+  await expect(page.getByRole("tab", { name: "Voice" })).toBeFocused();
+  await expect(page.getByRole("tab", { name: "Voice" })).toHaveAttribute("aria-selected", "true");
+  await page.getByRole("tab", { name: "Voice" }).press("Home");
+  await expect(chatTab).toBeFocused();
+  await expect(chatTab).toHaveAttribute("aria-selected", "true");
 });
 
 test("Ask page removes artificial boundary copy and keeps concise AI disclosure", async ({ page }) => {
@@ -960,7 +1079,9 @@ test("Ask page removes artificial boundary copy and keeps concise AI disclosure"
   await expect(page.getByText("Voice never impersonates Kevin", { exact: true })).toHaveCount(0);
 
   await page.getByRole("tab", { name: /Voice/ }).click();
-  await expect(page.getByText(/AI voice assistant.*public portfolio.*no transcript is retained/i)).toBeVisible();
+  await expect(page.getByText(/Nothing starts until you tap the button, and the call is not recorded/i)).toBeVisible();
+  const results = await new AxeBuilder({ page }).analyze();
+  expect(results.violations, JSON.stringify(results.violations, null, 2)).toEqual([]);
 });
 
 test("malformed Chat stream resets its draft and recovers with the deterministic answer", async ({ page }) => {
@@ -1110,7 +1231,10 @@ test("Voice is opt-in, requests one microphone, creates one peer, shows no trans
       body: JSON.stringify({
         sources: thisClose === 1
           ? [{ title: "Old call source", url: "https://portfolio.kevinastuhuaman.com/projects/paypal-ai-observability/" }]
-          : [{ title: "Current call source", url: "https://portfolio.kevinastuhuaman.com/projects/trackly/" }],
+          : [
+              { title: "Current call source", url: "https://portfolio.kevinastuhuaman.com/projects/trackly/" },
+              { title: "Unsafe source", url: "https://malicious.example/steal" },
+            ],
       }),
     });
   });
@@ -1118,7 +1242,7 @@ test("Voice is opt-in, requests one microphone, creates one peer, shows no trans
   await page.goto("/ask/");
   await page.getByRole("tab", { name: /Voice/ }).click();
   expect(await page.evaluate(() => window.__voiceCounters.mic)).toBe(0);
-  await expect(page.getByText(/AI voice assistant.*public portfolio.*no transcript is retained/i)).toBeVisible();
+  await expect(page.getByText(/Nothing starts until you tap the button, and the call is not recorded/i)).toBeVisible();
   await expect(page.locator(".portfolio-voice-orb-intro")).toHaveCSS("width", "260px");
   await expect(page.locator(".portfolio-voice-orb-intro")).toHaveCSS("height", "260px");
   await page.getByRole("button", { name: "Start voice call" }).click();
@@ -1140,6 +1264,15 @@ test("Voice is opt-in, requests one microphone, creates one peer, shows no trans
   await expect(page.getByText("Speaking", { exact: true })).toBeVisible();
   await page.evaluate(() => window.__voiceDataChannel.onmessage?.({ data: JSON.stringify({ type: "response.output_audio.done" }) }));
   await expect(page.getByText("Listening", { exact: true })).toBeVisible();
+  await page.evaluate(() => window.__voiceDataChannel.onmessage?.({ data: JSON.stringify({
+    type: "response.done",
+    response: {
+      usage: {
+        input_token_details: { audio_tokens: 11, cached_tokens: 7, text_tokens: 5 },
+        output_token_details: { audio_tokens: 13, text_tokens: 3 },
+      },
+    },
+  }) }));
   await page.evaluate(() => {
     window.__voicePeer.connectionState = "disconnected";
     window.__voicePeer.onconnectionstatechange?.();
@@ -1156,6 +1289,7 @@ test("Voice is opt-in, requests one microphone, creates one peer, shows no trans
   await expect.poll(() => page.evaluate(() => window.__voiceCounters.closed)).toBe(1);
   await expect.poll(() => page.evaluate(() => window.__voiceCounters.channelClosed)).toBe(1);
   expect(closeRequest.closeToken).toBe("test-close-capability-token-0000000000000000000");
+  expect(closeRequest.usage).toEqual({ inputAudioTokens: 11, outputAudioTokens: 13, cachedInputTokens: 7, textInputTokens: 5, textOutputTokens: 3 });
 
   await page.getByRole("button", { name: "Start another call" }).click();
   await expect(page.getByRole("button", { name: "Start voice call" })).toBeVisible();
@@ -1166,6 +1300,7 @@ test("Voice is opt-in, requests one microphone, creates one peer, shows no trans
   await page.getByRole("button", { name: "End call" }).click();
   await expect(page.getByText("Call ended", { exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: "Current call source" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Unsafe source" })).toHaveCount(0);
   await page.waitForTimeout(950);
   await expect(page.getByRole("link", { name: "Old call source" })).toHaveCount(0);
   await expect.poll(() => page.evaluate(() => window.__voiceCounters.closed)).toBe(2);
@@ -1193,7 +1328,7 @@ test("Voice surfaces connecting and microphone denial, then recovers to Chat or 
   await page.getByRole("button", { name: "Try again" }).click();
   await expect(page.getByRole("button", { name: "Start voice call" })).toBeVisible();
   await page.getByRole("button", { name: "Back to Chat" }).click();
-  await expect(page.locator(".chat-panel h2")).toHaveText("Ask anything about Kevin.");
+  await expect(page.locator(".chat-panel h2")).toHaveText("What are you curious about?");
 });
 
 test("assistant failure preserves the static cited fallback", async ({ page }) => {
@@ -1207,5 +1342,5 @@ test("assistant failure preserves the static cited fallback", async ({ page }) =
   await page.getByLabel("Question").fill("What did Kevin build at PayPal?");
   await page.getByRole("button", { name: "Ask", exact: true }).click();
   await expect(page.getByRole("status")).toHaveText("Assistant unavailable");
-  await expect(page.getByRole("heading", { name: "Five answers without the model." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Start here." })).toBeVisible();
 });

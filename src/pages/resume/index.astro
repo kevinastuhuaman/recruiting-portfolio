@@ -1,5 +1,5 @@
 ---
-import { Download, ExternalLink, Mail, Printer } from "@lucide/astro";
+import { Check, Copy, Download, ExternalLink, Printer } from "@lucide/astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { experience, links, site } from "../../data/site.js";
 import { claimsById } from "../../data/claims.js";
@@ -22,9 +22,11 @@ import { claimsById } from "../../data/claims.js";
         <button class="button button-outline-light" type="button" data-print-resume>
           <Printer aria-hidden="true" size={18} /> Print
         </button>
-        <a class="button button-outline-light" href={`mailto:${site.email}`}>
-          <Mail aria-hidden="true" size={18} /> Email
-        </a>
+        <button class="button button-outline-light ph-no-capture" type="button" data-resume-copy-email={site.email} data-ph-no-autocapture>
+          <Copy class="resume-copy-icon" aria-hidden="true" size={18} />
+          <Check class="resume-copy-check" aria-hidden="true" size={18} />
+          <span data-resume-copy-status aria-live="polite">Copy email</span>
+        </button>
       </div>
     </div>
   </header>
@@ -149,6 +151,27 @@ import { claimsById } from "../../data/claims.js";
       if (!(event.target instanceof HTMLInputElement)) return;
       documentElement?.setAttribute("data-lens", event.target.value);
     });
+    const resumeCopyButton = document.querySelector<HTMLButtonElement>("[data-resume-copy-email]");
+    const resumeCopyStatus = document.querySelector<HTMLElement>("[data-resume-copy-status]");
+    let resumeCopyTimer: number | undefined;
+
+    resumeCopyButton?.addEventListener("click", async () => {
+      const email = resumeCopyButton.dataset.resumeCopyEmail;
+      if (!email) return;
+
+      try {
+        await navigator.clipboard.writeText(email);
+        resumeCopyButton.dataset.copied = "true";
+        if (resumeCopyStatus) resumeCopyStatus.textContent = "Email copied";
+        window.clearTimeout(resumeCopyTimer);
+        resumeCopyTimer = window.setTimeout(() => {
+          delete resumeCopyButton.dataset.copied;
+          if (resumeCopyStatus) resumeCopyStatus.textContent = "Copy email";
+        }, 2200);
+      } catch {
+        window.prompt("Copy Kevin's email", email);
+      }
+    });
   </script>
 </BaseLayout>
 
@@ -160,6 +183,10 @@ import { claimsById } from "../../data/claims.js";
   .resume-actions {
     margin-top: 32px;
   }
+
+  .resume-copy-check { display: none; }
+  [data-resume-copy-email][data-copied="true"] .resume-copy-icon { display: none; }
+  [data-resume-copy-email][data-copied="true"] .resume-copy-check { display: block; color: #d8ff52; }
 
   .resume-actions button {
     background: transparent;

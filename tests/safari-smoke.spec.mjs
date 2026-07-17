@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
 test("WebKit renders the recruiter path and assistant without accessibility violations", async ({ page, browserName }) => {
+  test.setTimeout(60_000);
   expect(browserName).toBe("webkit");
   // Production is HTTPS. Astro's production CSP correctly upgrades insecure
   // requests, but that makes WebKit upgrade the local HTTP preview's own CSS
@@ -14,7 +15,11 @@ test("WebKit renders the recruiter path and assistant without accessibility viol
     const body = (await response.text()).replace("upgrade-insecure-requests;", "");
     await route.fulfill({ response, body });
   });
-  for (const path of ["/", "/resume/", "/ask/"]) {
+  for (const path of [
+    "/", "/resume/", "/ask/", "/contact/", "/about/", "/lab/", "/proof/",
+    "/projects/trackly/", "/projects/paypal-ai-observability/",
+    "/projects/berkeley-mobagel-ai-gtm/", "/projects/smb-fintech-bcp-credicorp/",
+  ]) {
     await page.goto(path);
     await expect(page.locator("main")).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
@@ -23,8 +28,9 @@ test("WebKit renders the recruiter path and assistant without accessibility viol
     const result = await new AxeBuilder({ page }).analyze();
     expect(result.violations, `${path} WebKit Axe violations`).toEqual([]);
   }
+  await page.goto("/ask/");
   await page.getByRole("tab", { name: /Voice/ }).click();
-  await expect(page.getByText(/This is an AI voice assistant/i)).toBeVisible();
+  await expect(page.getByText(/Nothing starts until you tap the button, and the call is not recorded/i)).toBeVisible();
 
   for (const width of [390, 1024, 1440]) {
     await page.setViewportSize({ width, height: 1000 });

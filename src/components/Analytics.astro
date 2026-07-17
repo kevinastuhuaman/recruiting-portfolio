@@ -1,13 +1,22 @@
 <script>
-  import { capturePortfolioEvent, classifyPortfolioInteraction } from "../lib/portfolioEvents";
+  import {
+    capturePortfolioEvent,
+    classifyPortfolioInteraction,
+    clearPortfolioEventQueue,
+    portfolioPrivacySignalEnabled,
+  } from "../lib/portfolioEvents";
 
   const earlyClickHandler = (event: MouseEvent) => {
     if (!(event.target instanceof Element)) return;
     const classified = classifyPortfolioInteraction(event.target);
     if (classified) capturePortfolioEvent(classified.event, classified.properties);
   };
-  window.__portfolioEarlyClickHandler = earlyClickHandler;
-  document.addEventListener("click", earlyClickHandler, { capture: true });
+  if (portfolioPrivacySignalEnabled()) {
+    clearPortfolioEventQueue();
+  } else {
+    window.__portfolioEarlyClickHandler = earlyClickHandler;
+    document.addEventListener("click", earlyClickHandler, { capture: true });
+  }
 
   const startAnalytics = () => {
     void import("../lib/portfolioAnalytics").then(({ initializePortfolioAnalytics }) => {
