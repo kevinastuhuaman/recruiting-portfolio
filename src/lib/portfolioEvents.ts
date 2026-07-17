@@ -16,7 +16,7 @@ export type PortfolioEvent =
 
 export type SafeValue = boolean | number | string;
 export type SafeProperties = Record<string, SafeValue | undefined>;
-export type QueuedPortfolioEvent = { event: PortfolioEvent; properties: SafeProperties };
+export type QueuedPortfolioEvent = { event: PortfolioEvent; properties: SafeProperties; pagePath?: string };
 const EVENT_QUEUE_KEY = "portfolio_event_queue";
 const PORTFOLIO_EVENTS = new Set<PortfolioEvent>([
   "portfolio_assistant_opened", "portfolio_assistant_mode_selected", "portfolio_case_study_opened",
@@ -40,7 +40,8 @@ function isQueuedPortfolioEvent(value: unknown): value is QueuedPortfolioEvent {
     && PORTFOLIO_EVENTS.has(item.event)
     && item.properties
     && typeof item.properties === "object"
-    && !Array.isArray(item.properties),
+    && !Array.isArray(item.properties)
+    && (item.pagePath === undefined || typeof item.pagePath === "string")
   );
 }
 
@@ -62,7 +63,7 @@ function initializePortfolioEventQueue() {
   return queue;
 }
 
-function clearPortfolioEventQueue() {
+export function clearPortfolioEventQueue() {
   window.__portfolioEventQueue = [];
   try { sessionStorage.removeItem(EVENT_QUEUE_KEY); } catch { /* storage is optional */ }
 }
@@ -105,7 +106,7 @@ export function capturePortfolioEvent(event: PortfolioEvent, properties: SafePro
     return;
   }
   const queue = initializePortfolioEventQueue();
-  queue.push({ event, properties });
+  queue.push({ event, properties, pagePath: window.location.pathname || "/" });
   try {
     sessionStorage.setItem(EVENT_QUEUE_KEY, JSON.stringify(queue));
   } catch {
@@ -121,6 +122,9 @@ export function drainPortfolioEvents(handler: (event: PortfolioEvent, properties
   const queue = initializePortfolioEventQueue();
   clearPortfolioEventQueue();
   for (const item of queue) {
-    handler(item.event, item.properties);
+    handler(item.event, {
+      ...item.properties,
+      ...(item.pagePath ? { page_path: item.pagePath } : {}),
+    });
   }
 }

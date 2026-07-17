@@ -125,6 +125,7 @@ export default function PortfolioAssistant() {
   const ask = async (value: string) => {
     const message = value.trim();
     if (message.length < 2 || inFlightRef.current) return;
+    stickToBottomRef.current = true;
     inFlightRef.current = true;
     const history = messages.slice(-6).map(({ role, content }) => ({ role, content }));
     setMessages((current) => [...current, { role: 'user', content: message }]);

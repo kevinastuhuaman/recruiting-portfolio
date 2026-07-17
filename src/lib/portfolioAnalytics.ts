@@ -1,6 +1,7 @@
 import posthog, { type CaptureResult } from "posthog-js";
 import {
   classifyPortfolioInteraction,
+  clearPortfolioEventQueue,
   drainPortfolioEvents,
   portfolioPrivacySignalEnabled,
   type SafeProperties,
@@ -65,7 +66,7 @@ function durationBucket(durationMs: number) {
   if (durationMs < 10_000) return "under_10s";
   if (durationMs < 30_000) return "10_to_29s";
   if (durationMs < 60_000) return "30_to_59s";
-  if (durationMs < 180_000) return "1_to_2m";
+  if (durationMs < 180_000) return "1_to_3m";
   return "3m_plus";
 }
 
@@ -122,10 +123,14 @@ function shouldRecordReplay(id: string, pathname: string) {
 function capture(event: string, properties: SafeProperties = {}) {
   if (!initialized || portfolioPrivacySignalEnabled()) return;
   try {
+    const sanitizedProperties = sanitizeProperties(properties);
+    const pagePath = typeof sanitizedProperties.page_path === "string"
+      ? safePath(sanitizedProperties.page_path)
+      : safePath();
     posthog.capture(event, {
-      ...sanitizeProperties(properties),
+      ...sanitizedProperties,
       $process_person_profile: false,
-      page_path: safePath(),
+      page_path: pagePath,
       portfolio_session_id: sessionId,
       environment: "production",
       product: "recruiting_portfolio",
@@ -183,7 +188,12 @@ export function initializePortfolioAnalytics(
   host = POSTHOG_DEFAULT_HOST,
   allowedHost = "portfolio.kevinastuhuaman.com",
 ) {
-  if (initialized || window.location.hostname !== allowedHost || !key?.startsWith("phc_") || portfolioPrivacySignalEnabled()) return;
+  if (initialized || window.location.hostname !== allowedHost) return;
+  if (portfolioPrivacySignalEnabled()) {
+    clearPortfolioEventQueue();
+    return;
+  }
+  if (!key?.startsWith("phc_")) return;
 
   const isLocalVerification = allowedHost === "127.0.0.1" || allowedHost === "localhost";
 

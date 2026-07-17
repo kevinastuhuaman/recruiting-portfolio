@@ -829,6 +829,7 @@ test("early analytics events survive fast cross-page navigation", async ({ page 
     "portfolio_assistant_opened",
     "portfolio_contact_action",
   ]);
+  expect(queue.map((item) => item.pagePath)).toEqual(["/", "/ask/"]);
   expect(queue[1].properties).toEqual({ action: "resume" });
 });
 
@@ -843,6 +844,7 @@ test("privacy signals prevent and clear the early analytics queue", async ({ pag
     ]));
   });
   await page.goto("/");
+  expect(await page.evaluate(() => sessionStorage.getItem("portfolio_event_queue"))).toBeNull();
   await page.locator('a[href="/ask/"]').first().evaluate((link) => {
     link.addEventListener("click", (event) => event.preventDefault(), { once: true });
     link.click();
@@ -850,6 +852,39 @@ test("privacy signals prevent and clear the early analytics queue", async ({ pag
 
   expect(await page.evaluate(() => sessionStorage.getItem("portfolio_event_queue"))).toBeNull();
   expect(await page.evaluate(() => window.__portfolioEventQueue ?? [])).toEqual([]);
+});
+
+test("Chat resumes autoscroll when a visitor asks a new question", async ({ page }) => {
+  let requestCount = 0;
+  await page.route("https://api.portfolio.kevinastuhuaman.com/api/portfolio/chat", async (route) => {
+    requestCount += 1;
+    const answer = requestCount === 1 ? "Long answer. ".repeat(240) : "Second answer.";
+    await route.fulfill({
+      status: 200,
+      contentType: "text/event-stream",
+      body: [
+        `event: meta\ndata: {"sessionId":"ses_44444444444444444444444444444444","turnId":"turn_${String(requestCount).repeat(32)}"}\n\n`,
+        `event: delta\ndata: ${JSON.stringify({ text: answer })}\n\n`,
+        'event: citations\ndata: {"citations":[]}\n\n',
+        'event: done\ndata: {}\n\n',
+      ].join(""),
+    });
+  });
+  await page.goto("/ask/");
+  const composer = page.getByPlaceholder("Ask anything about Kevin");
+  await composer.fill("First question");
+  await composer.press("Enter");
+  await expect(page.getByText(/Long answer/)).toBeVisible();
+  await page.locator(".chat-messages").evaluate((element) => {
+    element.scrollTop = 0;
+    element.dispatchEvent(new Event("scroll", { bubbles: true }));
+  });
+  await composer.fill("Second question");
+  await composer.press("Enter");
+  await expect(page.getByText("Second answer.", { exact: true })).toBeVisible();
+  await expect.poll(() => page.locator(".chat-messages").evaluate((element) => (
+    element.scrollHeight - element.scrollTop - element.clientHeight
+  ))).toBeLessThan(80);
 });
 
 test("resume print control works under the site CSP", async ({ page }) => {
