@@ -112,7 +112,7 @@ export const routes = [
   { path: "/about/", state: "index", title: "About | Kevin Astuhuaman", modified: "2026-07-12" },
   { path: "/proof/", state: "index", title: "Public evidence | Kevin Astuhuaman", modified: "2026-07-14" },
   { path: "/contact/", state: "index", title: "Contact | Kevin Astuhuaman", modified: "2026-07-12" },
-  { path: "/ask/", state: "noindex", title: "Ask Kevin's portfolio | Kevin Astuhuaman", modified: "2026-07-13" },
+  { path: "/ask/", state: "noindex", title: "Ask Kevin's AI | Kevin Astuhuaman", modified: "2026-07-17" },
   { path: "/privacy/", state: "index", title: "Privacy | Kevin Astuhuaman", modified: "2026-07-12" },
   { path: "/packet/", state: "compat", title: "Recruiter brief", modified: "2026-07-12" },
   { path: "/projects/agentic-dev-workflows/", state: "compat", title: "AI-assisted product building", modified: "2026-07-12" },
@@ -232,7 +232,7 @@ export const experience = [
   {
     organization: "Trackly",
     role: "AI Product Manager and builder",
-    dates: "2025-present",
+    dates: "2026-present",
     location: "Bay Area",
     summary: "Built and operates a real-time job-search product across web, native apps, CLI, MCP, matching, chat, and voice.",
     bullets: [

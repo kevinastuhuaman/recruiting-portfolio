@@ -46,7 +46,7 @@ import { links } from "../../data/site.js";
   .about-body { background: white; }
   .about-layout { display: grid; grid-template-columns: minmax(280px, .78fr) minmax(0, 1.22fr); gap: clamp(44px, 8vw, 110px); }
   figure { margin: 0; }
-  figure img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 6px; }
+  figure img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 6px; }
   figcaption { margin-top: 10px; color: #666660; font-size: .82rem; }
   .about-copy h2 { margin-bottom: 28px; }
   .about-copy h3 { margin: 46px 0 14px; }
@@ -54,7 +54,8 @@ import { links } from "../../data/site.js";
   .about-copy .button-row { margin-top: 40px; }
   @media (max-width: 760px) {
     .about-layout { grid-template-columns: 1fr; }
-    figure { width: min(100%, 320px); margin-inline: auto; }
-    figure img { aspect-ratio: 1; object-position: center 22%; }
+    figure { width: min(68vw, 260px); margin-inline: auto; }
+    figure img { height: auto; aspect-ratio: auto; object-fit: contain; object-position: center; }
+    figcaption { text-align: center; }
   }
 </style>

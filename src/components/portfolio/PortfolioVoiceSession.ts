@@ -36,6 +36,7 @@ interface PortfolioVoiceSessionOptions {
   levelRef: { current: number };
   onStateChange: (state: PortfolioVoiceState, endReason?: PortfolioVoiceEndReason) => void;
   onSource: (source: { title: string; url: string }) => void;
+  onActivityChange: (activity: 'searching' | 'answering' | null) => void;
   onError: (message: string) => void;
 }
 
@@ -178,13 +179,19 @@ export class PortfolioVoiceSession {
     let event: JsonRecord;
     try { event = asRecord(JSON.parse(raw)); } catch { return; }
     const type = String(event.type ?? '');
+    if (type === 'response.function_call_arguments.done' && event.name === 'lookup_portfolio') {
+      this.opts.onActivityChange('searching');
+      return;
+    }
     if (['response.audio.delta', 'response.output_audio.delta', 'output_audio_buffer.started'].includes(type)) {
       this.speaking = true;
+      this.opts.onActivityChange('answering');
       this.setState('speaking');
       return;
     }
     if (['response.audio.done', 'response.output_audio.done', 'output_audio_buffer.stopped'].includes(type)) {
       this.speaking = false;
+      this.opts.onActivityChange(null);
       this.setState('listening');
       return;
     }
@@ -305,6 +312,7 @@ export class PortfolioVoiceSession {
     this.opts.audioElement.srcObject = null;
     void this.audioContext?.close().catch(() => {});
     this.opts.levelRef.current = 0;
+    this.opts.onActivityChange(null);
     this.micStream = null;
     this.remoteStream = null;
     this.micAnalyser = null;

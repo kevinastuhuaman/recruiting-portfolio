@@ -19,6 +19,7 @@ export default function PortfolioVoiceExperience({ onSwitchToChat }: Props) {
   const [voiceError, setVoiceError] = useState('');
   const [muted, setMuted] = useState(false);
   const [voiceSources, setVoiceSources] = useState<PortfolioCitation[]>([]);
+  const [voiceActivity, setVoiceActivity] = useState<'searching' | 'answering' | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const voiceSessionRef = useRef<PortfolioVoiceSession | null>(null);
   const voiceGenerationRef = useRef(0);
@@ -54,6 +55,7 @@ export default function PortfolioVoiceExperience({ onSwitchToChat }: Props) {
     capturePortfolioEvent('portfolio_voice_started');
     setVoiceError('');
     setVoiceSources([]);
+    setVoiceActivity(null);
     setMuted(false);
     voiceTerminalTrackedRef.current = false;
     const generation = voiceGenerationRef.current + 1;
@@ -79,6 +81,9 @@ export default function PortfolioVoiceExperience({ onSwitchToChat }: Props) {
         setVoiceSources((current) => (
           current.some((item) => item.url === source.url) ? current : [...current, source]
         ));
+      },
+      onActivityChange: (activity) => {
+        if (voiceGenerationRef.current === generation) setVoiceActivity(activity);
       },
       onError: (message) => {
         if (voiceGenerationRef.current === generation) setVoiceError(message);
@@ -107,6 +112,7 @@ export default function PortfolioVoiceExperience({ onSwitchToChat }: Props) {
     voiceSessionRef.current = null;
     setVoiceState('intro');
     setVoiceError('');
+    setVoiceActivity(null);
   };
 
   const voiceLabel: Record<PortfolioVoiceState, string> = {
@@ -124,7 +130,7 @@ export default function PortfolioVoiceExperience({ onSwitchToChat }: Props) {
       <div className="voice-orb-wrap"><PortfolioVoiceOrb levelRef={levelRef} size={voiceState === 'intro' ? 260 : 300} variant={voiceState === 'intro' ? 'intro' : 'active'} /></div>
       {voiceState === 'intro' ? (
         <div className="voice-copy">
-          <p className="eyebrow">Kevin's AI assistant</p>
+          <p className="eyebrow">Kevin's AI</p>
           <h2>Talk through Kevin's work.</h2>
           <p>Ask about Kevin's work, product decisions, or experience. Nothing starts until you tap the button, and the call is not recorded.</p>
           <button className="voice-primary" onClick={() => void startVoice()}>Start voice call</button>
@@ -132,6 +138,7 @@ export default function PortfolioVoiceExperience({ onSwitchToChat }: Props) {
         </div>
       ) : (
         <div className="voice-copy active">
+          {voiceActivity === 'searching' && <div className="voice-tool-activity">Portfolio lookup · searching approved sources</div>}
           <p className="voice-state" aria-live="polite">{voiceLabel[voiceState]}</p>
           {voiceError && <p className="voice-error">{voiceError}</p>}
           {['connecting', 'listening', 'speaking', 'reconnecting'].includes(voiceState) && (
