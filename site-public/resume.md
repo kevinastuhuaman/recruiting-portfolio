@@ -21,7 +21,7 @@ Defined and prototyped an AI-assisted observability workflow for checkout diagno
 
 ### Trackly
 
-**AI Product Manager and builder** | 2025-present | Bay Area
+**AI Product Manager and builder** | 2026-present | Bay Area
 
 Built and operates a real-time job-search product across web, native apps, CLI, MCP, matching, chat, and voice.
 

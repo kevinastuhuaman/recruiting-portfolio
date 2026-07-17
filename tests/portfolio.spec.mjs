@@ -67,7 +67,7 @@ test("mobile first viewport leads with AI PM, Berkeley, and PayPal evidence", as
   await expect(page.locator(".mobile-nav summary")).toBeVisible();
   await expect(hero.getByText("Seven years building products and enjoying every minute of it.")).toBeVisible();
   await expect(hero.getByRole("link", { name: /View selected work/i })).toBeVisible();
-  await expect(hero.getByRole("link", { name: /Ask the portfolio/i })).toBeVisible();
+  await expect(hero.getByRole("link", { name: /Ask Kevin's AI/i })).toBeVisible();
   await expect(hero.locator("[data-home-mode]")).toHaveCount(0);
 
   const positions = await hero.locator("#home-title, .identity-stack, .role-focus").evaluateAll((elements) =>
@@ -277,6 +277,38 @@ test("mobile resume stays readable instead of shrinking into a desktop sheet", a
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
 });
 
+test("About keeps Kevin's complete portrait comfortably framed on mobile", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/about/", { waitUntil: "networkidle" });
+
+  const portrait = page.locator('.about-layout figure img[alt="Kevin Astuhuaman"]');
+  await portrait.scrollIntoViewIfNeeded();
+  await expect(portrait).toBeVisible();
+  await expect(portrait).toHaveCSS("object-fit", "contain");
+  const dimensions = await portrait.evaluate((image) => {
+    const rect = image.getBoundingClientRect();
+    return {
+      width: rect.width,
+      height: rect.height,
+      intrinsicRatio: image.naturalWidth / image.naturalHeight,
+      renderedRatio: rect.width / rect.height,
+    };
+  });
+  expect(dimensions.width).toBeLessThanOrEqual(260);
+  expect(dimensions.height).toBeLessThan(280);
+  expect(Math.abs(dimensions.renderedRatio - dimensions.intrinsicRatio)).toBeLessThan(0.02);
+});
+
+test("Trackly's corrected 2026 start date is consistent across public pages", async ({ page }) => {
+  await page.goto("/");
+  const tracklyExperience = page.locator("#experience details").filter({ hasText: "Trackly" });
+  await expect(tracklyExperience).toContainText("2026-present");
+  await expect(tracklyExperience).not.toContainText("2025-present");
+
+  await page.goto("/projects/trackly/");
+  await expect(page.locator(".trackly-hero .eyebrow")).toContainText("2026-present");
+});
+
 test("resume contact action copies the email instead of opening a composer", async ({ page }) => {
   await page.goto("/resume/");
   await page.evaluate(() => {
@@ -312,7 +344,7 @@ test("Ask renders a useful first impression before client hydration", async ({ b
   const page = await context.newPage();
   await page.goto(new URL("/ask/", baseURL).href);
 
-  await expect(page.getByRole("heading", { name: "Ask anything about Kevin." }).first()).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Ask Kevin's AI anything." }).first()).toBeVisible();
   await expect(page.getByText("Good starting points")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Start here." })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
@@ -896,17 +928,18 @@ test("resume print control works under the site CSP", async ({ page }) => {
   await expect.poll(() => page.evaluate(() => window.sessionStorage.getItem("portfolio_print_called"))).toBe("true");
 });
 
-test("grounded Chat streams plain text and server-controlled citations", async ({ page }) => {
+test("grounded Chat streams safe formatted answers, activity, and server-controlled citations", async ({ page }) => {
   await page.route("https://api.portfolio.kevinastuhuaman.com/api/portfolio/chat", async (route) => {
     await route.fulfill({
       status: 200,
       contentType: "text/event-stream",
       body: [
         'event: meta\ndata: {"sessionId":"ses_11111111111111111111111111111111","turnId":"turn_11111111111111111111111111111111"}\n\n',
-        'event: status\ndata: {"phase":"retrieving"}\n\n',
-        'event: status\ndata: {"phase":"synthesizing"}\n\n',
-        'event: delta\ndata: {"text":"Kevin chose direct career pages "}\n\n',
-        'event: delta\ndata: {"text":"as Trackly\'s source of earlier signal."}\n\n',
+        'event: status\ndata: {"phase":"retrieving","state":"active"}\n\n',
+        'event: status\ndata: {"phase":"retrieving","state":"complete","sourceCount":1,"sourceTitles":["Trackly case study"]}\n\n',
+        'event: status\ndata: {"phase":"synthesizing","state":"active","sourceCount":1}\n\n',
+        `event: delta\ndata: ${JSON.stringify({ text: "Kevin chose **direct career pages** as Trackly's source of earlier signal.\n\n" })}\n\n`,
+        `event: delta\ndata: ${JSON.stringify({ text: "- Earlier discovery\n- Human approval\n\n<script>window.__unsafeMarkdown = true</script>" })}\n\n`,
         'event: citations\ndata: {"citations":[{"id":"trackly","title":"Trackly case study","url":"https://portfolio.kevinastuhuaman.com/projects/trackly/"},{"title":"Unsafe source","url":"javascript:alert(1)"}]}\n\n',
         'event: done\ndata: {"fallback":false}\n\n',
       ].join(""),
@@ -916,6 +949,12 @@ test("grounded Chat streams plain text and server-controlled citations", async (
   await page.getByRole("button", { name: "How does Trackly show product judgment?" }).click();
   await expect(page.getByRole("status")).toHaveText("Ready");
   await expect(page.getByText(/direct career pages/i)).toBeVisible();
+  await expect(page.locator(".chat-message.assistant .chat-message-content strong")).toHaveText("direct career pages");
+  await expect(page.locator(".chat-message.assistant li")).toHaveText(["Earlier discovery", "Human approval"]);
+  await expect(page.locator(".chat-message.assistant script")).toHaveCount(0);
+  expect(await page.evaluate(() => window.__unsafeMarkdown)).toBeUndefined();
+  await expect(page.locator(".chat-reasoning")).toContainText("Searched Kevin’s public portfolio");
+  await expect(page.locator(".chat-reasoning")).toContainText("Trackly case study");
   await expect(page.getByRole("link", { name: "Trackly case study" })).toHaveAttribute("href", "https://portfolio.kevinastuhuaman.com/projects/trackly/");
   await expect(page.getByRole("link", { name: "Unsafe source" })).toHaveCount(0);
   await expect(page.locator(".chat-message.assistant").getByText("Sources")).toBeVisible();
@@ -1008,8 +1047,9 @@ test("Chat uses real activity phases and natural keyboard submission", async ({ 
         start(controller) {
           window.__portfolioChatStream = {
             meta() { controller.enqueue(encoder.encode('event: meta\ndata: {"sessionId":"ses_22222222222222222222222222222222","turnId":"turn_22222222222222222222222222222222"}\n\n')); },
-            retrieving() { controller.enqueue(encoder.encode('event: status\ndata: {"phase":"retrieving"}\n\n')); },
-            synthesizing() { controller.enqueue(encoder.encode('event: status\ndata: {"phase":"synthesizing"}\n\n')); },
+            retrieving() { controller.enqueue(encoder.encode('event: status\ndata: {"phase":"retrieving","state":"active"}\n\n')); },
+            retrieved() { controller.enqueue(encoder.encode('event: status\ndata: {"phase":"retrieving","state":"complete","sourceCount":1,"sourceTitles":["Trackly case study"]}\n\n')); },
+            synthesizing() { controller.enqueue(encoder.encode('event: status\ndata: {"phase":"synthesizing","state":"active","sourceCount":1}\n\n')); },
             delta() { controller.enqueue(encoder.encode('event: delta\ndata: {"text":"Kevin built Trackly"}\n\n')); },
             citations() {
               controller.enqueue(encoder.encode('event: citations\ndata: {"citations":[{"title":"Trackly case study","url":"https://portfolio.kevinastuhuaman.com/projects/trackly/"}]}\n\n'));
@@ -1029,17 +1069,19 @@ test("Chat uses real activity phases and natural keyboard submission", async ({ 
   await composer.fill("What did Kevin build?");
   await composer.press("Enter");
   await expect(page.getByRole("status")).toHaveText("Considering your question");
-  await expect(page.locator(".chat-activity")).toContainText("Considering your question");
+  await expect(page.locator(".chat-reasoning")).toContainText("Understanding your question");
   await page.evaluate(() => window.__portfolioChatStream.meta());
   await page.evaluate(() => window.__portfolioChatStream.retrieving());
   await expect(page.getByRole("status")).toHaveText("Looking through Kevin's portfolio");
+  await page.evaluate(() => window.__portfolioChatStream.retrieved());
+  await expect(page.locator(".chat-reasoning")).toContainText("Trackly case study");
   await page.evaluate(() => window.__portfolioChatStream.synthesizing());
   await expect(page.getByRole("status")).toHaveText("Summarizing what matters");
-  await expect(page.locator(".chat-activity")).toContainText("Summarizing what matters");
+  await expect(page.locator(".chat-reasoning")).toContainText("Grounding the answer in public evidence");
   await page.evaluate(() => window.__portfolioChatStream.delta());
   await expect(page.getByRole("status")).toHaveText("Writing answer");
   await expect(page.getByText("Kevin built Trackly", { exact: true })).toBeVisible();
-  await expect(page.locator(".chat-activity")).toHaveCount(0);
+  await expect(page.locator(".chat-reasoning")).toContainText("Writing the answer");
   await page.evaluate(() => window.__portfolioChatStream.citations());
   await expect(page.getByRole("link", { name: "Trackly case study" })).toBeVisible();
   await page.waitForTimeout(50);
@@ -1072,7 +1114,7 @@ test("Chat uses real activity phases and natural keyboard submission", async ({ 
 
 test("Ask page removes artificial boundary copy and keeps concise AI disclosure", async ({ page }) => {
   await page.goto("/ask/");
-  await expect(page.locator("h1")).toHaveText("Ask anything about Kevin.");
+  await expect(page.locator("h1")).toHaveText("Ask Kevin's AI anything.");
   await expect(page.getByText("Grounded Chat", { exact: true })).toHaveCount(0);
   await expect(page.getByText("Answer grounded in public evidence", { exact: true })).toHaveCount(0);
   await expect(page.getByText("Public corpus only", { exact: true })).toHaveCount(0);
@@ -1260,10 +1302,16 @@ test("Voice is opt-in, requests one microphone, creates one peer, shows no trans
   expect(await page.evaluate(() => window.__voiceCounters.sent)).toEqual([]);
   await expect(page.getByText("SECRET_TRANSCRIPT_SENTINEL")).toHaveCount(0);
   await expect(page.locator("[data-voice-transcript]")).toHaveCount(0);
+  await page.evaluate(() => window.__voiceDataChannel.onmessage?.({ data: JSON.stringify({ type: "response.function_call_arguments.done", name: "lookup_portfolio" }) }));
+  await expect(page.getByText(/Portfolio lookup · searching approved sources/i)).toBeVisible();
   await page.evaluate(() => window.__voiceDataChannel.onmessage?.({ data: JSON.stringify({ type: "response.output_audio.delta", delta: "audio" }) }));
   await expect(page.getByText("Speaking", { exact: true })).toBeVisible();
+  await expect(page.getByText(/Portfolio lookup · searching approved sources/i)).toHaveCount(0);
   await page.evaluate(() => window.__voiceDataChannel.onmessage?.({ data: JSON.stringify({ type: "response.output_audio.done" }) }));
   await expect(page.getByText("Listening", { exact: true })).toBeVisible();
+  await expect(page.getByText(/Portfolio lookup · searching approved sources/i)).toHaveCount(0);
+  await page.evaluate(() => window.__voiceDataChannel.onmessage?.({ data: JSON.stringify({ type: "response.function_call_arguments.done", name: "lookup_portfolio" }) }));
+  await expect(page.getByText(/Portfolio lookup · searching approved sources/i)).toBeVisible();
   await page.evaluate(() => window.__voiceDataChannel.onmessage?.({ data: JSON.stringify({
     type: "response.done",
     response: {
@@ -1273,6 +1321,7 @@ test("Voice is opt-in, requests one microphone, creates one peer, shows no trans
       },
     },
   }) }));
+  await expect(page.getByText(/Portfolio lookup · searching approved sources/i)).toHaveCount(0);
   await page.evaluate(() => {
     window.__voicePeer.connectionState = "disconnected";
     window.__voicePeer.onconnectionstatechange?.();
