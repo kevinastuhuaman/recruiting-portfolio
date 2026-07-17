@@ -1,4 +1,4 @@
-import { PORTFOLIO_API } from './portfolioApi';
+import { PORTFOLIO_API, sanitizePortfolioCitations } from './portfolioApi';
 
 export type PortfolioVoiceState = 'connecting' | 'listening' | 'speaking' | 'reconnecting' | 'ended' | 'failed';
 export type PortfolioVoiceEndReason = 'user_ended' | 'duration_cap' | 'page_hidden' | 'failed' | 'switched_to_chat';
@@ -25,6 +25,10 @@ type JsonRecord = Record<string, unknown>;
 
 function asRecord(value: unknown): JsonRecord {
   return typeof value === 'object' && value !== null ? value as JsonRecord : {};
+}
+
+function tokenCount(value: unknown): number {
+  return typeof value === 'number' && Number.isFinite(value) && value >= 0 ? Math.round(value) : 0;
 }
 
 interface PortfolioVoiceSessionOptions {
@@ -186,6 +190,18 @@ export class PortfolioVoiceSession {
     }
     if (type === 'input_audio_buffer.speech_started') {
       if (!this.speaking) this.setState('listening');
+      return;
+    }
+    if (type === 'response.done') {
+      const response = asRecord(event.response);
+      const usage = asRecord(response.usage);
+      const inputDetails = asRecord(usage.input_token_details);
+      const outputDetails = asRecord(usage.output_token_details);
+      this.usage.inputAudioTokens += tokenCount(inputDetails.audio_tokens);
+      this.usage.outputAudioTokens += tokenCount(outputDetails.audio_tokens);
+      this.usage.cachedInputTokens += tokenCount(inputDetails.cached_tokens);
+      this.usage.textInputTokens += tokenCount(inputDetails.text_tokens);
+      this.usage.textOutputTokens += tokenCount(outputDetails.text_tokens);
     }
   }
 
@@ -256,13 +272,7 @@ export class PortfolioVoiceSession {
       });
       if (response.ok && reason !== 'page_hidden') {
         const body = asRecord(await response.json().catch(() => ({})));
-        const sources = Array.isArray(body.sources) ? body.sources : [];
-        for (const source of sources) {
-          const citation = asRecord(source);
-          if (typeof citation.title === 'string' && typeof citation.url === 'string') {
-            this.opts.onSource({ title: citation.title, url: citation.url });
-          }
-        }
+        for (const citation of sanitizePortfolioCitations(body.sources)) this.opts.onSource(citation);
       }
     } catch { /* best effort metadata only */ }
   }

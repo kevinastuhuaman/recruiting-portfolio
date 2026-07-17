@@ -315,14 +315,18 @@ import { claimsById } from "../../../data/claims.js";
     }
 
     .prototype-body nav {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       padding: 10px;
-      flex-direction: row;
-      overflow-x: auto;
       border-right: 0;
       border-bottom: 1px solid #c8d4d2;
     }
 
-    .prototype-body nav span { flex: 0 0 auto; }
+    .prototype-body nav span {
+      min-width: 0;
+      padding: 10px 8px;
+      text-align: center;
+    }
     .prototype-body > section { padding: 28px 22px; }
     .prototype-grid { grid-template-columns: 1fr; }
     .prototype-grid > div + div { border-top: 0; border-left: 1px solid #c8d4d2; }

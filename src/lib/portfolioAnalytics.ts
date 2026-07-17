@@ -18,8 +18,9 @@ const SECTION_IDS = new Set([
 
 let initialized = false;
 let sessionId = "";
-let pageStartedAt = 0;
-let engagementSent = false;
+let visibleStartedAt = 0;
+let visibleDurationMs = 0;
+let engagementFinalized = false;
 
 function privacySignalEnabled() {
   const navigatorWithGpc = navigator as Navigator & { globalPrivacyControl?: boolean };
@@ -137,11 +138,22 @@ function capture(event: string, properties: SafeProperties = {}) {
 }
 
 function sendEngagement() {
-  if (engagementSent || !pageStartedAt) return;
-  engagementSent = true;
+  if (engagementFinalized || (!visibleStartedAt && !visibleDurationMs)) return;
+  if (visibleStartedAt) visibleDurationMs += Math.max(0, performance.now() - visibleStartedAt);
+  visibleStartedAt = 0;
+  engagementFinalized = true;
   capture("portfolio_page_engaged", {
-    duration_bucket: durationBucket(Math.max(0, performance.now() - pageStartedAt)),
+    duration_bucket: durationBucket(visibleDurationMs),
   });
+}
+
+function updateVisibleTime() {
+  if (document.visibilityState === "hidden") {
+    if (visibleStartedAt) visibleDurationMs += Math.max(0, performance.now() - visibleStartedAt);
+    visibleStartedAt = 0;
+    return;
+  }
+  visibleStartedAt = performance.now();
 }
 
 function markAllowlistedInteractions() {
@@ -177,7 +189,9 @@ export function initializePortfolioAnalytics(
   const isLocalVerification = allowedHost === "127.0.0.1" || allowedHost === "localhost";
 
   sessionId = getSessionId();
-  pageStartedAt = performance.now();
+  visibleStartedAt = document.visibilityState === "hidden" ? 0 : performance.now();
+  visibleDurationMs = 0;
+  engagementFinalized = false;
   markAllowlistedInteractions();
 
   posthog.init(key, {
@@ -242,9 +256,7 @@ export function initializePortfolioAnalytics(
         if (classified) capture(classified.event, classified.properties);
       }, { capture: true });
       window.addEventListener("pagehide", sendEngagement, { once: true });
-      document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === "hidden") sendEngagement();
-      });
+      document.addEventListener("visibilitychange", updateVisibleTime);
     },
   });
 }

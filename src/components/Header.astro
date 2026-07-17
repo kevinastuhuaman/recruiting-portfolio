@@ -34,6 +34,13 @@ const isCurrent = (href: string) => {
 </header>
 
 <script>
+  document.querySelectorAll<HTMLDetailsElement>(".mobile-nav").forEach((menu) => {
+    const summary = menu.querySelector<HTMLElement>("summary");
+    const updateLabel = () => summary?.setAttribute("aria-label", menu.open ? "Close navigation" : "Open navigation");
+    menu.addEventListener("toggle", updateLabel);
+    updateLabel();
+  });
+
   document.querySelectorAll(".mobile-nav a").forEach((link) => {
     link.addEventListener("click", () => link.closest("details")?.removeAttribute("open"));
   });

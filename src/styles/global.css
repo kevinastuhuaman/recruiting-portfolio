@@ -292,6 +292,8 @@ h3 {
   max-width: 1050px;
   margin-bottom: 26px;
   font-size: 4.75rem;
+  overflow-wrap: break-word;
+  text-wrap: balance;
 }
 
 #main-content > .page-hero .lede {
@@ -534,12 +536,15 @@ h3 {
     width: min(100% - 32px, var(--max));
   }
 
-  .page-hero {
-    padding-top: 120px;
+  #main-content > .page-hero {
+    padding: 64px 0 58px;
   }
 
-  .page-hero h1 {
-    font-size: 2.75rem;
+  #main-content > .page-hero h1 {
+    max-width: 100%;
+    font-size: clamp(2.65rem, 12.5vw, 3.4rem);
+    line-height: 0.98;
+    letter-spacing: -0.045em;
   }
 
   .metric strong {

@@ -1,9 +1,9 @@
 import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { capturePortfolioEvent } from '../../lib/portfolioEvents';
-import { askPublicCorpus, PORTFOLIO_API, submitPortfolioFeedback, type PortfolioCitation } from './portfolioApi';
+import { askPublicCorpus, PORTFOLIO_API, sanitizePortfolioCitations, submitPortfolioFeedback, type PortfolioCitation } from './portfolioApi';
 
 type Mode = 'chat' | 'voice';
-type Message = { role: 'user' | 'assistant'; content: string; turnId?: string };
+type Message = { role: 'user' | 'assistant'; content: string; turnId?: string; citations?: PortfolioCitation[] };
 type StreamEvent = Record<string, unknown>;
 type FeedbackState = { turnId: string; status: 'pending' | 'helpful' | 'needs_work' };
 const PortfolioVoiceExperience = lazy(() => import('./PortfolioVoiceExperience'));
@@ -39,7 +39,6 @@ export default function PortfolioAssistant() {
   const [mode, setMode] = useState<Mode>('chat');
   const [messages, setMessages] = useState<Message[]>([]);
   const [question, setQuestion] = useState('');
-  const [citations, setCitations] = useState<PortfolioCitation[]>([]);
   const [status, setStatus] = useState('Ready');
   const [loading, setLoading] = useState(false);
   const [latestTurnId, setLatestTurnId] = useState<string>();
@@ -49,8 +48,13 @@ export default function PortfolioAssistant() {
   const activeTurnIdRef = useRef<string | undefined>(undefined);
   const inFlightRef = useRef(false);
   const pendingDeltaRef = useRef('');
+  const pendingCitationsRef = useRef<PortfolioCitation[]>([]);
   const deltaFrameRef = useRef<number | null>(null);
   const analyticsStartedRef = useRef(false);
+  const chatMessagesRef = useRef<HTMLDivElement | null>(null);
+  const stickToBottomRef = useRef(true);
+  const chatTabRef = useRef<HTMLButtonElement | null>(null);
+  const voiceTabRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     return () => {
@@ -60,12 +64,21 @@ export default function PortfolioAssistant() {
     };
   }, []);
 
-  const commitAssistantDelta = (text: string) => {
+  useEffect(() => {
+    if (!stickToBottomRef.current) return;
+    const frame = requestAnimationFrame(() => {
+      const element = chatMessagesRef.current;
+      if (element) element.scrollTop = element.scrollHeight;
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [messages, loading, status]);
+
+  const commitAssistantDelta = (text: string, citations = pendingCitationsRef.current) => {
     setMessages((current) => {
       const next = [...current];
       const last = next[next.length - 1];
-      if (last?.role === 'assistant') next[next.length - 1] = { ...last, content: last.content + text };
-      else next.push({ role: 'assistant', content: text, turnId: activeTurnIdRef.current });
+      if (last?.role === 'assistant') next[next.length - 1] = { ...last, content: last.content + text, citations };
+      else next.push({ role: 'assistant', content: text, turnId: activeTurnIdRef.current, citations });
       return next;
     });
   };
@@ -82,8 +95,24 @@ export default function PortfolioAssistant() {
     if (deltaFrameRef.current === null) deltaFrameRef.current = requestAnimationFrame(flushAssistantDelta);
   };
 
+  const finalizeAssistantAnswer = () => {
+    if (deltaFrameRef.current !== null) cancelAnimationFrame(deltaFrameRef.current);
+    deltaFrameRef.current = null;
+    const text = pendingDeltaRef.current;
+    pendingDeltaRef.current = '';
+    const citations = pendingCitationsRef.current;
+    setMessages((current) => {
+      const next = [...current];
+      const last = next.at(-1);
+      if (last?.role === 'assistant') next[next.length - 1] = { ...last, content: last.content + text, citations };
+      else if (text) next.push({ role: 'assistant', content: text, turnId: activeTurnIdRef.current, citations });
+      return next;
+    });
+  };
+
   const resetAssistantDraft = () => {
     pendingDeltaRef.current = '';
+    pendingCitationsRef.current = [];
     if (deltaFrameRef.current !== null) cancelAnimationFrame(deltaFrameRef.current);
     deltaFrameRef.current = null;
     setMessages((current) => {
@@ -100,13 +129,13 @@ export default function PortfolioAssistant() {
     const history = messages.slice(-6).map(({ role, content }) => ({ role, content }));
     setMessages((current) => [...current, { role: 'user', content: message }]);
     setQuestion('');
-    setCitations([]);
+    pendingCitationsRef.current = [];
     setLatestTurnId(undefined);
     setFeedback(undefined);
     activeTurnIdRef.current = undefined;
     analyticsStartedRef.current = false;
     setLoading(true);
-    setStatus("Searching Kevin's portfolio");
+    setStatus('Considering your question');
     const controller = new AbortController();
     const responseTimer = window.setTimeout(() => controller.abort('portfolio_chat_timeout'), 20_000);
     chatAbortRef.current = controller;
@@ -163,11 +192,20 @@ export default function PortfolioAssistant() {
             }
             appendAssistantDelta(data.text);
           }
-          if (event === 'citations' && Array.isArray(data.citations)) setCitations(data.citations);
+          if (event === 'citations') {
+            const citations = sanitizePortfolioCitations(data.citations);
+            pendingCitationsRef.current = citations;
+            setMessages((current) => {
+              const next = [...current];
+              const last = next.at(-1);
+              if (last?.role === 'assistant') next[next.length - 1] = { ...last, citations };
+              return next;
+            });
+          }
           if (event === 'error') {
             if (data.reset === true) {
               resetAssistantDraft();
-              setCitations([]);
+              pendingCitationsRef.current = [];
             }
             if (data.recoverable === true) {
               recoveredFallback = true;
@@ -182,7 +220,7 @@ export default function PortfolioAssistant() {
         }
         if (done) break;
       }
-      flushAssistantDelta();
+      finalizeAssistantAnswer();
       if (!receivedDone) throw new Error('stream_truncated');
       capturePortfolioEvent('portfolio_chat_completed', {
         outcome: recoveredFallback ? 'streamed_fallback' : 'streamed',
@@ -206,8 +244,8 @@ export default function PortfolioAssistant() {
       try {
         capturePortfolioEvent('portfolio_chat_failed', { failure_stage: 'stream', recovered: true });
         const fallback = await askPublicCorpus(message, fallbackController.signal);
-        appendAssistantDelta(fallback.answer);
-        setCitations(fallback.citations);
+        pendingCitationsRef.current = fallback.citations;
+        commitAssistantDelta(fallback.answer, fallback.citations);
         capturePortfolioEvent('portfolio_chat_completed', { outcome: 'deterministic_fallback' });
         setStatus('Ready');
       } catch {
@@ -241,6 +279,20 @@ export default function PortfolioAssistant() {
     capturePortfolioEvent('portfolio_assistant_mode_selected', { mode: next });
   };
 
+  const onModeKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>, current: Mode) => {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    event.preventDefault();
+    const next: Mode = event.key === 'Home' ? 'chat' : event.key === 'End' ? 'voice' : current === 'chat' ? 'voice' : 'chat';
+    changeMode(next);
+    (next === 'chat' ? chatTabRef : voiceTabRef).current?.focus();
+  };
+
+  const onChatScroll = () => {
+    const element = chatMessagesRef.current;
+    if (!element) return;
+    stickToBottomRef.current = element.scrollHeight - element.scrollTop - element.clientHeight < 80;
+  };
+
   const rateAnswer = async (rating: 'helpful' | 'needs_work') => {
     const turnId = latestTurnId;
     if (!turnId || feedback?.turnId === turnId) return;
@@ -266,20 +318,21 @@ export default function PortfolioAssistant() {
   return (
     <section className="assistant-shell" aria-label="Portfolio assistant">
       <div className="assistant-tabs" role="tablist" aria-label="Assistant mode">
-        <button role="tab" aria-selected={mode === 'chat'} onClick={() => changeMode('chat')}>Chat</button>
-        <button role="tab" aria-selected={mode === 'voice'} onClick={() => changeMode('voice')}>Voice</button>
+        <button ref={chatTabRef} id="assistant-chat-tab" role="tab" aria-selected={mode === 'chat'} aria-controls="assistant-chat-panel" tabIndex={mode === 'chat' ? 0 : -1} onKeyDown={(event) => onModeKeyDown(event, 'chat')} onClick={() => changeMode('chat')}>Chat</button>
+        <button ref={voiceTabRef} id="assistant-voice-tab" role="tab" aria-selected={mode === 'voice'} aria-controls="assistant-voice-panel" tabIndex={mode === 'voice' ? 0 : -1} onKeyDown={(event) => onModeKeyDown(event, 'voice')} onClick={() => changeMode('voice')}>Voice</button>
       </div>
 
       {mode === 'chat' ? (
-        <div className="chat-panel" role="tabpanel">
-          <header><p className="eyebrow">Kevin's assistant</p><h2>Ask anything about Kevin.</h2><p>Explore his work, product decisions, experience, or the kind of role he is looking for.</p></header>
-          <div className="chat-messages" aria-live="polite">
+        <div className="chat-panel" id="assistant-chat-panel" role="tabpanel" aria-labelledby="assistant-chat-tab" tabIndex={0}>
+          <header><p className="eyebrow">Kevin's assistant</p><h2>What are you curious about?</h2><p>Explore his work, product decisions, experience, or the kind of role he is looking for.</p></header>
+          <div className="chat-messages" ref={chatMessagesRef} role="log" aria-busy={loading} onScroll={onChatScroll}>
             {messages.length === 0 ? (
               <div className="chat-empty"><strong>Good starting points</strong>{suggestions.map((item) => <button key={item} onClick={() => void ask(item)}>{item}</button>)}</div>
             ) : messages.map((message, index) => (
               <article className={`chat-message ${message.role}`} key={`${message.role}-${index}`}>
                 <span className="chat-message-label">{message.role === 'assistant' && <AssistantTrace />}{message.role === 'user' ? 'You' : "Kevin's assistant"}</span>
                 <p>{message.content}</p>
+                {message.role === 'assistant' && message.citations && message.citations.length > 0 && <div className="chat-message-citations"><strong>Sources</strong>{message.citations.map((citation) => <a href={citation.url} key={citation.url}>{citation.title}</a>)}</div>}
               </article>
             ))}
             {loading && !isStreamingAnswer && (
@@ -289,7 +342,6 @@ export default function PortfolioAssistant() {
               </div>
             )}
           </div>
-          {citations.length > 0 && <div className="chat-citations"><strong>Public sources</strong>{citations.map((citation) => <a href={citation.url} key={citation.url}>{citation.title}</a>)}</div>}
           {latestTurnId && !loading && <div className="chat-feedback" aria-label="Rate this answer"><span>{currentFeedback === 'pending' ? 'Sending feedback…' : currentFeedback ? 'Thanks for the feedback.' : 'Was this helpful?'}</span><button type="button" disabled={Boolean(currentFeedback)} onClick={() => void rateAnswer('helpful')}>Helpful</button><button type="button" disabled={Boolean(currentFeedback)} onClick={() => void rateAnswer('needs_work')}>Needs work</button></div>}
           <form onSubmit={onSubmit} className="chat-form">
             <label htmlFor="portfolio-question">Question</label>
@@ -299,7 +351,7 @@ export default function PortfolioAssistant() {
           <div className={`assistant-status${loading || status === 'Ready' ? ' sr-only' : ''}`} role="status">{status}</div>
         </div>
       ) : (
-        <Suspense fallback={<div className="voice-panel voice-loading" role="tabpanel">Preparing Voice…</div>}>
+        <Suspense fallback={<div className="voice-panel voice-loading" id="assistant-voice-panel" role="tabpanel" aria-labelledby="assistant-voice-tab" aria-busy="true"><div className="voice-loading-visual"><div className="voice-loading-orb" /></div><div className="voice-loading-copy" role="status"><AssistantTrace animated /><span>Preparing voice</span></div></div>}>
           <PortfolioVoiceExperience onSwitchToChat={() => changeMode('chat')} />
         </Suspense>
       )}

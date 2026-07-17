@@ -119,14 +119,14 @@ export default function PortfolioVoiceExperience({ onSwitchToChat }: Props) {
   };
 
   return (
-    <div className="voice-panel" role="tabpanel">
+    <div className="voice-panel" id="assistant-voice-panel" role="tabpanel" aria-labelledby="assistant-voice-tab" tabIndex={0}>
       <audio ref={audioRef} autoPlay hidden />
       <div className="voice-orb-wrap"><PortfolioVoiceOrb levelRef={levelRef} size={voiceState === 'intro' ? 260 : 300} variant={voiceState === 'intro' ? 'intro' : 'active'} /></div>
       {voiceState === 'intro' ? (
         <div className="voice-copy">
           <p className="eyebrow">Kevin's AI assistant</p>
           <h2>Talk through Kevin's work.</h2>
-          <p>This is an AI voice assistant. It answers from Kevin's public portfolio, and no transcript is retained. Microphone access begins only after you start.</p>
+          <p>Ask about Kevin's work, product decisions, or experience. Nothing starts until you tap the button, and the call is not recorded.</p>
           <button className="voice-primary" onClick={() => void startVoice()}>Start voice call</button>
           <button className="voice-secondary" onClick={switchToChat}>Back to Chat</button>
         </div>
