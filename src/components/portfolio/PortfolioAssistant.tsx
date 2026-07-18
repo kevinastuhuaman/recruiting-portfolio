@@ -125,7 +125,9 @@ export default function PortfolioAssistant() {
         const answer = answers?.length ? answers[answers.length - 1] : null;
         if (!container || !answer) return;
         anchorCompletedAnswerRef.current = false;
+        if (!stickToBottomRef.current) return;
         if (answer.getBoundingClientRect().height < container.clientHeight * 0.72) {
+          container.scrollTo({ top: container.scrollHeight, behavior: 'auto' });
           stickToBottomRef.current = true;
           return;
         }
@@ -216,6 +218,7 @@ export default function PortfolioAssistant() {
   const ask = async (value: string) => {
     const message = value.trim();
     if (message.length < 2 || inFlightRef.current) return;
+    anchorCompletedAnswerRef.current = false;
     stickToBottomRef.current = true;
     inFlightRef.current = true;
     const history = messages.slice(-6).map(({ role, content }) => ({ role, content }));
@@ -315,8 +318,7 @@ export default function PortfolioAssistant() {
             receivedDone = true;
             if (data.fallback === true) recoveredFallback = true;
             completeActivities();
-            anchorCompletedAnswerRef.current = true;
-            stickToBottomRef.current = false;
+            anchorCompletedAnswerRef.current = stickToBottomRef.current;
           }
         }
         if (done) break;
@@ -348,6 +350,7 @@ export default function PortfolioAssistant() {
         const fallback = await askPublicCorpus(message, fallbackController.signal);
         pendingCitationsRef.current = fallback.citations;
         commitAssistantDelta(fallback.answer, fallback.citations);
+        anchorCompletedAnswerRef.current = stickToBottomRef.current;
         updateActivity('writing', 'Used the verified portfolio fallback', 'complete');
         capturePortfolioEvent('portfolio_chat_completed', { outcome: 'deterministic_fallback' });
         setStatus('Ready');
