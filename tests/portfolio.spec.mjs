@@ -907,6 +907,11 @@ test("Chat resumes autoscroll when a visitor asks a new question", async ({ page
   await composer.fill("First question");
   await composer.press("Enter");
   await expect(page.getByText(/Long answer/)).toBeVisible();
+  await expect.poll(() => page.locator(".chat-messages").evaluate((container) => {
+    const answer = container.querySelector(".chat-message.assistant:last-of-type");
+    if (!(answer instanceof HTMLElement)) return Number.POSITIVE_INFINITY;
+    return Math.abs(answer.getBoundingClientRect().top - container.getBoundingClientRect().top);
+  }), { message: "a completed long answer settles at its beginning" }).toBeLessThan(90);
   await page.locator(".chat-messages").evaluate((element) => {
     element.scrollTop = 0;
     element.dispatchEvent(new Event("scroll", { bubbles: true }));
@@ -917,6 +922,73 @@ test("Chat resumes autoscroll when a visitor asks a new question", async ({ page
   await expect.poll(() => page.locator(".chat-messages").evaluate((element) => (
     element.scrollHeight - element.scrollTop - element.clientHeight
   ))).toBeLessThan(80);
+});
+
+test("Chat preserves a visitor's manual scroll position when a long stream finishes", async ({ page }) => {
+  await page.addInitScript(() => {
+    const originalFetch = window.fetch.bind(window);
+    window.fetch = async (input, init) => {
+      const url = typeof input === "string" ? input : input.url;
+      if (!url.endsWith("/api/portfolio/chat")) return originalFetch(input, init);
+      const encoder = new TextEncoder();
+      const stream = new ReadableStream({
+        start(controller) {
+          window.__portfolioManualScrollStream = {
+            delta() {
+              controller.enqueue(encoder.encode(`event: delta\ndata: ${JSON.stringify({ text: "Long streamed answer. ".repeat(240) })}\n\n`));
+            },
+            done() {
+              controller.enqueue(encoder.encode('event: done\ndata: {}\n\n'));
+              controller.close();
+            },
+          };
+        },
+      });
+      return new Response(stream, { status: 200, headers: { "Content-Type": "text/event-stream" } });
+    };
+  });
+  await page.goto("/ask/");
+  const composer = page.getByPlaceholder("Ask anything about Kevin");
+  await composer.fill("Give me the detailed version");
+  await composer.press("Enter");
+  await page.evaluate(() => window.__portfolioManualScrollStream.delta());
+  await expect(page.getByText(/Long streamed answer/)).toBeVisible();
+  await page.locator(".chat-messages").evaluate((element) => {
+    element.scrollTop = 0;
+    element.dispatchEvent(new Event("scroll", { bubbles: true }));
+  });
+  await page.evaluate(() => window.__portfolioManualScrollStream.done());
+  await expect(page.getByRole("status")).toHaveText("Ready");
+  await expect.poll(() => page.locator(".chat-messages").evaluate((element) => element.scrollTop)).toBeLessThan(20);
+});
+
+test("Chat anchors long deterministic fallback answers at their beginning", async ({ page }) => {
+  await page.route("https://api.portfolio.kevinastuhuaman.com/api/portfolio/chat", async (route) => {
+    await route.fulfill({ status: 503, contentType: "application/json", body: "{}" });
+  });
+  await page.route("https://api.portfolio.kevinastuhuaman.com/api/portfolio/ask", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ answer: "Long fallback answer. ".repeat(240), citations: [] }),
+    });
+  });
+  await page.goto("/ask/");
+  const composer = page.getByPlaceholder("Ask anything about Kevin");
+  await composer.fill("Give me the fallback answer");
+  await composer.press("Enter");
+  await expect(page.getByRole("status")).toHaveText("Ready");
+  await expect.poll(() => page.locator(".chat-messages").evaluate((container) => {
+    const answer = container.querySelector(".chat-message.assistant:last-of-type");
+    if (!(answer instanceof HTMLElement)) return Number.POSITIVE_INFINITY;
+    return Math.abs(answer.getBoundingClientRect().top - container.getBoundingClientRect().top);
+  })).toBeLessThan(90);
+});
+
+test("privacy copy describes safely formatted Chat answers", async ({ page }) => {
+  await page.goto("/privacy/");
+  await expect(page.getByText(/safely formatted answer/i)).toBeVisible();
+  await expect(page.getByText(/plain-text answer/i)).toHaveCount(0);
 });
 
 test("resume print control works under the site CSP", async ({ page }) => {
