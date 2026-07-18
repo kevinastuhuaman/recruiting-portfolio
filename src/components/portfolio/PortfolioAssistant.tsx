@@ -122,7 +122,7 @@ export default function PortfolioAssistant() {
       secondFrame = requestAnimationFrame(() => {
         const container = chatMessagesRef.current;
         const answers = container?.querySelectorAll<HTMLElement>('.chat-message.assistant');
-        const answer = answers?.item((answers?.length ?? 1) - 1);
+        const answer = answers?.length ? answers[answers.length - 1] : null;
         if (!container || !answer) return;
         anchorCompletedAnswerRef.current = false;
         if (answer.getBoundingClientRect().height < container.clientHeight * 0.72) {
