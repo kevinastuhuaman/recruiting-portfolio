@@ -84,6 +84,10 @@ Progression: Lead Product Manager (1 year), Senior Product Manager (1.5 years), 
 - LinkedIn: https://www.linkedin.com/in/kevinastuhuaman
 - GitHub: https://github.com/kevinastuhuaman
 - Writing: https://kevinastuhuaman.com/
+- X: https://x.com/kevinastuhuaman
+- YouTube: https://www.youtube.com/@kevinastuhuaman
+- Podcast: https://open.spotify.com/show/6OvPmvIDQh70CpLyU2DqkO?si=951d916ec5ad4ed9
+- Personal story: https://ai.kevinastuhuaman.com
 - Trackly: https://usetrackly.app/
 - Enterprise AI Interface Kit: https://kevinastuhuaman.github.io/enterprise-ai-interface-kit/
 - Enterprise AI Interface Kit source: https://github.com/kevinastuhuaman/enterprise-ai-interface-kit

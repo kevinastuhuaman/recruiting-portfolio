@@ -822,6 +822,27 @@ test("machine entry points link AI Product Motion Studies", async ({ request }) 
   expect(skill).toContain("Motion Studies LLM context");
 });
 
+test("machine entry points include every curated channel", async ({ request }) => {
+  const [llmsResponse, profileResponse] = await Promise.all([
+    request.get("/llms-full.txt"),
+    request.get("/profile.json"),
+  ]);
+
+  const llms = await llmsResponse.text();
+  const profile = await profileResponse.json();
+  const expected = {
+    x: "https://x.com/kevinastuhuaman",
+    youtube: "https://www.youtube.com/@kevinastuhuaman",
+    podcast: "https://open.spotify.com/show/6OvPmvIDQh70CpLyU2DqkO?si=951d916ec5ad4ed9",
+    personalStory: "https://ai.kevinastuhuaman.com",
+  };
+
+  for (const [name, url] of Object.entries(expected)) {
+    expect(profile.links[name]).toBe(url);
+    expect(llms).toContain(url);
+  }
+});
+
 test("404 output is excluded from indexing and structured data", async ({ page }) => {
   await page.goto("/404.html");
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "noindex, follow");
@@ -891,6 +912,20 @@ test("analytics payload excludes private content", async ({ page }) => {
       && entry.properties?.outcome === "streamed_fallback"
       && entry.properties?.recovered === true
     ))).toBe(true);
+    await page.goto("/");
+    await page.locator('[data-portfolio-destination="podcast"]').evaluate((link) => {
+      link.addEventListener("click", (event) => event.preventDefault(), { once: true });
+      link.click();
+    });
+    await expect.poll(() => events.some((entry) => (
+      entry.event === "portfolio_channel_opened"
+      && entry.properties?.channel === "watch-listen"
+      && entry.properties?.destination === "podcast"
+    ))).toBe(true);
+    const channelEvent = events.find((entry) => entry.event === "portfolio_channel_opened");
+    expect(channelEvent?.properties?.$el_text).toBeUndefined();
+    expect(channelEvent?.properties?.$elements_chain).toBeUndefined();
+    expect(JSON.stringify(channelEvent)).not.toContain("open.spotify.com");
     await page.goto("/resume/");
     const download = page.waitForEvent("download");
     await page.getByRole("link", { name: /Download PDF/i }).click();
