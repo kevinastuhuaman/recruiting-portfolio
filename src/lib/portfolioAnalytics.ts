@@ -13,6 +13,7 @@ const REPLAY_EXCLUDED_PATHS = new Set(["/ask/"]);
 
 const SECTION_IDS = new Set([
   "assistant",
+  "channels",
   "credibility",
   "experience",
   "lab",

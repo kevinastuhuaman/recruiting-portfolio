@@ -1,6 +1,7 @@
 ---
 import { ArrowUpRight, FileText, MessageCircle, Mic } from "@lucide/astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import CuratedChannels from "../components/CuratedChannels.astro";
 import HomepagePortfolioOrb from "../components/portfolio/HomepagePortfolioOrb";
 import { experience, projects, site } from "../data/site.js";
 import { claimsById } from "../data/claims.js";
@@ -133,6 +134,8 @@ const paypalClaim = claimsById["paypal-detection"];
         <a class="button button-primary" href="/ask/">Ask Kevin's AI <ArrowUpRight aria-hidden="true" size={17} /></a>
       </div>
     </section>
+
+    <CuratedChannels />
   </div>
 </BaseLayout>
 
