@@ -2,6 +2,7 @@ export type PortfolioEvent =
   | "portfolio_assistant_opened"
   | "portfolio_assistant_mode_selected"
   | "portfolio_case_study_opened"
+  | "portfolio_channel_opened"
   | "portfolio_chat_completed"
   | "portfolio_chat_failed"
   | "portfolio_chat_feedback"
@@ -20,6 +21,7 @@ export type QueuedPortfolioEvent = { event: PortfolioEvent; properties: SafeProp
 const EVENT_QUEUE_KEY = "portfolio_event_queue";
 const PORTFOLIO_EVENTS = new Set<PortfolioEvent>([
   "portfolio_assistant_opened", "portfolio_assistant_mode_selected", "portfolio_case_study_opened",
+  "portfolio_channel_opened",
   "portfolio_chat_completed", "portfolio_chat_failed", "portfolio_chat_feedback", "portfolio_chat_started",
   "portfolio_contact_action", "portfolio_page_engaged", "portfolio_section_viewed",
   "portfolio_voice_ended", "portfolio_voice_failed", "portfolio_voice_started", "portfolio_voice_state_changed",
@@ -82,6 +84,11 @@ export function classifyPortfolioInteraction(element: Element) {
 
   const link = element.closest<HTMLAnchorElement>("a[href]");
   if (!link) return undefined;
+  const channel = link.dataset.portfolioChannel;
+  const destination = link.dataset.portfolioDestination;
+  if (channel && destination) {
+    return { event: "portfolio_channel_opened" as const, properties: { channel, destination } };
+  }
   const href = link.getAttribute("href") ?? "";
   if (href.startsWith("mailto:")) return { event: "portfolio_contact_action" as const, properties: { action: "email" } };
   if (href.includes("linkedin.com")) return { event: "portfolio_contact_action" as const, properties: { action: "linkedin" } };

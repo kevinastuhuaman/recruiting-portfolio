@@ -85,7 +85,7 @@ test("mobile first viewport leads with AI PM, Berkeley, and PayPal evidence", as
 
 test("homepage follows the recruiter-first narrative order", async ({ page }) => {
   await page.goto("/", { waitUntil: "networkidle" });
-  const ids = ["credibility", "paypal", "trackly", "mobagel", "experience", "lab", "assistant", "contact"];
+  const ids = ["credibility", "paypal", "trackly", "mobagel", "experience", "lab", "assistant", "channels", "contact"];
   const tops = await Promise.all(ids.map((id) => page.locator(`#${id}`).evaluate((element) => element.getBoundingClientRect().top + window.scrollY)));
   expect(tops).toEqual([...tops].sort((a, b) => a - b));
   await expect(page.locator("#credibility")).toHaveCSS("border-bottom-width", "1px");
@@ -255,6 +255,57 @@ test("homepage exposes one contact invitation with copy-email and resume actions
   });
   await page.getByRole("button", { name: "Email copied" }).click();
   await expect(page.locator(".footer-copy-status")).toHaveText("Copy email");
+});
+
+test("homepage offers seven curated channels without overwhelming the contact path", async ({ page }) => {
+  await page.goto("/", { waitUntil: "networkidle" });
+  const channels = page.locator("#channels");
+
+  await expect(channels.getByRole("heading", { name: "Follow the thread." })).toBeVisible();
+  await expect(channels).toContainText("What I ship and how I think about products.");
+  await expect(channels).toContainText("Writing, unfinished thoughts, and life beyond work.");
+  await expect(channels).toContainText("Conversations with builders and my personal finance YouTube channel.");
+
+  const expectedLinks = [
+    ["GitHub", "https://github.com/kevinastuhuaman"],
+    ["LinkedIn", "https://www.linkedin.com/in/kevinastuhuaman"],
+    ["Newsletter", "https://kevinastuhuaman.com/"],
+    ["X", "https://x.com/kevinastuhuaman"],
+    ["Personal story", "https://ai.kevinastuhuaman.com"],
+    ["Podcast", "https://open.spotify.com/show/6OvPmvIDQh70CpLyU2DqkO?si=951d916ec5ad4ed9"],
+    ["YouTube", "https://www.youtube.com/@kevinastuhuaman"],
+  ];
+  for (const [name, href] of expectedLinks) {
+    const link = channels.getByRole("link", { name });
+    await expect(link).toHaveAttribute("href", href);
+    await expect(link).toHaveAttribute("target", "_blank");
+    await expect(link).toHaveAttribute("rel", "noopener noreferrer");
+  }
+
+  const schema = JSON.parse(await page.locator('script[type="application/ld+json"]').textContent());
+  const person = schema["@graph"].find((entry) => entry["@id"]?.endsWith("/#kevin"));
+  expect(person.sameAs).toHaveLength(expectedLinks.length);
+  expect(person.sameAs).toEqual(expect.arrayContaining(expectedLinks.map(([, href]) => href)));
+
+  await expect(channels.locator('[aria-label="Kevin\'s podcast and video channel"] a')).toHaveText(["Podcast", "YouTube"]);
+
+  for (const width of [390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    const layout = await channels.evaluate((section) => {
+      const cards = [...section.querySelectorAll(".channel")];
+      const rect = section.getBoundingClientRect();
+      return {
+        columns: getComputedStyle(section.querySelector(".channels-grid")).gridTemplateColumns.split(" ").length,
+        contained: cards.every((card) => {
+          const cardRect = card.getBoundingClientRect();
+          return cardRect.left >= rect.left - 1 && cardRect.right <= rect.right + 1;
+        }),
+      };
+    });
+    expect(layout.contained).toBe(true);
+    expect(layout.columns).toBe(width <= 768 ? 1 : 3);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+  }
 });
 
 test("email copy failure opens the manual-copy fallback without navigating", async ({ page }) => {
@@ -771,6 +822,27 @@ test("machine entry points link AI Product Motion Studies", async ({ request }) 
   expect(skill).toContain("Motion Studies LLM context");
 });
 
+test("machine entry points include every curated channel", async ({ request }) => {
+  const [llmsResponse, profileResponse] = await Promise.all([
+    request.get("/llms-full.txt"),
+    request.get("/profile.json"),
+  ]);
+
+  const llms = await llmsResponse.text();
+  const profile = await profileResponse.json();
+  const expected = {
+    x: "https://x.com/kevinastuhuaman",
+    youtube: "https://www.youtube.com/@kevinastuhuaman",
+    podcast: "https://open.spotify.com/show/6OvPmvIDQh70CpLyU2DqkO?si=951d916ec5ad4ed9",
+    personalStory: "https://ai.kevinastuhuaman.com",
+  };
+
+  for (const [name, url] of Object.entries(expected)) {
+    expect(profile.links[name]).toBe(url);
+    expect(llms).toContain(url);
+  }
+});
+
 test("404 output is excluded from indexing and structured data", async ({ page }) => {
   await page.goto("/404.html");
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "noindex, follow");
@@ -840,6 +912,20 @@ test("analytics payload excludes private content", async ({ page }) => {
       && entry.properties?.outcome === "streamed_fallback"
       && entry.properties?.recovered === true
     ))).toBe(true);
+    await page.goto("/");
+    await page.locator('[data-portfolio-destination="podcast"]').evaluate((link) => {
+      link.addEventListener("click", (event) => event.preventDefault(), { once: true });
+      link.click();
+    });
+    await expect.poll(() => events.some((entry) => (
+      entry.event === "portfolio_channel_opened"
+      && entry.properties?.channel === "watch-listen"
+      && entry.properties?.destination === "podcast"
+    ))).toBe(true);
+    const channelEvent = events.find((entry) => entry.event === "portfolio_channel_opened");
+    expect(channelEvent?.properties?.$el_text).toBeUndefined();
+    expect(channelEvent?.properties?.$elements_chain).toBeUndefined();
+    expect(JSON.stringify(channelEvent)).not.toContain("open.spotify.com");
     await page.goto("/resume/");
     const download = page.waitForEvent("download");
     await page.getByRole("link", { name: /Download PDF/i }).click();
@@ -894,6 +980,23 @@ test("early analytics events survive fast cross-page navigation", async ({ page 
   ]);
   expect(queue.map((item) => item.pagePath)).toEqual(["/", "/ask/"]);
   expect(queue[1].properties).toEqual({ action: "resume" });
+});
+
+test("curated channel clicks queue only controlled analytics labels", async ({ page }) => {
+  test.skip(Boolean(process.env.PUBLIC_POSTHOG_KEY), "requires the persisted early-event queue before PostHog drains it");
+  await page.goto("/");
+  await page.locator('[data-portfolio-destination="podcast"]').evaluate((link) => {
+    link.addEventListener("click", (event) => event.preventDefault(), { once: true });
+    link.click();
+  });
+
+  const queue = await page.evaluate(() => JSON.parse(sessionStorage.getItem("portfolio_event_queue") ?? "[]"));
+  expect(queue).toEqual([{
+    event: "portfolio_channel_opened",
+    pagePath: "/",
+    properties: { channel: "watch-listen", destination: "podcast" },
+  }]);
+  expect(JSON.stringify(queue)).not.toContain("open.spotify.com");
 });
 
 test("privacy signals prevent and clear the early analytics queue", async ({ page }) => {

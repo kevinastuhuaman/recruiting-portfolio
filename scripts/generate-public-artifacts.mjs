@@ -109,6 +109,10 @@ const profile = {
     linkedin: links.linkedin,
     github: links.github,
     writing: links.writing,
+    x: links.x,
+    youtube: links.youtube,
+    podcast: links.podcast,
+    personalStory: links.personalStory,
     trackly: links.trackly,
     enterpriseAiInterfaceKit: links.interfaceKit,
     enterpriseAiInterfaceKitSource: links.interfaceKitRepo,
@@ -280,6 +284,10 @@ ${publicClaims.map((claim) => `- ${claim.statement} Context: ${claim.context} So
 - LinkedIn: ${links.linkedin}
 - GitHub: ${links.github}
 - Writing: ${links.writing}
+- X: ${links.x}
+- YouTube: ${links.youtube}
+- Podcast: ${links.podcast}
+- Personal story: ${links.personalStory}
 - Trackly: ${links.trackly}
 - Enterprise AI Interface Kit: ${links.interfaceKit}
 - Enterprise AI Interface Kit source: ${links.interfaceKitRepo}
