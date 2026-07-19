@@ -1005,9 +1005,14 @@ const Heading = headingLevel;
       grid-template-columns: 1fr;
     }
 
-    .boundary-grid div + div,
-    .review-card > div + div {
+    .boundary-grid div + div {
       padding-left: 0;
+      border-left: 0;
+      border-top: 1px solid var(--wb-rule);
+    }
+
+    .review-card > div + div {
+      padding: 18px;
       border-left: 0;
       border-top: 1px solid var(--wb-rule);
     }

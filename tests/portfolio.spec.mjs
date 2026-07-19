@@ -137,6 +137,37 @@ test("homepage project system keeps type, media, and Berkeley steps readable", a
   await expect(page.locator("[data-berkeley-step]").first()).toHaveCSS("writing-mode", "horizontal-tb");
 });
 
+test("mobile case-study cards keep one deliberate content gutter", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+
+  await page.goto("/projects/paypal-ai-observability/", { waitUntil: "networkidle" });
+  const workbench = page.locator("[data-workbench]");
+  for (let step = 0; step < 4; step += 1) {
+    await workbench.locator("[data-workbench-action]").click();
+  }
+  await expect(workbench).toHaveAttribute("data-stage", "review");
+
+  const reviewGutters = await workbench.locator(".review-card > div").evaluateAll((rows) =>
+    rows.map((row) => {
+      const rowRect = row.getBoundingClientRect();
+      const content = row.querySelector("span, strong, p");
+      const contentRect = content?.getBoundingClientRect();
+      return contentRect ? Math.round(contentRect.left - rowRect.left) : null;
+    }),
+  );
+  expect(reviewGutters).toEqual([18, 18, 18]);
+
+  await page.goto("/projects/berkeley-mobagel-ai-gtm/", { waitUntil: "networkidle" });
+  const workstreamGutters = await page.locator(".workstreams section").evaluateAll((sections) =>
+    sections.map((section) => {
+      const sectionRect = section.getBoundingClientRect();
+      const eyebrowRect = section.querySelector(".eyebrow")?.getBoundingClientRect();
+      return eyebrowRect ? Math.round(eyebrowRect.left - sectionRect.left) : null;
+    }),
+  );
+  expect(workstreamGutters).toEqual([22, 22, 22, 22]);
+});
+
 test("homepage assistant preview reuses the moving voice orb without requesting audio", async ({ page }) => {
   await page.addInitScript(() => {
     window.__homepageMicRequests = 0;
