@@ -225,6 +225,7 @@ test("homepage orb keeps its static artwork when WebGL is unavailable", async ({
   const fallback = page.locator(".homepage-portfolio-orb-canvas.portfolio-voice-orb-fallback");
   await expect(fallback).toBeVisible();
   await expect(fallback).toHaveCSS("border-radius", "50%");
+  await expect(fallback).not.toHaveCSS("background-image", "none");
   await expect(fallback).not.toHaveCSS("background-image", /url\(/);
   await expect(page.locator(".homepage-portfolio-orb")).not.toHaveClass(/is-ready/);
 });
