@@ -12,10 +12,6 @@ export default function HomepagePortfolioOrb() {
 
   return (
     <div className={`homepage-portfolio-orb${ready ? " is-ready" : ""}`}>
-      <span
-        className="homepage-portfolio-orb-fallback"
-        aria-hidden="true"
-      />
       <PortfolioVoiceOrb
         className="homepage-portfolio-orb-canvas"
         levelRef={levelRef}
