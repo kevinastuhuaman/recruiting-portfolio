@@ -406,6 +406,9 @@ test("resume contact action copies the email instead of opening a composer", asy
   await expect(copyButton).toContainText("Email copied");
   await expect.poll(() => page.evaluate(() => window.sessionStorage.getItem("resume-copied-email"))).toBe("kevin.astuhuaman@berkeley.edu");
   await expect(page.locator('.resume-actions a[href^="mailto:"]')).toHaveCount(0);
+  await expect(page.locator(".resume-print-email")).toBeHidden();
+  await page.emulateMedia({ media: "print" });
+  await expect(page.locator(".resume-print-email")).toBeVisible();
 });
 
 test("lab previews show complete interfaces without cropped or empty media", async ({ page }) => {
