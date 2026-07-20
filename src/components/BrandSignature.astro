@@ -1,24 +1,17 @@
 ---
-const { brand } = Astro.props;
+const { brand, centered = false } = Astro.props;
 ---
 
-<div class:list={["brand-signature", `brand-${brand.id}`]}>
-  <span class:list={["brand-mark", brand.asset && "brand-mark-image"]} aria-hidden="true">
-    {brand.asset ? <img src={brand.asset} width="64" height="64" alt="" /> : brand.monogram}
-  </span>
+<div class:list={["brand-signature", centered && "brand-signature-centered"]}>
   <span class="brand-copy"><strong>{brand.label}</strong><small>{brand.relationship}</small></span>
 </div>
 
 <style>
-  .brand-signature { display: flex; min-width: 0; align-items: center; gap: 14px; }
-  .brand-paypal { --brand-accent: #0868d6; }
-  .brand-berkeley { --brand-accent: #fdb515; }
-  .brand-trackly { --brand-accent: #8d43ff; }
-  .brand-bcp { --brand-accent: #e85f16; }
-  .brand-mark { display: grid; width: 42px; height: 42px; flex: 0 0 42px; place-items: center; border: 1px solid color-mix(in srgb, var(--brand-accent) 42%, #171717); border-radius: 10px; background: color-mix(in srgb, var(--brand-accent) 12%, white); color: #11110f; font: 800 .72rem/1 var(--font-mono); letter-spacing: -.04em; }
-  .brand-mark-image { overflow: hidden; border: 0; background: #09090b; }
-  .brand-mark img { width: 100%; height: 100%; object-fit: cover; }
+  .brand-signature { display: block; min-width: 0; }
   .brand-copy, .brand-copy strong, .brand-copy small { display: block; min-width: 0; }
   .brand-copy strong { margin: 0 0 5px; font-size: 1rem; line-height: 1.15; }
   .brand-copy small { color: #62666c; font-size: .76rem; line-height: 1.35; }
+  .brand-signature-centered { width: 100%; text-align: center; }
+  .brand-signature-centered .brand-copy strong { font-size: 1.08rem; }
+  .brand-signature-centered .brand-copy small { max-width: 23ch; margin-inline: auto; }
 </style>

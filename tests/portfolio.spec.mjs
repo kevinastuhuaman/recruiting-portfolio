@@ -179,6 +179,7 @@ test("homepage assistant preview reuses the moving voice orb without requesting 
   await page.goto("/", { waitUntil: "networkidle" });
 
   const orb = page.locator(".homepage-portfolio-orb-canvas");
+  await expect(page.locator(".homepage-portfolio-orb")).toHaveClass(/is-ready/);
   await page.locator("#assistant").scrollIntoViewIfNeeded();
   await expect(orb).toBeVisible();
   await expect(orb).toHaveAttribute("data-motion", "animated");
@@ -221,9 +222,10 @@ test("homepage orb keeps its static artwork when WebGL is unavailable", async ({
   await page.goto("/", { waitUntil: "networkidle" });
 
   await page.locator("#assistant").scrollIntoViewIfNeeded();
-  const fallback = page.locator(".homepage-portfolio-orb-fallback");
+  const fallback = page.locator(".homepage-portfolio-orb-canvas.portfolio-voice-orb-fallback");
   await expect(fallback).toBeVisible();
   await expect(fallback).toHaveCSS("border-radius", "50%");
+  await expect(fallback).not.toHaveCSS("background-image", "none");
   await expect(fallback).not.toHaveCSS("background-image", /url\(/);
   await expect(page.locator(".homepage-portfolio-orb")).not.toHaveClass(/is-ready/);
 });
@@ -294,16 +296,21 @@ test("homepage offers seven curated channels without overwhelming the contact pa
     const layout = await channels.evaluate((section) => {
       const cards = [...section.querySelectorAll(".channel")];
       const rect = section.getBoundingClientRect();
+      const headingTops = cards.map((card) => Math.round(card.querySelector("h3").getBoundingClientRect().top));
+      const descriptionTops = cards.map((card) => Math.round(card.querySelector(":scope > p").getBoundingClientRect().top));
+      const navigationTops = cards.map((card) => Math.round(card.querySelector("nav").getBoundingClientRect().top));
       return {
         columns: getComputedStyle(section.querySelector(".channels-grid")).gridTemplateColumns.split(" ").length,
         contained: cards.every((card) => {
           const cardRect = card.getBoundingClientRect();
           return cardRect.left >= rect.left - 1 && cardRect.right <= rect.right + 1;
         }),
+        aligned: [headingTops, descriptionTops, navigationTops].every((positions) => Math.max(...positions) - Math.min(...positions) <= 1),
       };
     });
     expect(layout.contained).toBe(true);
     expect(layout.columns).toBe(width <= 768 ? 1 : 3);
+    if (width > 768) expect(layout.aligned).toBe(true);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
   }
 });
