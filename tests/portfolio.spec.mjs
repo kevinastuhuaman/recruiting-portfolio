@@ -922,6 +922,12 @@ test("analytics payload excludes private content", async ({ page }) => {
     });
   });
   await page.goto("/ask/?utm_source=linkedin");
+  if (process.env.PUBLIC_POSTHOG_KEY?.startsWith("phc_")) {
+    await expect.poll(
+      () => page.evaluate(() => typeof window.__portfolioAnalyticsCapture === "function"),
+      { message: "analytics initializes after browser idle" },
+    ).toBe(true);
+  }
   await page.locator('a[href="/resume/"]').first().evaluate((link) => {
     link.addEventListener("click", (event) => event.preventDefault(), { once: true });
     link.click();
@@ -931,7 +937,9 @@ test("analytics payload excludes private content", async ({ page }) => {
   await expect(page.getByRole("status")).toHaveText("Ready");
   expect(JSON.stringify(events)).not.toContain("private recruiter question text");
   if (process.env.PUBLIC_POSTHOG_KEY?.startsWith("phc_")) {
-    await expect.poll(() => events.length, { message: "analytics initializes after browser idle" }).toBeGreaterThan(0);
+    await expect.poll(() => events.some((entry) => (
+      entry.event === "portfolio_contact_action" && entry.properties?.action === "resume"
+    )), { message: "resume analytics event arrives" }).toBe(true);
     const anonymousIds = new Set(events.map((entry) => entry?.properties?.distinct_id));
     expect(anonymousIds.size).toBe(1);
     expect([...anonymousIds].every((id) => typeof id === "string" && id.length > 0)).toBe(true);
@@ -939,9 +947,6 @@ test("analytics payload excludes private content", async ({ page }) => {
     expect(events.every((entry) => !String(entry?.properties?.$current_url ?? "").includes("utm_source"))).toBe(true);
     expect(JSON.stringify(events)).not.toContain("utm_source");
     expect(JSON.stringify(events)).not.toContain("$initial_utm_");
-    expect(events.some((entry) => (
-      entry.event === "portfolio_contact_action" && entry.properties?.action === "resume"
-    ))).toBe(true);
     expect(events.some((entry) => (
       entry.event === "portfolio_chat_completed"
       && entry.properties?.outcome === "streamed_fallback"
