@@ -368,6 +368,8 @@ const inventoryMetrics = [
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let activeSurface = 0;
     let surfaceFrame = 0;
+    let programmaticSurface: number | null = null;
+    let surfaceUnlockTimer = 0;
 
     const setActiveSurface = (index: number) => {
       activeSurface = Math.max(0, Math.min(cards.length - 1, index));
@@ -383,15 +385,25 @@ const inventoryMetrics = [
     const scrollToSurface = (index: number) => {
       const card = cards[index];
       if (!rail || !card) return;
+      programmaticSurface = Math.max(0, Math.min(cards.length - 1, index));
+      window.clearTimeout(surfaceUnlockTimer);
       rail.scrollTo({
         left: card.offsetLeft - rail.offsetLeft,
         behavior: reducedMotion.matches ? "auto" : "smooth",
       });
-      setActiveSurface(index);
+      setActiveSurface(programmaticSurface);
+      surfaceUnlockTimer = window.setTimeout(() => {
+        programmaticSurface = null;
+        updateSurfaceFromScroll();
+      }, reducedMotion.matches ? 0 : 650);
     };
 
     const updateSurfaceFromScroll = () => {
       if (!rail || cards.length === 0) return;
+      if (programmaticSurface !== null) {
+        setActiveSurface(programmaticSurface);
+        return;
+      }
       const railLeft = rail.getBoundingClientRect().left;
       const closest = cards.reduce((best, card, index) => {
         const distance = Math.abs(card.getBoundingClientRect().left - railLeft);
@@ -403,6 +415,12 @@ const inventoryMetrics = [
     previous?.addEventListener("click", () => scrollToSurface(activeSurface - 1));
     next?.addEventListener("click", () => scrollToSurface(activeSurface + 1));
     targets.forEach((target) => target.addEventListener("click", () => scrollToSurface(Number(target.dataset.surfaceTarget))));
+    const releaseProgrammaticSurface = () => {
+      window.clearTimeout(surfaceUnlockTimer);
+      programmaticSurface = null;
+    };
+    rail?.addEventListener("pointerdown", releaseProgrammaticSurface, { passive: true });
+    rail?.addEventListener("wheel", releaseProgrammaticSurface, { passive: true });
     rail?.addEventListener("scroll", () => {
       window.cancelAnimationFrame(surfaceFrame);
       surfaceFrame = window.requestAnimationFrame(updateSurfaceFromScroll);
