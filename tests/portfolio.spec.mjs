@@ -84,6 +84,9 @@ test("mobile first viewport leads with AI PM, Berkeley, and PayPal evidence", as
   await expect(page.locator(".proof-strip .brand-signature")).toHaveCount(4);
   await expect(page.locator(".proof-strip .brand-signature-centered")).toHaveCount(0);
   await expect(page.locator(".proof-strip .brand-mark")).toHaveCount(0);
+  await expect(page.locator(".proof-strip .brand-copy strong").first()).toHaveCSS("font-size", "19.2px");
+  await expect(page.locator(".proof-strip .brand-copy strong").first()).toHaveCSS("margin-bottom", "12px");
+  await expect(page.locator(".proof-strip .brand-copy small").first()).toHaveCSS("font-size", "13.44px");
   const proofInsets = await page.locator(".proof-strip > div").evaluateAll((cells) =>
     cells.map((cell) => {
       const cellBox = cell.getBoundingClientRect();
