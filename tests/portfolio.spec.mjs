@@ -81,6 +81,22 @@ test("mobile first viewport leads with AI PM, Berkeley, and PayPal evidence", as
 
   await page.setViewportSize({ width: 1440, height: 1000 });
   await expect(page.locator(".proof-strip")).toBeVisible();
+  await expect(page.locator(".proof-strip .brand-signature")).toHaveCount(4);
+  await expect(page.locator(".proof-strip .brand-signature-centered")).toHaveCount(0);
+  await expect(page.locator(".proof-strip .brand-mark")).toHaveCount(0);
+  const proofInsets = await page.locator(".proof-strip > div").evaluateAll((cells) =>
+    cells.map((cell) => {
+      const cellBox = cell.getBoundingClientRect();
+      const signatureBox = cell.querySelector(".brand-signature")?.getBoundingClientRect();
+      return signatureBox ? { left: signatureBox.left - cellBox.left, top: signatureBox.top - cellBox.top } : null;
+    }),
+  );
+  expect(proofInsets).toEqual([
+    { left: 20, top: 20 },
+    { left: 20, top: 20 },
+    { left: 20, top: 20 },
+    { left: 20, top: 20 },
+  ]);
 });
 
 test("homepage follows the recruiter-first narrative order", async ({ page }) => {

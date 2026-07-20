@@ -37,7 +37,7 @@ const paypalClaim = claimsById["paypal-detection"];
     </section>
 
     <section id="credibility" class="proof-strip proof-strip-v2" aria-label="Credibility">
-      {homepageBrandSignatures.map((brand) => <div><BrandSignature brand={brand} centered /></div>)}
+      {homepageBrandSignatures.map((brand) => <div><BrandSignature brand={brand} /></div>)}
     </section>
 
     <section id="work" class="selected-work-v2" aria-labelledby="work-title">
@@ -270,10 +270,8 @@ const paypalClaim = claimsById["paypal-detection"];
   }
 
   .proof-strip > div {
-    display: grid;
     min-height: 142px;
     padding: 20px;
-    place-items: center;
     border-right: 1px solid #171717;
   }
 
