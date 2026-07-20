@@ -2,6 +2,16 @@
 import { ArrowUpRight, CodeXml } from "@lucide/astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { labArtifacts } from "../../data/site.js";
+
+const previewTreatments = [
+  { monogram: "IW", label: "Evidence → decision" },
+  { monogram: "65", label: "Tools → product systems" },
+  { monogram: "AW", label: "State → accountable action" },
+  { monogram: "EC", label: "Regression → release gate" },
+  { monogram: "HC", label: "Intent → human control" },
+  { monogram: "MS", label: "Motion → product state" },
+  { monogram: "EI", label: "Evidence → trusted interface" },
+];
 ---
 
 <BaseLayout
@@ -17,17 +27,32 @@ import { labArtifacts } from "../../data/site.js";
     </header>
 
     <section class="lab-grid" aria-label="Interactive product artifacts">
-      {labArtifacts.map((artifact, index) => (
+      {labArtifacts.map((artifact, index) => {
+        const treatment = previewTreatments[index] ?? { monogram: "AI", label: "Interactive product study" };
+        return (
         <article id={artifact.id} class:list={["lab-card", index === 0 && "lab-card-featured"]}>
-          <a class="lab-visual" href={artifact.live} aria-label={`Open ${artifact.name}`}>
+          <a
+            class:list={["lab-visual", `lab-preview-${index + 1}`]}
+            href={artifact.live}
+            aria-label={`Open ${artifact.name}`}
+            data-lab-preview
+          >
+            <div class="lab-placeholder" aria-hidden="true">
+              <span class="lab-placeholder-kicker">Interactive product study</span>
+              <strong>{treatment.monogram}</strong>
+              <span class="lab-placeholder-title">{artifact.name}</span>
+              <span class="lab-placeholder-signal">{treatment.label}</span>
+              <i></i><i></i>
+            </div>
             {artifact.image ? (
               <img
+                class="lab-preview-image"
                 src={artifact.image}
                 width="1200"
                 height="630"
-                loading="eager"
+                loading={index === 0 ? "eager" : "lazy"}
                 decoding="async"
-                fetchpriority={index === 0 ? "high" : "auto"}
+                fetchpriority={index === 0 ? "high" : undefined}
                 alt={`${artifact.name} interface preview`}
               />
             ) : (
@@ -44,7 +69,8 @@ import { labArtifacts } from "../../data/site.js";
             </div>
           </div>
         </article>
-      ))}
+        );
+      })}
     </section>
 
     <aside class="lab-boundary">
@@ -52,6 +78,47 @@ import { labArtifacts } from "../../data/site.js";
       <p>These studies use synthetic data and original public interfaces. They demonstrate product thinking and implementation without publishing employer systems, Trackly user data, private infrastructure, or production authorization logic.</p>
     </aside>
   </div>
+
+  <script>
+    document.querySelectorAll<HTMLElement>("[data-lab-preview]").forEach((preview) => {
+      const image = preview.querySelector<HTMLImageElement>(".lab-preview-image");
+      if (!image) return;
+
+      const reveal = () => {
+        preview.classList.remove("is-loading", "has-error");
+        preview.classList.add("is-ready");
+      };
+      const preserveFallback = () => {
+        preview.classList.remove("is-loading", "is-ready");
+        preview.classList.add("has-error");
+      };
+
+      const revealWhenDecoded = async () => {
+        if (image.naturalWidth === 0) {
+          preserveFallback();
+          return;
+        }
+        try {
+          await image.decode();
+        } catch {
+          if (image.naturalWidth === 0) {
+            preserveFallback();
+            return;
+          }
+        }
+        reveal();
+      };
+
+      if (image.complete) {
+        void revealWhenDecoded();
+        return;
+      }
+
+      preview.classList.add("is-loading");
+      image.addEventListener("load", () => void revealWhenDecoded(), { once: true });
+      image.addEventListener("error", preserveFallback, { once: true });
+    });
+  </script>
 </BaseLayout>
 
 <style>
@@ -63,9 +130,23 @@ import { labArtifacts } from "../../data/site.js";
   .lab-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-left: 1px solid var(--ink); }
   .lab-card { min-width: 0; scroll-margin-top: 88px; border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); background: #fff; }
   .lab-card-featured { grid-column: 1 / -1; display: grid; grid-template-columns: 1.3fr .7fr; }
-  .lab-visual { position: relative; display: grid; min-width: 0; min-height: 0; aspect-ratio: 16 / 9; place-items: center; overflow: hidden; background: #141122; }
-  .lab-visual::before { position: absolute; inset: 0; background: linear-gradient(rgba(128,86,245,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(128,86,245,.08) 1px, transparent 1px); background-size: 40px 40px; content: ""; }
-  .lab-visual img { position: relative; z-index: 1; display: block; width: 100%; height: 100%; min-height: 0; object-fit: contain; transition: transform .5s cubic-bezier(.2,.7,.2,1), opacity .2s ease; }
+  .lab-visual { position: relative; display: grid; min-width: 0; min-height: 0; aspect-ratio: 16 / 9; place-items: center; overflow: hidden; background: #141122; isolation: isolate; }
+  .lab-preview-1, .lab-preview-5 { --preview-accent: #72d6ed; }
+  .lab-preview-2, .lab-preview-6 { --preview-accent: #d8ff52; }
+  .lab-preview-3, .lab-preview-7 { --preview-accent: #a57aff; }
+  .lab-preview-4 { --preview-accent: #ffb86b; }
+  .lab-placeholder { position: absolute; inset: 0; z-index: 1; display: grid; padding: clamp(22px, 4vw, 42px); grid-template: auto 1fr auto auto / 1fr; overflow: hidden; background: radial-gradient(circle at 82% 14%, color-mix(in srgb, var(--preview-accent) 24%, transparent), transparent 34%), #141122; color: #fff; transition: opacity .24s ease; }
+  .lab-placeholder::before { position: absolute; inset: 0; background: linear-gradient(rgba(255,255,255,.055) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.055) 1px, transparent 1px); background-size: 38px 38px; content: ""; mask-image: linear-gradient(to bottom, #000, transparent 82%); }
+  .lab-placeholder-kicker, .lab-placeholder-title, .lab-placeholder-signal, .lab-placeholder strong { position: relative; z-index: 2; }
+  .lab-placeholder-kicker { color: color-mix(in srgb, var(--preview-accent) 84%, white); font: 700 .68rem/1 var(--font-mono); letter-spacing: .09em; text-transform: uppercase; }
+  .lab-placeholder strong { align-self: center; font-size: clamp(4.6rem, 12vw, 9rem); line-height: .75; letter-spacing: -.09em; }
+  .lab-placeholder-title { max-width: 28ch; margin-bottom: 7px; font-size: clamp(1rem, 2vw, 1.45rem); font-weight: 760; }
+  .lab-placeholder-signal { color: rgba(255,255,255,.62); font-size: .78rem; }
+  .lab-placeholder i { position: absolute; right: -9%; bottom: -34%; width: 58%; aspect-ratio: 1; border: 1px solid color-mix(in srgb, var(--preview-accent) 46%, transparent); border-radius: 50%; }
+  .lab-placeholder i:last-child { right: 4%; bottom: -49%; width: 76%; opacity: .52; }
+  .lab-visual img { position: relative; z-index: 2; display: block; width: 100%; height: 100%; min-height: 0; object-fit: contain; background: #141122; transition: transform .5s cubic-bezier(.2,.7,.2,1), opacity .24s ease; }
+  .lab-visual.is-loading img, .lab-visual.has-error img { opacity: 0; }
+  .lab-visual.is-ready .lab-placeholder { opacity: 0; pointer-events: none; }
   .lab-card:hover .lab-visual img { transform: scale(1.018); }
   .lab-copy { padding: 30px; }
   .lab-number { color: var(--accent); font: 700 .78rem/1 var(--font-mono); }
@@ -86,7 +167,9 @@ import { labArtifacts } from "../../data/site.js";
     .lab-grid { grid-template-columns: 1fr; }
     .lab-card-featured { grid-column: auto; display: block; }
     .lab-visual { min-height: 0; }
+    .lab-placeholder { padding: 22px; }
+    .lab-placeholder strong { font-size: clamp(4.2rem, 22vw, 7rem); }
     .lab-copy h2 { margin-top: 28px; }
   }
-  @media (prefers-reduced-motion: reduce) { .lab-visual img { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .lab-visual img, .lab-placeholder { transition: none; } }
 </style>

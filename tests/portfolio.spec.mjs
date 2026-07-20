@@ -124,7 +124,7 @@ test("homepage project system keeps type, media, and Berkeley steps readable", a
     });
     expect(aspectDelta, `PayPal image ratio at ${width}px`).toBeLessThan(0.03);
 
-    const tracklyImage = page.locator("#trackly .trackly-proof > img");
+    const tracklyImage = page.locator("#trackly .trackly-proof img");
     await expect(tracklyImage).toBeVisible();
     await expect(tracklyImage).toHaveCSS("object-fit", "contain");
     const tracklyAspectDelta = await tracklyImage.evaluate((image) => {
@@ -406,6 +406,9 @@ test("resume contact action copies the email instead of opening a composer", asy
   await expect(copyButton).toContainText("Email copied");
   await expect.poll(() => page.evaluate(() => window.sessionStorage.getItem("resume-copied-email"))).toBe("kevin.astuhuaman@berkeley.edu");
   await expect(page.locator('.resume-actions a[href^="mailto:"]')).toHaveCount(0);
+  await expect(page.locator(".resume-print-email")).toBeHidden();
+  await page.emulateMedia({ media: "print" });
+  await expect(page.locator(".resume-print-email")).toBeVisible();
 });
 
 test("lab previews show complete interfaces without cropped or empty media", async ({ page }) => {
@@ -414,11 +417,34 @@ test("lab previews show complete interfaces without cropped or empty media", asy
 
   const previews = page.locator(".lab-visual img");
   await expect(previews).toHaveCount(7);
+  await expect(previews.first()).toHaveAttribute("loading", "eager");
+  await expect(previews.first()).toHaveAttribute("fetchpriority", "high");
+  for (const preview of (await previews.all()).slice(1)) {
+    await expect(preview).toHaveAttribute("loading", "lazy");
+  }
+
+  const placeholders = page.locator(".lab-placeholder");
+  await expect(placeholders).toHaveCount(7);
+  for (const placeholder of await placeholders.all()) {
+    await expect(placeholder.locator("strong")).not.toHaveText("");
+    await expect(placeholder.locator(".lab-placeholder-title")).not.toHaveText("");
+  }
+
   for (const preview of await previews.all()) {
     await preview.scrollIntoViewIfNeeded();
     await expect(preview).toHaveCSS("object-fit", "contain");
     await expect.poll(() => preview.evaluate((image) => image.complete && image.naturalWidth > 0)).toBe(true);
   }
+});
+
+test("lab previews preserve a purposeful fallback when media fails", async ({ page }) => {
+  await page.route("**/assets/builder-stack-preview.png", (route) => route.abort());
+  await page.goto("/lab/", { waitUntil: "networkidle" });
+
+  const card = page.locator("#builder-stack");
+  await expect(card.locator(".lab-visual")).toHaveClass(/has-error/);
+  await expect(card.locator(".lab-placeholder-title")).toHaveText("AI Product Builder Stack");
+  await expect(card.locator(".lab-placeholder")).toBeVisible();
 });
 
 test("Ask renders a useful first impression before client hydration", async ({ browser, baseURL }) => {
@@ -450,12 +476,24 @@ test("Trackly leads with motion and immediate cross-platform proof", async ({ pa
   await page.goto("/projects/trackly/", { waitUntil: "networkidle" });
 
   await expect(page.locator("[data-trackly-film]")).toHaveAttribute("poster", "/assets/trackly-demo-poster.webp");
-  await expect(page.locator(".surface-rail figure")).toHaveCount(3);
-  await expect(page.locator(".surface-rail figcaption strong")).toHaveText(["iOS", "macOS", "CLI + MCP"]);
+  await expect(page.locator(".surface-rail figure")).toHaveCount(5);
+  await expect(page.locator(".surface-rail figcaption strong")).toHaveText(["Web", "iOS", "macOS", "CLI + MCP", "Chat + Voice"]);
   await page.locator(".surface-rail").scrollIntoViewIfNeeded();
-  for (const image of await page.locator(".surface-rail img").all()) {
-    await expect.poll(() => image.evaluate((element) => element.complete && element.naturalWidth > 0)).toBe(true);
+  await expect(page.locator("[data-surface-current]")).toHaveText("01");
+  await expect(page.locator("[data-surface-previous]")).toBeDisabled();
+  await expect(page.locator("[data-surface-next]")).toBeEnabled();
+  const surfaceTargets = page.locator("[data-surface-target]");
+  await expect(surfaceTargets).toHaveCount(5);
+  for (let index = 0; index < 5; index += 1) {
+    await surfaceTargets.nth(index).click();
+    await expect(page.locator("[data-surface-current]")).toHaveText(String(index + 1).padStart(2, "0"));
+    for (const image of await page.locator("[data-surface-card]").nth(index).locator("img").all()) {
+      await expect.poll(() => image.evaluate((element) => element.complete && element.naturalWidth > 0)).toBe(true);
+    }
   }
+  await expect(page.locator("[data-surface-next]")).toBeDisabled();
+  await page.locator("[data-surface-previous]").click();
+  await expect(page.locator("[data-surface-current]")).toHaveText("04");
   const mediaHeights = await page.locator(".surface-media").evaluateAll((elements) =>
     elements.map((element) => Math.round(element.getBoundingClientRect().height)),
   );
@@ -614,7 +652,7 @@ test("Trackly inventory and product decisions stay current and visually structur
   await expect(page.locator(".metric-row")).not.toContainText("July 14");
   await expect(page.locator("main")).not.toContainText("Inventory source checked");
   const schema = JSON.parse(await page.locator('script[type="application/ld+json"]').textContent());
-  expect(schema["@graph"].find((entry) => entry["@type"] === "Article")?.dateModified).toBe("2026-07-16");
+  expect(schema["@graph"].find((entry) => entry["@type"] === "Article")?.dateModified).toBe("2026-07-19");
 
   const steps = page.locator(".system-artifact li");
   await expect(steps).toHaveCount(5);
@@ -649,7 +687,7 @@ test("builder stack proof is visible and machine-readable", async ({ page, reque
   const response = await request.get("/assistant-corpus.json");
   expect(response.ok()).toBe(true);
   const corpus = await response.json();
-  expect(corpus.corpusVersion).toBe("2026-07-14.1");
+  expect(corpus.corpusVersion).toBe("2026-07-19.1");
   expect(corpus.sourceCommit).toMatch(/^[a-f0-9]{40}$/);
   expect(corpus.checksum).toBe(createHash("sha256").update(JSON.stringify(corpus.entries)).digest("hex"));
   const builderStackEntry = corpus.entries.find((entry) => entry.id === "builder-stack");
@@ -887,6 +925,12 @@ test("analytics payload excludes private content", async ({ page }) => {
     });
   });
   await page.goto("/ask/?utm_source=linkedin");
+  if (process.env.PUBLIC_POSTHOG_KEY?.startsWith("phc_")) {
+    await expect.poll(
+      () => page.evaluate(() => typeof window.__portfolioAnalyticsCapture === "function"),
+      { message: "analytics initializes after browser idle" },
+    ).toBe(true);
+  }
   await page.locator('a[href="/resume/"]').first().evaluate((link) => {
     link.addEventListener("click", (event) => event.preventDefault(), { once: true });
     link.click();
@@ -896,7 +940,9 @@ test("analytics payload excludes private content", async ({ page }) => {
   await expect(page.getByRole("status")).toHaveText("Ready");
   expect(JSON.stringify(events)).not.toContain("private recruiter question text");
   if (process.env.PUBLIC_POSTHOG_KEY?.startsWith("phc_")) {
-    await expect.poll(() => events.length, { message: "analytics initializes after browser idle" }).toBeGreaterThan(0);
+    await expect.poll(() => events.some((entry) => (
+      entry.event === "portfolio_contact_action" && entry.properties?.action === "resume"
+    )), { message: "resume analytics event arrives" }).toBe(true);
     const anonymousIds = new Set(events.map((entry) => entry?.properties?.distinct_id));
     expect(anonymousIds.size).toBe(1);
     expect([...anonymousIds].every((id) => typeof id === "string" && id.length > 0)).toBe(true);
@@ -905,15 +951,15 @@ test("analytics payload excludes private content", async ({ page }) => {
     expect(JSON.stringify(events)).not.toContain("utm_source");
     expect(JSON.stringify(events)).not.toContain("$initial_utm_");
     expect(events.some((entry) => (
-      entry.event === "portfolio_contact_action" && entry.properties?.action === "resume"
-    ))).toBe(true);
-    expect(events.some((entry) => (
       entry.event === "portfolio_chat_completed"
       && entry.properties?.outcome === "streamed_fallback"
       && entry.properties?.recovered === true
     ))).toBe(true);
     await page.goto("/");
-    await page.locator('[data-portfolio-destination="podcast"]').evaluate((link) => {
+    const podcastLink = page.locator('[data-portfolio-destination="podcast"]');
+    await expect(podcastLink).toHaveAttribute("data-ph-no-autocapture", "");
+    await expect(podcastLink).not.toHaveAttribute("data-analytics-capture", "true");
+    await podcastLink.evaluate((link) => {
       link.addEventListener("click", (event) => event.preventDefault(), { once: true });
       link.click();
     });
@@ -926,6 +972,8 @@ test("analytics payload excludes private content", async ({ page }) => {
     expect(channelEvent?.properties?.$el_text).toBeUndefined();
     expect(channelEvent?.properties?.$elements_chain).toBeUndefined();
     expect(JSON.stringify(channelEvent)).not.toContain("open.spotify.com");
+    expect(JSON.stringify(events)).not.toContain("open.spotify.com");
+    expect(JSON.stringify(events)).not.toContain("si=951d916ec5ad4ed9");
     await page.goto("/resume/");
     const download = page.waitForEvent("download");
     await page.getByRole("link", { name: /Download PDF/i }).click();
@@ -997,6 +1045,7 @@ test("curated channel clicks queue only controlled analytics labels", async ({ p
     properties: { channel: "watch-listen", destination: "podcast" },
   }]);
   expect(JSON.stringify(queue)).not.toContain("open.spotify.com");
+  expect(JSON.stringify(queue)).not.toContain("si=951d916ec5ad4ed9");
 });
 
 test("privacy signals prevent and clear the early analytics queue", async ({ page }) => {
@@ -1123,6 +1172,13 @@ test("privacy copy describes safely formatted Chat answers", async ({ page }) =>
   await page.goto("/privacy/");
   await expect(page.getByText(/safely formatted answer/i)).toBeVisible();
   await expect(page.getByText(/plain-text answer/i)).toHaveCount(0);
+});
+
+test("privacy copy discloses controlled curated-channel analytics", async ({ page }) => {
+  await page.goto("/privacy/");
+  await expect(page.getByText(/curated-channel opens/i)).toBeVisible();
+  await expect(page.getByText(/never the outbound URL or its query string/i)).toBeVisible();
+  await expect(page.getByText(/excludes curated-channel links/i)).toBeVisible();
 });
 
 test("resume print control works under the site CSP", async ({ page }) => {
@@ -1418,10 +1474,12 @@ test("Voice is opt-in, requests one microphone, creates one peer, shows no trans
   test.setTimeout(60_000);
   let closeRequest = null;
   let closeCount = 0;
+  const closeContentTypes = [];
   await page.addInitScript(() => {
     const counters = { mic: 0, pc: 0, stopped: 0, closed: 0, channelClosed: 0, sent: [] };
     window.__voiceCounters = counters;
     const track = { enabled: true, stop() { counters.stopped += 1; } };
+    window.__voiceTrack = track;
     const stream = { getAudioTracks: () => [track], getTracks: () => [track] };
     Object.defineProperty(navigator, "mediaDevices", {
       configurable: true,
@@ -1440,7 +1498,7 @@ test("Voice is opt-in, requests one microphone, creates one peer, shows no trans
       addTrack() {}
       getSenders() { return []; }
       createDataChannel() {
-        const dc = { readyState: "connecting", send(value) { counters.sent.push(JSON.parse(value)); }, close() { counters.channelClosed += 1; this.readyState = "closed"; }, onopen: null, onmessage: null };
+        const dc = { readyState: "connecting", send(value) { counters.sent.push(JSON.parse(value)); }, close() { counters.channelClosed += 1; this.readyState = "closed"; this.onclose?.(); }, onopen: null, onmessage: null, onclose: null, onerror: null };
         window.__voiceDataChannel = dc;
         window.setTimeout(() => { dc.readyState = "open"; dc.onopen?.(); }, 100);
         return dc;
@@ -1471,6 +1529,7 @@ test("Voice is opt-in, requests one microphone, creates one peer, shows no trans
   });
   await page.route("https://api.portfolio.kevinastuhuaman.com/api/portfolio/voice/close", async (route) => {
     closeRequest = JSON.parse(route.request().postData() ?? "{}");
+    closeContentTypes.push(route.request().headers()["content-type"] ?? "");
     const thisClose = ++closeCount;
     if (thisClose === 1) await new Promise((resolve) => setTimeout(resolve, 900));
     await route.fulfill({
@@ -1495,7 +1554,12 @@ test("Voice is opt-in, requests one microphone, creates one peer, shows no trans
   await expect(page.locator(".portfolio-voice-orb-intro")).toHaveCSS("height", "260px");
   await page.getByRole("button", { name: "Start voice call" }).click();
   await expect(page.getByText("Connecting", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Mute", exact: true }).click();
+  await expect(page.getByText("Microphone muted", { exact: true })).toBeVisible();
+  expect(await page.evaluate(() => window.__voiceTrack.enabled)).toBe(false);
+  await page.getByRole("button", { name: "Unmute", exact: true }).click();
   await expect(page.getByText("Listening", { exact: true })).toBeVisible();
+  expect(await page.evaluate(() => window.__voiceTrack.enabled)).toBe(true);
   await expect(page.locator(".portfolio-voice-orb-active")).toHaveCSS("width", "300px");
   await expect(page.locator(".portfolio-voice-orb-active")).toHaveCSS("height", "300px");
   expect(await page.evaluate(() => window.__voiceCounters.mic)).toBe(1);
@@ -1552,13 +1616,27 @@ test("Voice is opt-in, requests one microphone, creates one peer, shows no trans
   await expect(page.getByText("Listening", { exact: true })).toBeVisible();
   expect(await page.evaluate(() => window.__voiceCounters.mic)).toBe(2);
   expect(await page.evaluate(() => window.__voiceCounters.pc)).toBe(2);
-  await page.getByRole("button", { name: "End call" }).click();
-  await expect(page.getByText("Call ended", { exact: true })).toBeVisible();
+  await page.evaluate(() => window.dispatchEvent(new Event("pagehide")));
+  await expect.poll(() => closeCount).toBe(2);
+  expect(closeContentTypes[1]).toBe("text/plain;charset=UTF-8");
+  await expect.poll(() => page.evaluate(() => window.__voiceCounters.closed)).toBe(2);
+  await page.getByRole("button", { name: "Start another call" }).click();
+  await page.getByRole("button", { name: "Start voice call" }).click();
+  await expect(page.getByText("Listening", { exact: true })).toBeVisible();
+  expect(await page.evaluate(() => window.__voiceCounters.mic)).toBe(3);
+  expect(await page.evaluate(() => window.__voiceCounters.pc)).toBe(3);
+  await page.evaluate(() => window.__voiceDataChannel.onmessage?.({ data: JSON.stringify({
+    type: "error",
+    error: { code: "upstream_test_failure", message: "SECRET_REALTIME_ERROR" },
+  }) }));
+  await expect(page.getByText("Assistant unavailable", { exact: true })).toBeVisible();
+  await expect(page.getByText("The voice assistant encountered a realtime error.")).toBeVisible();
+  await expect(page.getByText("SECRET_REALTIME_ERROR")).toHaveCount(0);
   await expect(page.getByRole("link", { name: "Current call source" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Unsafe source" })).toHaveCount(0);
   await page.waitForTimeout(950);
   await expect(page.getByRole("link", { name: "Old call source" })).toHaveCount(0);
-  await expect.poll(() => page.evaluate(() => window.__voiceCounters.closed)).toBe(2);
+  await expect.poll(() => page.evaluate(() => window.__voiceCounters.closed)).toBe(3);
 });
 
 test("Voice surfaces connecting and microphone denial, then recovers to Chat or retry", async ({ page }) => {
@@ -1597,5 +1675,6 @@ test("assistant failure preserves the static cited fallback", async ({ page }) =
   await page.getByLabel("Question").fill("What did Kevin build at PayPal?");
   await page.getByRole("button", { name: "Ask", exact: true }).click();
   await expect(page.getByRole("status")).toHaveText("Assistant unavailable");
+  await page.getByText("Browse five quick answers", { exact: true }).click();
   await expect(page.getByRole("heading", { name: "Start here." })).toBeVisible();
 });

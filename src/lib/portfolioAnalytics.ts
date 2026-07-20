@@ -95,9 +95,14 @@ function beforeSend(event: CaptureResult | null): CaptureResult | null {
     "$initial_current_url", "$initial_referrer", "$initial_session_entry_url", "$initial_session_entry_referrer",
   ]);
   const campaignProperty = /^(?:(?:\$initial_|\$session_entry_))?(?:utm_|gad_source$|mc_cid$|gclid$|gclsrc$|dclid$|gbraid$|wbraid$|fbclid$|msclkid$|twclid$|igshid$|ttclid$|rdt_cid$|epik$|qclid$|sccid$|irclid$|li_fat_id$|_kx$)/;
+  const outboundLocationProperty = /(?:href|link_url|target_url)$/i;
   const sanitizeAttribution = (record: Record<string, unknown>) => {
     for (const key of Object.keys(record)) {
       if (campaignProperty.test(key)) {
+        delete record[key];
+        continue;
+      }
+      if (outboundLocationProperty.test(key)) {
         delete record[key];
         continue;
       }
@@ -163,6 +168,11 @@ function updateVisibleTime() {
 
 function markAllowlistedInteractions() {
   document.querySelectorAll<HTMLElement>("a[href], button").forEach((element) => {
+    if (element.matches("[data-portfolio-channel]")) {
+      delete element.dataset.analyticsCapture;
+      element.dataset.phNoAutocapture = "";
+      return;
+    }
     if (classifyPortfolioInteraction(element)) element.dataset.analyticsCapture = "true";
   });
 }
@@ -225,7 +235,12 @@ export function initializePortfolioAnalytics(
       dom_event_allowlist: ["click"],
       element_allowlist: ["a", "button"],
       css_selector_allowlist: ["[data-analytics-capture='true']"],
-      css_selector_ignorelist: [".ph-no-capture", ".ph-no-autocapture", "[data-ph-no-autocapture]"],
+      css_selector_ignorelist: [
+        ".ph-no-capture",
+        ".ph-no-autocapture",
+        "[data-ph-no-autocapture]",
+        "[data-portfolio-channel]",
+      ],
       capture_copied_text: false,
     },
     session_recording: {

@@ -1,6 +1,7 @@
 ---
 import { ArrowUpRight, Hammer, Headphones, PenLine } from "@lucide/astro";
 import { links } from "../data/site.js";
+import SocialMark from "./SocialMark.astro";
 
 const channels = [
   {
@@ -66,7 +67,7 @@ const channels = [
                 data-portfolio-channel={channel.id}
                 data-portfolio-destination={link.destination}
               >
-                <span>{link.label}</span>
+                <span class="channel-link-label"><SocialMark name={link.label} /><span>{link.label}</span></span>
                 <ArrowUpRight aria-hidden="true" size={17} />
               </a>
             ))}
@@ -162,6 +163,9 @@ const channels = [
     font-weight: 720;
     text-decoration: none;
   }
+
+  .channel-link-label { display: inline-flex; align-items: center; gap: 10px; }
+  .channel-link-label :global(svg) { width: 17px; height: 17px; color: #55595f; }
 
   .channel a svg {
     flex: 0 0 auto;

@@ -2,6 +2,8 @@
 import { ArrowUpRight } from "@lucide/astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { links } from "../../data/site.js";
+import BrandSignature from "../../components/BrandSignature.astro";
+import { homepageBrandSignatures } from "../../data/brandSignatures.js";
 ---
 
 <BaseLayout
@@ -27,7 +29,9 @@ import { links } from "../../data/site.js";
         <p class="eyebrow">How I work</p>
         <h2>Start with the decision a person needs to make.</h2>
         <p>I ask what changed for the user, what evidence they need, what can go wrong, and who owns the result. The technology follows that operating model.</p>
-        <p>At PayPal, that meant structuring an AI-assisted diagnostic workflow around detection, evidence, and ownership. With Trackly, it means treating source health and model quality as visible parts of the product. At Berkeley, it meant connecting an AI platform prototype to adoption, pricing, partnerships, and a roadmap. At Banco de Credito BCP, it meant balancing speed with risk and compliance while leading products and product managers.</p>
+        <div class="proof-path" aria-label="Experience across products and institutions">
+          {homepageBrandSignatures.map((brand) => <BrandSignature brand={brand} />)}
+        </div>
         <h3>I build close to the system.</h3>
         <p>I use code, APIs, MCP, native apps, evals, and observability to reduce the distance between a product decision and working evidence. AI agents increase my implementation speed, but product judgment remains my responsibility.</p>
         <h3>I am looking for two kinds of work.</h3>
@@ -51,11 +55,18 @@ import { links } from "../../data/site.js";
   .about-copy h2 { margin-bottom: 28px; }
   .about-copy h3 { margin: 46px 0 14px; }
   .about-copy p { color: #44443f; font-size: 1.05rem; }
+  .proof-path { display: grid; margin: 34px 0 44px; grid-template-columns: 1fr 1fr; border-block: 1px solid #d6d6cf; }
+  .proof-path :global(.brand-signature) { min-height: 94px; padding: 18px 12px; border-bottom: 1px solid #d6d6cf; }
+  .proof-path :global(.brand-signature:nth-child(odd)) { border-right: 1px solid #d6d6cf; }
+  .proof-path :global(.brand-signature:nth-last-child(-n + 2)) { border-bottom: 0; }
   .about-copy .button-row { margin-top: 40px; }
   @media (max-width: 760px) {
     .about-layout { grid-template-columns: 1fr; }
     figure { width: min(68vw, 260px); margin-inline: auto; }
     figure img { height: auto; aspect-ratio: auto; object-fit: contain; object-position: center; }
     figcaption { text-align: center; }
+    .proof-path { grid-template-columns: 1fr; }
+    .proof-path :global(.brand-signature:nth-child(odd)) { border-right: 0; }
+    .proof-path :global(.brand-signature:nth-last-child(2)) { border-bottom: 1px solid #d6d6cf; }
   }
 </style>

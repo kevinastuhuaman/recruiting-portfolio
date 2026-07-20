@@ -15,7 +15,7 @@ export const site = {
   description:
     "Kevin Astuhuaman is an AI Product Manager, ex-PayPal in AI/ML observability, and Berkeley Haas MBA with seven years of experience building products.",
   email: "kevin.astuhuaman@berkeley.edu",
-  updated: "2026-07-14",
+  updated: "2026-07-19",
   image: "/assets/kevin-portrait.webp",
   socialImage: "/assets/og-card.png",
 };
@@ -106,18 +106,18 @@ export const labArtifacts = [
 ];
 
 export const routes = [
-  { path: "/", state: "index", title: "Kevin Astuhuaman | AI Product Manager", modified: "2026-07-16" },
-  { path: "/lab/", state: "index", title: "AI Product Lab | Kevin Astuhuaman", modified: "2026-07-13" },
-  { path: "/projects/trackly/", state: "index", title: "Trackly case study | Kevin Astuhuaman", modified: "2026-07-16" },
+  { path: "/", state: "index", title: "Kevin Astuhuaman | AI Product Manager", modified: "2026-07-19" },
+  { path: "/lab/", state: "index", title: "AI Product Lab | Kevin Astuhuaman", modified: "2026-07-19" },
+  { path: "/projects/trackly/", state: "index", title: "Trackly case study | Kevin Astuhuaman", modified: "2026-07-19" },
   { path: "/projects/paypal-ai-observability/", state: "index", title: "PayPal AI observability | Kevin Astuhuaman", modified: "2026-07-12" },
   { path: "/projects/berkeley-mobagel-ai-gtm/", state: "index", title: "Berkeley and MoBagel AI product strategy | Kevin Astuhuaman", modified: "2026-07-12" },
   { path: "/projects/smb-fintech-bcp-credicorp/", state: "index", title: "BCP and Credicorp product leadership | Kevin Astuhuaman", modified: "2026-07-12" },
-  { path: "/resume/", state: "index", title: "Resume | Kevin Astuhuaman", modified: "2026-07-14" },
-  { path: "/about/", state: "index", title: "About | Kevin Astuhuaman", modified: "2026-07-12" },
+  { path: "/resume/", state: "index", title: "Resume | Kevin Astuhuaman", modified: "2026-07-19" },
+  { path: "/about/", state: "index", title: "About | Kevin Astuhuaman", modified: "2026-07-19" },
   { path: "/proof/", state: "index", title: "Public evidence | Kevin Astuhuaman", modified: "2026-07-14" },
-  { path: "/contact/", state: "index", title: "Contact | Kevin Astuhuaman", modified: "2026-07-12" },
-  { path: "/ask/", state: "noindex", title: "Ask Kevin's AI | Kevin Astuhuaman", modified: "2026-07-17" },
-  { path: "/privacy/", state: "index", title: "Privacy | Kevin Astuhuaman", modified: "2026-07-12" },
+  { path: "/contact/", state: "index", title: "Contact | Kevin Astuhuaman", modified: "2026-07-19" },
+  { path: "/ask/", state: "noindex", title: "Ask Kevin's AI | Kevin Astuhuaman", modified: "2026-07-19" },
+  { path: "/privacy/", state: "index", title: "Privacy | Kevin Astuhuaman", modified: "2026-07-19" },
   { path: "/packet/", state: "compat", title: "Recruiter brief", modified: "2026-07-12" },
   { path: "/projects/agentic-dev-workflows/", state: "compat", title: "AI-assisted product building", modified: "2026-07-12" },
   { path: "/llms.txt", state: "fetch", title: "LLM profile", modified: "2026-07-14" },

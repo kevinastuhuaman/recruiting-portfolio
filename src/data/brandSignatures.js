@@ -1,0 +1,52 @@
+export const brandSignatures = {
+  paypal: {
+    id: "paypal",
+    label: "PayPal Checkout",
+    relationship: "AI observability prototype",
+    monogram: "PP",
+    accent: "#0868d6",
+    usageBasis: "typographic-fallback",
+    guidelineUrl: "https://www.paypal.com/us/legalhub/paypal/trademark",
+    verifiedAt: "2026-07-19",
+    reviewBy: "Kevin Astuhuaman",
+  },
+  berkeley: {
+    id: "berkeley",
+    label: "Berkeley Haas",
+    relationship: "STEM MBA, 2026",
+    monogram: "H",
+    accent: "#fdb515",
+    usageBasis: "typographic-fallback",
+    guidelineUrl: "https://haas.berkeley.edu/brand-hub/visual-identity/",
+    verifiedAt: "2026-07-19",
+    reviewBy: "Kevin Astuhuaman",
+  },
+  trackly: {
+    id: "trackly",
+    label: "Trackly",
+    relationship: "Web, native, CLI, MCP, chat, voice",
+    asset: "/assets/brands/trackly-appicon.png",
+    accent: "#8d43ff",
+    usageBasis: "owned-product-mark",
+    assetSource: "TracklyWeb public brand assets",
+    verifiedAt: "2026-07-19",
+    reviewBy: "Kevin Astuhuaman",
+  },
+  bcp: {
+    id: "bcp",
+    label: "BCP / Credicorp",
+    relationship: "Six years of product progression",
+    monogram: "BCP",
+    accent: "#e85f16",
+    usageBasis: "typographic-fallback",
+    verifiedAt: "2026-07-19",
+    reviewBy: "Kevin Astuhuaman",
+  },
+};
+
+export const homepageBrandSignatures = [
+  brandSignatures.paypal,
+  brandSignatures.berkeley,
+  brandSignatures.trackly,
+  brandSignatures.bcp,
+];

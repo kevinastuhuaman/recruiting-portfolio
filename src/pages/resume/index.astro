@@ -54,9 +54,9 @@ import { claimsById } from "../../data/claims.js";
           <p>AI Product Manager | Ex-PayPal AI/ML Observability | Berkeley Haas MBA '26 | {site.location}</p>
         </div>
         <nav aria-label="Resume contact links">
+          <span class="resume-print-email">{site.email}</span>
           <a href={links.linkedin}>LinkedIn <ExternalLink aria-hidden="true" size={14} /></a>
           <a href={links.github}>GitHub <ExternalLink aria-hidden="true" size={14} /></a>
-          <a href={`mailto:${site.email}`}>{site.email}</a>
         </nav>
       </header>
 
@@ -289,6 +289,10 @@ import { claimsById } from "../../data/claims.js";
     gap: 4px;
   }
 
+  .resume-print-email {
+    display: none;
+  }
+
   .resume-section-title {
     margin: 44px 0 0;
     padding-bottom: 10px;
@@ -485,6 +489,10 @@ import { claimsById } from "../../data/claims.js";
 
     .resume-identity nav {
       gap: 2px;
+    }
+
+    .resume-print-email {
+      display: inline;
     }
 
     .resume-section-title {

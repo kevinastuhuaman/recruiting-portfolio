@@ -98,6 +98,7 @@ export class PortfolioVoiceSession {
 
       const pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
       this.pc = pc;
+      this.micStream.getAudioTracks().forEach((track) => { track.enabled = !this.muted; });
       this.micStream.getAudioTracks().forEach((track) => pc.addTrack(track, this.micStream!));
       pc.ontrack = (event) => {
         const stream = event.streams[0] ?? new MediaStream([event.track]);
@@ -112,6 +113,8 @@ export class PortfolioVoiceSession {
       this.dc = dc;
       dc.onopen = () => this.markConnected();
       dc.onmessage = (event) => void this.handleEvent(event.data);
+      dc.onerror = () => this.fail('The voice connection encountered an error.', 'data_channel_error');
+      dc.onclose = () => this.fail('The voice connection ended unexpectedly.', 'data_channel_closed');
 
       const offer = await pc.createOffer({ offerToReceiveAudio: true });
       await pc.setLocalDescription(offer);
@@ -179,6 +182,14 @@ export class PortfolioVoiceSession {
     let event: JsonRecord;
     try { event = asRecord(JSON.parse(raw)); } catch { return; }
     const type = String(event.type ?? '');
+    if (type === 'error') {
+      const realtimeError = asRecord(event.error);
+      const category = typeof realtimeError.code === 'string' && realtimeError.code
+        ? `realtime_${realtimeError.code}`
+        : 'realtime_error';
+      this.fail('The voice assistant encountered a realtime error.', category);
+      return;
+    }
     if (type === 'response.function_call_arguments.done' && event.name === 'lookup_portfolio') {
       this.opts.onActivityChange('searching');
       return;
@@ -266,8 +277,11 @@ export class PortfolioVoiceSession {
     this.closeSent = true;
     const durationSeconds = this.startedAt ? Math.min(300, Math.max(0, Math.round((performance.now() - this.startedAt) / 1000))) : 0;
     try {
+      const pageTeardown = reason === 'page_hidden';
       const response = await fetch(`${PORTFOLIO_API}/voice/close`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' }, keepalive: reason === 'page_hidden',
+        method: 'POST',
+        headers: { 'Content-Type': pageTeardown ? 'text/plain;charset=UTF-8' : 'application/json' },
+        keepalive: pageTeardown,
         body: JSON.stringify({
           sessionId: this.token.sessionId,
           closeToken: this.token.closeToken,
