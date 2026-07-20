@@ -1,8 +1,8 @@
 ---
-const { brand, centered = false } = Astro.props;
+const { brand } = Astro.props;
 ---
 
-<div class:list={["brand-signature", centered && "brand-signature-centered"]}>
+<div class="brand-signature">
   <span class="brand-copy"><strong>{brand.label}</strong><small>{brand.relationship}</small></span>
 </div>
 
@@ -11,7 +11,4 @@ const { brand, centered = false } = Astro.props;
   .brand-copy, .brand-copy strong, .brand-copy small { display: block; min-width: 0; }
   .brand-copy strong { margin: 0 0 5px; font-size: 1rem; line-height: 1.15; }
   .brand-copy small { color: #62666c; font-size: .76rem; line-height: 1.35; }
-  .brand-signature-centered { width: 100%; text-align: center; }
-  .brand-signature-centered .brand-copy strong { font-size: 1.08rem; }
-  .brand-signature-centered .brand-copy small { max-width: 23ch; margin-inline: auto; }
 </style>
