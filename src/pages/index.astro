@@ -1174,12 +1174,14 @@ const paypalClaim = claimsById["paypal-detection"];
     .editorial-heading-light { padding: 0 0 48px; }
     .lab-teaser-v2, .assistant-preview-v2 { padding: 68px 24px; }
   }
-  @media (max-width: 620px) {
-    .hero-copy-v2 .button-row { display: grid; width: 100%; }
+  @media (max-width: 640px) {
     .proof-strip-v2 { grid-template-columns: 1fr 1fr; }
     .proof-strip-v2 > div { min-height: 112px; border-bottom: 1px solid var(--ink); }
     .proof-strip-v2 > div:nth-child(odd) { border-right: 1px solid var(--ink); }
     .proof-strip-v2 > div:nth-last-child(-n + 2) { border-bottom: 0; }
+  }
+  @media (max-width: 620px) {
+    .hero-copy-v2 .button-row { display: grid; width: 100%; }
     .feature-copy { padding: 34px 22px; }
     .feature-copy h3 { margin-top: 52px; }
     .feature-media, .trackly-proof, .mobagel-map { padding: 22px; min-height: 0; }

@@ -109,12 +109,12 @@ const previewTreatments = [
         reveal();
       };
 
-      preview.classList.add("is-loading");
       if (image.complete) {
         void revealWhenDecoded();
         return;
       }
 
+      preview.classList.add("is-loading");
       image.addEventListener("load", () => void revealWhenDecoded(), { once: true });
       image.addEventListener("error", preserveFallback, { once: true });
     });
