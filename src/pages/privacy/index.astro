@@ -17,7 +17,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 
   <article class="reading-shell section-pad prose">
     <h2>What is measured</h2>
-    <p>The portfolio sends privacy-limited events to a dedicated PostHog project: page views without query strings, broad engaged-time buckets, section visibility, case-study clicks, resume and contact actions, assistant mode and lifecycle events, and Helpful or Needs work feedback. On public pages outside the assistant, ten percent of tab sessions may also be sampled for masked replay and heatmaps. Automatic click capture is restricted to key portfolio actions.</p>
+    <p>The portfolio sends privacy-limited events to a dedicated PostHog project: page views without query strings, broad engaged-time buckets, section visibility, case-study clicks, resume and contact actions, curated-channel opens, assistant mode and lifecycle events, and Helpful or Needs work feedback. Curated-channel events contain only the channel category and a controlled destination label, never the outbound URL or its query string. On public pages outside the assistant, ten percent of tab sessions may also be sampled for masked replay and heatmaps. Automatic click capture is restricted to key portfolio actions and excludes curated-channel links.</p>
 
     <h2>What is not measured</h2>
     <p>The assistant does not send question text, answers, form text, resume lens selections, email content, application history, or Trackly user data to behavioral analytics. Replay is always disabled on <code>/ask/</code>. On sampled public pages, all page text and inputs are masked before leaving the browser, query strings are removed, cross-origin frames are excluded, and no visitor profile is created.</p>

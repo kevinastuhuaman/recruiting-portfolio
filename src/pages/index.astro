@@ -3,8 +3,10 @@ import { ArrowUpRight, FileText, MessageCircle, Mic } from "@lucide/astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import CuratedChannels from "../components/CuratedChannels.astro";
 import HomepagePortfolioOrb from "../components/portfolio/HomepagePortfolioOrb";
+import BrandSignature from "../components/BrandSignature.astro";
 import { experience, projects, site } from "../data/site.js";
 import { claimsById } from "../data/claims.js";
+import { homepageBrandSignatures } from "../data/brandSignatures.js";
 
 const paypal = projects.find((project) => project.id === "paypal") ?? projects[0];
 const trackly = projects.find((project) => project.id === "trackly") ?? projects[1];
@@ -35,10 +37,7 @@ const paypalClaim = claimsById["paypal-detection"];
     </section>
 
     <section id="credibility" class="proof-strip proof-strip-v2" aria-label="Credibility">
-      <div><strong>PayPal Checkout</strong><span>AI observability prototype</span></div>
-      <div><strong>Berkeley Haas</strong><span>STEM MBA, 2026</span></div>
-      <div><strong>Trackly</strong><span>Web, native, CLI, MCP, chat, voice</span></div>
-      <div><strong>BCP / Credicorp</strong><span>Six years of product progression</span></div>
+      {homepageBrandSignatures.map((brand) => <div><BrandSignature brand={brand} /></div>)}
     </section>
 
     <section id="work" class="selected-work-v2" aria-labelledby="work-title">
@@ -72,7 +71,10 @@ const paypalClaim = claimsById["paypal-detection"];
           <a class="text-link" href={trackly.href}>Explore Trackly <ArrowUpRight aria-hidden="true" size={17} /></a>
         </div>
         <div class="trackly-proof">
-          <img src={trackly.image} width="1440" height="1000" loading="eager" decoding="async" alt="Trackly homepage showing direct career-page monitoring" />
+          <picture>
+            <source media="(max-width: 620px)" srcset="/assets/trackly-app-store.webp" />
+            <img src={trackly.image} width="1440" height="1000" loading="eager" decoding="async" alt="Trackly product interface" />
+          </picture>
           <ol class="state-flow" aria-label="Trackly product decision sequence">
             <li><span>Problem</span><strong>Strong roles appeared before aggregators.</strong></li>
             <li><span>Decision</span><strong>Monitor the source: company career pages.</strong></li>
@@ -1099,7 +1101,12 @@ const paypalClaim = claimsById["paypal-detection"];
   .metric-inline span { align-self: center; color: var(--muted); font-size: .78rem; }
   .feature-story-trackly { background: #f6f4fb; }
   .trackly-proof { display: grid; min-width: 0; grid-template-rows: minmax(0,1fr) auto; padding: 38px; gap: 22px; }
-  .trackly-proof > img { width: 100%; height: auto; border: 1px solid var(--ink); background: #09090b; object-fit: contain; }
+  .trackly-proof > picture { display: block; min-width: 0; }
+  .trackly-proof > picture img { display: block; width: 100%; height: auto; border: 1px solid var(--ink); background: #09090b; object-fit: contain; }
+  @media (max-width: 620px) {
+    .trackly-proof > picture { padding: 10px; border: 1px solid var(--ink); background: #fff; }
+    .trackly-proof > picture img { border: 0; background: #fff; }
+  }
   .state-flow { display: grid; margin: 0; padding: 0; grid-template-columns: repeat(4,minmax(0,1fr)); list-style: none; border: 1px solid var(--ink); }
   .state-flow li { min-height: 126px; padding: 16px; border-right: 1px solid var(--ink); background: #fff; }
   .state-flow li:last-child { border-right: 0; background: var(--signal); }
@@ -1160,7 +1167,8 @@ const paypalClaim = claimsById["paypal-detection"];
     .hero-copy-v2 h2 { font-size: clamp(2.8rem,11vw,4.9rem); }
     .editorial-heading { padding: 68px 24px 44px; }
     .feature-index { display: none; }
-    .feature-copy { min-height: 440px; border-right: 0; border-bottom: 1px solid var(--ink); }
+    .feature-copy { min-height: 0; border-right: 0; border-bottom: 1px solid var(--ink); }
+    .feature-copy h3 { margin-top: 72px; }
     .feature-media, .trackly-proof, .mobagel-map { min-height: 420px; }
     .experience-v2 { padding: 68px 24px; }
     .editorial-heading-light { padding: 0 0 48px; }
@@ -1170,7 +1178,10 @@ const paypalClaim = claimsById["paypal-detection"];
     .hero-copy-v2 .button-row { display: grid; width: 100%; }
     .proof-strip-v2 { grid-template-columns: 1fr 1fr; }
     .proof-strip-v2 > div { min-height: 112px; border-bottom: 1px solid var(--ink); }
+    .proof-strip-v2 > div:nth-child(odd) { border-right: 1px solid var(--ink); }
+    .proof-strip-v2 > div:nth-last-child(-n + 2) { border-bottom: 0; }
     .feature-copy { padding: 34px 22px; }
+    .feature-copy h3 { margin-top: 52px; }
     .feature-media, .trackly-proof, .mobagel-map { padding: 22px; min-height: 0; }
     .state-flow { grid-template-columns: 1fr 1fr; }
     .state-flow li:nth-child(2) { border-right: 0; }

@@ -21,6 +21,8 @@ import { claimsById } from "../../data/claims.js";
     <PortfolioAssistant client:load />
   </div>
 
+    <details class="faq-disclosure" open data-faq-disclosure>
+      <summary><span>Not sure what to ask?</span><strong>Browse five quick answers</strong></summary>
     <section class="faq-section" aria-labelledby="fallback-title">
       <header>
         <p class="eyebrow">Quick answers</p>
@@ -56,6 +58,10 @@ import { claimsById } from "../../data/claims.js";
       </div>
       <noscript><p class="no-script-note">Interactive questions require JavaScript. The five cited answers above remain fully available.</p></noscript>
     </section>
+    </details>
+    <script>
+      document.querySelector<HTMLDetailsElement>("[data-faq-disclosure]")?.removeAttribute("open");
+    </script>
   </div>
 </BaseLayout>
 
@@ -151,7 +157,14 @@ import { claimsById } from "../../data/claims.js";
   .voice-sources a { font-size: .84rem; }
   .voice-tool-activity { display: inline-flex; margin: 0 0 22px; padding: 9px 13px; align-items: center; gap: 9px; border: 1px solid rgba(255,255,255,.25); border-radius: 999px; color: rgba(255,255,255,.76); font-size: .76rem; }
   .voice-tool-activity::before { width: 7px; height: 7px; border-radius: 50%; background: #9c7cff; box-shadow: 0 0 12px #9c7cff; content: ""; }
-  .faq-section { display: grid; grid-template-columns: .62fr 1.38fr; gap: 54px; margin-top: 100px; padding-top: 68px; border-top: 1px solid var(--ink); }
+  .faq-disclosure { margin-top: 80px; border-block: 1px solid var(--ink); }
+  .faq-disclosure > summary { display: flex; min-height: 76px; padding: 18px 0; align-items: center; justify-content: space-between; gap: 24px; cursor: pointer; list-style: none; }
+  .faq-disclosure > summary::-webkit-details-marker { display: none; }
+  .faq-disclosure > summary span { color: var(--muted); }
+  .faq-disclosure > summary strong { display: inline-flex; align-items: center; gap: 12px; }
+  .faq-disclosure > summary strong::after { content: "+"; font-size: 1.25rem; }
+  .faq-disclosure[open] > summary strong::after { content: "−"; }
+  .faq-section { display: grid; grid-template-columns: .62fr 1.38fr; gap: 54px; padding: 60px 0 68px; border-top: 1px solid var(--line); }
   .faq-section header h2 { margin: 42px 0 16px; font-size: clamp(2.5rem,5vw,4.8rem); line-height: .95; letter-spacing: -.05em; }
   .faq-section header > p:last-child { color: var(--muted); }
   .faq-list details { border-bottom: 1px solid var(--ink); }

@@ -7,6 +7,7 @@ export default defineConfig({
   output: "static",
   trailingSlash: "always",
   publicDir: "./site-public",
+  devToolbar: { enabled: false },
   security: {
     csp: {
       directives: [

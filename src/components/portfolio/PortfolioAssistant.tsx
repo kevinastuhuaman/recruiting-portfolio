@@ -346,13 +346,13 @@ export default function PortfolioAssistant() {
       activeController = fallbackController;
       chatAbortRef.current = fallbackController;
       try {
-        capturePortfolioEvent('portfolio_chat_failed', { failure_stage: 'stream', recovered: true });
         const fallback = await askPublicCorpus(message, fallbackController.signal);
         pendingCitationsRef.current = fallback.citations;
         commitAssistantDelta(fallback.answer, fallback.citations);
         anchorCompletedAnswerRef.current = stickToBottomRef.current;
         updateActivity('writing', 'Used the verified portfolio fallback', 'complete');
-        capturePortfolioEvent('portfolio_chat_completed', { outcome: 'deterministic_fallback' });
+        capturePortfolioEvent('portfolio_chat_failed', { failure_stage: 'stream', recovered: true });
+        capturePortfolioEvent('portfolio_chat_completed', { outcome: 'deterministic_fallback', recovered: true });
         setStatus('Ready');
       } catch {
         if (chatAbortRef.current !== fallbackController) return;

@@ -4,7 +4,7 @@ AI Product Manager | Ex-PayPal AI/ML Observability | Berkeley Haas MBA '26 | Bay
 
 LinkedIn: https://www.linkedin.com/in/kevinastuhuaman | GitHub: https://github.com/kevinastuhuaman | Portfolio: https://portfolio.kevinastuhuaman.com
 
-Version: 2026-07-14
+Version: 2026-07-19
 
 Role lenses: Applied AI | Enterprise Platform | Zero-to-One / Growth | Leadership
 

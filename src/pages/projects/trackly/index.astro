@@ -1,5 +1,5 @@
 ---
-import { ArrowUpRight, ExternalLink } from "@lucide/astro";
+import { ArrowLeft, ArrowRight, ArrowUpRight, ExternalLink } from "@lucide/astro";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { links, routes } from "../../../data/site.js";
 import { claimsById } from "../../../data/claims.js";
@@ -97,24 +97,63 @@ const inventoryMetrics = [
     </section>
 
     <section class="surface-proof" aria-labelledby="surface-proof-title">
-      <header>
-        <p class="eyebrow">Selected product surfaces</p>
-        <h2 id="surface-proof-title">One product, designed for different moments.</h2>
+      <header class="surface-proof-header">
+        <div>
+          <p class="eyebrow">Selected product surfaces</p>
+          <h2 id="surface-proof-title">One product, designed for different moments.</h2>
+        </div>
+        <div class="surface-gallery-controls" aria-label="Product surface navigation">
+          <p class="surface-count" aria-live="polite"><strong data-surface-current>01</strong><span aria-hidden="true"> / </span><span>05</span><span class="sr-only"> product surfaces</span></p>
+          <div class="surface-arrow-controls">
+            <button type="button" data-surface-previous aria-controls="trackly-surface-rail" aria-label="Show previous product surface" disabled>
+              <ArrowLeft aria-hidden="true" size={18} />
+            </button>
+            <button type="button" data-surface-next aria-controls="trackly-surface-rail" aria-label="Show next product surface">
+              <ArrowRight aria-hidden="true" size={18} />
+            </button>
+          </div>
+        </div>
       </header>
-      <div class="surface-rail" tabindex="0" role="region" aria-label="Selected Trackly product surfaces; scroll horizontally for more">
-        <figure class="surface-ios">
-          <div class="surface-media"><img src="/assets/trackly-app-store.webp" width="1284" height="1291" loading="eager" decoding="async" alt="Trackly iOS App Store product page" /></div>
+      <div id="trackly-surface-rail" class="surface-rail" tabindex="0" role="region" aria-label="Five Trackly product surfaces; use the arrow controls or scroll horizontally" data-surface-rail>
+        <figure class="surface-web" data-surface-card>
+          <div class="surface-media"><img src="/assets/trackly-home.webp" width="1440" height="1000" loading="lazy" decoding="async" alt="Trackly web product showing monitored companies, job inventory, and role tracking" /></div>
+          <figcaption><strong>Web</strong><span>Research the market and manage signal</span></figcaption>
+        </figure>
+        <figure class="surface-ios" data-surface-card>
+          <div class="surface-media"><img src="/assets/trackly-app-store.webp" width="1284" height="1291" loading="lazy" decoding="async" alt="Trackly iOS App Store product page" /></div>
           <figcaption><strong>iOS</strong><span>Act while a role is new</span></figcaption>
         </figure>
-        <figure class="surface-macos">
-          <div class="surface-media"><img src="/assets/trackly-macos-appstore.webp" width="1840" height="1140" loading="eager" decoding="async" alt="Trackly macOS App Store product page" /></div>
+        <figure class="surface-macos" data-surface-card>
+          <div class="surface-media"><img src="/assets/trackly-macos-appstore.webp" width="1840" height="1140" loading="lazy" decoding="async" alt="Trackly macOS App Store product page" /></div>
           <figcaption><strong>macOS</strong><span>Keyboard-first triage</span></figcaption>
         </figure>
-        <figure class="surface-cli">
-          <div class="surface-media"><img src="/assets/trackly-cli.webp" width="720" height="720" loading="eager" decoding="async" alt="Trackly command-line search results" /><img src="/assets/trackly-mcp.webp" width="720" height="720" loading="eager" decoding="async" alt="Trackly MCP server configuration" /></div>
+        <figure class="surface-cli" data-surface-card>
+          <div class="surface-media">
+            <div class="surface-terminal-pane"><img src="/assets/trackly-cli.webp" width="720" height="720" loading="lazy" decoding="async" alt="Trackly command-line search results" /></div>
+            <div class="surface-mcp-pane"><img src="/assets/trackly-mcp.webp" width="720" height="720" loading="lazy" decoding="async" alt="Trackly MCP server configuration" /></div>
+          </div>
           <figcaption><strong>CLI + MCP</strong><span>Bring the signal into agent workflows</span></figcaption>
         </figure>
+        <figure class="surface-conversation" data-surface-card>
+          <div class="surface-media">
+            <div class="surface-chat-preview" aria-hidden="true">
+              <span>CHAT</span>
+              <i></i><i></i><i></i>
+              <strong>Grounded answers</strong>
+            </div>
+            <div class="surface-voice-preview">
+              <img src="/assets/portfolio-orb-static.png" width="600" height="602" loading="lazy" decoding="async" alt="Metal orb representing Trackly's realtime voice interface" />
+              <span aria-hidden="true">VOICE</span>
+            </div>
+          </div>
+          <figcaption><strong>Chat + Voice</strong><span>Ask through the interface that fits the moment</span></figcaption>
+        </figure>
       </div>
+      <nav class="surface-progress" aria-label="Choose a Trackly product surface">
+        {['Web', 'iOS', 'macOS', 'CLI and MCP', 'Chat and Voice'].map((label, index) => (
+          <button type="button" data-surface-target={index} aria-label={`Show ${label}`} aria-current={index === 0 ? 'true' : undefined}><span></span></button>
+        ))}
+      </nav>
     </section>
 
     <details class="case-depth" data-case-depth>
@@ -320,6 +359,59 @@ const inventoryMetrics = [
   </script>
 
   <script>
+    const rail = document.querySelector<HTMLElement>("[data-surface-rail]");
+    const cards = Array.from(document.querySelectorAll<HTMLElement>("[data-surface-card]"));
+    const current = document.querySelector<HTMLElement>("[data-surface-current]");
+    const previous = document.querySelector<HTMLButtonElement>("[data-surface-previous]");
+    const next = document.querySelector<HTMLButtonElement>("[data-surface-next]");
+    const targets = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-surface-target]"));
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let activeSurface = 0;
+    let surfaceFrame = 0;
+
+    const setActiveSurface = (index: number) => {
+      activeSurface = Math.max(0, Math.min(cards.length - 1, index));
+      if (current) current.textContent = String(activeSurface + 1).padStart(2, "0");
+      if (previous) previous.disabled = activeSurface === 0;
+      if (next) next.disabled = activeSurface === cards.length - 1;
+      targets.forEach((target, targetIndex) => {
+        if (targetIndex === activeSurface) target.setAttribute("aria-current", "true");
+        else target.removeAttribute("aria-current");
+      });
+    };
+
+    const scrollToSurface = (index: number) => {
+      const card = cards[index];
+      if (!rail || !card) return;
+      rail.scrollTo({
+        left: card.offsetLeft - rail.offsetLeft,
+        behavior: reducedMotion.matches ? "auto" : "smooth",
+      });
+      setActiveSurface(index);
+    };
+
+    const updateSurfaceFromScroll = () => {
+      if (!rail || cards.length === 0) return;
+      const railLeft = rail.getBoundingClientRect().left;
+      const closest = cards.reduce((best, card, index) => {
+        const distance = Math.abs(card.getBoundingClientRect().left - railLeft);
+        return distance < best.distance ? { index, distance } : best;
+      }, { index: 0, distance: Number.POSITIVE_INFINITY });
+      setActiveSurface(closest.index);
+    };
+
+    previous?.addEventListener("click", () => scrollToSurface(activeSurface - 1));
+    next?.addEventListener("click", () => scrollToSurface(activeSurface + 1));
+    targets.forEach((target) => target.addEventListener("click", () => scrollToSurface(Number(target.dataset.surfaceTarget))));
+    rail?.addEventListener("scroll", () => {
+      window.cancelAnimationFrame(surfaceFrame);
+      surfaceFrame = window.requestAnimationFrame(updateSurfaceFromScroll);
+    }, { passive: true });
+    window.addEventListener("resize", updateSurfaceFromScroll, { passive: true });
+    setActiveSurface(0);
+  </script>
+
+  <script>
     const film = document.querySelector<HTMLVideoElement>("[data-trackly-film]");
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (film && !reduceMotion.matches && "IntersectionObserver" in window) {
@@ -410,22 +502,77 @@ const inventoryMetrics = [
     margin: 78px 0 92px;
   }
 
-  .surface-proof > header {
+  .surface-proof-header {
     display: grid;
-    grid-template-columns: minmax(180px, .45fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) auto;
     gap: 32px;
     margin-bottom: 34px;
     align-items: end;
   }
 
+  .surface-proof-header h2 {
+    max-width: 720px;
+    margin: 16px 0 0;
+  }
+
+  .surface-gallery-controls {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .surface-count {
+    min-width: 66px;
+    margin: 0;
+    color: #706a68;
+    font: 650 .78rem/1 var(--font-mono);
+    letter-spacing: .04em;
+  }
+
+  .surface-count strong {
+    color: var(--ink);
+    font-size: 1rem;
+  }
+
+  .surface-arrow-controls {
+    display: flex;
+    gap: 8px;
+  }
+
+  .surface-arrow-controls button {
+    display: grid;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    place-items: center;
+    border: 1px solid var(--ink);
+    border-radius: 50%;
+    background: #fff;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background 160ms ease, color 160ms ease, opacity 160ms ease;
+  }
+
+  .surface-arrow-controls button:hover:not(:disabled),
+  .surface-arrow-controls button:focus-visible {
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .surface-arrow-controls button:disabled {
+    cursor: default;
+    opacity: .28;
+  }
+
   .surface-rail {
     display: grid;
-    grid-auto-columns: minmax(420px, 58%);
+    grid-auto-columns: minmax(540px, 78%);
     grid-auto-flow: column;
-    gap: 16px;
-    padding-bottom: 14px;
+    gap: 18px;
+    padding: 2px 2px 16px;
     overflow-x: auto;
     overscroll-behavior-inline: contain;
+    scroll-padding-inline: 2px;
     scroll-snap-type: x mandatory;
     scrollbar-color: #8f8999 transparent;
   }
@@ -436,18 +583,19 @@ const inventoryMetrics = [
     margin: 0;
     overflow: hidden;
     border: 1px solid #d7d7d0;
-    border-radius: 6px;
+    border-radius: 8px;
     background: #0d0b12;
     scroll-snap-align: start;
+    box-shadow: 0 14px 34px rgba(35, 23, 55, .08);
   }
 
   .surface-media {
     display: grid;
     width: 100%;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 16 / 10;
     place-items: center;
     overflow: hidden;
-    background: #f2f2ef;
+    background: #111018;
   }
 
   .surface-media > img {
@@ -459,21 +607,171 @@ const inventoryMetrics = [
 
   .surface-rail figcaption {
     display: flex;
-    padding: 14px 16px;
+    min-height: 64px;
+    padding: 15px 17px;
+    align-items: center;
     justify-content: space-between;
     gap: 16px;
     background: #fff;
     font-size: .78rem;
   }
 
-  .surface-rail figcaption span { color: #666660; text-align: right; }
+  .surface-rail figcaption strong { font-size: .84rem; }
+  .surface-rail figcaption span { max-width: 68%; color: #666660; text-align: right; }
+
+  .surface-web .surface-media {
+    padding: 20px;
+    background: #09090b;
+  }
+
+  .surface-web .surface-media img {
+    border: 1px solid rgba(255,255,255,.13);
+    border-radius: 4px;
+  }
+
+  .surface-ios .surface-media {
+    padding: 18px;
+    background: #f4f4f1;
+  }
+
+  .surface-ios .surface-media img {
+    width: auto;
+    max-width: 100%;
+    filter: drop-shadow(0 15px 24px rgba(0,0,0,.12));
+  }
+
+  .surface-macos .surface-media {
+    padding: 16px;
+    background: #09090d;
+  }
+
+  .surface-macos .surface-media img {
+    border-radius: 6px;
+    box-shadow: 0 14px 30px rgba(0,0,0,.26);
+  }
 
   .surface-cli .surface-media {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.15fr .85fr;
+    gap: 1px;
     background: #0d0b12;
   }
 
-  .surface-cli img { min-width: 0; }
+  .surface-terminal-pane,
+  .surface-mcp-pane {
+    position: relative;
+    display: grid;
+    width: 100%;
+    height: 100%;
+    place-items: center;
+    overflow: hidden;
+    background: #0d0b12;
+  }
+
+  .surface-terminal-pane { border-right: 1px solid rgba(255,255,255,.12); }
+  .surface-terminal-pane img,
+  .surface-mcp-pane img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    object-fit: cover;
+  }
+
+  .surface-terminal-pane img { transform: scale(1.22); }
+  .surface-mcp-pane img { transform: scale(1.36); }
+
+  .surface-conversation .surface-media {
+    grid-template-columns: 1fr 1fr;
+    background: #100d18;
+  }
+
+  .surface-chat-preview,
+  .surface-voice-preview {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    padding: clamp(20px, 4vw, 42px);
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .surface-chat-preview {
+    border-right: 1px solid rgba(255,255,255,.13);
+  }
+
+  .surface-chat-preview > span,
+  .surface-voice-preview > span {
+    position: absolute;
+    top: 22px;
+    left: 24px;
+    color: rgba(255,255,255,.55);
+    font: 700 .63rem/1 var(--font-mono);
+    letter-spacing: .14em;
+  }
+
+  .surface-chat-preview i {
+    display: block;
+    width: 88%;
+    height: 11px;
+    margin: 5px 0;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(255,255,255,.82), rgba(255,255,255,.16));
+  }
+
+  .surface-chat-preview i:nth-of-type(2) { width: 68%; }
+  .surface-chat-preview i:nth-of-type(3) { width: 76%; }
+  .surface-chat-preview strong {
+    margin-top: 20px;
+    color: #fff;
+    font-size: clamp(1.05rem, 2vw, 1.42rem);
+    letter-spacing: -.025em;
+  }
+
+  .surface-voice-preview {
+    align-items: center;
+  }
+
+  .surface-voice-preview img {
+    width: min(78%, 250px);
+    height: auto;
+    clip-path: circle(48% at 50% 50%);
+    filter: drop-shadow(0 0 24px rgba(111,87,255,.38));
+  }
+
+  .surface-progress {
+    display: flex;
+    width: max-content;
+    margin: 12px auto 0;
+    gap: 1px;
+  }
+
+  .surface-progress button {
+    display: grid;
+    width: 34px;
+    height: 32px;
+    padding: 0;
+    place-items: center;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .surface-progress button span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: #c6c2c9;
+    transition: width 160ms ease, background 160ms ease;
+  }
+
+  .surface-progress button[aria-current="true"] span {
+    width: 30px;
+    background: var(--trackly);
+  }
+
+  .surface-progress button:focus-visible { outline: 2px solid var(--trackly); outline-offset: 0; }
 
   .case-depth {
     margin: 72px 0 0;
@@ -893,7 +1191,7 @@ const inventoryMetrics = [
   @media (max-width: 760px) {
     .trackly-film figcaption,
     .case-snapshot,
-    .surface-proof > header,
+    .surface-proof-header,
     .case-depth > summary {
       grid-template-columns: 1fr;
     }
@@ -913,12 +1211,48 @@ const inventoryMetrics = [
       gap: 6px;
     }
 
+    .surface-proof-header {
+      gap: 24px;
+      margin-bottom: 26px;
+    }
+
+    .surface-gallery-controls {
+      width: 100%;
+      justify-content: space-between;
+    }
+
     .surface-rail {
-      grid-auto-columns: min(86vw, 520px);
+      grid-auto-columns: min(84vw, 500px);
+      gap: 12px;
       margin-inline: calc(50% - 50vw);
-      padding-inline: 18px;
+      padding-inline: max(18px, calc((100vw - min(100% - 36px, 960px)) / 2));
+      scroll-padding-inline: max(18px, calc((100vw - min(100% - 36px, 960px)) / 2));
       scrollbar-width: none;
     }
+
+    .surface-rail figcaption {
+      min-height: 74px;
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .surface-rail figcaption span { max-width: none; text-align: left; }
+
+    .surface-web .surface-media,
+    .surface-ios .surface-media,
+    .surface-macos .surface-media { padding: 10px; }
+
+    .surface-chat-preview,
+    .surface-voice-preview { padding: 18px; }
+
+    .surface-chat-preview > span,
+    .surface-voice-preview > span { top: 15px; left: 16px; }
+
+    .surface-chat-preview strong { margin-top: 13px; font-size: .9rem; }
+    .surface-chat-preview i { height: 7px; margin-block: 3px; }
+
+    .surface-progress { margin-top: 8px; }
 
     .case-depth > summary small { text-align: left; }
     .case-depth > summary::after { grid-column: 1; }
@@ -980,6 +1314,8 @@ const inventoryMetrics = [
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .surface-arrow-controls button,
+    .surface-progress button span { transition: none; }
     .trackly-film video { visibility: hidden; }
     .trackly-film { background: #0d0b12 url('/assets/trackly-demo-poster.webp') center / contain no-repeat; }
   }

@@ -1,0 +1,21 @@
+---
+import { Newspaper } from "@lucide/astro";
+import type { SimpleIcon } from "simple-icons";
+import { siGithub, siSpotify, siX, siYoutube } from "simple-icons";
+
+const { name, size = 18 } = Astro.props as { name: string; size?: number };
+const icons: Record<string, SimpleIcon> = { GitHub: siGithub, Podcast: siSpotify, X: siX, YouTube: siYoutube };
+const icon = icons[name];
+---
+
+{name === "LinkedIn" ? (
+  <svg aria-hidden="true" width={size} height={size} viewBox="0 0 24 24" role="img">
+    <path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.61 0 4.27 2.38 4.27 5.47v6.27ZM5.32 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.1 20.45H3.54V9H7.1v11.45Z"></path>
+  </svg>
+) : name === "Newsletter" ? (
+  <Newspaper aria-hidden="true" size={size} stroke-width={2} />
+) : icon ? (
+  <svg aria-hidden="true" width={size} height={size} viewBox="0 0 24 24" role="img">
+    <path fill="currentColor" d={icon.path}></path>
+  </svg>
+) : null}
