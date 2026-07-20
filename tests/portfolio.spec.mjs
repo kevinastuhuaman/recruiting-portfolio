@@ -78,12 +78,18 @@ test("mobile first viewport leads with AI PM, Berkeley, and PayPal evidence", as
   );
   expect(positions.every((position) => position.top < 844 && position.bottom > 0 && position.width > 0)).toBe(true);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+  await expect(page.locator(".proof-strip .brand-copy strong").first()).toHaveCSS("font-size", "19.2px");
+  await expect(page.locator(".proof-strip .brand-copy strong").first()).toHaveCSS("margin-bottom", "12px");
+  await expect(page.locator(".proof-strip .brand-copy small").first()).toHaveCSS("font-size", "13.44px");
 
   await page.setViewportSize({ width: 1440, height: 1000 });
   await expect(page.locator(".proof-strip")).toBeVisible();
   await expect(page.locator(".proof-strip .brand-signature")).toHaveCount(4);
   await expect(page.locator(".proof-strip .brand-signature-centered")).toHaveCount(0);
   await expect(page.locator(".proof-strip .brand-mark")).toHaveCount(0);
+  await expect(page.locator(".proof-strip .brand-copy strong").first()).toHaveCSS("font-size", "19.2px");
+  await expect(page.locator(".proof-strip .brand-copy strong").first()).toHaveCSS("margin-bottom", "12px");
+  await expect(page.locator(".proof-strip .brand-copy small").first()).toHaveCSS("font-size", "13.44px");
   const proofInsets = await page.locator(".proof-strip > div").evaluateAll((cells) =>
     cells.map((cell) => {
       const cellBox = cell.getBoundingClientRect();
